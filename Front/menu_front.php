@@ -40,7 +40,8 @@
 <div class="container py-4">
 
   <!-- Bienvenida -->
-  <div id="welcomeRow" class="row mb-4"></div>
+  <div id="welcomeRow" class="row mb-4"><button onclick="logout()" class="btn btn-outline-danger">Cerrar Sesión</button></div>
+
 
   <!-- Comunicados -->
   <div id="newsRow" class="row g-4 mb-5">
@@ -89,6 +90,7 @@ document.getElementById('welcomeRow').innerHTML = `
       <div>
         <p class="welcome-name">Hola, ${u.nombres}</p>
         <p class="welcome-mail">${u.correo}</p>
+        <button onclick="logout()" class="btn btn-outline-danger">Cerrar Sesión</button>
       </div>
     </div>
   </div>`;
@@ -129,6 +131,12 @@ function openModule(menu){
   if ( menu.id === 3 ||
        (menu.nombre || '').toUpperCase().includes('VISITA') ){
       location.href = 'citas.php';          // <<<<<<
+      return;
+  }
+
+    if ( menu.id === 7 ||
+       (menu.nombre || '').toUpperCase().includes('VISITA') ){
+      location.href = 'panel_calendario.php';          // <<<<<<
       return;
   }
 
@@ -263,6 +271,24 @@ fetch(API_MENU).then(r=>r.json()).then(({ok,menus})=>{
     col.appendChild(c);grid.appendChild(col);
   });
 });
+
+
+/* ---------- Logout ---------- */
+// Función para cerrar sesión (puedes llamarla desde un botón)
+async function logout() { const token = localStorage.getItem('cs_token');
+if (!token) { window.location.href = 'login_front.php';
+return;
+} try { const response = await fetch('../api/logout.php', {
+method: 'POST', headers: { 'Content-Type': 'application/json'
+}, body: JSON.stringify({ token: token }) });
+const data = await response.json();
+if (data.ok) { console.log(data.mensaje);
+} else { console.error('Error al cerrar sesión:', data.mensaje);
+} } catch (error) { console.error('Error de conexión:', error);
+} finally {localStorage.removeItem('cs_token');
+localStorage.removeItem('cs_usuario');
+window.location.href = 'login_front.php';
+} }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

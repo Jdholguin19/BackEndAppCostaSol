@@ -6,6 +6,8 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
 
 <style>
 /* ancho máximo */
@@ -44,6 +46,8 @@
 .fc-event[style*="background-color:#ffc107"] *,
 .fc-event[style*="background-color: #ffc107"] *{color:#212529!important;}
 </style>
+
+
 </head>
 <body class="bg-light">
 
@@ -51,6 +55,9 @@
   <div class="d-flex align-items-center gap-3 mb-3">
     <h1 class="h4 mb-0">Calendario por responsable</h1>
     <select id="selResp" class="form-select w-auto"></select>
+        <button class="btn btn-link text-dark btn-back" id="btnBack">
+          <i class="bi bi-arrow-left"></i>
+      </button> 
   </div>
 
   <div id="calendar"></div>
@@ -115,6 +122,12 @@ function initCalendar(){
   calendar.render();
   selResp.onchange=()=>calendar.refetchEvents();
 }
+
+
+/* ---------- navegación ---------- */
+document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
+
+
 </script>
 </body>
 </html>
