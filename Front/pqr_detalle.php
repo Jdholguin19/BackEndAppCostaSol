@@ -63,24 +63,34 @@ body{background:#f5f6f8}
   <ul id="chat" class="chat mb-5"></ul>
 
   <!-- —— caja nueva respuesta (solo maqueta) —— -->
-  <div class="card p-3">
-    <textarea class="form-control mb-2" rows="3" placeholder="Escriba su respuesta…"></textarea>
+  <form id="frmRespuesta" enctype="multipart/form-data" class="card p-3">
+    <textarea id="txtMensaje" name="mensaje" class="form-control mb-2" rows="3" placeholder="Escriba su respuesta…" required></textarea>
     <div class="d-flex justify-content-between">
-      <input type="file" class="form-control w-auto form-control-sm">
-      <button class="btn btn-primary btn-sm" disabled>Enviar</button>
+      <input type="file" name="archivo" accept="image/*,application/pdf" class="form-control w-auto form-control-sm">
+      <button id="btnSend" class="btn btn-primary btn-sm" type="submit">Enviar</button>
     </div>
-  </div>
+  </form>
 </div>
 
 <script>
 /* ------- rutas ------- */
-const END_PQR  = '../api/pqr_list.php?id_usuario=0&estado_id=0&pqr_id=<?=$id?>'; // solo 1 registro
 const END_RESP = '../api/pqr_respuestas.php?pqr_id=<?=$id?>';
+const END_SEND = '../api/pqr_insert_form.php';
+
+/* ------- obtener usuario autenticado ------- */
+const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
+if(!u.id) { alert('Usuario no autenticado'); location.href='login_front.php'; }
+
+const END_PQR  = `../api/pqr_list.php?id_usuario=${u.id}&estado_id=0&pqr_id=<?=$id?>`; // solo 1 registro
 
 /* ------- refs DOM ------- */
 const titleEl = document.getElementById('title');
 const headBox = document.getElementById('headBox');
 const chat    = document.getElementById('chat');
+const frmRespuesta = document.getElementById('frmRespuesta');
+const btnSend = document.getElementById('btnSend');
+const txtMensaje = document.getElementById('txtMensaje');
+
 
 /* ------- helpers ------- */
 function fechaHora(str){
@@ -128,14 +138,39 @@ fetch(END_PQR).then(r=>r.json()).then(d=>{
 });
 
 /* ------- respuestas ------- */
-fetch(END_RESP).then(r=>r.json()).then(d=>{
-  if(!d.ok){ chat.innerHTML='<li class="text-danger">Error</li>'; return; }
-  chat.innerHTML = d.respuestas.length
-    ? d.respuestas.map(msgHTML).join('')
-    : '<li class="text-muted">— Sin respuestas —</li>';
+function loadRespuestas() {
+  fetch(END_RESP).then(r=>r.json()).then(d=>{
+    if(!d.ok){ chat.innerHTML='<li class="text-danger">Error</li>'; return; }
+    chat.innerHTML = d.respuestas.length
+      ? d.respuestas.map(msgHTML).join('')
+      : '<li class="text-muted">— Sin respuestas —</li>';
+  });
+}
+loadRespuestas();
+
+/* ------- envío de nueva respuesta ------- */
+frmRespuesta.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!frmRespuesta.checkValidity()){ frmRespuesta.classList.add('was-validated'); return; }
+// Difini la variable u en global para usarlo en varios scripts
+  if(!u.id) { alert('Usuario no autenticado'); return; }
+
+  const fd = new FormData(frmRespuesta);
+  fd.append('pqr_id', <?=$id?>);
+  fd.append('usuario_id', u.id);
+
+  btnSend.disabled=true; btnSend.textContent='Enviando…';
+
+  fetch(END_SEND,{method:'POST',body:fd})
+    .then(r=>r.json()).then(d=>{
+      if(d.ok){
+        txtMensaje.value = ''; // Clear the textarea
+        frmRespuesta.classList.remove('was-validated');
+        loadRespuestas(); // Reload messages
+      }else throw ''; })
+    .catch(()=>alert('Error al enviar respuesta'))
+    .finally(()=>{btnSend.disabled=false;btnSend.textContent='Enviar';});
 });
-
-
 
 </script>
 </body></html>
