@@ -140,6 +140,12 @@ function openModule(menu){
       return;
   }
 
+    if ( menu.id === 8 ||
+       (menu.nombre || '').toUpperCase().includes('VISITA') ){
+      location.href = 'pqr_notificaciones.php';          // <<<<<<
+      return;
+  }  
+
 
   // …aquí podrías despachar otros módulos por nombre o id
   alert('Abrir módulo '+menu.id);

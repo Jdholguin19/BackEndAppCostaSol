@@ -1,7 +1,4 @@
-
-<!doctype html><html lang="es">
-<!-- Notificaciones -->
-<head>
+<!doctype html><html lang="es"><head>
 <meta charset="utf-8"><title>Notificaciones PQR</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -10,6 +7,19 @@
 <style>
 body{background:#f5f6f8}
 .container{max-width:760px}
+/* Estilo para que la tarjeta de notificación se vea como un enlace */
+.notification-card-link {
+    text-decoration: none;
+    color: inherit; /* Heredar el color del texto */
+    display: block; /* Hacer que todo el enlace sea clickeable */
+}
+.notification-card-link .card {
+    transition: transform .2s ease-in-out; /* Efecto suave al pasar el mouse */
+}
+.notification-card-link:hover .card {
+    transform: translateY(-3px); /* Pequeño levantamiento al pasar el mouse */
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important; /* Sombra sutil */
+}
 </style>
 </head><body>
 
@@ -36,14 +46,16 @@ fetch('../api/notificaciones.php')
     if (d.ok) {
       if (d.notificaciones.length > 0) {
         notificationsListEl.innerHTML = d.notificaciones.map(notif => `
-          <div class="card mb-3">
-            <div class="card-body">
-              <h6 class="card-title">Nueva respuesta en PQR #${notif.pqr_id}</h6>
-              <p class="card-text mb-2">${notif.mensaje}</p>
-              <p class="card-subtitle text-muted small">Por: ${notif.usuario} el ${notif.fecha_respuesta}</p>
-               ${notif.url_adjunto ? `<p><a href="${notif.url_adjunto}" target="_blank">Ver adjunto</a></p>` : ''}
+          <a href="pqr_detalle.php?id=${notif.pqr_id}" class="notification-card-link">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h6 class="card-title">Nueva respuesta en PQR #${notif.pqr_id}</h6>
+                <p class="card-text mb-2">${notif.mensaje}</p>
+                <p class="card-subtitle text-muted small">Por: ${notif.usuario} el ${notif.fecha_respuesta}</p>
+                 ${notif.url_adjunto ? `<p><a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">Ver adjunto</a></p>` : ''} <!-- Evitar que el click en el adjunto active el enlace de la tarjeta -->
+              </div>
             </div>
-          </div>
+          </a>
         `).join('');
       } else {
         notificationsListEl.innerHTML = '<div class="text-center text-muted">No hay notificaciones</div>';
