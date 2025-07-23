@@ -62,7 +62,7 @@ body{background:#f5f6f8}
   <!-- hilo -->
   <ul id="chat" class="chat mb-5"></ul>
 
-  <!-- —— caja nueva respuesta (solo maqueta) —— -->
+  <!-- —— caja nueva respuesta —— -->
   <form id="frmRespuesta" enctype="multipart/form-data" class="card p-3">
     <textarea id="txtMensaje" name="mensaje" class="form-control mb-2" rows="3" placeholder="Escriba su respuesta…" required></textarea>
     <div class="d-flex justify-content-between">
@@ -70,6 +70,10 @@ body{background:#f5f6f8}
       <button id="btnSend" class="btn btn-primary btn-sm" type="submit">Enviar</button>
     </div>
   </form>
+
+  <!-- Área para mostrar notificaciones de éxito -->
+  <div id="notificationArea" class="mt-3"></div>
+
 </div>
 
 <script>
@@ -79,8 +83,9 @@ const END_SEND = '../api/pqr_insert_form.php';
 
 /* ------- obtener usuario autenticado ------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
-if(!u.id) { alert('Usuario no autenticado'); location.href='login_front.php'; }
+if(!u.id) { alert('Usuario no autenticado'); location.href='login.php'; }
 
+// Ahora que u está definido, podemos usar u.id para END_PQR
 const END_PQR  = `../api/pqr_list.php?id_usuario=${u.id}&estado_id=0&pqr_id=<?=$id?>`; // solo 1 registro
 
 /* ------- refs DOM ------- */
@@ -90,6 +95,7 @@ const chat    = document.getElementById('chat');
 const frmRespuesta = document.getElementById('frmRespuesta');
 const btnSend = document.getElementById('btnSend');
 const txtMensaje = document.getElementById('txtMensaje');
+const notificationArea = document.getElementById('notificationArea');
 
 
 /* ------- helpers ------- */
@@ -109,7 +115,7 @@ function msgHTML(r){
   const esResp = Number(r.responsable_id) > 0;
 
   const dirClass = esResp ? 'right' : '';
-  const foto = r.url_foto || 'https://via.placeholder.com/40x40?text=%20';
+  const foto = r.url_foto || 'https://via.placeholder.com/40x40?text=%20'; // Considera usar la foto real del usuario/responsable
 
   return `<li class="${dirClass}">
             <img src="${foto}" class="avatar-sm" alt="">
@@ -120,6 +126,21 @@ function msgHTML(r){
           </li>`;
 }
 
+function showNotification(message, type = 'success') {
+  const alertDiv = document.createElement('div');
+  alertDiv.classList.add('alert', `alert-${type}`, 'alert-dismissible', 'fade', 'show');
+  alertDiv.setAttribute('role', 'alert');
+  alertDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  notificationArea.appendChild(alertDiv);
+
+  // Ocultar después de unos segundos
+  setTimeout(() => {
+    alertDiv.remove(); // Eliminar el elemento de la notificación
+  }, 5000); // Ocultar después de 5 segundos
+}
 
 
 /* ------- cabecera PQR ------- */
@@ -152,8 +173,8 @@ loadRespuestas();
 frmRespuesta.addEventListener('submit',e=>{
   e.preventDefault();
   if(!frmRespuesta.checkValidity()){ frmRespuesta.classList.add('was-validated'); return; }
-// Difini la variable u en global para usarlo en varios scripts
-  if(!u.id) { alert('Usuario no autenticado'); return; }
+
+  if(!u.id) { showNotification('Usuario no autenticado', 'danger'); return; }
 
   const fd = new FormData(frmRespuesta);
   fd.append('pqr_id', <?=$id?>);
@@ -167,10 +188,12 @@ frmRespuesta.addEventListener('submit',e=>{
         txtMensaje.value = ''; // Clear the textarea
         frmRespuesta.classList.remove('was-validated');
         loadRespuestas(); // Reload messages
+        showNotification('Respuesta enviada correctamente!'); // Mostrar notificación de éxito
       }else throw ''; })
-    .catch(()=>alert('Error al enviar respuesta'))
+    .catch(()=>showNotification('Error al enviar respuesta', 'danger')) // Mostrar notificación de error
     .finally(()=>{btnSend.disabled=false;btnSend.textContent='Enviar';});
 });
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body></html>

@@ -40,7 +40,7 @@
 <div class="container py-4">
 
   <!-- Bienvenida -->
-  <div id="welcomeRow" class="row mb-4"><button onclick="logout()" class="btn btn-outline-danger">Cerrar Sesión</button></div>
+  <div id="welcomeRow" class="row mb-4"></div>
 
 
   <!-- Comunicados -->
