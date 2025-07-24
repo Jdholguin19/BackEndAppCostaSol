@@ -53,11 +53,11 @@ if (!token) {
         }
     })
     .then(r => {
-        if (r.status === 401) { // Manejar no autorizado
+        if (r.status === 401) {
             notificationsListEl.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado. Por favor, inicia sesión de nuevo.</div>';
             // Opcional: Redirigir a la página de login
             // window.location.href = 'login_front.php';
-            return Promise.reject('No autorizado'); // Terminar la cadena de promesas
+            return Promise.reject('No autorizado');
         }
         return r.json();
     })
@@ -80,13 +80,12 @@ if (!token) {
                 notificationsListEl.innerHTML = '<div class="text-center text-muted">No hay notificaciones</div>';
             }
         } else {
-            // Mostrar mensaje de error del backend si existe
             notificationsListEl.innerHTML = `<div class="alert alert-danger">Error al cargar notificaciones: ${d.mensaje || 'Error desconocido'}</div>`;
         }
     })
     .catch(err => {
-        console.error(err); // Loguear el error en la consola
-        if (err !== 'No autorizado') { // Evitar mostrar doble mensaje si es error 401
+        console.error(err);
+        if (err !== 'No autorizado') {
              notificationsListEl.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor de notificaciones</div>';
         }
     });
