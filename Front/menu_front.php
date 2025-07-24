@@ -73,8 +73,9 @@
 
 <script>
 /* ---------- USER ---------- */
+console.log('Valor en localStorage para cs_usuario:', localStorage.getItem('cs_usuario')); // Registro
 const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
-if (!u.id) location.href = 'login.php';
+if (!u.id) location.href = 'login_front.php';
 
 /* ---------- Endpoints ---------- */
 const API_NEWS  = '../api/noticias.php?limit=10';
@@ -88,7 +89,7 @@ document.getElementById('welcomeRow').innerHTML = `
     <div class="welcome-card">
       <img src="${u.url_foto_perfil || 'https://via.placeholder.com/48'}" class="avatar" alt="">
       <div>
-        <p class="welcome-name">Hola, ${u.nombres}</p>
+        <p class=\"welcome-name\">Hola, ${u.nombres || u.nombre}</p>
         <p class="welcome-mail">${u.correo}</p>
         <button onclick="logout()" class="btn btn-outline-danger">Cerrar Sesión</button>
       </div>

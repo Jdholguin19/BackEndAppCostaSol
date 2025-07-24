@@ -107,14 +107,29 @@ form.addEventListener('submit', async ev=>{
       return;
     }
     /* guardar token y usuario en LocalStorage */
+    console.log('Datos de usuario a guardar en localStorage:', data.user); // Registro
     localStorage.setItem('cs_token',  data.token);
-    localStorage.setItem('cs_usuario',JSON.stringify(data.usuario));
+    localStorage.setItem('cs_usuario',JSON.stringify(data.user));
 
-    /* redirigir al menú principal */
-    window.location.href = 'menu_front.php';
+    /* redirigir segun el tipo de usuario */
+    if (data.user.is_responsable) {
+      window.location.href = 'menu_front.php'; // Redirect responsible users to menu_front.php
+    } else {
+      // Redirect based on user.rol_id for clients/residents
+      if (data.user.rol_id === 1) {
+        window.location.href = 'menu_front.php'; // Example: Redirect role 1 to client_dashboard.php
+      } else if (data.user.rol_id === 2) {
+        window.location.href = 'menu_front.php'; // Example: Redirect role 2 to resident_portal.php
+      } else {
+        // Default redirect for other roles or if rol_id is not handled
+        window.location.href = 'menu_front.php'; // Example: Redirect to a default page
+      }
+    }
+
   }catch(err){
     console.error(err);
     msg.textContent = 'Error de conexión';
+    console.error('Login error: ' + err.message);
   }
 });
 </script>

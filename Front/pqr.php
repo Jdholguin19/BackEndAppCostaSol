@@ -47,85 +47,122 @@
 
 <script>
 /* ---------- constantes ---------- */
-const UID      = JSON.parse(localStorage.getItem('cs_usuario')||'{}').id || 0;
+// Ya no necesitamos UID del localStorage para la API listado; el backend lo obtiene del token
+// const UID      = JSON.parse(localStorage.getItem('cs_usuario')||'{}').id || 0;
 const END_EST  = '../api/pqr_estados.php';
-const END_PQR  = estado => `../api/pqr_list.php?id_usuario=${UID}&estado_id=${estado}`;
+const END_PQR  = estado => `../api/pqr_list.php?estado_id=${estado}`;
 
 /* ---------- referencias DOM ---------- */
 const tabs = document.getElementById('estadoTabs');
 const list = document.getElementById('pqrList');
 
-/* ---------- cargar estados ---------- */
-fetch(END_EST)
-  .then(r=>r.json())
-  .then(d=>{
-      if(!d.ok) return;
-      d.estados.forEach(st=>{
-          const li=document.createElement('li');li.className='nav-item';
-          li.innerHTML=`<button class="nav-link" data-id="${st.id}">${st.nombre}</button>`;
-          tabs.appendChild(li);
-      });
-  });
+// Obtener el token de localStorage
+const token = localStorage.getItem('cs_token');
 
-/* ---------- plantilla de tarjeta ---------- */
-function card(p){
-   const short  = p.descripcion.length>140 ? p.descripcion.slice(0,137)+'…' : p.descripcion;
-   const badgeT = `<span class="badge bg-secondary me-1">${p.tipo}</span>`;
-   const estadoClass = p.estado.toLowerCase().includes('cerr') ? 'cerrado'
-                     : p.estado.toLowerCase().includes('pro')  ? 'proceso'
-                     : 'abierto';
-   const badgeE = `<span class="badge-dot ${estadoClass}">${p.estado}</span>`;
-   const fecha  = new Date(p.fecha_ingreso).toLocaleDateString();
-   const thumb  = p.url_problema ? `<img src="${p.url_problema}" class="pqr-thumb me-3">` : '';
+// Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
+if (!token) {
+     list.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los PQRs.</div>';
+     // Opcional: Redirigir a la página de login después de un breve retraso
+     // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
 
-   return `<div class="card mb-3">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <h5 class="card-title mb-1">${p.subtipo} · Mz ${p.manzana} – Villa ${p.villa}</h5>
-          <small class="text-muted">${fecha}</small>
-        </div>
-        <p class="mb-1">${badgeT}${badgeE}</p>
-        <div class="d-flex">
-          ${thumb}
-          <p class="card-text small text-muted mb-0">${short}</p>
-        </div>
-        <div class="text-end small">
-          <a href="pqr_detalle.php?id=${p.id}"
-            class="link-secondary text-decoration-none">
-            ${p.n_respuestas} respuestas
-          </a>
-        </div>
-      </div>
-   </div>`;
-}
+} else {
 
-/* ---------- cargar lista ---------- */
-function load(estado=0){
-    list.innerHTML='<div class="text-center py-5"><div class="spinner-border"></div></div>';
-    fetch(END_PQR(estado))
+    /* ---------- cargar estados ---------- */
+    // Asegúrate de que la API de estados no requiere autenticación o maneja la falta de token
+    fetch(END_EST)
       .then(r=>r.json())
       .then(d=>{
-          if(!d.ok){list.innerHTML='<p class="text-danger">Error</p>';return;}
-          list.innerHTML = d.pqr.length
-              ? d.pqr.map(card).join('')
-              : '<p class="text-muted">— Sin registros —</p>';
+          if(!d.ok) return;
+          d.estados.forEach(st=>{
+              const li=document.createElement('li');li.className='nav-item';
+              li.innerHTML=`<button class="nav-link" data-id="${st.id}">${st.nombre}</button>`;
+              tabs.appendChild(li);
+          });
       });
+
+    /* ---------- plantilla de tarjeta ---------- */
+    function card(p){
+       const short  = p.descripcion.length>140 ? p.descripcion.slice(0,137)+'…' : p.descripcion;
+       const badgeT = `<span class="badge bg-secondary me-1">${p.tipo}</span>`;
+       const estadoClass = p.estado.toLowerCase().includes('cerr') ? 'cerrado'
+                         : p.estado.toLowerCase().includes('pro')  ? 'proceso'
+                         : 'abierto';
+       const badgeE = `<span class="badge-dot ${estadoClass}">${p.estado}</span>`;
+       const fecha  = new Date(p.fecha_ingreso).toLocaleDateString();
+       const thumb  = p.url_problema ? `<img src="${p.url_problema}" class="pqr-thumb me-3">` : '';
+
+       // Mostrar Mz/Villa solo si están presentes
+       const mzVilla = (p.manzana || p.villa) ? ` · Mz ${p.manzana} – Villa ${p.villa}` : '';
+
+       return `<div class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title mb-1">${p.subtipo}${mzVilla}</h5>
+              <small class="text-muted">${fecha}</small>
+            </div>
+            <p class="mb-1">${badgeT}${badgeE}</p>
+            <div class="d-flex">
+              ${thumb}
+              <p class="card-text small text-muted mb-0">${short}</p>
+            </div>
+            <div class="text-end small">
+              <a href="pqr_detalle.php?id=${p.id}"
+                class="link-secondary text-decoration-none">
+                ${p.n_respuestas} respuestas
+              </a>
+            </div>
+          </div>
+       </div>`;
+    }
+
+    /* ---------- cargar lista ---------- */
+    function load(estado=0){
+        list.innerHTML='<div class="text-center py-5"><div class="spinner-border"></div></div>';
+
+        fetch(END_PQR(estado), {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+          .then(r => {
+               if (r.status === 401) {
+                    list.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado. Por favor, inicia sesión de nuevo.</div>';
+                    // Opcional: Redirigir a la página de login
+                    // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
+                    return Promise.reject('No autorizado');
+                }
+                return r.json();
+          })
+          .then(d=>{
+              if(!d.ok){list.innerHTML=`<p class="text-danger">Error al cargar PQRs: ${d.mensaje || 'Desconocido'}</p>`;return;}
+              list.innerHTML = d.pqr.length
+                  ? d.pqr.map(card).join('')
+                  : '<p class="text-muted">— Sin registros —</p>';
+          })
+           .catch(err => {
+               console.error(err);
+                if (err !== 'No autorizado') {
+                    list.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor de PQRs</div>';
+                }
+           });
+    }
+
+    /* ---------- eventos ---------- */
+    tabs.addEventListener('click',e=>{
+        if(!e.target.matches('.nav-link')) return;
+        tabs.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
+        e.target.classList.add('active');
+        load(e.target.dataset.id);
+    });
+
+    /* ---------- navegación ---------- */
+    document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
+    document.getElementById('btnNuevo').onclick = () => location.href = 'pqr_nuevo.php';
+
+    /* primera carga */
+    load();
+
 }
-
-/* ---------- eventos ---------- */
-tabs.addEventListener('click',e=>{
-    if(!e.target.matches('.nav-link')) return;
-    tabs.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
-    e.target.classList.add('active');
-    load(e.target.dataset.id);
-});
-
-/* ---------- navegación ---------- */
-document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
-document.getElementById('btnNuevo').onclick = () => location.href = 'pqr_nuevo.php';
-
-/* primera carga */
-load();
 </script>
 
 </body>

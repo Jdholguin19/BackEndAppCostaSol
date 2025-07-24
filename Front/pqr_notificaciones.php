@@ -40,33 +40,59 @@ body{background:#f5f6f8}
 const notificationsListEl = document.getElementById('notificationsList');
 
 /* ------- obtener notificaciones ------- */
-fetch('../api/notificaciones.php')
-  .then(r => r.json())
-  .then(d => {
-    if (d.ok) {
-      if (d.notificaciones.length > 0) {
-        notificationsListEl.innerHTML = d.notificaciones.map(notif => `
-          <a href="pqr_detalle.php?id=${notif.pqr_id}" class="notification-card-link">
-            <div class="card mb-3">
-              <div class="card-body">
-                <h6 class="card-title">Nueva respuesta en PQR #${notif.pqr_id}</h6>
-                <p class="card-text mb-2">${notif.mensaje}</p>
-                <p class="card-subtitle text-muted small">Por: ${notif.usuario} el ${notif.fecha_respuesta}</p>
-                 ${notif.url_adjunto ? `<p><a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">Ver adjunto</a></p>` : ''} <!-- Evitar que el click en el adjunto active el enlace de la tarjeta -->
-              </div>
-            </div>
-          </a>
-        `).join('');
-      } else {
-        notificationsListEl.innerHTML = '<div class="text-center text-muted">No hay notificaciones</div>';
-      }
-    } else {
-      notificationsListEl.innerHTML = '<div class="alert alert-danger">Error al cargar notificaciones</div>';
-    }
-  })
-  .catch(() => {
-    notificationsListEl.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor de notificaciones</div>';
-  });
+// Obtener el token de localStorage
+const token = localStorage.getItem('cs_token');
+
+// Verificar si hay token antes de hacer la solicitud
+if (!token) {
+    notificationsListEl.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver las notificaciones.</div>';
+} else {
+    fetch('../api/notificaciones.php', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(r => {
+        if (r.status === 401) { // Manejar no autorizado
+            notificationsListEl.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado. Por favor, inicia sesión de nuevo.</div>';
+            // Opcional: Redirigir a la página de login
+            // window.location.href = 'login_front.php';
+            return Promise.reject('No autorizado'); // Terminar la cadena de promesas
+        }
+        return r.json();
+    })
+    .then(d => {
+        if (d.ok) {
+            if (d.notificaciones.length > 0) {
+                notificationsListEl.innerHTML = d.notificaciones.map(notif => `
+                    <a href="pqr_detalle.php?id=${notif.pqr_id}" class="notification-card-link">
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <h6 class="card-title">Nueva respuesta en PQR #${notif.pqr_id}</h6>
+                          <p class="card-text mb-2">${notif.mensaje}</p>
+                          <p class="card-subtitle text-muted small">Por: ${notif.usuario} el ${notif.fecha_respuesta}</p>
+                           ${notif.url_adjunto ? `<p><a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">Ver adjunto</a></p>` : ''} <!-- Evitar que el click en el adjunto active el enlace de la tarjeta -->
+                        </div>
+                      </div>
+                    </a>
+                `).join('');
+            } else {
+                notificationsListEl.innerHTML = '<div class="text-center text-muted">No hay notificaciones</div>';
+            }
+        } else {
+            // Mostrar mensaje de error del backend si existe
+            notificationsListEl.innerHTML = `<div class="alert alert-danger">Error al cargar notificaciones: ${d.mensaje || 'Error desconocido'}</div>`;
+        }
+    })
+    .catch(err => {
+        console.error(err); // Loguear el error en la consola
+        if (err !== 'No autorizado') { // Evitar mostrar doble mensaje si es error 401
+             notificationsListEl.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor de notificaciones</div>';
+        }
+    });
+}
+
+
 </script>
 
 </body></html>
