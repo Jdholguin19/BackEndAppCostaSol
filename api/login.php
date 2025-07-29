@@ -1,7 +1,7 @@
 <?php
 /**
  *  api/login.php
- *  POST  { "correo": "...", "contrasena": "...", "onesignal_player_id"?: "..." }
+ *  POST  { "correo": "...", "contrasena": "..." }
  *  OK    { ok:true, token:"...", user:{ id, nombre, correo, url_foto_perfil, rol, is_responsable } }
  */
 
@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $input      = json_decode(file_get_contents('php://input'), true);
 $correo     = $input['correo']     ?? null;
 $contrasena = $input['contrasena'] ?? null;
-$oneSignalPlayerId = $input['onesignal_player_id'] ?? null; // Nuevo: Player ID de OneSignal
 
 if (!$correo || !$contrasena) {
     http_response_code(422);
@@ -48,19 +47,11 @@ try {
         $authenticated_user_info = $user; // Guardar info del usuario
         $authenticated_user_info['is_responsable'] = false;
 
-        /* ---------- 3. Generar, guardar token y Player ID para usuario ---------- */
+        /* ---------- 3. Generar y guardar token para usuario ---------- */
         $token = base64_encode(random_bytes(24));
-        $update_sql = 'UPDATE usuario SET token = :token';
-        $params = [':token' => $token, ':id' => $user['id']];
-
-        if ($oneSignalPlayerId) {
-            $update_sql .= ', onesignal_player_id = :player_id';
-            $params[':player_id'] = $oneSignalPlayerId;
-        }
-         $update_sql .= ' WHERE id = :id';
-
+        $update_sql = 'UPDATE usuario SET token = :token WHERE id = :id';
         $update_stmt = $db->prepare($update_sql);
-        $update_stmt->execute($params);
+        $update_stmt->execute([':token' => $token, ':id' => $user['id']]);
 
         /* ---------- 4. Respuesta para usuario ---------- */
         unset($authenticated_user_info['contrasena_hash']);
@@ -83,21 +74,11 @@ try {
             $authenticated_user_info['is_responsable'] = true;
             $authenticated_user_info['rol'] = 'responsable'; // Consistency
 
-            /* ---------- 6. Generar, guardar token y Player ID para responsable ---------- */
+            /* ---------- 6. Generar y guardar token para responsable ---------- */
             $token = base64_encode(random_bytes(24));
-            $update_sql = 'UPDATE responsable SET token = :token';
-            $params = [':token' => $token, ':id' => $responsable['id']];
-
-            // Nota: Asumimos que la tabla responsable TAMBIÉN tiene un campo onesignal_player_id si quieres notificarles.
-            // Si no, esta parte del código para responsables con Player ID debe omitirse o adaptarse.
-            if ($oneSignalPlayerId) {
-                 $update_sql .= ', onesignal_player_id = :player_id';
-                 $params[':player_id'] = $oneSignalPlayerId;
-            }
-            $update_sql .= ' WHERE id = :id';
-
+            $update_sql = 'UPDATE responsable SET token = :token WHERE id = :id';
             $update_stmt = $db->prepare($update_sql);
-            $update_stmt->execute($params);
+            $update_stmt->execute([':token' => $token, ':id' => $responsable['id']]);
 
             /* ---------- 7. Respuesta para responsable ---------- */
             unset($authenticated_user_info['contrasena_hash']);

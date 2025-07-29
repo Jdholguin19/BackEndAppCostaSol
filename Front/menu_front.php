@@ -44,6 +44,7 @@
       notifyButton: {
         enable: true,
       },
+      allowLocalhostAsSecureOrigin: true,
     });
   });
 </script>
