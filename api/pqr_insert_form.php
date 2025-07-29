@@ -55,8 +55,6 @@ $db = DB::getDB();
 try{
     /* ---------- 1. validar ---------- */
     $pqrId     = (int)($_POST['pqr_id']     ?? 0);
-    // Ya no obtenemos usuario_id del POST; lo obtenemos del usuario autenticado
-    // $usuarioId = (int)($_POST['usuario_id'] ?? 0);
     $mensaje   = trim($_POST['mensaje']   ?? '');
 
     // Validar que pqr_id y mensaje estén presentes
@@ -68,7 +66,6 @@ try{
     /* ---------- 2. gestionar adjunto ---------- */
     $urlAdjunto = null;
     if(!empty($_FILES['archivo']['tmp_name'])){
-        // Verificar si el directorio de destino existe y tiene permisos de escritura
         $uploadDir = __DIR__.'/../ImagenesPQR_respuestas/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true); // Crear directorio si no existe
@@ -76,19 +73,13 @@ try{
          if (is_writable($uploadDir)) {
             $name = uniqid().'-'.basename($_FILES['archivo']['name']);
             $dest = $uploadDir.$name;
-            // Corregido move_uploaded_uploaded_file a move_uploaded_file
             if(move_uploaded_file($_FILES['archivo']['tmp_name'],$dest)){
-                // Asegúrate de que esta URL es correcta para acceso público
                 $urlAdjunto = "https://app.costasol.com.ec/ImagenesPQR_respuestas/$name";
             } else {
-                // Loggear error de subida de archivo
                  error_log('Error al mover archivo subido para PQR respuesta.');
-                 // Puedes decidir si esto es un error fatal o solo un problema con el adjunto.
-                 // Por ahora, permitiremos que la respuesta se inserte sin adjunto si falla la subida.
             }
          } else {
              error_log('Directorio de subida no es escribible: '.$uploadDir);
-             // Manejar el error: quizás devolver un error al usuario o simplemente no guardar el adjunto.
          }
 
     }
@@ -111,11 +102,100 @@ try{
 
     $db->prepare($sql)->execute([
         ':pqr_id'=> $pqrId,
-        ':usuario_id'=> $remitente_usuario_id, // ID del usuario si es usuario regular
-        ':responsable_id'=> $remitente_responsable_id, // ID del responsable si es responsable
+        ':usuario_id'=> $remitente_usuario_id,
+        ':responsable_id'=> $remitente_responsable_id,
         ':mensaje'=> $mensaje,
         ':url_adjunto'=> $urlAdjunto
     ]);
+
+    // --- INICIO: Lógica para enviar Notificación Push al Cliente ---
+    if ($is_responsable && $remitente_responsable_id) {
+        // 1. Obtener el ID del cliente asociado a este PQR
+        $sql_get_user_id = 'SELECT id_usuario FROM pqr WHERE id = :pqr_id LIMIT 1';
+        $stmt_get_user_id = $db->prepare($sql_get_user_id);
+        $stmt_get_user_id->execute([':pqr_id' => $pqrId]);
+        $cliente_id = $stmt_get_user_id->fetchColumn();
+
+        if ($cliente_id) {
+            // 2. Obtener el onesignal_player_id y nombre del cliente
+            $sql_get_player_id = 'SELECT onesignal_player_id, nombres FROM usuario WHERE id = :user_id LIMIT 1';
+            $stmt_get_player_id = $db->prepare($sql_get_player_id);
+            $stmt_get_player_id->execute([':user_id' => $cliente_id]);
+            $cliente_info = $stmt_get_player_id->fetch(PDO::FETCH_ASSOC);
+
+            $oneSignalPlayerId = $cliente_info['onesignal_player_id'] ?? null;
+            $cliente_nombre = $cliente_info['nombres'] ?? 'Cliente';
+
+
+            if ($oneSignalPlayerId) {
+                // 3. Obtener información adicional del PQR para la notificación
+                $sql_get_pqr_info = 'SELECT numero_solicitud, pr.manzana, pr.villa
+                                     FROM pqr p
+                                     JOIN propiedad pr ON p.id_propiedad = pr.id
+                                     WHERE p.id = :pqr_id LIMIT 1';
+                $stmt_get_pqr_info = $db->prepare($sql_get_pqr_info);
+                $stmt_get_pqr_info->execute([':pqr_id' => $pqrId]);
+                $pqr_info = $stmt_get_pqr_info->fetch(PDO::FETCH_ASSOC);
+
+                $pqr_numero = $pqr_info['numero_solicitud'] ?? 'N/A';
+                $manzana = $pqr_info['manzana'] ?? 'N/A';
+                $villa = $pqr_info['villa'] ?? 'N/A';
+
+                // Construir el mensaje de la notificación
+                $message_title = "Respuesta a tu PQR {$pqr_numero}";
+                $notification_message = strlen($mensaje) > 100 ? substr($mensaje, 0, 97) . '...' : $mensaje;
+                $message_body = "El responsable ha respondido: \"" . $notification_message . "\" en tu PQR {$pqr_numero} (Mz {$manzana} Villa {$villa}).";
+
+
+                // --- Código para enviar a la API de OneSignal ---
+                $oneSignalAppId = 'e77613c2-51f8-431d-9892-8b2463ecc817'; // Tu App ID
+                $oneSignalApiKey = 'os_v2_app_453bhqsr7bbr3gesrmsgh3gic66q3hsf24becvfqkh44mrzwgvmwtm3k4p47sydyynham5mmlkc4qyigv27jxoage7n3omod5plhxmi'; // Tu REST API Key
+
+                $fields = [
+                    'app_id' => $oneSignalAppId,
+                    'include_player_ids' => [$oneSignalPlayerId],
+                    'headings' => ['en' => $message_title, 'es' => $message_title],
+                    'contents' => ['en' => $message_body, 'es' => $message_body],
+                    'data' => ['pqr_id' => $pqrId]
+                ];
+
+                $fields = json_encode($fields);
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json; charset=utf-8',
+                    'Authorization: Basic ' . $oneSignalApiKey
+                ));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_POST, TRUE);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // Considerar TRUE en producción
+
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+
+                $responseData = json_decode($response, true);
+
+                if ($httpCode === 200 && isset($responseData['id'])) {
+                     error_log("Notificación OneSignal enviada correctamente al Player ID " . $oneSignalPlayerId . " (PQR ID: " . $pqrId . "). OneSignal ID: " . $responseData['id']);
+                } else {
+                     error_log("Error al enviar notificación OneSignal al Player ID " . $oneSignalPlayerId . " (PQR ID: " . $pqrId . "). HTTP Code: " . $httpCode . ". Response: " . $response);
+                }
+
+                // --- Fin Código para enviar a la API de OneSignal ---
+
+            } else {
+                 error_log("Cliente con ID " . $cliente_id . " para PQR " . $pqrId . " no tiene onesignal_player_id registrado.");
+            }
+        } else {
+            error_log("PQR con ID " . $pqrId . " no tiene un id_usuario asociado para enviar notificación.");
+        }
+    }
+    // --- FIN: Lógica para enviar Notificación Push al Cliente ---
+
 
     echo json_encode(['ok'=>true]);
 
