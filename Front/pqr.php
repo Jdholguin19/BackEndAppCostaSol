@@ -14,6 +14,13 @@
 .badge-dot.cerrado::before  {background:#1f9d55}
 .badge-dot.abierto::before  {background:#0d6efd}
 
+/* Estilos para el badge de urgencia (opcional) */
+.badge-urgencia { font-size: .8rem; padding: .3em .6em; border-radius: .25rem; }
+.badge-urgencia.Bajo  { background-color: #28a745; color: #fff; }
+.badge-urgencia.Media { background-color: #ffc107; color: #212529; }
+.badge-urgencia.Alta  { background-color: #dc3545; color: #fff; }
+
+
 .pqr-thumb{width:56px;height:56px;object-fit:cover;border-radius:.25rem}
 .btn-back {padding:.25rem .5rem;font-size:1.25rem;line-height:1}
 </style>
@@ -29,6 +36,13 @@
       </button>
 
       <h1 class="h4 mb-0 flex-grow-1 text-center">PQR</h1>
+
+      <!-- Selector de Ordenacixc3xb3n (Nuevo) -->
+      <select id="selOrdenacion" class="form-select form-select-sm w-auto me-2">
+          <option value="fecha">Ordenar por Fecha</option>
+          <option value="urgencia">Ordenar por Urgencia</option>
+      </select>
+
 
       <button class="btn btn-primary btn-sm" id="btnNuevo">
         <i class="bi bi-plus"></i> Nuevo
@@ -47,38 +61,39 @@
 
 <script>
 /* ---------- constantes ---------- */
-// Ya no necesitamos UID del localStorage para la API listado; el backend lo obtiene del token
-// const UID      = JSON.parse(localStorage.getItem('cs_usuario')||'{}').id || 0;
 const END_EST  = '../api/pqr_estados.php';
-const END_PQR  = estado => `../api/pqr_list.php?estado_id=${estado}`;
+// Modificamos END_PQR para aceptar parxc3xa1metro de ordenacixc3xb3n
+const END_PQR  = (estado, orderBy) => `../api/pqr_list.php?estado_id=${estado}&order_by=${orderBy}`;
 
 /* ---------- referencias DOM ---------- */
 const tabs = document.getElementById('estadoTabs');
 const list = document.getElementById('pqrList');
+const selOrdenacion = document.getElementById('selOrdenacion');
 
 // Obtener el token de localStorage
 const token = localStorage.getItem('cs_token');
 
 // Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
 if (!token) {
-     list.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los PQRs.</div>';
-     // Opcional: Redirigir a la página de login después de un breve retraso
-     // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
-
+     list.innerHTML = '<div class="alert alert-warning">Debes iniciar sesion para ver los PQRs.</div>';
 } else {
 
-    /* ---------- cargar estados ---------- */
-    // Asegúrate de que la API de estados no requiere autenticación o maneja la falta de token
+    /* ---------- cargar estados (Restaurado) ---------- */
     fetch(END_EST)
       .then(r=>r.json())
       .then(d=>{
           if(!d.ok) return;
-          d.estados.forEach(st=>{
+          const fragment = document.createDocumentFragment();
+          // Omitir el primer item "Todos" que ya estxc3xa1 en el HTML
+          for (let i = 0; i < d.estados.length; i++) {
+              const st = d.estados[i];
               const li=document.createElement('li');li.className='nav-item';
               li.innerHTML=`<button class="nav-link" data-id="${st.id}">${st.nombre}</button>`;
-              tabs.appendChild(li);
-          });
+              fragment.appendChild(li);
+          }
+          tabs.appendChild(fragment);
       });
+
 
     /* ---------- plantilla de tarjeta ---------- */
     function card(p){
@@ -88,11 +103,15 @@ if (!token) {
                          : p.estado.toLowerCase().includes('pro')  ? 'proceso'
                          : 'abierto';
        const badgeE = `<span class="badge-dot ${estadoClass}">${p.estado}</span>`;
+
+       const urgenciaClass = p.urgencia ? p.urgencia.replace(' ', '') : '';
+       const badgeU = p.urgencia ? `<span class="badge badge-urgencia ${urgenciaClass} me-1">${p.urgencia}</span>` : '';
+
+
        const fecha  = new Date(p.fecha_ingreso).toLocaleDateString();
        const thumb  = p.url_problema ? `<img src="${p.url_problema}" class="pqr-thumb me-3">` : '';
 
-       // Mostrar Mz/Villa solo si están presentes
-       const mzVilla = (p.manzana || p.villa) ? ` · Mz ${p.manzana} – Villa ${p.villa}` : '';
+       const mzVilla = (p.manzana || p.villa) ? ` --- Mz ${p.manzana} --- Villa ${p.villa}` : '';
 
        return `<div class="card mb-3">
           <div class="card-body">
@@ -100,7 +119,7 @@ if (!token) {
               <h5 class="card-title mb-1">${p.subtipo}${mzVilla}</h5>
               <small class="text-muted">${fecha}</small>
             </div>
-            <p class="mb-1">${badgeT}${badgeE}</p>
+            <p class="mb-1">${badgeT}${badgeE}${badgeU}</p>
             <div class="d-flex">
               ${thumb}
               <p class="card-text small text-muted mb-0">${short}</p>
@@ -116,19 +135,17 @@ if (!token) {
     }
 
     /* ---------- cargar lista ---------- */
-    function load(estado=0){
+    function load(estado = 0, orderBy = selOrdenacion.value){
         list.innerHTML='<div class="text-center py-5"><div class="spinner-border"></div></div>';
 
-        fetch(END_PQR(estado), {
+        fetch(END_PQR(estado, orderBy), {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
           .then(r => {
                if (r.status === 401) {
-                    list.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado. Por favor, inicia sesión de nuevo.</div>';
-                    // Opcional: Redirigir a la página de login
-                    // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
+                    list.innerHTML = '<div class="alert alert-warning">Tu sesixc3xb3n ha expirado o no estxc3xa1s autorizado. Por favor, inicia sesixc3xb3n de nuevo.</div>';
                     return Promise.reject('No autorizado');
                 }
                 return r.json();
@@ -137,7 +154,7 @@ if (!token) {
               if(!d.ok){list.innerHTML=`<p class="text-danger">Error al cargar PQRs: ${d.mensaje || 'Desconocido'}</p>`;return;}
               list.innerHTML = d.pqr.length
                   ? d.pqr.map(card).join('')
-                  : '<p class="text-muted">— Sin registros —</p>';
+                  : '<p class="text-muted">--- Sin registros ---</p>';
           })
            .catch(err => {
                console.error(err);
@@ -152,17 +169,29 @@ if (!token) {
         if(!e.target.matches('.nav-link')) return;
         tabs.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active'));
         e.target.classList.add('active');
-        load(e.target.dataset.id);
+        // Al cambiar la pestaxc3xb1a, cargamos con el estado seleccionado y la ordenacixc3xb3n actual
+        load(e.target.dataset.id, selOrdenacion.value);
     });
 
-    /* ---------- navegación ---------- */
+    // Listener para el cambio en el selector de ordenacixc3xb3n
+    selOrdenacion.addEventListener('change', e => {
+        const selectedEstadoTab = tabs.querySelector('.nav-link.active');
+        const currentEstadoId = selectedEstadoTab ? selectedEstadoTab.dataset.id : 0;
+        const selectedOrderBy = e.target.value;
+        // Al cambiar la ordenacixc3xb3n, cargamos con el estado actual y la nueva ordenacixc3xb3n
+        load(currentEstadoId, selectedOrderBy);
+    });
+
+
+    /* ---------- navegacixc3xb3n ---------- */
     document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
     document.getElementById('btnNuevo').onclick = () => location.href = 'pqr_nuevo.php';
 
     /* primera carga */
-    load();
+    // Carga inicial con el estado "Todos" (0) y la ordenacixc3xb3n por defecto ("fecha")
+    load(0, selOrdenacion.value);
 
-}
+} // Fin del bloque else para cuando hay token
 </script>
 
 </body>
