@@ -156,7 +156,10 @@ try{
                     'include_player_ids' => [$oneSignalPlayerId],
                     'headings' => ['en' => $message_title, 'es' => $message_title],
                     'contents' => ['en' => $message_body, 'es' => $message_body],
-                    'data' => ['pqr_id' => $pqrId]
+                    'data' => ['pqr_id' => $pqrId],
+                    'ttl' => 86400,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
+                    'expire_in' => 86400  // Notificación se borra 24 horas después de ser leída (86400 segundos)
+
                 ];
 
                 $fields = json_encode($fields);
@@ -247,7 +250,10 @@ try{
                     'include_player_ids' => [$oneSignalRespPlayerId],
                     'headings' => ['en' => $message_title_resp, 'es' => $message_title_resp],
                     'contents' => ['en' => $message_body_resp, 'es' => $message_body_resp],
-                    'data' => ['pqr_id' => $pqrId] // Puedes incluir datos adicionales para manejar en el frontend del responsable
+                    'data' => ['pqr_id' => $pqrId], // Puedes incluir datos adicionales para manejar en el frontend del responsable
+                    'ttl' => 86400,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
+                    'expire_in' => 86400  // Notificación se borra 24 horas después de ser leída (86400 segundos)
+                    
                 ];
 
                 $fields_resp = json_encode($fields_resp);
