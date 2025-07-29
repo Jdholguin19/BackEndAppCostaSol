@@ -81,12 +81,13 @@ body{background:#f5f6f8}
 /* ------- rutas ------- */
 const END_RESP = '../api/pqr_respuestas.php?pqr_id=<?=$id?>';
 const END_SEND = '../api/pqr_insert_form.php';
+const END_UPDATE_ESTADO = '../api/pqr_update_estado.php'; // Nuevo endpoint
 
 /* ------- obtener usuario autenticado ------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
 if(!u.id) { 
     document.getElementById('wrap').innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los detalles del PQR.</div>';
-} else {
+} else { // Inicio del bloque else si hay usuario autenticado
 
     const END_PQR  = `../api/pqr_list.php?pqr_id=<?=$id?>`;
 
@@ -105,11 +106,18 @@ if(!u.id) {
     // Variable para almacenar las respuestas actuales y comparar
     let currentResponses = [];
 
+    // Verificar si el usuario es responsable
+    const isResponsable = u.is_responsable || false;
+
+    // Variable para almacenar el estado actual del PQR (para revertir si falla la actualización)
+    let currentPqrEstadoId = null;
+
+
     // Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
-    if (!token) {
+    if (!token) { // Inicio del bloque if si no hay token
          headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este PQR. Por favor, inicia sesión de nuevo.</div>';
          if (frmRespuesta) frmRespuesta.style.display = 'none';
-    } else {
+    } else { // Inicio del bloque else si hay token
 
         /* ------- helpers ------- */
         function fechaHora(str){
@@ -172,19 +180,33 @@ if(!u.id) {
               return;
           }
           const p = d.pqr[0];
-          titleEl.textContent = p.subtipo;
+
+          // Actualizar el estado actual del PQR globalmente
+          currentPqrEstadoId = p.estado_id;
+
+          // Mostrar Manzana/Villa en el título si están disponibles
+          const mzVillaTitle = (p.manzana || p.villa) ? ` · Mz ${p.manzana} – Villa ${p.villa}` : '';
+          titleEl.textContent = `${p.subtipo}${mzVillaTitle}`; // Establecer el título con el subtipo y Mz/Villa
+
+
           headBox.innerHTML = `
-            <h2 class="h6 msg-head mb-1">${p.subtipo}</h2>
             <p class="mb-1">
               <span class="badge bg-secondary me-1">${p.tipo}</span>
               ${badgeEstado(p.estado)}
             </p>
-            <p class="small text-muted mb-2">${p.manzana}/${p.villa} · ${fechaHora(p.fecha_ingreso)}</p>
+            <p class="small text-muted mb-2">${fechaHora(p.fecha_ingreso)}</p>
             <div class="p-3 rounded bg-white border">${p.descripcion}</div>`;
 
+          // Si el PQR está cerrado, ocultar el formulario de respuesta
           if (p.estado.toLowerCase().includes('cerr')) {
           if (frmRespuesta) frmRespuesta.style.display = 'none';
           }
+
+          // --- INICIO: Lógica para Responsables ---
+          if (isResponsable) {
+              addEstadoDropdown(p.estado_id); // p.estado_id debería venir en la respuesta de pqr_list.php
+          }
+          // --- FIN: Lógica para Responsables ---
 
         })
          .catch(err => {
@@ -194,6 +216,133 @@ if(!u.id) {
                  if (frmRespuesta) frmRespuesta.style.display = 'none';
             }
         });
+
+        /* ------- Función para agregar menú desplegable de estado (para responsables) ------- */
+        function addEstadoDropdown(currentEstadoId) {
+            if (document.getElementById('selEstadoPQR')) {
+                return; // Ya existe, no añadir de nuevo
+            }
+
+            const selectHtml = `
+              <select id="selEstadoPQR" class="form-select form-select-sm w-auto ms-3">
+                <!-- Opciones se cargarán aquí -->
+</select>`;
+
+            const titleElement = document.getElementById('title');
+            if (titleElement) {
+                titleElement.insertAdjacentHTML('afterend', selectHtml);
+            }
+
+            const selEstadoPQR = document.getElementById('selEstadoPQR');
+
+            fetch('../api/pqr_estados.php')
+                .then(r => r.json())
+                .then(d => {
+                    if (d.ok && d.estados) {
+                        d.estados.forEach(estado => {
+                            const option = document.createElement('option');
+                            option.value = estado.id;
+                            option.textContent = estado.nombre;
+                            if (estado.id == currentEstadoId) {
+                                option.selected = true;
+                            }
+                            selEstadoPQR.appendChild(option);
+                        });
+
+                        selEstadoPQR.addEventListener('change', handleEstadoChange);
+
+                    } else {
+                        console.error('Error al cargar estados de PQR:', d.msg);
+                        if (selEstadoPQR) {
+                             selEstadoPQR.innerHTML = '<option value="">Error al cargar</option>';
+                             selEstadoPQR.disabled = true;
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching PQR states:', err);
+                     if (selEstadoPQR) {
+                         selEstadoPQR.innerHTML = '<option value="">Error de red</option>';
+                         selEstadoPQR.disabled = true;
+                    }
+                });
+        }
+
+        /* ------- Función para manejar el cambio de estado ------- */
+        function handleEstadoChange(event) {
+            const newEstadoId = event.target.value;
+            const pqrId = <?=$id?>;
+
+            if (!newEstadoId) {
+                console.warn("Seleccione un estado válido.");
+                return;
+            }
+
+            // Deshabilitar el select mientras se actualiza
+            event.target.disabled = true;
+
+            fetch(END_UPDATE_ESTADO, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    pqr_id: pqrId,
+                    estado_id: newEstadoId
+                })
+            })
+            .then(r => {
+                if (r.status === 401 || r.status === 403) {
+                     showNotification('No tienes permiso para cambiar el estado del PQR.', 'danger');
+                     // Revertir la selección del dropdown si no está autorizado
+                     event.target.value = currentPqrEstadoId; // Usar el estado global almacenado
+                     return Promise.reject('Permiso denegado o no autorizado');
+                }
+                return r.json();
+            })
+            .then(d => {
+                if (d.ok) {
+                    showNotification('Estado del PQR actualizado correctamente.');
+                    // Actualizar el estado actual global
+                    currentPqrEstadoId = newEstadoId;
+                     // Actualizar la visualización del badge de estado
+                     updateEstadoBadge(newEstadoId, event.target.options[event.target.selectedIndex].text);
+
+                     // Si el estado cambia a cerrado, ocultar el formulario de respuesta
+                     if (event.target.options[event.target.selectedIndex].text.toLowerCase().includes('cerr')) {
+                         if (frmRespuesta) frmRespuesta.style.display = 'none';
+                     } else {
+                          if (frmRespuesta) frmRespuesta.style.display = 'block';
+                     }
+
+                } else {
+                    showNotification('Error al actualizar el estado del PQR: ' + (d.msg || 'Desconocido'), 'danger');
+                     // Revertir la selección del dropdown si falla la actualización
+                     event.target.value = currentPqrEstadoId;
+                }
+            })
+            .catch(err => {
+                console.error('Error updating PQR state:', err);
+                 if (err !== 'Permiso denegado o no autorizado') {
+                     showNotification('Error de red al actualizar el estado del PQR.', 'danger');
+                 }
+                 // Revertir la selección del dropdown en caso de error de red
+                 event.target.value = currentPqrEstadoId;
+            })
+            .finally(()=>{ event.target.disabled = false; }); // Habilitar el select al finalizar
+        } // FIN de la función handleEstadoChange
+
+        // Función para actualizar el badge de estado en la cabecera (Opcional)
+        function updateEstadoBadge(estadoId, estadoNombre) {
+            const badgeContainer = headBox.querySelector('.badge-dot').parentNode; // Encuentra el contenedor del badge
+            if (badgeContainer) {
+                badgeContainer.innerHTML = `
+                  <span class="badge bg-secondary me-1">${headBox.querySelector('.badge.bg-secondary').textContent}</span>
+                  ${badgeEstado(estadoNombre)}`; // Reutiliza la función badgeEstado
+            }
+        }
+
 
         /* ------- respuestas (Función para cargar y mostrar) ------- */
         function loadAndDisplayResponses() {
@@ -289,7 +438,7 @@ if(!u.id) {
             .finally(()=>{btn.disabled=false;btn.textContent='Enviar';});
         });
 
-    }
-}
+    } // FIN del bloque else si hay token
+} // FIN del bloque else si hay usuario autenticado
 </script>
 </body></html>
