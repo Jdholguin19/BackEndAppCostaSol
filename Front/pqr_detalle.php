@@ -76,6 +76,7 @@ body{background:#f5f6f8}
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ------- rutas ------- */
 const END_RESP = '../api/pqr_respuestas.php?pqr_id=<?=$id?>';
@@ -83,21 +84,11 @@ const END_SEND = '../api/pqr_insert_form.php';
 
 /* ------- obtener usuario autenticado ------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
-// Aunque obtenemos u.id del localStorage, la API de PQR listado ya no lo usa de la URL
-// La API valida con el token y obtiene el ID del usuario/responsable.
-// Sin embargo, mantenemos esta verificación básica de u.id para deshabilitar la UI si no hay usuario logueado.
 if(!u.id) { 
-    // alert('Usuario no autenticado'); // Evitar alert en carga automática
-    // location.href='login.php'; // Redirigir si no hay usuario logueado
-    // Mejor, solo deshabilitar la UI y mostrar mensaje en headBox si no hay usuario
     document.getElementById('wrap').innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los detalles del PQR.</div>';
-    // No ejecutar el resto del script si no hay usuario
 } else {
 
-    // Ya no se usa u.id en la URL para la API listado; el backend lo obtiene del token
-    // const END_PQR  = `../api/pqr_list.php?id_usuario=${u.id}&estado_id=0&pqr_id=<?=$id?>`;
-    // Ahora solo enviamos el pqr_id en la URL
-    const END_PQR  = `../api/pqr_list.php?pqr_id=<?=$id?>`; // solo 1 registro
+    const END_PQR  = `../api/pqr_list.php?pqr_id=<?=$id?>`;
 
     /* ------- refs DOM ------- */
     const titleEl = document.getElementById('title');
@@ -111,14 +102,14 @@ if(!u.id) {
     // Obtener el token de localStorage
     const token = localStorage.getItem('cs_token');
 
+    // Variable para almacenar las respuestas actuales y comparar
+    let currentResponses = [];
+
     // Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
     if (!token) {
-        // Mostrar mensaje y deshabilitar UI si no hay token
          headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este PQR. Por favor, inicia sesión de nuevo.</div>';
          if (frmRespuesta) frmRespuesta.style.display = 'none';
-
     } else {
-
 
         /* ------- helpers ------- */
         function fechaHora(str){
@@ -131,13 +122,10 @@ if(!u.id) {
           return `<span class="badge-dot ${cls}">${txt}</span>`;
         }
 
-
         function msgHTML(r){
-          /* r.responsable_id es 0, null o un número › 0 */
           const esResp = Number(r.responsable_id) > 0;
-
           const dirClass = esResp ? 'right' : '';
-          const foto = r.url_foto || 'https://via.placeholder.com/40x40?text=%20'; // Considera usar la foto real del usuario/responsable
+          const foto = r.url_foto || 'https://via.placeholder.com/40x40?text=%20';
 
           return `<li class="${dirClass}">
                     <img src="${foto}" class="avatar-sm" alt="">
@@ -158,15 +146,12 @@ if(!u.id) {
           `;
           notificationArea.appendChild(alertDiv);
 
-          // Ocultar después de unos segundos
           setTimeout(() => {
-            alertDiv.remove(); // Eliminar el elemento de la notificación
-          }, 5000); // Ocultar después de 5 segundos
+            alertDiv.remove();
+          }, 5000);
         }
 
-
         /* ------- cabecera PQR ------- */
-        // Incluir el token en la solicitud a la API de lista de PQRs
         fetch(END_PQR, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -174,18 +159,14 @@ if(!u.id) {
         })
         .then(r => {
             if (r.status === 401) {
-                // Manejar no autorizado - mostrar mensaje y posiblemente redirigir
                 headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este PQR. Por favor, inicia sesión de nuevo.</div>';
-                if (frmRespuesta) frmRespuesta.style.display = 'none'; // Asegurarse de que frmRespuesta existe antes de intentar ocultarlo
-                // Opcional: Redirigir a la página de login
-                // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
+                if (frmRespuesta) frmRespuesta.style.display = 'none';
                  return Promise.reject('No autorizado');
             }
             return r.json();
         })
         .then(d=>{
           if(!d.ok||!d.pqr[0]) {
-              // Manejar caso donde no se encuentra el PQR o hay error del backend
               headBox.innerHTML = `<div class="alert alert-danger">Error al cargar el PQR o no encontrado: ${d.mensaje || 'Desconocido'}</div>`;
               if (frmRespuesta) frmRespuesta.style.display = 'none';
               return;
@@ -201,7 +182,6 @@ if(!u.id) {
             <p class="small text-muted mb-2">${p.manzana}/${p.villa} · ${fechaHora(p.fecha_ingreso)}</p>
             <div class="p-3 rounded bg-white border">${p.descripcion}</div>`;
 
-          // Si el PQR está cerrado, ocultar el formulario de respuesta
           if (p.estado.toLowerCase().includes('cerr')) {
           if (frmRespuesta) frmRespuesta.style.display = 'none';
           }
@@ -215,9 +195,8 @@ if(!u.id) {
             }
         });
 
-        /* ------- respuestas ------- */
-        // Incluir el token en la solicitud a la API de respuestas
-        function loadRespuestas() {
+        /* ------- respuestas (Función para cargar y mostrar) ------- */
+        function loadAndDisplayResponses() {
           fetch(END_RESP, {
               headers: {
                   'Authorization': `Bearer ${token}`
@@ -225,8 +204,6 @@ if(!u.id) {
           }).then(r => {
               if (r.status === 401) {
                  chat.innerHTML='<li class="text-warning">Tu sesión ha expirado o no estás autorizado para ver las respuestas.</li>';
-                  // Opcional: Redirigir a la página de login
-                  // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
                   return Promise.reject('No autorizado');
               }
               return r.json();
@@ -237,9 +214,19 @@ if(!u.id) {
                  console.error('Error en API pqr_respuestas:', d.msg);
                  return;
              }
-            chat.innerHTML = d.respuestas.length
-              ? d.respuestas.map(msgHTML).join('')
-              : '<li class="text-muted">— Sin respuestas —</li>';
+
+            const newResponsesString = JSON.stringify(d.respuestas);
+            const currentResponsesString = JSON.stringify(currentResponses);
+
+            if (newResponsesString !== currentResponsesString) {
+                currentResponses = d.respuestas;
+                chat.innerHTML = currentResponses.length
+                  ? currentResponses.map(msgHTML).join('')
+                  : '<li class="text-muted">— Sin respuestas —</li>';
+
+                chat.scrollTop = chat.scrollHeight;
+            }
+
           })
           .catch(err=>{
                console.error(err);
@@ -248,57 +235,61 @@ if(!u.id) {
              }
           });
         }
-        loadRespuestas();
+
+        // Cargar respuestas al cargar la página
+        loadAndDisplayResponses();
+
+        // Configurar polling para cargar respuestas cada 5 segundos
+        const pollingInterval = setInterval(loadAndDisplayResponses, 5000);
+
+        // Limpiar el intervalo cuando el usuario sale de la página
+        window.addEventListener('beforeunload', () => {
+            clearInterval(pollingInterval);
+        });
 
         /* ------- envío de nueva respuesta ------- */
-        // Incluir el token en la solicitud a la API de envío de respuesta
         frmRespuesta.addEventListener('submit',e=>{
           e.preventDefault();
           if(!frmRespuesta.checkValidity()){ frmRespuesta.classList.add('was-validated'); return; }
 
-          // No enviamos usuario_id en el FormData; el backend lo obtiene del token
-          const fd = new FormData(frmRespuesta);
+          const fd = new FormData(e.target);
           fd.append('pqr_id', <?=$id?>);
-          // fd.append('usuario_id', u.id); // <-- ELIMINADO
 
-          btnSend.disabled=true; btnSend.textContent='Enviando…';
+          const btn=document.getElementById('btnSend');
+          btn.disabled=true; btn.textContent='Enviando…';
 
           fetch(END_SEND,{method:'POST',body:fd,
               headers: {
                   'Authorization': `Bearer ${token}`
-                  // No necesitas Content-Type: multipart/form-data aquí; fetch lo establece automáticamente con FormData
               }
            })
             .then(r => {
                 if (r.status === 401) {
                      showNotification('Tu sesión ha expirado o no estás autorizado para responder. Por favor, inicia sesión de nuevo.', 'danger');
-                     // Opcional: Redirigir a la página de login
-                     // setTimeout(() => { location.href = 'login_front.php'; }, 2000);
                      return Promise.reject('No autorizado');
                 }
                 return r.json();
             })
             .then(d=>{
               if(d.ok){
-                txtMensaje.value = ''; // Clear the textarea
+                txtMensaje.value = '';
                 const fileInput = frmRespuesta.querySelector('input[type="file"]');
                 if(fileInput) fileInput.value = '';
 
                 frmRespuesta.classList.remove('was-validated');
-                loadRespuestas(); // Reload messages
-                showNotification('Respuesta enviada correctamente!'); // Mostrar notificación de éxito
-              }else throw d.msg || ''; }) // Lanzar mensaje de error del backend si existe
-            .catch(errMsg=>{
-                console.error(errMsg);
-                 if (errMsg !== 'No autorizado') {
-                    showNotification('Error al enviar respuesta: ' + (errMsg || 'Desconocido'), 'danger');
-                 }
+                loadAndDisplayResponses();
+                showNotification('Respuesta enviada correctamente!');
+              }else throw d.msg || ''; })
+            .catch(errMsg => {
+                 console.error(errMsg);
+                  if (errMsg !== 'No autorizado') {
+                       showNotification('Error al enviar respuesta: ' + (errMsg || 'Desconocido'), 'danger');
+                  }
             })
-            .finally(()=>{btnSend.disabled=false;btnSend.textContent='Enviar';});
+            .finally(()=>{btn.disabled=false;btn.textContent='Enviar';});
         });
 
     }
 }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body></html>

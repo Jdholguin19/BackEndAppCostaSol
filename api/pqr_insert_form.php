@@ -197,6 +197,96 @@ try{
     // --- FIN: Lógica para enviar Notificación Push al Cliente ---
 
 
+    // --- INICIO: Lógica para enviar Notificación Push al Responsable ---
+    if (!$is_responsable && $remitente_usuario_id) { // Verificar si el remitente es un usuario regular
+        // 1. Obtener el ID del responsable asociado a este PQR
+        $sql_get_responsable_id = 'SELECT responsable_id FROM pqr WHERE id = :pqr_id LIMIT 1';
+        $stmt_get_responsable_id = $db->prepare($sql_get_responsable_id);
+        $stmt_get_responsable_id->execute([':pqr_id' => $pqrId]);
+        $responsable_id_pqr = $stmt_get_responsable_id->fetchColumn();
+
+        if ($responsable_id_pqr) {
+            // 2. Obtener el onesignal_player_id y nombre del responsable
+            $sql_get_resp_player_id = 'SELECT onesignal_player_id, nombre FROM responsable WHERE id = :responsable_id LIMIT 1';
+            $stmt_get_resp_player_id = $db->prepare($sql_get_resp_player_id);
+            $stmt_get_resp_player_id->execute([':responsable_id' => $responsable_id_pqr]);
+            $responsable_info = $stmt_get_resp_player_id->fetch(PDO::FETCH_ASSOC);
+
+            $oneSignalRespPlayerId = $responsable_info['onesignal_player_id'] ?? null;
+            $responsable_nombre_notif = $responsable_info['nombre'] ?? 'Responsable';
+
+
+            if ($oneSignalRespPlayerId) {
+                // 3. Obtener información adicional del PQR y del cliente para la notificación
+                $sql_get_pqr_user_info = 'SELECT p.numero_solicitud, pr.manzana, pr.villa, u.nombres, u.apellidos
+                                          FROM pqr p
+                                          JOIN propiedad pr ON p.id_propiedad = pr.id
+                                          JOIN usuario u ON p.id_usuario = u.id
+                                          WHERE p.id = :pqr_id LIMIT 1';
+                $stmt_get_pqr_user_info = $db->prepare($sql_get_pqr_user_info);
+                $stmt_get_pqr_user_info->execute([':pqr_id' => $pqrId]);
+                $pqr_user_info = $stmt_get_pqr_user_info->fetch(PDO::FETCH_ASSOC);
+
+                $pqr_numero = $pqr_user_info['numero_solicitud'] ?? 'N/A';
+                $manzana = $pqr_user_info['manzana'] ?? 'N/A';
+                $villa = $pqr_user_info['villa'] ?? 'N/A';
+                $cliente_nombre_completo = trim(($pqr_user_info['nombres'] ?? '') . ' ' . ($pqr_user_info['apellidos'] ?? 'Cliente'));
+
+                // Construir el mensaje de la notificación para el responsable
+                $message_title_resp = "Nueva respuesta de {$cliente_nombre_completo} en PQR {$pqr_numero}";
+                 $notification_message_resp = strlen($mensaje) > 100 ? substr($mensaje, 0, 97) . '...' : $mensaje;
+                $message_body_resp = "El cliente ha respondido: \"" . $notification_message_resp . "\" en PQR {$pqr_numero} (Mz {$manzana} Villa {$villa}).";
+
+
+                // --- Código para enviar a la API de OneSignal ---
+                $oneSignalAppId = 'e77613c2-51f8-431d-9892-8b2463ecc817'; // Tu App ID
+                $oneSignalApiKey = 'os_v2_app_453bhqsr7bbr3gesrmsgh3gic66q3hsf24becvfqkh44mrzwgvmwtm3k4p47sydyynham5mmlkc4qyigv27jxoage7n3omod5plhxmi'; // Tu REST API Key
+
+                $fields_resp = [
+                    'app_id' => $oneSignalAppId,
+                    'include_player_ids' => [$oneSignalRespPlayerId],
+                    'headings' => ['en' => $message_title_resp, 'es' => $message_title_resp],
+                    'contents' => ['en' => $message_body_resp, 'es' => $message_body_resp],
+                    'data' => ['pqr_id' => $pqrId] // Puedes incluir datos adicionales para manejar en el frontend del responsable
+                ];
+
+                $fields_resp = json_encode($fields_resp);
+
+                $ch_resp = curl_init();
+                curl_setopt($ch_resp, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+                curl_setopt($ch_resp, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json; charset=utf-8',
+                    'Authorization: Basic ' . $oneSignalApiKey
+                ));
+                curl_setopt($ch_resp, CURLOPT_RETURNTRANSFER, TRUE);
+                curl_setopt($ch_resp, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch_resp, CURLOPT_POST, TRUE);
+                curl_setopt($ch_resp, CURLOPT_POSTFIELDS, $fields_resp);
+                curl_setopt($ch_resp, CURLOPT_SSL_VERIFYPEER, FALSE); // Considerar TRUE en producción
+
+                $response_resp = curl_exec($ch_resp);
+                $httpCode_resp = curl_getinfo($ch_resp, CURLINFO_HTTP_CODE);
+                curl_close($ch_resp);
+
+                $responseData_resp = json_decode($response_resp, true);
+
+                 if ($httpCode_resp === 200 && isset($responseData_resp['id'])) {
+                     error_log("Notificación OneSignal enviada correctamente al Responsable Player ID " . $oneSignalRespPlayerId . " (PQR ID: " . $pqrId . "). OneSignal ID: " . $responseData_resp['id']);
+                } else {
+                     error_log("Error al enviar notificación OneSignal al Responsable Player ID " . $oneSignalRespPlayerId . " (PQR ID: " . $pqrId . "). HTTP Code: " . $httpCode_resp . ". Response: " . $response_resp);
+                }
+                // --- Fin Código para enviar a la API de OneSignal ---
+
+            } else {
+                 error_log("Responsable con ID " . $responsable_id_pqr . " para PQR " . $pqrId . " no tiene onesignal_player_id registrado.");
+            }
+        } else {
+            error_log("PQR con ID " . $pqrId . " no tiene un responsable_id asociado para enviar notificación.");
+        }
+    }
+    // --- FIN: Lógica para enviar Notificación Push al Responsable ---
+
+
     echo json_encode(['ok'=>true]);
 
 }catch(Throwable $e){
