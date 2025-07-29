@@ -38,7 +38,7 @@
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
 // OPCIÓN 2: Si la Opción 1 no funciona, usar esta
-
+// Código final limpio para reemplazar en tu menu_front.php
 OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
         appId: "e77613c2-51f8-431d-9892-8b2463ecc817",
@@ -49,76 +49,53 @@ OneSignalDeferred.push(async function(OneSignal) {
         allowLocalhostAsSecureOrigin: true,
     });
 
+    // --- INICIO: Código para obtener y enviar el player_id ---
     const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
     if (u.id) {
         try {
-            // Esperar a que OneSignal esté completamente listo
+            // Esperar un momento para que OneSignal esté completamente listo
             await new Promise(resolve => setTimeout(resolve, 2000));
             
-            // Intentar obtener el ID usando diferentes métodos
-            let playerId = null;
+            // Obtener el Player ID usando acceso directo a la propiedad
+            const playerId = OneSignal.User.PushSubscription.id;
             
-            // Método 1: getIdAsync
-            try {
-                playerId = await OneSignal.User.PushSubscription.getIdAsync();
-            } catch (e) {
-                console.log("getIdAsync falló:", e.message);
-            }
-            
-            // Método 2: Acceso directo a la propiedad
-            if (!playerId) {
-                try {
-                    playerId = OneSignal.User.PushSubscription.id;
-                } catch (e) {
-                    console.log("Acceso directo falló:", e.message);
-                }
-            }
-            
-            console.log("OneSignal Player ID obtenido:", playerId);
-            
+            console.log("OneSignal Player ID:", playerId);
+
             if (playerId) {
-                await enviarPlayerIdAlBackend(u.id, playerId);
+                // Enviar el player_id al backend
+                const token = localStorage.getItem('cs_token');
+                if (token) {
+                    const response = await fetch('../api/update_player_id.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            user_id: u.id,
+                            onesignal_player_id: playerId
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.ok) {
+                        console.log("Player ID actualizado en el servidor:", data.mensaje);
+                    } else {
+                        console.error("Error al actualizar Player ID en el servidor:", data.mensaje);
+                    }
+                } else {
+                    console.warn("No hay token de autenticación para enviar el Player ID.");
+                }
             } else {
-                console.warn("No se pudo obtener el Player ID con ningún método");
+                console.warn("OneSignal Player ID es null - usuario puede no estar suscrito");
             }
         } catch (error) {
-            console.error("Error general:", error);
+            console.error("Error al obtener o enviar el OneSignal Player ID:", error);
         }
+    } else {
+        console.warn("Usuario no logueado, no se puede enviar el Player ID.");
     }
+    // --- FIN: Código para obtener y enviar el player_id ---
 });
-
-
-// Función helper para enviar al backend
-async function enviarPlayerIdAlBackend(userId, playerId) {
-    const token = localStorage.getItem('cs_token');
-    if (!token) {
-        console.warn("No hay token de autenticación para enviar el Player ID.");
-        return;
-    }
-    
-    try {
-        const response = await fetch('../api/update_player_id.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                user_id: userId,
-                onesignal_player_id: playerId
-            })
-        });
-        
-        const data = await response.json();
-        if (data.ok) {
-            console.log("Player ID actualizado en el servidor:", data.mensaje);
-        } else {
-            console.error("Error al actualizar Player ID en el servidor:", data.mensaje);
-        }
-    } catch (error) {
-        console.error("Error de red al enviar Player ID:", error);
-    }
-}
 </script>
 </head>
 <body class="bg-light">
