@@ -142,9 +142,9 @@ try{
                 $villa = $pqr_info['villa'] ?? 'N/A';
 
                 // Construir el mensaje de la notificación
-                $message_title = "Respuesta a tu PQR {$pqr_numero}";
+                $message_title = "Nueva respuesta a tu mensaje";
                 $notification_message = strlen($mensaje) > 100 ? substr($mensaje, 0, 97) . '...' : $mensaje;
-                $message_body = "El responsable ha respondido: \"" . $notification_message . "\" en tu PQR {$pqr_numero} (Mz {$manzana} Villa {$villa}).";
+                $message_body = "Mz {$manzana} Villa {$villa}.";
 
 
                 // --- Código para enviar a la API de OneSignal ---
@@ -236,9 +236,9 @@ try{
                 $cliente_nombre_completo = trim(($pqr_user_info['nombres'] ?? '') . ' ' . ($pqr_user_info['apellidos'] ?? 'Cliente'));
 
                 // Construir el mensaje de la notificación para el responsable
-                $message_title_resp = "Nueva respuesta de {$cliente_nombre_completo} en PQR {$pqr_numero}";
+                $message_title_resp = "Nueva respuesta de {$cliente_nombre_completo}";
                  $notification_message_resp = strlen($mensaje) > 100 ? substr($mensaje, 0, 97) . '...' : $mensaje;
-                $message_body_resp = "El cliente ha respondido: \"" . $notification_message_resp . "\" en PQR {$pqr_numero} (Mz {$manzana} Villa {$villa}).";
+                $message_body_resp = "Mz {$manzana} Villa {$villa}.";
 
 
                 // --- Código para enviar a la API de OneSignal ---
