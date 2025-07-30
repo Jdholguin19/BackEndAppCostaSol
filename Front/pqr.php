@@ -13,12 +13,11 @@
 .badge-dot.proceso::before  {background:#d4ac1d}
 .badge-dot.cerrado::before  {background:#1f9d55}
 .badge-dot.abierto::before  {background:#0d6efd}
-
-/* Estilos para el badge de urgencia (opcional) */
+ 
+/* Estilos para el badge de urgencia (opcional) modifica si se cambia o aumente los tipos de urgencia de pqr */
 .badge-urgencia { font-size: .8rem; padding: .3em .6em; border-radius: .25rem; }
-.badge-urgencia.Bajo  { background-color: #28a745; color: #fff; }
-.badge-urgencia.Media { background-color: #ffc107; color: #212529; }
-.badge-urgencia.Alta  { background-color: #dc3545; color: #fff; }
+.badge-urgencia.Basica  { background-color: #28a745; color: #fff; }
+.badge-urgencia.Urgente  { background-color: #dc3545; color: #fff; }
 
 
 .pqr-thumb{width:56px;height:56px;object-fit:cover;border-radius:.25rem}
