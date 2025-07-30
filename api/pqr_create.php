@@ -68,10 +68,19 @@ try{
     // Validar que los campos requeridos (excluyendo id_usuario) estén presentes
     if(!$pid||!$tipo||!$sub||$desc===''){
         http_response_code(400);
-        exit(json_encode(['ok'=>false,'msg'>'Datos incompletos (id_propiedad, tipo_id, subtipo_id, o descripcion faltante)']));
+        exit(json_encode(['ok'=>false,'msg'=>'Datos incompletos (id_propiedad, tipo_id, subtipo_id, o descripcion faltante)']));
     }
 
-    /* ---------- 2. gestionar adjunto ---------- */
+    /* ---------- 2. obtener urgencia_id del subtipo ---------- */
+    $sql_get_urgencia = 'SELECT urgencia_id FROM subtipo_pqr WHERE id = :subtipo_id LIMIT 1';
+    $stmt_get_urgencia = $db->prepare($sql_get_urgencia);
+    $stmt_get_urgencia->execute([':subtipo_id' => $sub]);
+    $urgencia_data = $stmt_get_urgencia->fetch(PDO::FETCH_ASSOC);
+
+    $urgencia_id = $urgencia_data['urgencia_id'] ?? 1; // Default a 1 (BASICA) si no se encuentra
+
+
+    /* ---------- 3. gestionar adjunto ---------- */
     $urlProblema = null;
     if(!empty($_FILES['archivo']['tmp_name'])){
          $uploadDir = __DIR__.'/../ImagenesPQR_problema/';
@@ -92,21 +101,21 @@ try{
         }
     }
 
-    /* ---------- 3. obtener responsable aleatorio ---------- */
+    /* ---------- 4. obtener responsable aleatorio ---------- */
     $respId = $db->query("SELECT id FROM responsable WHERE estado=1 ORDER BY RAND() LIMIT 1")
                  ->fetchColumn();
 
-    /* ---------- 4. crear numero_solicitud ---------- */
+    /* ---------- 5. crear numero_solicitud ---------- */
     $num = $db->query("SELECT LPAD(IFNULL(MAX(id),0)+1,5,'0') FROM pqr")->fetchColumn();
     $numero = 'SAC'.$num;                               // ej: SAC00007
 
-    /* ---------- 5. insertar ---------- */
+    /* ---------- 6. insertar ---------- */
     $sql = 'INSERT INTO pqr
             (numero_solicitud,id_usuario,id_propiedad,tipo_id,subtipo_id,estado_id,
              descripcion,urgencia_id,url_problema,responsable_id,fecha_compromiso)
             VALUES
             (:num,:uid,:pid,:tipo,:sub,1,          /* 1 = Ingresado */
-             :des,2,:url,:resp,DATE_ADD(NOW(),INTERVAL 5 DAY))';
+             :des,:urgencia_id,:url,:resp,DATE_ADD(NOW(),INTERVAL 5 DAY))'; // Usar :urgencia_id aquí
     $db->prepare($sql)->execute([
         ':num'=>$numero,
         ':uid'=>$authenticated_user_id, // <-- Usamos el ID del usuario autenticado
@@ -114,6 +123,7 @@ try{
         ':tipo'=>$tipo,
         ':sub'=>$sub,
         ':des'=>$desc,
+        ':urgencia_id'=>$urgencia_id, // <-- Usar el urgencia_id obtenido
         ':url'=>$urlProblema,
         ':resp'=>$respId
     ]);

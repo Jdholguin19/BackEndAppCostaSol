@@ -240,6 +240,9 @@ if(!u.id) {
                 .then(d => {
                     if (d.ok && d.estados) {
                         d.estados.forEach(estado => {
+                            if (estado.id == 1) {
+                              return; // Saltar la opción con ID 1 (Ingresado)
+                            }
                             const option = document.createElement('option');
                             option.value = estado.id;
                             option.textContent = estado.nombre;

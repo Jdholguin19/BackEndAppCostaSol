@@ -14,10 +14,10 @@
 .badge-dot.cerrado::before  {background:#1f9d55}
 .badge-dot.abierto::before  {background:#0d6efd}
  
-/* Estilos para el badge de urgencia (opcional) modifica si se cambia o aumente los tipos de urgencia de pqr */
+/* Estilos para el badge de urgencia (opcional) modifica si se cambia o aumente los tipos de de pqr */
 .badge-urgencia { font-size: .8rem; padding: .3em .6em; border-radius: .25rem; }
-.badge-urgencia.Basica  { background-color: #28a745; color: #fff; }
-.badge-urgencia.Urgente  { background-color: #dc3545; color: #fff; }
+.badge-urgencia.BASICA  { background-color: #28a745; color: #fff; }
+.badge-urgencia.URGENTE  { background-color: #dc3545; color: #fff; }
 
 
 .pqr-thumb{width:56px;height:56px;object-fit:cover;border-radius:.25rem}
