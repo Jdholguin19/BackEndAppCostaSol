@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>PQR</title>
+<title>Contingencia</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -34,7 +34,7 @@
         <i class="bi bi-arrow-left"></i>
       </button>
 
-      <h1 class="h4 mb-0 flex-grow-1 text-center">PQR</h1>
+      <h1 class="h4 mb-0 flex-grow-1 text-center">Contingencia</h1>
 
       <!-- Selector de Ordenacixc3xb3n (Nuevo) -->
       <select id="selOrdenacion" class="form-select form-select-sm w-auto me-2">
