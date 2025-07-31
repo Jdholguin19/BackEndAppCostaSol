@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../config/db.php';
+require_once __DIR__.'/../../config/db.php';
 
 $id = (int)($_GET['tipo_id'] ?? 0);
 $db = DB::getDB();

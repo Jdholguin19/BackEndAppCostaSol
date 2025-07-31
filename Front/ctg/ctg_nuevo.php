@@ -63,7 +63,7 @@ if (!token) {
     /* ---------- llenar propiedades ---------- */
     // Asegúrate de que esta API (obtener_propiedades.php) también maneja token si es necesario
     // Actualmente usa id_usuario en URL - si la cambiaste, ajusta aquí
-    fetch('../api/obtener_propiedades.php?id_usuario='+u.id) // <-- Si obtener_propiedades.php usa token, ajusta esta llamada
+    fetch('../../api/obtener_propiedades.php?id_usuario='+u.id) // <-- Si obtener_propiedades.php usa token, ajusta esta llamada
       .then(r=>r.json()).then(d=>{
         if(!d.ok) return;
         const sel = document.getElementById('selProp');
@@ -75,7 +75,7 @@ if (!token) {
 
     /* ---------- llenar tipos ---------- */
     // Asegúrate de que esta API (tipo_ctg.php) maneja token si es necesario
-    fetch('../api/tipo_ctg.php').then(r=>r.json()).then(d=>{
+    fetch('../../api/ctg/tipo_ctg.php').then(r=>r.json()).then(d=>{
       if(d.ok){
         const sel=document.getElementById('selTipo');
         d.tipos.forEach(t=>sel.insertAdjacentHTML('beforeend',
@@ -91,7 +91,7 @@ if (!token) {
       const tid=e.target.value, selSub=document.getElementById('selSub');
       selSub.innerHTML='<option>— Cargando… —</option>'; selSub.disabled=true;
       // Asegúrate de que esta API (subtipo_ctg.php) maneja token si es necesario
-      fetch('../api/subtipo_ctg.php?tipo_id='+tid).then(r=>r.json()).then(d=>{ // <-- Si subtipo_ctg.php usa token, ajusta esta llamada
+      fetch('../../api/ctg/subtipo_ctg.php?tipo_id='+tid).then(r=>r.json()).then(d=>{ // <-- Si subtipo_ctg.php usa token, ajusta esta llamada
           selSub.innerHTML='<option value="">— Seleccione —</option>';
           if(d.ok){
             d.subtipos.forEach(s=>selSub.insertAdjacentHTML('beforeend',
@@ -112,7 +112,7 @@ if (!token) {
       const btn=document.getElementById('btnSend');
       btn.disabled=true; btn.textContent='Enviando…';
 
-      fetch('../api/ctg_create.php',{method:'POST',body:fd,
+      fetch('../../api/ctg/ctg_create.php',{method:'POST',body:fd,
           headers: {
               'Authorization': `Bearer ${token}`
               // No necesitas Content-Type: multipart/form-data aquí; fetch lo establece automáticamente con FormData

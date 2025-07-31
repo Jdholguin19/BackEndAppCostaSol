@@ -1,4 +1,4 @@
-<?php /* Front/ctg_detalle.php */
+<?php /* Front/ctg/ctg_detalle.php */
 $id = (int)($_GET['id'] ?? 0);
 ?>
 <!doctype html><html lang="es"><head>
@@ -79,9 +79,9 @@ body{background:#f5f6f8}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ------- rutas ------- */
-const END_RESP = '../api/ctg_respuestas.php?ctg_id=<?=$id?>';
-const END_SEND = '../api/ctg_insert_form.php';
-const END_UPDATE_ESTADO = '../api/ctg_update_estado.php'; // Nuevo endpoint
+const END_RESP = '../../api/ctg/ctg_respuestas.php?ctg_id=<?=$id?>';
+const END_SEND = '../../api/ctg/ctg_insert_form.php';
+const END_UPDATE_ESTADO = '../../api/ctg/ctg_update_estado.php'; // Nuevo endpoint
 
 /* ------- obtener usuario autenticado ------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
@@ -89,7 +89,7 @@ if(!u.id) {
     document.getElementById('wrap').innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los detalles del CTG.</div>';
 } else { // Inicio del bloque else si hay usuario autenticado
 
-    const END_CTG  = `../api/ctg_list.php?ctg_id=<?=$id?>`;
+    const END_CTG  = `../../api/ctg/ctg_list.php?ctg_id=<?=$id?>`;
 
     /* ------- refs DOM ------- */
     const titleEl = document.getElementById('title');
@@ -235,7 +235,7 @@ if(!u.id) {
 
             const selEstadoCTG = document.getElementById('selEstadoCTG');
 
-            fetch('../api/ctg_estados.php')
+            fetch('../../api/ctg/ctg_estados.php')
                 .then(r => r.json())
                 .then(d => {
                     if (d.ok && d.estados) {

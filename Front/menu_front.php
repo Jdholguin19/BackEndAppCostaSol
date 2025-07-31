@@ -187,7 +187,7 @@ function svgCircle(percent){
 function openModule(menu){
   // Si el nombre es CTG lanzamos ctg.php
   if ((menu.nombre || '').trim().toUpperCase() === 'CTG'){
-      location.href = 'ctg.php';               // ctg.php leerá el usuario desde localStorage
+      location.href = 'ctg/ctg.php';               // ctg.php leerá el usuario desde localStorage
       return;
   }
 
@@ -205,7 +205,7 @@ function openModule(menu){
 
     if ( menu.id === 8 ||
        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-      location.href = 'ctg_notificaciones.php';          // <<<<<<
+      location.href = 'ctg/ctg_notificaciones.php';          // <<<<<<
       return;
   }  
 
@@ -264,7 +264,7 @@ function pintarAvance(etapa, porcentaje){
       <div>
         <h4 class="mb-1">Fase de Construcción</h4>
         <p class="mb-2">${etapa}</p>
-        <a href="fase_detalle.php?manzana=${encodeURIComponent(currentManzana)}&villa=${encodeURIComponent(currentSolar)}"
+        <a href="ctg/fase_detalle.php?manzana=${encodeURIComponent(currentManzana)}&villa=${encodeURIComponent(currentSolar)}"
            class="link-secondary small">
           Ver detalles <i class="bi bi-chevron-right"></i>
         </a>

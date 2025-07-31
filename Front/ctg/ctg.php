@@ -60,9 +60,9 @@
 
 <script>
 /* ---------- constantes ---------- */
-const END_EST  = '../api/ctg_estados.php';
+const END_EST  = '../../api/ctg/ctg_estados.php';
 // Modificamos END_CTG para aceptar parxc3xa1metro de ordenacixc3xb3n
-const END_CTG  = (estado, orderBy) => `../api/ctg_list.php?estado_id=${estado}&order_by=${orderBy}`;
+const END_CTG  = (estado, orderBy) => `../../api/ctg/ctg_list.php?estado_id=${estado}&order_by=${orderBy}`;
 
 /* ---------- referencias DOM ---------- */
 const tabs = document.getElementById('estadoTabs');
@@ -183,7 +183,7 @@ if (!token) {
 
 
     /* ---------- navegacixc3xb3n ---------- */
-    document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
+    document.getElementById('btnBack').onclick  = () => location.href='../menu_front.php';
     document.getElementById('btnNuevo').onclick = () => location.href = 'ctg_nuevo.php';
 
     /* primera carga */

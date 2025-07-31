@@ -1,5 +1,5 @@
 <!doctype html><html lang="es"><head>
-<!--- Front/ctg_notificaciones.php --->
+<!--- Front/ctg/ctg_notificaciones.php --->
 <meta charset="utf-8"><title>Notificaciones CTG</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -48,7 +48,7 @@ const token = localStorage.getItem('cs_token');
 if (!token) {
     notificationsListEl.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver las notificaciones.</div>';
 } else {
-    fetch('../api/notificaciones.php', {
+    fetch('../../api/notificaciones.php', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -57,7 +57,7 @@ if (!token) {
         if (r.status === 401) {
             notificationsListEl.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado. Por favor, inicia sesión de nuevo.</div>';
             // Opcional: Redirigir a la página de login
-            // window.location.href = 'login_front.php';
+            // window.location.href = '../ctg/login_front.php';
             return Promise.reject('No autorizado');
         }
         return r.json();
