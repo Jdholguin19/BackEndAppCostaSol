@@ -14,13 +14,13 @@
 .badge-dot.cerrado::before  {background:#1f9d55}
 .badge-dot.abierto::before  {background:#0d6efd}
  
-/* Estilos para el badge de urgencia (opcional) modifica si se cambia o aumente los tipos de de pqr */
+/* Estilos para el badge de urgencia (opcional) modifica si se cambia o aumente los tipos de de ctg */
 .badge-urgencia { font-size: .8rem; padding: .3em .6em; border-radius: .25rem; }
 .badge-urgencia.BASICA  { background-color: #28a745; color: #fff; }
 .badge-urgencia.URGENTE  { background-color: #dc3545; color: #fff; }
 
 
-.pqr-thumb{width:56px;height:56px;object-fit:cover;border-radius:.25rem}
+.ctg-thumb{width:56px;height:56px;object-fit:cover;border-radius:.25rem}
 .btn-back {padding:.25rem .5rem;font-size:1.25rem;line-height:1}
 </style>
 </head>
@@ -54,19 +54,19 @@
   </ul>
 
   <!-- lista -->
-  <div id="pqrList"></div>
+  <div id="ctgList"></div>
 
 </div>
 
 <script>
 /* ---------- constantes ---------- */
-const END_EST  = '../api/pqr_estados.php';
-// Modificamos END_PQR para aceptar parxc3xa1metro de ordenacixc3xb3n
-const END_PQR  = (estado, orderBy) => `../api/pqr_list.php?estado_id=${estado}&order_by=${orderBy}`;
+const END_EST  = '../api/ctg_estados.php';
+// Modificamos END_CTG para aceptar parxc3xa1metro de ordenacixc3xb3n
+const END_CTG  = (estado, orderBy) => `../api/ctg_list.php?estado_id=${estado}&order_by=${orderBy}`;
 
 /* ---------- referencias DOM ---------- */
 const tabs = document.getElementById('estadoTabs');
-const list = document.getElementById('pqrList');
+const list = document.getElementById('ctgList');
 const selOrdenacion = document.getElementById('selOrdenacion');
 
 // Obtener el token de localStorage
@@ -74,7 +74,7 @@ const token = localStorage.getItem('cs_token');
 
 // Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
 if (!token) {
-     list.innerHTML = '<div class="alert alert-warning">Debes iniciar sesion para ver los PQRs.</div>';
+     list.innerHTML = '<div class="alert alert-warning">Debes iniciar sesion para ver los CTGs.</div>';
 } else {
 
     /* ---------- cargar estados (Restaurado) ---------- */
@@ -108,7 +108,7 @@ if (!token) {
 
 
        const fecha  = new Date(p.fecha_ingreso).toLocaleDateString();
-       const thumb  = p.url_problema ? `<img src="${p.url_problema}" class="pqr-thumb me-3">` : '';
+       const thumb  = p.url_problema ? `<img src="${p.url_problema}" class="ctg-thumb me-3">` : '';
 
        const mzVilla = (p.manzana || p.villa) ? ` --- Mz ${p.manzana} --- Villa ${p.villa}` : '';
 
@@ -124,7 +124,7 @@ if (!token) {
               <p class="card-text small text-muted mb-0">${short}</p>
             </div>
             <div class="text-end small">
-              <a href="pqr_detalle.php?id=${p.id}"
+              <a href="ctg_detalle.php?id=${p.id}"
                 class="link-secondary text-decoration-none">
                 ${p.n_respuestas} respuestas
               </a>
@@ -137,7 +137,7 @@ if (!token) {
     function load(estado = 0, orderBy = selOrdenacion.value){
         list.innerHTML='<div class="text-center py-5"><div class="spinner-border"></div></div>';
 
-        fetch(END_PQR(estado, orderBy), {
+        fetch(END_CTG(estado, orderBy), {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -150,15 +150,15 @@ if (!token) {
                 return r.json();
           })
           .then(d=>{
-              if(!d.ok){list.innerHTML=`<p class="text-danger">Error al cargar PQRs: ${d.mensaje || 'Desconocido'}</p>`;return;}
-              list.innerHTML = d.pqr.length
-                  ? d.pqr.map(card).join('')
+              if(!d.ok){list.innerHTML=`<p class="text-danger">Error al cargar CTGs: ${d.mensaje || 'Desconocido'}</p>`;return;}
+              list.innerHTML = d.ctg.length
+                  ? d.ctg.map(card).join('')
                   : '<p class="text-muted">--- Sin registros ---</p>';
           })
            .catch(err => {
                console.error(err);
                 if (err !== 'No autorizado') {
-                    list.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor de PQRs</div>';
+                    list.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor de CTGs</div>';
                 }
            });
     }
@@ -184,7 +184,7 @@ if (!token) {
 
     /* ---------- navegacixc3xb3n ---------- */
     document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
-    document.getElementById('btnNuevo').onclick = () => location.href = 'pqr_nuevo.php';
+    document.getElementById('btnNuevo').onclick = () => location.href = 'ctg_nuevo.php';
 
     /* primera carga */
     // Carga inicial con el estado "Todos" (0) y la ordenacixc3xb3n por defecto ("fecha")

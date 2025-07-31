@@ -7,7 +7,7 @@ $db = DB::getDB();
 try {
     $stmt = $db->prepare(
         'SELECT id, nombre 
-           FROM subtipo_pqr 
+           FROM subtipo_ctg 
           WHERE tipo_id = ? 
        ORDER BY nombre'
     );
@@ -18,7 +18,7 @@ try {
         'subtipos' => $stmt->fetchAll(PDO::FETCH_ASSOC)
     ]);
 } catch (Throwable $e) {
-    error_log('subtipo_pqr: '.$e->getMessage());
+    error_log('subtipo_ctg: '.$e->getMessage());
     http_response_code(500);
     echo json_encode(['ok'=>false]);
 }

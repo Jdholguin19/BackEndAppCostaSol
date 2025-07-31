@@ -1,7 +1,7 @@
 <?php
-/*  POST /api/pqr_insert_form.php
+/*  POST /api/ctg_insert_form.php
  *  Body  (multipart/form-data)
- *      pqr_id         int
+ *      ctg_id         int
  *      mensaje        string
  *      archivo        (file | optional)
  *  Requires token in header Authorization: Bearer <token>
@@ -54,13 +54,13 @@ $db = DB::getDB();
 
 try{
     /* ---------- 1. validar ---------- */
-    $pqrId     = (int)($_POST['pqr_id']     ?? 0);
+    $ctgId     = (int)($_POST['ctg_id']     ?? 0);
     $mensaje   = trim($_POST['mensaje']   ?? '');
 
-    // Validar que pqr_id y mensaje estén presentes
-    if(!$pqrId || $mensaje === ''){
+    // Validar que ctg_id y mensaje estén presentes
+    if(!$ctgId || $mensaje === ''){
         http_response_code(400);
-        exit(json_encode(['ok'=>false,'msg'=>'Datos incompletos (pqr_id o mensaje faltante)']));
+        exit(json_encode(['ok'=>false,'msg'=>'Datos incompletos (ctg_id o mensaje faltante)']));
     }
 
     /* ---------- 2. gestionar adjunto ---------- */
@@ -76,7 +76,7 @@ try{
             if(move_uploaded_file($_FILES['archivo']['tmp_name'],$dest)){
                 $urlAdjunto = "https://app.costasol.com.ec/ImagenesPQR_respuestas/$name";
             } else {
-                 error_log('Error al mover archivo subido para PQR respuesta.');
+                 error_log('Error al mover archivo subido para CTG respuesta.');
             }
          } else {
              error_log('Directorio de subida no es escribible: '.$uploadDir);
@@ -95,13 +95,13 @@ try{
     }
 
     /* ---------- 4. insertar respuesta ---------- */
-    $sql = 'INSERT INTO respuesta_pqr
-            (pqr_id, usuario_id, responsable_id, mensaje, url_adjunto, fecha_respuesta)
+    $sql = 'INSERT INTO respuesta_ctg
+            (ctg_id, usuario_id, responsable_id, mensaje, url_adjunto, fecha_respuesta)
             VALUES
-            (:pqr_id, :usuario_id, :responsable_id, :mensaje, :url_adjunto, NOW())';
+            (:ctg_id, :usuario_id, :responsable_id, :mensaje, :url_adjunto, NOW())';
 
     $db->prepare($sql)->execute([
-        ':pqr_id'=> $pqrId,
+        ':ctg_id'=> $ctgId,
         ':usuario_id'=> $remitente_usuario_id,
         ':responsable_id'=> $remitente_responsable_id,
         ':mensaje'=> $mensaje,
@@ -110,10 +110,10 @@ try{
 
     // --- INICIO: Lógica para enviar Notificación Push al Cliente ---
     if ($is_responsable && $remitente_responsable_id) {
-        // 1. Obtener el ID del cliente asociado a este PQR
-        $sql_get_user_id = 'SELECT id_usuario FROM pqr WHERE id = :pqr_id LIMIT 1';
+        // 1. Obtener el ID del cliente asociado a este CTG
+        $sql_get_user_id = 'SELECT id_usuario FROM ctg WHERE id = :ctg_id LIMIT 1';
         $stmt_get_user_id = $db->prepare($sql_get_user_id);
-        $stmt_get_user_id->execute([':pqr_id' => $pqrId]);
+        $stmt_get_user_id->execute([':ctg_id' => $ctgId]);
         $cliente_id = $stmt_get_user_id->fetchColumn();
 
         if ($cliente_id) {
@@ -128,18 +128,18 @@ try{
 
 
             if ($oneSignalPlayerId) {
-                // 3. Obtener información adicional del PQR para la notificación
-                $sql_get_pqr_info = 'SELECT numero_solicitud, pr.manzana, pr.villa
-                                     FROM pqr p
+                // 3. Obtener información adicional del CTG para la notificación
+                $sql_get_ctg_info = 'SELECT numero_solicitud, pr.manzana, pr.villa
+                                     FROM ctg p
                                      JOIN propiedad pr ON p.id_propiedad = pr.id
-                                     WHERE p.id = :pqr_id LIMIT 1';
-                $stmt_get_pqr_info = $db->prepare($sql_get_pqr_info);
-                $stmt_get_pqr_info->execute([':pqr_id' => $pqrId]);
-                $pqr_info = $stmt_get_pqr_info->fetch(PDO::FETCH_ASSOC);
+                                     WHERE p.id = :ctg_id LIMIT 1';
+                $stmt_get_ctg_info = $db->prepare($sql_get_ctg_info);
+                $stmt_get_ctg_info->execute([':ctg_id' => $ctgId]);
+                $ctg_info = $stmt_get_ctg_info->fetch(PDO::FETCH_ASSOC);
 
-                $pqr_numero = $pqr_info['numero_solicitud'] ?? 'N/A';
-                $manzana = $pqr_info['manzana'] ?? 'N/A';
-                $villa = $pqr_info['villa'] ?? 'N/A';
+                $ctg_numero = $ctg_info['numero_solicitud'] ?? 'N/A';
+                $manzana = $ctg_info['manzana'] ?? 'N/A';
+                $villa = $ctg_info['villa'] ?? 'N/A';
 
                 // Construir el mensaje de la notificación
                 $message_title = "Nueva respuesta a tu mensaje";
@@ -156,7 +156,7 @@ try{
                     'include_player_ids' => [$oneSignalPlayerId],
                     'headings' => ['en' => $message_title, 'es' => $message_title],
                     'contents' => ['en' => $message_body, 'es' => $message_body],
-                    'data' => ['pqr_id' => $pqrId],
+                    'data' => ['ctg_id' => $ctgId],
                     'ttl' => 86400,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
                     'expire_in' => 86400  // Notificación se borra 24 horas después de ser leída (86400 segundos)
 
@@ -183,18 +183,18 @@ try{
                 $responseData = json_decode($response, true);
 
                 if ($httpCode === 200 && isset($responseData['id'])) {
-                     error_log("Notificación OneSignal enviada correctamente al Player ID " . $oneSignalPlayerId . " (PQR ID: " . $pqrId . "). OneSignal ID: " . $responseData['id']);
+                     error_log("Notificación OneSignal enviada correctamente al Player ID " . $oneSignalPlayerId . " (CTG ID: " . $ctgId . "). OneSignal ID: " . $responseData['id']);
                 } else {
-                     error_log("Error al enviar notificación OneSignal al Player ID " . $oneSignalPlayerId . " (PQR ID: " . $pqrId . "). HTTP Code: " . $httpCode . ". Response: " . $response);
+                     error_log("Error al enviar notificación OneSignal al Player ID " . $oneSignalPlayerId . " (CTG ID: " . $ctgId . "). HTTP Code: " . $httpCode . ". Response: " . $response);
                 }
 
                 // --- Fin Código para enviar a la API de OneSignal ---
 
             } else {
-                 error_log("Cliente con ID " . $cliente_id . " para PQR " . $pqrId . " no tiene onesignal_player_id registrado.");
+                 error_log("Cliente con ID " . $cliente_id . " para CTG " . $ctgId . " no tiene onesignal_player_id registrado.");
             }
         } else {
-            error_log("PQR con ID " . $pqrId . " no tiene un id_usuario asociado para enviar notificación.");
+            error_log("CTG con ID " . $ctgId . " no tiene un id_usuario asociado para enviar notificación.");
         }
     }
     // --- FIN: Lógica para enviar Notificación Push al Cliente ---
@@ -202,17 +202,17 @@ try{
 
     // --- INICIO: Lógica para enviar Notificación Push al Responsable ---
     if (!$is_responsable && $remitente_usuario_id) { // Verificar si el remitente es un usuario regular
-        // 1. Obtener el ID del responsable asociado a este PQR
-        $sql_get_responsable_id = 'SELECT responsable_id FROM pqr WHERE id = :pqr_id LIMIT 1';
+        // 1. Obtener el ID del responsable asociado a este CTG
+        $sql_get_responsable_id = 'SELECT responsable_id FROM ctg WHERE id = :ctg_id LIMIT 1';
         $stmt_get_responsable_id = $db->prepare($sql_get_responsable_id);
-        $stmt_get_responsable_id->execute([':pqr_id' => $pqrId]);
-        $responsable_id_pqr = $stmt_get_responsable_id->fetchColumn();
+        $stmt_get_responsable_id->execute([':ctg_id' => $ctgId]);
+        $responsable_id_ctg = $stmt_get_responsable_id->fetchColumn();
 
-        if ($responsable_id_pqr) {
+        if ($responsable_id_ctg) {
             // 2. Obtener el onesignal_player_id y nombre del responsable
             $sql_get_resp_player_id = 'SELECT onesignal_player_id, nombre FROM responsable WHERE id = :responsable_id LIMIT 1';
             $stmt_get_resp_player_id = $db->prepare($sql_get_resp_player_id);
-            $stmt_get_resp_player_id->execute([':responsable_id' => $responsable_id_pqr]);
+            $stmt_get_resp_player_id->execute([':responsable_id' => $responsable_id_ctg]);
             $responsable_info = $stmt_get_resp_player_id->fetch(PDO::FETCH_ASSOC);
 
             $oneSignalRespPlayerId = $responsable_info['onesignal_player_id'] ?? null;
@@ -220,20 +220,20 @@ try{
 
 
             if ($oneSignalRespPlayerId) {
-                // 3. Obtener información adicional del PQR y del cliente para la notificación
-                $sql_get_pqr_user_info = 'SELECT p.numero_solicitud, pr.manzana, pr.villa, u.nombres, u.apellidos
-                                          FROM pqr p
+                // 3. Obtener información adicional del CTG y del cliente para la notificación
+                $sql_get_ctg_user_info = 'SELECT p.numero_solicitud, pr.manzana, pr.villa, u.nombres, u.apellidos
+                                          FROM ctg p
                                           JOIN propiedad pr ON p.id_propiedad = pr.id
                                           JOIN usuario u ON p.id_usuario = u.id
-                                          WHERE p.id = :pqr_id LIMIT 1';
-                $stmt_get_pqr_user_info = $db->prepare($sql_get_pqr_user_info);
-                $stmt_get_pqr_user_info->execute([':pqr_id' => $pqrId]);
-                $pqr_user_info = $stmt_get_pqr_user_info->fetch(PDO::FETCH_ASSOC);
+                                          WHERE p.id = :ctg_id LIMIT 1';
+                $stmt_get_ctg_user_info = $db->prepare($sql_get_ctg_user_info);
+                $stmt_get_ctg_user_info->execute([':ctg_id' => $ctgId]);
+                $ctg_user_info = $stmt_get_ctg_user_info->fetch(PDO::FETCH_ASSOC);
 
-                $pqr_numero = $pqr_user_info['numero_solicitud'] ?? 'N/A';
-                $manzana = $pqr_user_info['manzana'] ?? 'N/A';
-                $villa = $pqr_user_info['villa'] ?? 'N/A';
-                $cliente_nombre_completo = trim(($pqr_user_info['nombres'] ?? '') . ' ' . ($pqr_user_info['apellidos'] ?? 'Cliente'));
+                $ctg_numero = $ctg_user_info['numero_solicitud'] ?? 'N/A';
+                $manzana = $ctg_user_info['manzana'] ?? 'N/A';
+                $villa = $ctg_user_info['villa'] ?? 'N/A';
+                $cliente_nombre_completo = trim(($ctg_user_info['nombres'] ?? '') . ' ' . ($ctg_user_info['apellidos'] ?? 'Cliente'));
 
                 // Construir el mensaje de la notificación para el responsable
                 $message_title_resp = "Nueva respuesta de {$cliente_nombre_completo}";
@@ -250,7 +250,7 @@ try{
                     'include_player_ids' => [$oneSignalRespPlayerId],
                     'headings' => ['en' => $message_title_resp, 'es' => $message_title_resp],
                     'contents' => ['en' => $message_body_resp, 'es' => $message_body_resp],
-                    'data' => ['pqr_id' => $pqrId], // Puedes incluir datos adicionales para manejar en el frontend del responsable
+                    'data' => ['ctg_id' => $ctgId], // Puedes incluir datos adicionales para manejar en el frontend del responsable
                     'ttl' => 86400,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
                     'expire_in' => 86400  // Notificación se borra 24 horas después de ser leída (86400 segundos)
                     
@@ -277,17 +277,17 @@ try{
                 $responseData_resp = json_decode($response_resp, true);
 
                  if ($httpCode_resp === 200 && isset($responseData_resp['id'])) {
-                     error_log("Notificación OneSignal enviada correctamente al Responsable Player ID " . $oneSignalRespPlayerId . " (PQR ID: " . $pqrId . "). OneSignal ID: " . $responseData_resp['id']);
+                     error_log("Notificación OneSignal enviada correctamente al Responsable Player ID " . $oneSignalRespPlayerId . " (CTG ID: " . $ctgId . "). OneSignal ID: " . $responseData_resp['id']);
                 } else {
-                     error_log("Error al enviar notificación OneSignal al Responsable Player ID " . $oneSignalRespPlayerId . " (PQR ID: " . $pqrId . "). HTTP Code: " . $httpCode_resp . ". Response: " . $response_resp);
+                     error_log("Error al enviar notificación OneSignal al Responsable Player ID " . $oneSignalRespPlayerId . " (CTG ID: " . $ctgId . "). HTTP Code: " . $httpCode_resp . ". Response: " . $response_resp);
                 }
                 // --- Fin Código para enviar a la API de OneSignal ---
 
             } else {
-                 error_log("Responsable con ID " . $responsable_id_pqr . " para PQR " . $pqrId . " no tiene onesignal_player_id registrado.");
+                 error_log("Responsable con ID " . $responsable_id_ctg . " para CTG " . $ctgId . " no tiene onesignal_player_id registrado.");
             }
         } else {
-            error_log("PQR con ID " . $pqrId . " no tiene un responsable_id asociado para enviar notificación.");
+            error_log("CTG con ID " . $ctgId . " no tiene un responsable_id asociado para enviar notificación.");
         }
     }
     // --- FIN: Lógica para enviar Notificación Push al Responsable ---
@@ -296,7 +296,7 @@ try{
     echo json_encode(['ok'=>true]);
 
 }catch(Throwable $e){
-    error_log('pqr_insert_form: '.$e->getMessage());
+    error_log('ctg_insert_form: '.$e->getMessage());
     http_response_code(500);
     echo json_encode(['ok'=>false,'msg'=>'Error interno']);
 }

@@ -1,13 +1,13 @@
 <?php
 /*  GET /api/notificaciones.php
  *  Requiere token en header Authorization: Bearer <token>
- *  Muestra notificaciones de respuestas: Responsables asignados a PQRs de Clientes (para Clientes),
- *  Clientes a PQRs (para Responsables).
+ *  Muestra notificaciones de respuestas: Responsables asignados a CTGs de Clientes (para Clientes),
+ *  Clientes a CTGs (para Responsables).
  *
  *  Respuesta:
  *      {
  *        ok:true,
- *        notificaciones: [ { pqr_id:1, mensaje:"...", usuario:"...", fecha_respuesta:"...", url_adjunto:"...", manzana: "...", villa: "..." }, ... ]
+ *        notificaciones: [ { ctg_id:1, mensaje:"...", usuario:"...", fecha_respuesta:"...", url_adjunto:"...", manzana: "...", villa: "..." }, ... ]
  *      }
  */
 
@@ -58,19 +58,19 @@ if (!$authenticated_user) {
 
 
 try {
-    // Unir con la tabla pqr y propiedad para obtener manzana y villa
+    // Unir con la tabla ctg y propiedad para obtener manzana y villa
     $sql = "SELECT
-                rp.pqr_id,
+                rp.ctg_id,
                 rp.mensaje,
                 COALESCE(u.nombres , resp.nombre) AS usuario,
                 rp.fecha_respuesta,
                 rp.url_adjunto,
                 pr.manzana,
                 pr.villa
-            FROM respuesta_pqr rp
+            FROM respuesta_ctg rp
             LEFT JOIN usuario u ON rp.usuario_id = u.id
             LEFT JOIN responsable resp ON rp.responsable_id = resp.id
-            JOIN pqr p ON rp.pqr_id = p.id
+            JOIN ctg p ON rp.ctg_id = p.id
             JOIN propiedad pr ON p.id_propiedad = pr.id"; // JOIN a propiedad
 
     $conditions = [];
@@ -78,21 +78,21 @@ try {
 
     if ($is_responsable) {
         // Responsable: Mostrar respuestas de clientes (donde usuario_id IS NOT NULL)
-        // y donde el PQR esté asignado a este responsable.
+        // y donde el CTG esté asignado a este responsable.
         $conditions[] = 'rp.usuario_id IS NOT NULL'; // Respuesta de un cliente
-        $conditions[] = 'p.responsable_id = :responsable_id'; // PQR asignado a este responsable
+        $conditions[] = 'p.responsable_id = :responsable_id'; // CTG asignado a este responsable
         $params[':responsable_id'] = $authenticated_user['id'];
 
     } else {
-        // Cliente: SOLO mostrar respuestas de responsables asignados a sus PQRs
+        // Cliente: SOLO mostrar respuestas de responsables asignados a sus CTGs
         // NO mostrar sus propias respuestas ni las de otros clientes
 
-        // Solo respuestas del responsable asignado al PQR
+        // Solo respuestas del responsable asignado al CTG
         $conditions[] = 'rp.responsable_id IS NOT NULL'; // Solo respuestas de responsables
-        $conditions[] = 'rp.responsable_id = p.responsable_id'; // Del responsable asignado al PQR
-        $conditions[] = 'p.id_usuario = :user_id'; // PQR del cliente autenticado
+        $conditions[] = 'rp.responsable_id = p.responsable_id'; // Del responsable asignado al CTG
+        $conditions[] = 'p.id_usuario = :user_id'; // CTG del cliente autenticado
 
-        $params[':user_id'] = $authenticated_user['id']; // ID del cliente para filtrar PQRs
+        $params[':user_id'] = $authenticated_user['id']; // ID del cliente para filtrar CTGs
     }
 
     if (!empty($conditions)) {

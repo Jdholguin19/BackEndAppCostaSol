@@ -1,5 +1,5 @@
 <!doctype html><html lang="es"><head>
-<meta charset="utf-8"><title>Nuevo PQR</title>
+<meta charset="utf-8"><title>Nuevo CTG</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
@@ -8,9 +8,9 @@ body{background:#f5f6f8}
 </style></head><body>
 <div class="container py-4">
   <button class="btn btn-link" onclick="history.back()"><i class="bi bi-arrow-left"></i></button>
-  <h1 class="h4 mb-4">Nuevo PQR</h1>
+  <h1 class="h4 mb-4">Nuevo CTG</h1>
 
-  <form id="frmPqr" enctype="multipart/form-data" class="card p-4 shadow-sm needs-validation" novalidate>
+  <form id="frmCtg" enctype="multipart/form-data" class="card p-4 shadow-sm needs-validation" novalidate>
     <!-- propiedad -->
     <label class="form-label">Propiedad</label>
     <select id="selProp" name="id_propiedad" class="form-select mb-3" required></select>
@@ -56,7 +56,7 @@ const token = localStorage.getItem('cs_token');
 if (!token) {
     const container = document.querySelector('.container');
     if (container) {
-        container.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para crear un nuevo PQR.</div>';
+        container.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para crear un nuevo CTG.</div>';
     }
 } else {
 
@@ -74,8 +74,8 @@ if (!token) {
       });
 
     /* ---------- llenar tipos ---------- */
-    // Asegúrate de que esta API (tipo_pqr.php) maneja token si es necesario
-    fetch('../api/tipo_pqr.php').then(r=>r.json()).then(d=>{
+    // Asegúrate de que esta API (tipo_ctg.php) maneja token si es necesario
+    fetch('../api/tipo_ctg.php').then(r=>r.json()).then(d=>{
       if(d.ok){
         const sel=document.getElementById('selTipo');
         d.tipos.forEach(t=>sel.insertAdjacentHTML('beforeend',
@@ -90,8 +90,8 @@ if (!token) {
     document.getElementById('selTipo').addEventListener('change',e=>{
       const tid=e.target.value, selSub=document.getElementById('selSub');
       selSub.innerHTML='<option>— Cargando… —</option>'; selSub.disabled=true;
-      // Asegúrate de que esta API (subtipo_pqr.php) maneja token si es necesario
-      fetch('../api/subtipo_pqr.php?tipo_id='+tid).then(r=>r.json()).then(d=>{ // <-- Si subtipo_pqr.php usa token, ajusta esta llamada
+      // Asegúrate de que esta API (subtipo_ctg.php) maneja token si es necesario
+      fetch('../api/subtipo_ctg.php?tipo_id='+tid).then(r=>r.json()).then(d=>{ // <-- Si subtipo_ctg.php usa token, ajusta esta llamada
           selSub.innerHTML='<option value="">— Seleccione —</option>';
           if(d.ok){
             d.subtipos.forEach(s=>selSub.insertAdjacentHTML('beforeend',
@@ -102,7 +102,7 @@ if (!token) {
     });
 
     /* ---------- envío ---------- */
-    document.getElementById('frmPqr').addEventListener('submit',e=>{
+    document.getElementById('frmCtg').addEventListener('submit',e=>{
       e.preventDefault();
       if(!e.target.checkValidity()){ e.target.classList.add('was-validated'); return; }
 
@@ -112,15 +112,15 @@ if (!token) {
       const btn=document.getElementById('btnSend');
       btn.disabled=true; btn.textContent='Enviando…';
 
-      fetch('../api/pqr_create.php',{method:'POST',body:fd,
+      fetch('../api/ctg_create.php',{method:'POST',body:fd,
           headers: {
               'Authorization': `Bearer ${token}`
               // No necesitas Content-Type: multipart/form-data aquí; fetch lo establece automáticamente con FormData
           }
        })
         .then(r => {
-            if (r.status === 403) { // Manejar Prohibido (si responsables intentan crear PQR)
-                 alert('No tienes permiso para crear PQRs.');
+            if (r.status === 403) { // Manejar Prohibido (si responsables intentan crear CTG)
+                 alert('No tienes permiso para crear CTGs.');
                  return Promise.reject('Permiso denegado');
             }
              if (r.status === 401) { // Manejar No autorizado
@@ -134,12 +134,12 @@ if (!token) {
         .then(d=>{
           if(d.ok){
             alert('Solicitud registrada Nº '+d.numero);
-            location.href='pqr.php';
+            location.href='ctg.php';
           }else throw d.msg || ''; }) // Lanzar mensaje de error del backend si existe
         .catch(errMsg => {
              console.error(errMsg);
               if (errMsg !== 'No autorizado' && errMsg !== 'Permiso denegado') {
-                   alert('Error al registrar PQR: ' + (errMsg || 'Desconocido'));
+                   alert('Error al registrar CTG: ' + (errMsg || 'Desconocido'));
               }
         })
         .finally(()=>{btn.disabled=false;btn.textContent='Enviar';});

@@ -1,6 +1,6 @@
 <!doctype html><html lang="es"><head>
-<!--- Front/pqr_notificaciones.php --->
-<meta charset="utf-8"><title>Notificaciones PQR</title>
+<!--- Front/ctg_notificaciones.php --->
+<meta charset="utf-8"><title>Notificaciones CTG</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -28,7 +28,7 @@ body{background:#f5f6f8}
   <button class="btn btn-link text-dark btn-back" onclick="history.back()">
     <i class="bi bi-arrow-left"></i>
   </button>
-  <h1 class="h5 mb-4">Notificaciones de Respuestas PQR</h1>
+  <h1 class="h5 mb-4">Notificaciones de Respuestas CTG</h1>
 
   <div id="notificationsList">
     <!-- Las notificaciones se cargarán aquí -->
@@ -66,7 +66,7 @@ if (!token) {
         if (d.ok) {
             if (d.notificaciones.length > 0) {
                 notificationsListEl.innerHTML = d.notificaciones.map(notif => `
-                    <a href="pqr_detalle.php?id=${notif.pqr_id}" class="notification-card-link">
+                    <a href="ctg_detalle.php?id=${notif.ctg_id}" class="notification-card-link">
                       <div class="card mb-3">
                         <div class="card-body">
                           <h6 class="card-title">Nueva respuesta de Mz ${notif.manzana} - Villa ${notif.villa}</h6>

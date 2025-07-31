@@ -1,5 +1,5 @@
 <?php
-/*  POST /api/pqr_create.php
+/*  POST /api/ctg_create.php
  *  Body  (multipart/form-data)
  *      id_propiedad     int
  *      tipo_id          int
@@ -46,9 +46,9 @@ if ($tokenType === 'Bearer' && $token) {
 }
 
 if (!$authenticated_user || $is_responsable) {
-    // Solo permitir la creación de PQRs a usuarios regulares, no a responsables
+    // Solo permitir la creación de CTGs a usuarios regulares, no a responsables
     http_response_code(403); // Prohibido
-    exit(json_encode(['ok' => false, 'mensaje' => 'No autorizado para crear PQRs']));
+    exit(json_encode(['ok' => false, 'mensaje' => 'No autorizado para crear CTGs']));
 }
 
 // Si llegamos aquí, es un usuario regular autenticado.
@@ -72,7 +72,7 @@ try{
     }
 
     /* ---------- 2. obtener urgencia_id del subtipo ---------- */
-    $sql_get_urgencia = 'SELECT urgencia_id FROM subtipo_pqr WHERE id = :subtipo_id LIMIT 1';
+    $sql_get_urgencia = 'SELECT urgencia_id FROM subtipo_ctg WHERE id = :subtipo_id LIMIT 1';
     $stmt_get_urgencia = $db->prepare($sql_get_urgencia);
     $stmt_get_urgencia->execute([':subtipo_id' => $sub]);
     $urgencia_data = $stmt_get_urgencia->fetch(PDO::FETCH_ASSOC);
@@ -94,7 +94,7 @@ try{
                 // Asegúrate de que esta URL es correcta para acceso público
                 $urlProblema = "https://app.costasol.com.ec/ImagenesPQR_problema/$name";
             } else {
-                error_log('Error al mover archivo subido para PQR problema.');
+                error_log('Error al mover archivo subido para CTG problema.');
             }
         } else {
              error_log('Directorio de subida de problema no es escribible: '.$uploadDir);
@@ -106,11 +106,11 @@ try{
                  ->fetchColumn();
 
     /* ---------- 5. crear numero_solicitud ---------- */
-    $num = $db->query("SELECT LPAD(IFNULL(MAX(id),0)+1,5,'0') FROM pqr")->fetchColumn();
+    $num = $db->query("SELECT LPAD(IFNULL(MAX(id),0)+1,5,'0') FROM ctg")->fetchColumn();
     $numero = 'SAC'.$num;                               // ej: SAC00007
 
     /* ---------- 6. insertar ---------- */
-    $sql = 'INSERT INTO pqr
+    $sql = 'INSERT INTO ctg
             (numero_solicitud,id_usuario,id_propiedad,tipo_id,subtipo_id,estado_id,
              descripcion,urgencia_id,url_problema,responsable_id,fecha_compromiso)
             VALUES
@@ -131,7 +131,7 @@ try{
     echo json_encode(['ok'=>true,'id'=>$db->lastInsertId(),'numero'=>$numero]);
 
 }catch(Throwable $e){
-    error_log('pqr_create: '.$e->getMessage());
+    error_log('ctg_create: '.$e->getMessage());
     http_response_code(500);
     echo json_encode(['ok'=>false,'msg'=>'Error interno']);
 }

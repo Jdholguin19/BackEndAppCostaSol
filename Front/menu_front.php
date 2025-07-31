@@ -185,9 +185,9 @@ function svgCircle(percent){
 }
 
 function openModule(menu){
-  // Si el nombre es PQR lanzamos pqr.php
-  if ((menu.nombre || '').trim().toUpperCase() === 'PQR'){
-      location.href = 'pqr.php';               // pqr.php leerá el usuario desde localStorage
+  // Si el nombre es CTG lanzamos ctg.php
+  if ((menu.nombre || '').trim().toUpperCase() === 'CTG'){
+      location.href = 'ctg.php';               // ctg.php leerá el usuario desde localStorage
       return;
   }
 
@@ -205,7 +205,7 @@ function openModule(menu){
 
     if ( menu.id === 8 ||
        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-      location.href = 'pqr_notificaciones.php';          // <<<<<<
+      location.href = 'ctg_notificaciones.php';          // <<<<<<
       return;
   }  
 

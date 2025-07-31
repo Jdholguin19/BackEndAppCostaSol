@@ -1,6 +1,6 @@
 <?php
 /**
- *  GET /api/pqr_respuestas.php?pqr_id=12
+ *  GET /api/ctg_respuestas.php?ctg_id=12
  *  Requiere token en header Authorization: Bearer <token>
  *  → { ok:true, respuestas:[
  *        { id, mensaje, url_adjunto, fecha_respuesta,
@@ -43,10 +43,10 @@ if (!$authenticated_user) {
 
 // --- Fin Lógica de Autenticación --- //
 
-$pqrId = (int)($_GET['pqr_id'] ?? 0);
-if(!$pqrId){
+$ctgId = (int)($_GET['ctg_id'] ?? 0);
+if(!$ctgId){
     http_response_code(400);
-    exit(json_encode(['ok'=>false,'msg'=>'pqr_id requerido']));
+    exit(json_encode(['ok'=>false,'msg'=>'ctg_id requerido']));
 }
 
 try{
@@ -59,17 +59,17 @@ try{
                 r.responsable_id,
                 COALESCE(u.nombres , resp.nombre)          AS nombre,
                 COALESCE(u.url_foto_perfil , resp.url_foto_perfil) AS url_foto
-        FROM    respuesta_pqr r
+        FROM    respuesta_ctg r
         LEFT JOIN usuario     u    ON u.id    = r.usuario_id
         LEFT JOIN responsable resp ON resp.id = r.responsable_id
-        WHERE   r.pqr_id = :pid
+        WHERE   r.ctg_id = :pid
         ORDER BY r.fecha_respuesta ASC';
 
     $st  = $db->prepare($sql);
-    $st->execute([':pid'=>$pqrId]);
+    $st->execute([':pid'=>$ctgId]);
     echo json_encode(['ok'=>true,'respuestas'=>$st->fetchAll(PDO::FETCH_ASSOC)]);
 }catch(Throwable $e){
-    error_log('pqr_respuestas: '.$e->getMessage());
+    error_log('ctg_respuestas: '.$e->getMessage());
     http_response_code(500);
     echo json_encode(['ok'=>false,'msg'=>'Error interno']);
 }

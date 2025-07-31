@@ -1,8 +1,8 @@
-<?php /* Front/pqr_detalle.php */
+<?php /* Front/ctg_detalle.php */
 $id = (int)($_GET['id'] ?? 0);
 ?>
 <!doctype html><html lang="es"><head>
-<meta charset="utf-8"><title>PQR detalle</title>
+<meta charset="utf-8"><title>CTG detalle</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -53,7 +53,7 @@ body{background:#f5f6f8}
     <button class="btn btn-link text-dark btn-back" onclick="history.back()">
       <i class="bi bi-arrow-left"></i>
     </button>
-    <h1 class="h5 mb-0 flex-grow-1 text-truncate" id="title">PQR</h1>
+    <h1 class="h5 mb-0 flex-grow-1 text-truncate" id="title">CTG</h1>
   </div>
 
   <!-- detalle principal -->
@@ -79,17 +79,17 @@ body{background:#f5f6f8}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 /* ------- rutas ------- */
-const END_RESP = '../api/pqr_respuestas.php?pqr_id=<?=$id?>';
-const END_SEND = '../api/pqr_insert_form.php';
-const END_UPDATE_ESTADO = '../api/pqr_update_estado.php'; // Nuevo endpoint
+const END_RESP = '../api/ctg_respuestas.php?ctg_id=<?=$id?>';
+const END_SEND = '../api/ctg_insert_form.php';
+const END_UPDATE_ESTADO = '../api/ctg_update_estado.php'; // Nuevo endpoint
 
 /* ------- obtener usuario autenticado ------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
 if(!u.id) { 
-    document.getElementById('wrap').innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los detalles del PQR.</div>';
+    document.getElementById('wrap').innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los detalles del CTG.</div>';
 } else { // Inicio del bloque else si hay usuario autenticado
 
-    const END_PQR  = `../api/pqr_list.php?pqr_id=<?=$id?>`;
+    const END_CTG  = `../api/ctg_list.php?ctg_id=<?=$id?>`;
 
     /* ------- refs DOM ------- */
     const titleEl = document.getElementById('title');
@@ -109,13 +109,13 @@ if(!u.id) {
     // Verificar si el usuario es responsable
     const isResponsable = u.is_responsable || false;
 
-    // Variable para almacenar el estado actual del PQR (para revertir si falla la actualización)
-    let currentPqrEstadoId = null;
+    // Variable para almacenar el estado actual del CTG (para revertir si falla la actualización)
+    let currentCtgEstadoId = null;
 
 
     // Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
     if (!token) { // Inicio del bloque if si no hay token
-         headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este PQR. Por favor, inicia sesión de nuevo.</div>';
+         headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este CTG. Por favor, inicia sesión de nuevo.</div>';
          if (frmRespuesta) frmRespuesta.style.display = 'none';
     } else { // Inicio del bloque else si hay token
 
@@ -159,30 +159,30 @@ if(!u.id) {
           }, 5000);
         }
 
-        /* ------- cabecera PQR ------- */
-        fetch(END_PQR, {
+        /* ------- cabecera CTG ------- */
+        fetch(END_CTG, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
         .then(r => {
             if (r.status === 401) {
-                headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este PQR. Por favor, inicia sesión de nuevo.</div>';
+                headBox.innerHTML = '<div class="alert alert-warning">Tu sesión ha expirado o no estás autorizado para ver este CTG. Por favor, inicia sesión de nuevo.</div>';
                 if (frmRespuesta) frmRespuesta.style.display = 'none';
                  return Promise.reject('No autorizado');
             }
             return r.json();
         })
         .then(d=>{
-          if(!d.ok||!d.pqr[0]) {
-              headBox.innerHTML = `<div class="alert alert-danger">Error al cargar el PQR o no encontrado: ${d.mensaje || 'Desconocido'}</div>`;
+          if(!d.ok||!d.ctg[0]) {
+              headBox.innerHTML = `<div class="alert alert-danger">Error al cargar el CTG o no encontrado: ${d.mensaje || 'Desconocido'}</div>`;
               if (frmRespuesta) frmRespuesta.style.display = 'none';
               return;
           }
-          const p = d.pqr[0];
+          const p = d.ctg[0];
 
-          // Actualizar el estado actual del PQR globalmente
-          currentPqrEstadoId = p.estado_id;
+          // Actualizar el estado actual del CTG globalmente
+          currentCtgEstadoId = p.estado_id;
 
           // Mostrar Manzana/Villa en el título si están disponibles
           const mzVillaTitle = (p.manzana || p.villa) ? ` · Mz ${p.manzana} – Villa ${p.villa}` : '';
@@ -197,14 +197,14 @@ if(!u.id) {
             <p class="small text-muted mb-2">${fechaHora(p.fecha_ingreso)}</p>
             <div class="p-3 rounded bg-white border">${p.descripcion}</div>`;
 
-          // Si el PQR está cerrado, ocultar el formulario de respuesta
+          // Si el CTG está cerrado, ocultar el formulario de respuesta
           if (p.estado.toLowerCase().includes('cerr')) {
           if (frmRespuesta) frmRespuesta.style.display = 'none';
           }
 
           // --- INICIO: Lógica para Responsables ---
           if (isResponsable) {
-              addEstadoDropdown(p.estado_id); // p.estado_id debería venir en la respuesta de pqr_list.php
+              addEstadoDropdown(p.estado_id); // p.estado_id debería venir en la respuesta de ctg_list.php
           }
           // --- FIN: Lógica para Responsables ---
 
@@ -212,19 +212,19 @@ if(!u.id) {
          .catch(err => {
            console.error(err);
             if (err !== 'No autorizado') {
-                 headBox.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor para obtener el PQR.</div>';
+                 headBox.innerHTML = '<div class="alert alert-danger">Error al conectar con el servidor para obtener el CTG.</div>';
                  if (frmRespuesta) frmRespuesta.style.display = 'none';
             }
         });
 
         /* ------- Función para agregar menú desplegable de estado (para responsables) ------- */
         function addEstadoDropdown(currentEstadoId) {
-            if (document.getElementById('selEstadoPQR')) {
+            if (document.getElementById('selEstadoCTG')) {
                 return; // Ya existe, no añadir de nuevo
             }
 
             const selectHtml = `
-              <select id="selEstadoPQR" class="form-select form-select-sm w-auto ms-3">
+              <select id="selEstadoCTG" class="form-select form-select-sm w-auto ms-3">
                 <!-- Opciones se cargarán aquí -->
 </select>`;
 
@@ -233,9 +233,9 @@ if(!u.id) {
                 titleElement.insertAdjacentHTML('afterend', selectHtml);
             }
 
-            const selEstadoPQR = document.getElementById('selEstadoPQR');
+            const selEstadoCTG = document.getElementById('selEstadoCTG');
 
-            fetch('../api/pqr_estados.php')
+            fetch('../api/ctg_estados.php')
                 .then(r => r.json())
                 .then(d => {
                     if (d.ok && d.estados) {
@@ -249,24 +249,24 @@ if(!u.id) {
                             if (estado.id == currentEstadoId) {
                                 option.selected = true;
                             }
-                            selEstadoPQR.appendChild(option);
+                            selEstadoCTG.appendChild(option);
                         });
 
-                        selEstadoPQR.addEventListener('change', handleEstadoChange);
+                        selEstadoCTG.addEventListener('change', handleEstadoChange);
 
                     } else {
-                        console.error('Error al cargar estados de PQR:', d.msg);
-                        if (selEstadoPQR) {
-                             selEstadoPQR.innerHTML = '<option value="">Error al cargar</option>';
-                             selEstadoPQR.disabled = true;
+                        console.error('Error al cargar estados de CTG:', d.msg);
+                        if (selEstadoCTG) {
+                             selEstadoCTG.innerHTML = '<option value="">Error al cargar</option>';
+                             selEstadoCTG.disabled = true;
                         }
                     }
                 })
                 .catch(err => {
-                    console.error('Error fetching PQR states:', err);
-                     if (selEstadoPQR) {
-                         selEstadoPQR.innerHTML = '<option value="">Error de red</option>';
-                         selEstadoPQR.disabled = true;
+                    console.error('Error fetching CTG states:', err);
+                     if (selEstadoCTG) {
+                         selEstadoCTG.innerHTML = '<option value="">Error de red</option>';
+                         selEstadoCTG.disabled = true;
                     }
                 });
         }
@@ -274,7 +274,7 @@ if(!u.id) {
         /* ------- Función para manejar el cambio de estado ------- */
         function handleEstadoChange(event) {
             const newEstadoId = event.target.value;
-            const pqrId = <?=$id?>;
+            const ctgId = <?=$id?>;
 
             if (!newEstadoId) {
                 console.warn("Seleccione un estado válido.");
@@ -291,24 +291,24 @@ if(!u.id) {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    pqr_id: pqrId,
+                    ctg_id: ctgId,
                     estado_id: newEstadoId
                 })
             })
             .then(r => {
                 if (r.status === 401 || r.status === 403) {
-                     showNotification('No tienes permiso para cambiar el estado del PQR.', 'danger');
+                     showNotification('No tienes permiso para cambiar el estado del CTG.', 'danger');
                      // Revertir la selección del dropdown si no está autorizado
-                     event.target.value = currentPqrEstadoId; // Usar el estado global almacenado
+                     event.target.value = currentCtgEstadoId; // Usar el estado global almacenado
                      return Promise.reject('Permiso denegado o no autorizado');
                 }
                 return r.json();
             })
             .then(d => {
                 if (d.ok) {
-                    showNotification('Estado del PQR actualizado correctamente.');
+                    showNotification('Estado del CTG actualizado correctamente.');
                     // Actualizar el estado actual global
-                    currentPqrEstadoId = newEstadoId;
+                    currentCtgEstadoId = newEstadoId;
                      // Actualizar la visualización del badge de estado
                      updateEstadoBadge(newEstadoId, event.target.options[event.target.selectedIndex].text);
 
@@ -320,18 +320,18 @@ if(!u.id) {
                      }
 
                 } else {
-                    showNotification('Error al actualizar el estado del PQR: ' + (d.msg || 'Desconocido'), 'danger');
+                    showNotification('Error al actualizar el estado del CTG: ' + (d.msg || 'Desconocido'), 'danger');
                      // Revertir la selección del dropdown si falla la actualización
-                     event.target.value = currentPqrEstadoId;
+                     event.target.value = currentCtgEstadoId;
                 }
             })
             .catch(err => {
-                console.error('Error updating PQR state:', err);
+                console.error('Error updating CTG state:', err);
                  if (err !== 'Permiso denegado o no autorizado') {
-                     showNotification('Error de red al actualizar el estado del PQR.', 'danger');
+                     showNotification('Error de red al actualizar el estado del CTG.', 'danger');
                  }
                  // Revertir la selección del dropdown en caso de error de red
-                 event.target.value = currentPqrEstadoId;
+                 event.target.value = currentCtgEstadoId;
             })
             .finally(()=>{ event.target.disabled = false; }); // Habilitar el select al finalizar
         } // FIN de la función handleEstadoChange
@@ -363,7 +363,7 @@ if(!u.id) {
           .then(d=>{
             if(!d.ok){
                  chat.innerHTML='<li class="text-danger">Error al cargar respuestas</li>';
-                 console.error('Error en API pqr_respuestas:', d.msg);
+                 console.error('Error en API ctg_respuestas:', d.msg);
                  return;
              }
 
@@ -405,7 +405,7 @@ if(!u.id) {
           if(!frmRespuesta.checkValidity()){ frmRespuesta.classList.add('was-validated'); return; }
 
           const fd = new FormData(e.target);
-          fd.append('pqr_id', <?=$id?>);
+          fd.append('ctg_id', <?=$id?>);
 
           const btn=document.getElementById('btnSend');
           btn.disabled=true; btn.textContent='Enviando…';

@@ -1,8 +1,8 @@
 <?php
 /**
- *  GET /api/pqr_list.php[&estado_id=…][&order_by=…]
+ *  GET /api/ctg_list.php[&estado_id=…][&order_by=…]
  *  order_by: 'fecha' (default) or 'urgencia'
- *  Respuesta: { ok:true, pqr:[ { id, numero, tipo, subtipo, estado,
+ *  Respuesta: { ok:true, ctg:[ { id, numero, tipo, subtipo, estado,
  *                               descripcion, fecha_ingreso, n_respuestas, manzana, villa,
  *                               urgencia_id, urgencia } ] } // Axcc3xb1adimos urgencia_id y urgencia
  */
@@ -66,24 +66,24 @@ try{
                 p.urgencia_id,                       -- Axcc3xb1adimos ID de urgencia
                 up.nombre            AS urgencia,   -- Axcc3xb1adimos nombre de urgencia
                 ( SELECT COUNT(*) 
-                    FROM respuesta_pqr r 
-                   WHERE r.pqr_id = p.id )        AS n_respuestas
-        FROM    pqr p
-        JOIN    tipo_pqr     tp ON tp.id = p.tipo_id
-        JOIN    subtipo_pqr  sp ON sp.id = p.subtipo_id
-        JOIN    estado_pqr   ep ON ep.id = p.estado_id
+                    FROM respuesta_ctg r 
+                   WHERE r.ctg_id = p.id )        AS n_respuestas
+        FROM    ctg p
+        JOIN    tipo_ctg     tp ON tp.id = p.tipo_id
+        JOIN    subtipo_ctg  sp ON sp.id = p.subtipo_id
+        JOIN    estado_ctg   ep ON ep.id = p.estado_id
         JOIN    propiedad    pr ON pr.id = p.id_propiedad
-        JOIN    urgencia_pqr up ON up.id = p.urgencia_id'; // <-- JOIN a la tabla de urgencia
+        JOIN    urgencia_ctg up ON up.id = p.urgencia_id'; // <-- JOIN a la tabla de urgencia
 
     $conditions = [];
     $params = [];
 
     if ($is_responsable) {
-        // Responsable: Ver PQRs asignados a xc3xa9l
+        // Responsable: Ver CTGs asignados a xc3xa9l
         $conditions[] = 'p.responsable_id = :responsable_id';
         $params[':responsable_id'] = $authenticated_user['id'];
     } else {
-        // Usuario regular: Ver solo sus propios PQRs
+        // Usuario regular: Ver solo sus propios CTGs
         $conditions[] = 'p.id_usuario = :user_id';
         $params[':user_id'] = $authenticated_user['id'];
     }
@@ -112,10 +112,10 @@ try{
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
 
-    echo json_encode(['ok'=>true,'pqr'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]);
+    echo json_encode(['ok'=>true,'ctg'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]);
 
 }catch(Throwable $e){
-    error_log('pqr_list: '.$e->getMessage());
+    error_log('ctg_list: '.$e->getMessage());
     http_response_code(500);
     echo json_encode(['ok'=>false,'msg'=>'Error interno']);
 }

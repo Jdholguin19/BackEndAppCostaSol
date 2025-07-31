@@ -1,7 +1,7 @@
 <?php
-/*  POST /api/pqr_update_estado.php
+/*  POST /api/ctg_update_estado.php
  *  Body (JSON):
- *      pqr_id     int     ID del PQR a actualizar
+ *      ctg_id     int     ID del CTG a actualizar
  *      estado_id  int     Nuevo ID del estado
  *  Requires token in header Authorization: Bearer <token>
  *
@@ -50,54 +50,54 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' && $_SERVER['REQUEST_METHOD'] !== 'PUT
 
 /* ---------- 1. Entrada ---------- */
 $input = json_decode(file_get_contents('php://input'), true);
-$pqrId = (int)($input['pqr_id'] ?? 0);
+$ctgId = (int)($input['ctg_id'] ?? 0);
 $estadoId = (int)($input['estado_id'] ?? 0);
 
 // Validar entrada
-if (!$pqrId || !$estadoId) {
+if (!$ctgId || !$estadoId) {
     http_response_code(400);
-    exit(json_encode(['ok' => false, 'mensaje' => 'pqr_id y estado_id son requeridos']));
+    exit(json_encode(['ok' => false, 'mensaje' => 'ctg_id y estado_id son requeridos']));
 }
 
 try {
     // Reutilizar la conexión de la autenticación
     $db = DB::getDB();
 
-    // Opcional: Verificar si el PQR con ese ID existe y está asignado a este responsable (medida de seguridad adicional)
-    $sql_check_pqr = 'SELECT id FROM pqr WHERE id = :pqr_id AND responsable_id = :responsable_id LIMIT 1';
-    $stmt_check_pqr = $db->prepare($sql_check_pqr);
-    $stmt_check_pqr->execute([
-        ':pqr_id' => $pqrId,
+    // Opcional: Verificar si el CTG con ese ID existe y está asignado a este responsable (medida de seguridad adicional)
+    $sql_check_ctg = 'SELECT id FROM ctg WHERE id = :ctg_id AND responsable_id = :responsable_id LIMIT 1';
+    $stmt_check_ctg = $db->prepare($sql_check_ctg);
+    $stmt_check_ctg->execute([
+        ':ctg_id' => $ctgId,
         ':responsable_id' => $authenticated_user['id']
     ]);
 
-    if (!$stmt_check_pqr->fetch()) {
-        http_response_code(403); // Prohibido si el PQR no existe o no está asignado a este responsable
-        exit(json_encode(['ok' => false, 'mensaje' => 'PQR no encontrado o no asignado a este responsable.']));
+    if (!$stmt_check_ctg->fetch()) {
+        http_response_code(403); // Prohibido si el CTG no existe o no está asignado a este responsable
+        exit(json_encode(['ok' => false, 'mensaje' => 'CTG no encontrado o no asignado a este responsable.']));
     }
 
 
-    /* ---------- 2. Actualizar estado del PQR ---------- */
-    $sql_update = 'UPDATE pqr SET estado_id = :estado_id, fecha_actualizacion = NOW() WHERE id = :pqr_id';
+    /* ---------- 2. Actualizar estado del CTG ---------- */
+    $sql_update = 'UPDATE ctg SET estado_id = :estado_id, fecha_actualizacion = NOW() WHERE id = :ctg_id';
     $stmt_update = $db->prepare($sql_update);
     $stmt_update->execute([
         ':estado_id' => $estadoId,
-        ':pqr_id' => $pqrId
+        ':ctg_id' => $ctgId
     ]);
 
-    // Verificar si se afectó alguna fila (si el PQR existía y se pudo actualizar)
+    // Verificar si se afectó alguna fila (si el CTG existía y se pudo actualizar)
     if ($stmt_update->rowCount() > 0) {
          // Opcional: Si el nuevo estado es "Resuelto" o "Cerrado", podrías añadir lógica adicional aquí (ej: enviar una última notificación al cliente).
 
         echo json_encode(['ok' => true, 'mensaje' => 'Estado actualizado correctamente']);
     } else {
         http_response_code(500); 
-        echo json_encode(['ok' => false, 'mensaje' => 'No se pudo actualizar el estado del PQR.']);
+        echo json_encode(['ok' => false, 'mensaje' => 'No se pudo actualizar el estado del CTG.']);
     }
 
 
 } catch (Throwable $e) {
-    error_log('pqr_update_estado error: ' . $e->getMessage());
+    error_log('ctg_update_estado error: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode(['ok' => false, 'mensaje' => 'Error interno del servidor.']);
 }
