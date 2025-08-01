@@ -205,9 +205,17 @@ function openModule(menu){
 
     if ( menu.id === 8 ||
        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-      location.href = 'ctg/ctg_notificaciones.php';          // <<<<<<
+      location.href = 'notificaciones.php';          // <<<<<<
       return;
   }  
+
+
+    if ( menu.id === 9 ||
+       (menu.nombre || '').toUpperCase().includes('VISITA') ){
+      location.href = 'pqr/pqr.php';          // <<<<<<
+      return;
+  }
+
 
   // …aquí podrías despachar otros módulos por nombre o id
   alert('Abrir módulo '+menu.id);
@@ -264,7 +272,7 @@ function pintarAvance(etapa, porcentaje){
       <div>
         <h4 class="mb-1">Fase de Construcción</h4>
         <p class="mb-2">${etapa}</p>
-        <a href="ctg/fase_detalle.php?manzana=${encodeURIComponent(currentManzana)}&villa=${encodeURIComponent(currentSolar)}"
+        <a href="fase_detalle.php?manzana=${encodeURIComponent(currentManzana)}&villa=${encodeURIComponent(currentSolar)}"
            class="link-secondary small">
           Ver detalles <i class="bi bi-chevron-right"></i>
         </a>
