@@ -7,33 +7,8 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/css/style_main.css" rel="stylesheet"> <!-- Link to the new CSS file -->
 
-<style>
-/* ---- Welcome ---- */
-.welcome-card{background:#fff;border-radius:.75rem;padding:1rem 1.25rem;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:.75rem}
-.avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid #20805e}
-.welcome-name{font-weight:600;margin:0}
-.welcome-mail{font-size:.8rem;color:#6c757d;margin:0}
-
-/* ---- General cards ---- */
-.menu-card{cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.menu-card:hover{transform:translateY(-4px);box-shadow:0 4px 14px rgba(0,0,0,.12)}
-.menu-icon{font-size:2.2rem;color:#20805e}
-
-/* ---- Noticias ---- */
-.news-thumb{width:140px;height:140px;object-fit:cover;border-radius:.25rem 0 0 .25rem}
-@media (max-width:767.98px){.news-thumb{width:100%;height:180px;border-radius:.25rem .25rem 0 0}}
-.carousel-indicators.outside{position:relative;margin-top:.5rem}
-
-/* ---- Propiedades tabs ---- */
-#propTabs .nav-link{border-radius:999px;font-size:.85rem;padding:.35rem 1rem}
-#propTabs .nav-link.active{background:#20805e;color:#fff}
-
-/* ---- Avance circular ---- */
-.progress-ring{width:140px;height:140px}
-.progress-ring text{font-size:2.5rem;font-weight:600;fill:#0f4833;text-anchor:middle;dominant-baseline:central}
-</style>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -175,7 +150,7 @@ function svgCircle(percent){
       <!-- giramos solo las circunferencias -->
       <g transform="rotate(-90 70 70)">
         <circle cx="70" cy="70" r="${r}" stroke="#e7eff1" stroke-width="12" fill="none"/>
-        <circle cx="70" cy="70" r="${r}" stroke="#46a06c" stroke-width="12" fill="none"
+        <circle cx="70" cy="70" r="${r}" stroke="#4ac987" stroke-width="12" fill="none"
                 stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round"/>
       </g>
       <!-- texto sin rotar -->
@@ -205,7 +180,7 @@ function openModule(menu){
 
     if ( menu.id === 8 ||
        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-      location.href = 'notificaciones.php';          // <<<<<<
+      location.href = 'ctg_notificaciones.php';          // <<<<<<
       return;
   }  
 
@@ -227,7 +202,7 @@ fetch(API_NEWS).then(r=>r.json()).then(({ok,noticias})=>{
   const row=document.getElementById('newsRow');row.innerHTML='';
   const wrap=document.createElement('div');wrap.className='col-12 col-lg-10 mx-auto';
   wrap.innerHTML = `
-    <div class="menu-card bg-white rounded-3 p-4">
+    <div class="news-card">
       <div class="text-center mb-3">
         <i class="menu-icon bi bi-megaphone"></i>
         <h3 class="h5 fw-bold mb-0">Comunicados</h3>

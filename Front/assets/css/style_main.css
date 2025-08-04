@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap');
+
+/* General body styles */
+body {
+    background-color: #f5f6f8; /* Light grey background */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Clean sans-serif font */
+}
+
+h1, h2, h3, h4, h5, h6,
+.welcome-name, /* Apply serif font to welcome name */
+.fw-bold, /* Apply serif font to bold text which might be titles */
+.fw-semibold /* Apply serif font to semi-bold text which might be titles */
+ {
+    font-family: 'Playfair Display', serif;
+}
+
+
+/* Welcome card */
+.welcome-card {
+    background: #fff;
+    border-radius: .75rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4ac987; /* Accent color border */
+}
+
+.welcome-name {
+    font-weight: 600;
+    margin: 0;
+    /* font-family is applied by the general h rule */
+}
+
+.welcome-mail {
+    font-size: .8rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* General cards */
+.menu-card {
+    cursor: pointer;
+    transition: .15s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .08); /* Soft shadow */
+    border-radius: .75rem; /* Rounded corners */
+    background-color: #fff; /* White background */
+    padding: 1.5rem; /* Add padding */
+    text-align: center; /* Center text */
+}
+
+.menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+}
+
+.menu-icon {
+    font-size: 2.8rem; /* Slightly larger icon */
+    color: #4ac987; /* Accent color */
+}
+
+/* Noticias card */
+.news-card {
+    background: #fff;
+    border-radius: .75rem;
+    padding: 1.5rem; /* Add padding */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+}
+
+.news-thumb {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: .25rem 0 0 .25rem;
+}
+
+@media (max-width: 767.98px) {
+    .news-thumb {
+        width: 100%;
+        height: 180px;
+        border-radius: .25rem .25rem 0 0;
+    }
+}
+
+.carousel-indicators.outside {
+    position: relative;
+    margin-top: .5rem;
+    bottom: auto; /* Override bootstrap default */
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: #ced4da; /* Default indicator color */
+}
+
+.carousel-indicators .active {
+    background-color: #4ac987; /* Active indicator color */
+}
+
+/* Propiedades tabs */
+#propTabs .nav-link {
+    border-radius: 999px;
+    font-size: .85rem;
+    padding: .35rem 1rem;
+    color: #6c757d; /* Default link color */
+    border: 1px solid transparent; /* Add border for inactive state */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+#propTabs .nav-link.active {
+    background: #4ac987; /* Accent color background */
+    color: #fff;
+    border-color: #4ac987;
+}
+
+#propContent .border {
+    border-radius: .75rem !important; /* Rounded corners for property info */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .06); /* Soft shadow */
+}
+
+
+/* Avance circular */
+.progress-ring {
+    width: 140px;
+    height: 140px;
+}
+
+.progress-ring text {
+    font-size: 2.5rem;
+    font-weight: 600;
+    fill: #212529; /* Darker text color */
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+.progress-ring circle {
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.progress-ring circle:last-child {
+    stroke: #4ac987; /* Accent color for progress */
+}
+
+/* Link styles */
+a.link-success {
+    color: #4ac987 !important; /* Accent color for success links */
+}
+
+a.link-secondary {
+     color: #6c757d !important; /* Muted color for secondary links */
+}
+
+.link-success:hover,
+.link-secondary:hover {
+    text-decoration: underline;
+}
