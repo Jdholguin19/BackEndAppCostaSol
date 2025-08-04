@@ -1,0 +1,126 @@
+
+    /* Specific styles for fase_detalle */
+    .accordion-button:not(.collapsed) {
+      
+        background: #39a452 !important;
+        color: #fff !important;
+    }
+
+    .badge-estado {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 12px;
+    }
+
+    .badge-Hecho {
+        background-color:rgb(0, 255, 60) !important;
+        color: #155724 !important;
+    }
+
+    .badge-Proceso {
+        background-color:rgb(255, 196, 0) !important;
+        color: #856404 !important;
+    }
+
+    .badge-Planificado {
+        background-color:rgb(0, 128, 255) !important;
+        color: #6c757d !important;
+    }
+
+    .fotos-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .fotos-grid img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .fase-header {
+        background: #ffffff;
+        padding: 1rem 1.5rem 0.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .fase-title {
+        font-family: 'Playfair Display';
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2d5a3d;
+        margin: 0;
+        text-align: center;
+    }
+
+    .fase-subtitle {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin: 0.5rem 0 0 0;
+        text-align: center;
+    }
+
+    .accordion-item {
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+        overflow: hidden;
+    }
+
+    .accordion-button {
+        font-family: 'Playfair Display';
+        background: #ffffff;
+        border: 5px solid rgba(199, 197, 197, 0.21);
+        border-radius: 12px;
+
+        padding: 1rem 1.5rem;
+        font-weight: 600;
+        color: #1a1a1a;
+        transition: all 0.2s ease;
+    }
+
+    .accordion-button:not(.collapsed) {
+        box-shadow: none;
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color:rgb(164, 210, 180);
+    }
+
+    .accordion-body {
+        font-family: 'Playfair Display';
+        padding: 1rem 1.5rem;
+        background: #f9fafb;
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+
+    .accordion-body p {
+        font-family: 'Playfair Display';
+        margin-bottom: 0.5rem;
+        color: #6b7280;
+    }
+
+    .back-button {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #2d5a3d;
+        font-size: 1.25rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+    }
+
+    .back-button:hover {
+        background-color: #f3f4f6;
+    }

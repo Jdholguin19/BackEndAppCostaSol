@@ -79,9 +79,13 @@
   <div class="welcome-card">
     <div class="welcome-info">
       <p class="welcome-name" id="welcomeName">Hola, Usuario</p>
-      <p class="welcome-mail" id="welcomeEmail">usuario@email.com</p>
+      <p class="welcome-prop"><i>Elija su propiedad:</i></p>
     </div>
-    <img src="" class="avatar" id="welcomeAvatar" alt="Avatar">
+    <!-- Contenedor para el avatar y el botón de cerrar sesión -->
+    <div class="avatar-container">
+        <img src="" class="avatar" id="welcomeAvatar" alt="Avatar">
+        <button id="logoutButton" class="logout-button" style="display: none;">Cerrar sesión</button>
+    </div>
   </div>
   
   <!-- Property Tabs -->
@@ -150,7 +154,6 @@
 
   /* ---------- Welcome ---------- */
   document.getElementById('welcomeName').textContent = `Hola, ${u.nombres || u.nombre}`;
-  document.getElementById('welcomeEmail').textContent = u.correo;
   document.getElementById('welcomeAvatar').src = u.url_foto_perfil || 'https://via.placeholder.com/48';
 
   /* ---------- Helpers ---------- */
@@ -352,6 +355,7 @@
   });
 
   /* ---------- Logout ---------- */
+
   // Función para cerrar sesión (puedes llamarla desde un botón)
   async function logout() { 
     const token = localStorage.getItem('cs_token');
@@ -381,6 +385,35 @@
       window.location.href = 'login_front.php';
     } 
   }
+
+
+  // Función para cerrar sesión (puedes llamarla desde un botón)
+  /* ---------- Logout Button ---------- */
+  document.getElementById('welcomeAvatar').addEventListener('click', function() {
+      const logoutButton = document.getElementById('logoutButton');
+      // Alternar la visibilidad del botón
+      if (logoutButton.style.display === 'none') {
+          logoutButton.style.display = 'block';
+      } else {
+          logoutButton.style.display = 'none';
+      }
+  });
+
+  // Ocultar el botón si se hace clic fuera de él o del avatar
+  document.addEventListener('click', function(event) {
+      const avatarContainer = document.querySelector('.avatar-container');
+      const logoutButton = document.getElementById('logoutButton');
+      // Si el clic no fue dentro del contenedor del avatar (que incluye el avatar y el botón)
+      if (!avatarContainer.contains(event.target) && logoutButton.style.display === 'block') {
+          logoutButton.style.display = 'none';
+      }
+  });
+
+  // Evento de clic para el botón de cerrar sesión
+  document.getElementById('logoutButton').addEventListener('click', function() {
+      logout(); // Llamar a la función de cerrar sesión existente
+  });
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

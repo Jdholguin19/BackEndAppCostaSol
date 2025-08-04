@@ -39,7 +39,7 @@ try {
     $db = DB::getDB();
 
     /* 1. Todas las etapas (para mostrar las que aún no tienen avance) */
-    $stmt = $db->query('SELECT id, nombre FROM etapa_construccion ORDER BY id');
+    $stmt = $db->query('SELECT id, nombre, descripcion FROM etapa_construccion ORDER BY id');
     $etapas = [];
     foreach ($stmt as $row) {
         $etapas[$row['id']] = [
@@ -47,13 +47,13 @@ try {
             'etapa'      => $row['nombre'],
             'porcentaje' => 0,
             'estado'     => 'Planificado',
-            'descripcion'=> '',
+            'descripcion'=> $row['descripcion'] ?? '',
             'fotos'      => []
         ];
     }
 
     /* 2. Avances para la manzana + villa */
-    $sql = 'SELECT pc.id, pc.id_etapa, pc.porcentaje, pc.descripcion,
+    $sql = 'SELECT pc.id, pc.id_etapa, pc.porcentaje, ec.descripcion,
                    pc.drive_item_id,
                    ec.nombre
             FROM   progreso_construccion pc
@@ -68,10 +68,10 @@ try {
 
     foreach ($q as $r) {
         $e = &$etapas[$r['id_etapa']];                 // referencia
+        // Actualizar datos con la última captura para esta etapa
         // primera fila de esta etapa = última captura → usa sus datos
         if ($e['porcentaje'] === 0) {
             $e['porcentaje']  = (int)$r['porcentaje'];
-            $e['descripcion'] = $r['descripcion'] ?? '';
             $e['estado']      = $r['porcentaje'] >= 100 ? 'Hecho'
                                : ($r['porcentaje'] > 0 ? 'Proceso' : 'Planificado');
         }

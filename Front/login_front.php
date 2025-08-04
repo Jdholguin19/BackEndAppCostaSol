@@ -3,38 +3,14 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iniciar sesión | CostaSol</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/css/style_main.css" rel="stylesheet">
+<link href="assets/css/style_login.css" rel="stylesheet">
 
-<style>
-html,body{height:100%}
-body{
-  display:flex;align-items:center;justify-content:center;
-  background:#f3f5f7;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif
-}
-.logo{width:120px}
-.tab-btn{
-  border:0;padding:.25rem 1rem;border-radius:999px;font-size:.85rem;
-  background:#0f3d2f;color:#fff
-}
-.tab-btn.inactive{
-  background:#f9f3e7;color:#0f3d2f
-}
-.tab-btn+ .tab-btn{margin-left:.25rem}
-.input-round{
-  border-radius:2rem;padding-left:1rem
-}
-.btn-primary-cs{
-  background:#0f3d2f;border:none;border-radius:999px;padding:.5rem 2rem
-}
-.btn-primary-cs:hover{background:#0d3327}
-.small-link{font-size:.75rem}
-.form-box{
-  width:100%;max-width:320px
-}
-</style>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -51,101 +27,138 @@ body{
 </head>
 <body>
 
-<main class="form-box">
-
+<!-- Main Content -->
+<div class="login-container">
+  <!-- CostaSol Logo -->
   <div class="text-center mb-4">
     <img src="https://app.costasol.com.ec/iconos/LogoCostaSolVerde.svg" alt="CostaSol logo" class="logo">
   </div>
 
   <!-- selector residente / trabajador -->
-  <div class="d-flex justify-content-center mb-4">
-    <button id="btnResidente" class="tab-btn">Residente</button>
-    <button id="btnTrabajador" class="tab-btn inactive">Trabajador</button>
+  <div class="tab-container">
+    <button id="btnResidente" class="tab-btn active">Residente</button>
+    <button id="btnTrabajador" class="tab-btn">Trabajador</button>
   </div>
 
-  <form id="loginForm" class="mb-2">
-    <div class="mb-3">
-      <input type="email" class="form-control input-round" id="correo" placeholder="Usuario:" required>
-    </div>
-    <div class="mb-2">
-      <input type="password" class="form-control input-round" id="contrasena" placeholder="Contraseña:" required>
-    </div>
+  <div class="form-container">
+    <form id="loginForm">
+      <div class="form-group">
+        <input type="email" class="form-control" id="correo" placeholder="Usuario:" required>
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" id="contrasena" placeholder="Contraseña:" required>
+      </div>
 
-    <div class="text-end small-link mb-3">
-      <a href="#" class="link-secondary link-underline-opacity-0">Recuperar contraseña</a>
-    </div>
+      <a href="#" class="forgot-link">Recuperar contraseña</a>
 
-    <div class="d-grid">
-      <button class="btn btn-primary-cs" type="submit">Ingresar</button>
-    </div>
-  </form>
+      <button class="btn btn-login" type="submit" id="loginBtn">
+        <span id="loginText">Ingresar</span>
+        <span id="loginSpinner" style="display: none;">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </span>
+      </button>
+    </form>
 
-  <div id="msg" class="text-center text-danger small"></div>
-</main>
+    <div id="msg" class="error-message" style="display: none;"></div>
+  </div>
+</div>
 
 <script>
 const API_LOGIN = '../api/login.php';
 const form = document.getElementById('loginForm');
-const msg  = document.getElementById('msg');
+const msg = document.getElementById('msg');
+const loginBtn = document.getElementById('loginBtn');
+const loginText = document.getElementById('loginText');
+const loginSpinner = document.getElementById('loginSpinner');
 
 /* --- selector de perfil (por si más adelante envías role_id) --- */
 let perfil = 'residente';
-document.getElementById('btnResidente').onclick = e=>{
-  perfil='residente'; e.target.classList.remove('inactive');
-  document.getElementById('btnTrabajador').classList.add('inactive');
+
+document.getElementById('btnResidente').onclick = function(e) {
+  perfil = 'residente';
+  e.target.classList.add('active');
+  document.getElementById('btnTrabajador').classList.remove('active');
 };
-document.getElementById('btnTrabajador').onclick = e=>{
-  perfil='trabajador'; e.target.classList.remove('inactive');
-  document.getElementById('btnResidente').classList.add('inactive');
+
+document.getElementById('btnTrabajador').onclick = function(e) {
+  perfil = 'trabajador';
+  e.target.classList.add('active');
+  document.getElementById('btnResidente').classList.remove('active');
 };
 
 /* --- envío --- */
-form.addEventListener('submit', async ev=>{
-  ev.preventDefault(); msg.textContent='';
+form.addEventListener('submit', async function(ev) {
+  ev.preventDefault();
+  
+  // Hide previous messages
+  msg.style.display = 'none';
+  msg.className = 'error-message';
+  
+  // Show loading state
+  loginBtn.disabled = true;
+  loginText.style.display = 'none';
+  loginSpinner.style.display = 'inline-block';
+  
   const payload = {
-    correo    : document.getElementById('correo').value.trim(),
+    correo: document.getElementById('correo').value.trim(),
     contrasena: document.getElementById('contrasena').value,
-    perfil    : perfil            // opcional; el backend puede ignorarlo
+    perfil: perfil
   };
 
-  try{
-    const r = await fetch(API_LOGIN,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
+  try {
+    const r = await fetch(API_LOGIN, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
+    
     const data = await r.json();
-    if(!data.ok){
+    
+    if (!data.ok) {
       msg.textContent = data.mensaje || 'Credenciales incorrectas';
+      msg.style.display = 'block';
       return;
     }
+    
+    // Success message
+    msg.textContent = 'Iniciando sesión...';
+    msg.className = 'success-message';
+    msg.style.display = 'block';
+    
     /* guardar token y usuario en LocalStorage */
-    console.log('Datos de usuario a guardar en localStorage:', data.user); // Registro
-    localStorage.setItem('cs_token',  data.token);
-    localStorage.setItem('cs_usuario',JSON.stringify(data.user));
+    console.log('Datos de usuario a guardar en localStorage:', data.user);
+    localStorage.setItem('cs_token', data.token);
+    localStorage.setItem('cs_usuario', JSON.stringify(data.user));
 
     /* redirigir segun el tipo de usuario */
     if (data.user.is_responsable) {
-      window.location.href = 'menu_front.php'; // Redirect responsible users to menu_front.php
+      window.location.href = 'menu_front.php';
     } else {
-      // Redirect based on user.rol_id for clients/residents
       if (data.user.rol_id === 1) {
-        window.location.href = 'menu_front.php'; // Example: Redirect role 1 to client_dashboard.php
+        window.location.href = 'menu_front.php';
       } else if (data.user.rol_id === 2) {
-        window.location.href = 'menu_front.php'; // Example: Redirect role 2 to resident_portal.php
+        window.location.href = 'menu_front.php';
       } else {
-        // Default redirect for other roles or if rol_id is not handled
-        window.location.href = 'menu_front.php'; // Example: Redirect to a default page
+        window.location.href = 'menu_front.php';
       }
     }
 
-  }catch(err){
+  } catch (err) {
     console.error(err);
     msg.textContent = 'Error de conexión';
+    msg.style.display = 'block';
     console.error('Login error: ' + err.message);
+  } finally {
+    // Reset button state
+    loginBtn.disabled = false;
+    loginText.style.display = 'inline';
+    loginSpinner.style.display = 'none';
   }
 });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
