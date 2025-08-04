@@ -1,29 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* General body styles */
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #f5f6f8; /* Light grey background */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Clean sans-serif font */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    line-height: 1.5;
+    overflow-x: hidden;
 }
 
-h1, h2, h3, h4, h5, h6,
-.welcome-name, /* Apply serif font to welcome name */
-.fw-bold, /* Apply serif font to bold text which might be titles */
-.fw-semibold /* Apply serif font to semi-bold text which might be titles */
- {
-    font-family: 'Playfair Display', serif;
+/* Mobile-first container */
+.container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
+/* Header section */
+.header-section {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
 
-/* Welcome card */
 .welcome-card {
-    background: #fff;
-    border-radius: .75rem;
-    padding: 1rem 1.25rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
     display: flex;
     align-items: center;
-    gap: .75rem;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.welcome-info {
+    flex: 1;
+}
+
+.welcome-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.welcome-mail {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+    margin-top: 0.25rem;
 }
 
 .avatar {
@@ -31,111 +60,206 @@ h1, h2, h3, h4, h5, h6,
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #4ac987; /* Accent color border */
+    border: 2px solid #e5e7eb;
+    background: #f3f4f6;
 }
 
-.welcome-name {
-    font-weight: 600;
-    margin: 0;
-    /* font-family is applied by the general h rule */
+/* Property tabs */
+.property-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
 }
 
-.welcome-mail {
-    font-size: .8rem;
-    color: #6c757d;
-    margin: 0;
-}
-
-/* General cards */
-.menu-card {
+.property-tab {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    white-space: nowrap;
     cursor: pointer;
-    transition: .15s;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .08); /* Soft shadow */
-    border-radius: .75rem; /* Rounded corners */
-    background-color: #fff; /* White background */
-    padding: 1.5rem; /* Add padding */
-    text-align: center; /* Center text */
+    transition: all 0.2s ease;
 }
 
-.menu-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .12);
+.property-tab.active {
+    background: #2d5a3d;
+    color: #ffffff;
+    border-color: #2d5a3d;
 }
 
-.menu-icon {
-    font-size: 2.8rem; /* Slightly larger icon */
-    color: #4ac987; /* Accent color */
+/* Main content area */
+.main-content {
+    padding: 1rem 1.5rem;
+    padding-bottom: 5rem; /* Space for bottom navigation */
 }
 
-/* Noticias card */
+/* News card - Compact design with small images */
 .news-card {
-    background: #fff;
-    border-radius: .75rem;
-    padding: 1.5rem; /* Add padding */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+}
+
+.news-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.news-icon {
+    width: 32px;
+    height: 32px;
+    background: #2d5a3d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.news-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.news-title .text-primary {
+    color: #2d5a3d;
+}
+
+.news-title .text-gray {
+    color: #9ca3af;
+}
+
+/* Show carousel with smaller images */
+.carousel {
+    display: block;
+    margin-top: 1rem;
+}
+
+.carousel-inner {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.carousel-item {
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.news-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 80px;
 }
 
 .news-thumb {
-    width: 140px;
-    height: 140px;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
-    border-radius: .25rem 0 0 .25rem;
+    border-radius: 8px;
+    flex-shrink: 0;
 }
 
-@media (max-width: 767.98px) {
-    .news-thumb {
-        width: 100%;
-        height: 180px;
-        border-radius: .25rem .25rem 0 0;
-    }
+.news-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.news-text h5 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.3;
+}
+
+.news-text p {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-text a {
+    font-size: 0.75rem;
+    color: #2d5a3d;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .carousel-indicators.outside {
-    position: relative;
-    margin-top: .5rem;
-    bottom: auto; /* Override bootstrap default */
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 1rem;
 }
 
 .carousel-indicators [data-bs-target] {
-    background-color: #ced4da; /* Default indicator color */
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+    border: none;
+    padding: 0;
 }
 
 .carousel-indicators .active {
-    background-color: #4ac987; /* Active indicator color */
+    background-color: #2d5a3d;
 }
 
-/* Propiedades tabs */
-#propTabs .nav-link {
-    border-radius: 999px;
-    font-size: .85rem;
-    padding: .35rem 1rem;
-    color: #6c757d; /* Default link color */
-    border: 1px solid transparent; /* Add border for inactive state */
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+/* Construction progress card */
+.construction-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
 }
 
-#propTabs .nav-link.active {
-    background: #4ac987; /* Accent color background */
-    color: #fff;
-    border-color: #4ac987;
+.construction-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-#propContent .border {
-    border-radius: .75rem !important; /* Rounded corners for property info */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .06); /* Soft shadow */
-}
-
-
-/* Avance circular */
 .progress-ring {
-    width: 140px;
-    height: 140px;
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+}
+
+.progress-ring svg {
+    width: 100%;
+    height: 100%;
 }
 
 .progress-ring text {
-    font-size: 2.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    fill: #212529; /* Darker text color */
+    fill: #454343;
     text-anchor: middle;
     dominant-baseline: central;
 }
@@ -147,19 +271,200 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .progress-ring circle:last-child {
-    stroke: #4ac987; /* Accent color for progress */
+    stroke: #39a452;
 }
 
-/* Link styles */
-a.link-success {
-    color: #4ac987 !important; /* Accent color for success links */
+.construction-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
 }
 
-a.link-secondary {
-     color: #6c757d !important; /* Muted color for secondary links */
+.construction-stage {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
 }
 
-.link-success:hover,
-.link-secondary:hover {
-    text-decoration: underline;
+.construction-link {
+    font-size: 0.75rem;
+    color: #5DAF84;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Module grid */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.menu-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 120px;
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menu-icon {
+    font-size: 2rem;
+    color: #2d5a3d;
+    margin-bottom: 0.5rem;
+}
+
+.menu-card h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.menu-card p {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Bottom navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    padding: 0.75rem 0;
+    z-index: 1000;
+}
+
+.bottom-nav-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-item.active {
+    color: #2d5a3d;
+}
+
+.nav-item i {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.nav-item.active i {
+    transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .container {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+    
+    .module-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .module-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-5 { margin-bottom: 1.25rem; }
+
+/* Hide elements that don't fit mobile design */
+@media (max-width: 767px) {
+    .welcome-card .btn {
+        display: none; /* Hide logout button on mobile */
+    }
+}
+
+/* Loading states */
+.spinner-border {
+    color: #2d5a3d;
+}
+
+/* Property content styling */
+#propContent .border {
+    border-radius: 12px !important;
+    border: 1px solid #f0f0f0 !important;
+    background: #ffffff;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+#propContent p {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+#propContent p:last-child {
+    margin-bottom: 0;
+}
+
+/* Carousel controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background: rgba(45, 90, 61, 0.8);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
 }
