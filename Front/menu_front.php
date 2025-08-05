@@ -215,6 +215,14 @@
     }  
 
 
+    if ( menu.id === 10 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'users.php';          // <<<<<<
+        return;
+    } 
+
+
+
     // …aquí podrías despachar otros módulos por nombre o id
     alert('Abrir módulo '+menu.id);
   }
