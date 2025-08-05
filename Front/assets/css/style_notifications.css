@@ -1,0 +1,283 @@
+/* Estilos específicos para notificaciones */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f8fafc;
+    color: #1a1a1a;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 100%;
+    padding: 0;
+}
+
+/* Header Section */
+.notifications-header {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.notifications-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    text-align: center;
+}
+
+.back-button {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px; /* Espacio para bottom nav */
+}
+
+.notifications-container {
+    padding: 1rem 1.5rem;
+}
+
+/* Notification Cards */
+.notification-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.notification-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.notification-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.notification-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #2d5a3d;
+    margin: 0;
+    flex: 1;
+}
+
+.notification-type {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.625rem;
+    font-weight: 500;
+    padding: 0.125rem 0.5rem;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 0.5rem;
+}
+
+.type-ctg {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.type-pqr {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.notification-message {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+    margin: 0.5rem 0;
+}
+
+.notification-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.notification-user {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.625rem;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+.notification-date {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.625rem;
+    color: #9ca3af;
+}
+
+.notification-attachment {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.notification-attachment a {
+    color: #2d5a3d;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.notification-attachment a:hover {
+    text-decoration: underline;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #9ca3af;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Loading State */
+.loading-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.loading-state .spinner-border {
+    width: 2rem;
+    height: 2rem;
+}
+
+/* Error State */
+.error-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #dc2626;
+}
+
+.error-state .alert {
+    border-radius: 12px;
+    border: none;
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    z-index: 1000;
+}
+
+.bottom-nav-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.75rem 0;
+    max-width: 100%;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    min-width: 60px;
+}
+
+.nav-item:hover {
+    color: #2d5a3d;
+    text-decoration: none;
+}
+
+.nav-item.active {
+    color: #2d5a3d;
+}
+
+.nav-item i {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.nav-item span {
+    font-size: 0.625rem;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .container {
+        max-width: 760px;
+        margin: 0 auto;
+    }
+    
+    .notifications-container {
+        padding: 1.5rem 2rem;
+    }
+} 

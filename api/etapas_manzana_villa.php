@@ -21,7 +21,10 @@
  *       ...
  *    ]
  *  }
+ * Falta implementar:
+ * el sistema de porcentajes de las etapas reales, ya que ahora se muentran solo con validacion de si hay fotos o no, ya que esto esta de la mano con la base de datos, que no hay datos de los proncetajes 
  */
+
 
 require_once __DIR__.'/../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
@@ -54,7 +57,7 @@ try {
 
     /* 2. Avances para la manzana + villa */
     $sql = 'SELECT pc.id, pc.id_etapa, pc.porcentaje, ec.descripcion,
-                   pc.drive_item_id,
+                   pc.drive_item_id, pc.fecha_registro, pc.mz, pc.villa,
                    ec.nombre
             FROM   progreso_construccion pc
             JOIN   etapa_construccion    ec ON ec.id = pc.id_etapa
@@ -66,28 +69,62 @@ try {
     $q = $db->prepare($sql);
     $q->execute([':mz'=>$mz, ':vl'=>$vl]);
 
+    // Debug: ver qué datos estamos obteniendo
+    $debug_data = [];
+    $processed_etapas = [];
+    
     foreach ($q as $r) {
-        $e = &$etapas[$r['id_etapa']];                 // referencia
-        // Actualizar datos con la última captura para esta etapa
-        // primera fila de esta etapa = última captura → usa sus datos
-        if ($e['porcentaje'] === 0) {
-            $e['porcentaje']  = (int)$r['porcentaje'];
-            $e['estado']      = $r['porcentaje'] >= 100 ? 'Hecho'
-                               : ($r['porcentaje'] > 0 ? 'Proceso' : 'Planificado');
+        $debug_data[] = $r;
+        $idEtapa = $r['id_etapa'];
+        
+        // Solo actualizar si es la primera vez que vemos esta etapa (último registro)
+        if (!isset($processed_etapas[$idEtapa])) {
+            $e = &$etapas[$idEtapa];
+            // Manejar porcentajes null - convertirlos a 0
+            $porcentaje = $r['porcentaje'] === null ? 0 : (int)$r['porcentaje'];
+            $e['porcentaje'] = $porcentaje;
+            
+            // Si hay fotos, considerar como "Proceso" aunque el porcentaje sea 0
+            $tieneFotos = false;
+            foreach ($q as $r2) {
+                if ($r2['id_etapa'] == $idEtapa && $r2['drive_item_id']) {
+                    $tieneFotos = true;
+                    break;
+                }
+            }
+            
+            if ($tieneFotos) {
+                $e['estado'] = 'Proceso';
+            } else {
+                $e['estado'] = $porcentaje >= 100 ? 'Hecho' 
+                              : ($porcentaje > 0 ? 'Proceso' : 'Planificado');
+            }
+            
+            $processed_etapas[$idEtapa] = true;
         }
+        
+        // Agregar fotos si existen
         if ($r['drive_item_id']) {
-        $e['fotos'][] = "../SharePoint/mostrar_imagen.php?id=" . urlencode($r['id']);
+            $etapas[$idEtapa]['fotos'][] = "../SharePoint/mostrar_imagen.php?id=" . urlencode($r['id']);
+        }
     }
-    }
-    // quitar índice numérico
-    $etapasList = array_values($etapas);
 
-    echo json_encode([
+    // Debug: incluir información de debug en la respuesta
+    $response = [
         'ok'      => true,
         'manzana' => $mz,
         'villa'   => $vl,
-        'etapas'  => $etapasList
-    ]);
+        'etapas'  => array_values($etapas),
+        'debug'   => [
+            'sql_params' => ['mz' => $mz, 'vl' => $vl],
+            'found_records' => count($debug_data),
+            'sample_data' => array_slice($debug_data, 0, 3),
+            'processed_etapas' => array_keys($processed_etapas),
+            'sql_query' => $sql
+        ]
+    ];
+
+    echo json_encode($response);
 
 } catch (Throwable $e) {
     error_log('etapas_manzana_villa: '.$e->getMessage());

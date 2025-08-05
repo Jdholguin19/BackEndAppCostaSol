@@ -1,45 +1,108 @@
 
     /* Specific styles for fase_detalle */
-    .accordion-button:not(.collapsed) {
-      
-        background: #39a452 !important;
-        color: #fff !important;
-    }
-
-    .badge-estado {
-        font-size: 0.75rem;
-        padding: 0.25rem 0.5rem;
+    .stage-card {
+        background: #ffffff;
         border-radius: 12px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border: 1px solid #f0f0f0;
+        transition: all 0.2s ease;
+        cursor: pointer;
     }
 
-    .badge-Hecho {
-        background-color:rgb(0, 255, 60) !important;
-        color: #155724 !important;
+    .stage-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-1px);
     }
 
-    .badge-Proceso {
-        background-color:rgb(255, 196, 0) !important;
-        color: #856404 !important;
+    .stage-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
     }
 
-    .badge-Planificado {
-        background-color:rgb(0, 128, 255) !important;
-        color: #6c757d !important;
+    .stage-name {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        color: #2d5a3d;
+        margin: 0;
     }
 
-    .fotos-grid {
+    .stage-status {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-Hecho {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+
+    .status-Proceso {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-Planificado {
+        background-color: #e0f2fe;
+        color: #0c4a6e;
+    }
+
+    .stage-description {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.875rem;
+        color: #6b7280;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .stage-photos {
+        margin-top: 1rem;
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
-        margin-top: 1rem;
     }
 
-    .fotos-grid img {
-        width: 70px;
-        height: 70px;
+    .stage-photos img {
+        width: 60px;
+        height: 60px;
         object-fit: cover;
         border-radius: 8px;
         border: 1px solid #e5e7eb;
+        transition: transform 0.2s ease;
+    }
+
+    .stage-photos img:hover {
+        transform: scale(1.05);
+    }
+
+    .stage-content {
+        display: none;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .stage-content.show {
+        display: block;
+    }
+
+    .chevron-icon {
+        color: #2d5a3d;
+        font-size: 0.875rem;
+        transition: transform 0.2s ease;
+    }
+
+    .stage-card.expanded .chevron-icon {
+        transform: rotate(180deg);
     }
 
     .fase-header {
@@ -49,8 +112,8 @@
     }
 
     .fase-title {
-        font-family: 'Playfair Display';
-        font-size: 1.2rem;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.25rem;
         font-weight: 600;
         color: #2d5a3d;
         margin: 0;
@@ -62,48 +125,6 @@
         color: #6b7280;
         margin: 0.5rem 0 0 0;
         text-align: center;
-    }
-
-    .accordion-item {
-        border: 1px solid #f0f0f0;
-        border-radius: 12px;
-        margin-bottom: 0.5rem;
-        overflow: hidden;
-    }
-
-    .accordion-button {
-        font-family: 'Playfair Display';
-        background: #ffffff;
-        border: 5px solid rgba(199, 197, 197, 0.21);
-        border-radius: 12px;
-
-        padding: 1rem 1.5rem;
-        font-weight: 600;
-        color: #1a1a1a;
-        transition: all 0.2s ease;
-    }
-
-    .accordion-button:not(.collapsed) {
-        box-shadow: none;
-    }
-
-    .accordion-button:focus {
-        box-shadow: none;
-        border-color:rgb(164, 210, 180);
-    }
-
-    .accordion-body {
-        font-family: 'Playfair Display';
-        padding: 1rem 1.5rem;
-        background: #f9fafb;
-        font-size: 0.875rem;
-        line-height: 1.5;
-    }
-
-    .accordion-body p {
-        font-family: 'Playfair Display';
-        margin-bottom: 0.5rem;
-        color: #6b7280;
     }
 
     .back-button {
@@ -124,3 +145,76 @@
     .back-button:hover {
         background-color: #f3f4f6;
     }
+
+    .stages-container {
+        padding: 1rem 1.5rem;
+    }
+
+
+    /* Estilos para personalizar Featherlight */
+
+/* Fondo oscuro del visor */
+.featherlight {
+    background: rgba(45, 90, 61, 0.9); /* Color similar al verde de tu diseño con transparencia */
+}
+
+/* Contenido del visor (imagen) */
+.featherlight .featherlight-content {
+    /* Eliminar el padding por defecto si no es necesario */
+    padding: 0;
+    /* Añadir bordes redondeados si lo deseas */
+    border-radius: 12px;
+    overflow: hidden; /* Para asegurar que la imagen dentro también respete los bordes redondeados */
+    border: none; /* Eliminar el borde por defecto */
+}
+
+/* Estilos para la imagen dentro del visor */
+.featherlight .featherlight-image {
+    /* Asegurar que la imagen se ajuste bien en pantallas pequeñas */
+    display: block;
+    max-width: 100%;
+    max-height: 80vh; /* Limitar la altura para que no ocupe toda la pantalla verticalmente */
+    margin: 0 auto; /* Centrar la imagen */
+    border-radius: 12px; /* Bordes redondeados para la imagen */
+}
+
+/* Botón de cierre */
+.featherlight .featherlight-close {
+    top: 10px;
+    right: 10px;
+    color: #ffffff; /* Color blanco para mayor visibilidad sobre el fondo oscuro */
+    font-size: 1.5rem; /* Tamaño del icono de cierre */
+    line-height: 1;
+    width: auto; /* Ajustar el ancho */
+    height: auto; /* Ajustar la altura */
+    background: none; /* Eliminar fondo si lo tiene por defecto */
+    border: none; /* Eliminar borde si lo tiene por defecto */
+    text-align: center;
+    text-decoration: none;
+    /* Añadir una sombra suave para destacarlo */
+    text-shadow: 0 0 5px rgba(122, 59, 59, 0.827);
+}
+
+.featherlight .featherlight-close:hover {
+    color: #e0e0e0; /* Color ligeramente más claro al pasar el ratón */
+}
+
+/* Botones de navegación (anterior y siguiente) */
+.featherlight .featherlight-next,
+.featherlight .featherlight-previous {
+    color: #ffffff; /* Color blanco */
+    font-size: 2rem; /* Tamaño de los iconos */
+    /* Posicionamiento, Featherlight ya los posiciona, puedes ajustar si es necesario */
+}
+
+.featherlight .featherlight-next:hover,
+.featherlight .featherlight-previous:hover {
+    color: #e0e0e0; /* Color ligeramente más claro al pasar el ratón */
+}
+
+/* Ajustes para pantallas pequeñas si es necesario */
+@media all and (max-width: 768px) {
+    .featherlight .featherlight-image {
+        max-height: 80vh; /* Ajustar la altura máxima en pantallas más pequeñas */
+    }
+}
