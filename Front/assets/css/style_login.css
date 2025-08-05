@@ -29,7 +29,7 @@ body {
     margin-bottom: 2rem;
     gap: 0.25rem;
     width: 100%;
-    max-width: 280px;
+    max-width: 200px;
 }
 
 .tab-btn {
@@ -37,7 +37,7 @@ body {
     border: none;
     padding: 0.75rem 1rem;
     border-radius: 20px;
-    font-size: 0.875rem;
+    font-size: 0.850rem;
     font-weight: 500;
     background: transparent;
     color: #2d5a3d;
@@ -53,6 +53,7 @@ body {
 .form-container {
     width: 100%;
     max-width: 320px;
+    align-items: center;
 }
 
 .form-group {
@@ -85,7 +86,7 @@ body {
     text-decoration: none;
     text-align: right;
     display: block;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
 }
 
 .forgot-link:hover {
@@ -99,9 +100,11 @@ body {
     padding: 0.875rem 2rem;
     font-weight: 600;
     color: #ffffff;
-    width: 100%;
     transition: all 0.2s ease;
     font-size: 0.875rem;
+    width: 75%; /* Asegurar que ambos botones tengan el mismo ancho */
+    margin: 1rem auto 0 auto; /* Añadido para centrar (1rem arriba, auto a los lados, 0 abajo) */
+    display: block; /* Asegurar que se comporten como bloque */
 }
 
 .btn-login:hover {
@@ -112,6 +115,38 @@ body {
 .btn-login:active {
     transform: translateY(0);
 }
+
+
+.btn-register {
+    background: transparent;
+    border: 1px solid #2d5a3d;
+    border-radius: 25px; /* Keep border-radius consistent */
+    padding: 0.75rem 1.5rem; /* Reduced padding */
+    font-weight: 600;
+    color: #2d5a3d;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    margin-top: 1rem; /* Add some space above the button */  
+    width: 75%; /* Asegurar que ambos botones tengan el mismo ancho */
+    margin: 1rem auto 0 auto; /* Añadido para centrar (1rem arriba, auto a los lados, 0 abajo) */
+    display: block; /* Asegurar que se comporten como bloque */
+
+
+}
+.btn-register:hover {
+    background: #e9f3eb; /* Light green background on hover */
+    color: #2d5a3d;
+    border-color: #2d5a3d;
+    transform: translateY(-1px);
+}
+.btn-register:active {
+    transform: translateY(0);
+    background: #d4ebd7; /* Slightly darker green on active */
+}
+
+
+
+
 
 .error-message {
     color: #dc3545;

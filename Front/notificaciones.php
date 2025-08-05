@@ -112,11 +112,11 @@ if (!token) {
                     if (notif.tipo_solicitud === 'CTG') {
                         detailPageUrl = `ctg/ctg_detalle.php?id=${notif.solicitud_id}`;
                         typeClass = 'type-ctg';
-                        notificationTitle = 'Nuevo mensaje sobre tu CTG';
+                        notificationTitle = 'Respuesta a su CTG';
                     } else if (notif.tipo_solicitud === 'PQR') {
                         detailPageUrl = `pqr/pqr_detalle.php?id=${notif.solicitud_id}`;
                         typeClass = 'type-pqr';
-                        notificationTitle = 'Nuevo mensaje sobre tu PQR';
+                        notificationTitle = 'Nuevo mensaje a su PQR';
                     }
                     // --- FIN Lógica para construir el enlace y la presentación dinámicamente ---
 

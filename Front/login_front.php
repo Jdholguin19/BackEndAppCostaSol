@@ -49,7 +49,7 @@
         <input type="password" class="form-control" id="contrasena" placeholder="Contraseña:" required>
       </div>
 
-      <a href="#" class="forgot-link">Recuperar contraseña</a>
+      <a href="#" class="forgot-link"><center>Recuperar contraseña</center></a>
 
       <button class="btn btn-login" type="submit" id="loginBtn">
         <span id="loginText">Ingresar</span>
@@ -60,9 +60,7 @@
         </span>
       </button>
     </form>
-
-    <div id="msg" class="error-message" style="display: none;"></div>
-  </div>
+ <button class="btn btn-register" id="registerBtn">Registrarse</button> <div id="msg" class="error-message" style="display: none;"></div> </div>
 </div>
 
 <script>
@@ -87,6 +85,12 @@ document.getElementById('btnTrabajador').onclick = function(e) {
   e.target.classList.add('active');
   document.getElementById('btnResidente').classList.remove('active');
 };
+
+/* --- redirección a registro --- */
+const registerBtn = document.getElementById('registerBtn');
+registerBtn.addEventListener('click', function() {
+  window.location.href = 'register_front.php';
+}); // Corrected: Added closing parenthesis
 
 /* --- envío --- */
 form.addEventListener('submit', async function(ev) {

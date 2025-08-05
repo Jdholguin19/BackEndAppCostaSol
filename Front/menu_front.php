@@ -189,6 +189,13 @@
         return;
     }
 
+
+    if ( menu.id === 6 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'garantias.php';          // <<<<<<
+        return;
+    }
+
     if ( menu.id === 3 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
         location.href = 'citas.php';          // <<<<<<
