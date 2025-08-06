@@ -189,18 +189,24 @@
         return;
     }
 
-
-    if ( menu.id === 6 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-        location.href = 'garantias.php';          // <<<<<<
+/*
+    if ((menu.nombre || '').trim().toUpperCase() === 'Garantias'){
+        location.href = 'garantias.php';              
         return;
-    }
+    }*/
 
     if ( menu.id === 3 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
         location.href = 'citas.php';          // <<<<<<
         return;
     }
+
+
+    if ( menu.id === 6 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'garantias.php';          // <<<<<<
+        return;
+    }    
 
       if ( menu.id === 7 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
@@ -227,6 +233,12 @@
         location.href = 'users.php';          // <<<<<<
         return;
     } 
+
+    if ( menu.id === 11 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'mcm.php';          // <<<<<<
+        return;
+    }
 
 
 
