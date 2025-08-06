@@ -14,7 +14,139 @@ require_once __DIR__ . '/../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
 try {
-    $db      = DB::getDB();
+    $db = DB::getDB();
+    
+    // --- Lógica de Autenticación --- //
+    $headers = getallheaders();
+    $authHeader = $headers['Authorization'] ?? '';
+    $token = null;
+    
+    if (strpos($authHeader, 'Bearer ') === 0) {
+        $token = substr($authHeader, 7);
+    }
+    
+    $authenticated_user = null;
+    $is_responsable = false;
+    
+    if ($token) {
+        // Buscar en tabla 'usuario'
+        $sql_user = 'SELECT id, nombres, rol_id FROM usuario WHERE token = :token LIMIT 1';
+        $stmt_user = $db->prepare($sql_user);
+        $stmt_user->execute([':token' => $token]);
+        $authenticated_user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+        
+        if ($authenticated_user) {
+            $is_responsable = false;
+        } else {
+            // Buscar en tabla 'responsable'
+            $sql_resp = 'SELECT id, nombre FROM responsable WHERE token = :token LIMIT 1';
+            $stmt_resp = $db->prepare($sql_resp);
+            $stmt_resp->execute([':token' => $token]);
+            $authenticated_user = $stmt_resp->fetch(PDO::FETCH_ASSOC);
+            if ($authenticated_user) {
+                $is_responsable = true;
+            }
+        }
+    }
+    
+    /* --------- Verificar si el usuario es responsable --------- */
+    if ($authenticated_user && isset($authenticated_user['rol_id']) && $authenticated_user['rol_id'] == 3) {
+        // Si es responsable, siempre mostrar garantías
+        $mostrar_garantias = true;
+    } else {
+        // Para usuarios regulares, verificar progreso de construcción
+        $mostrar_garantias = false;
+        
+        // Obtener propiedades del usuario
+        $sql_propiedades = 'SELECT id, manzana, villa FROM propiedad WHERE id_usuario = :user_id';
+        $stmt_propiedades = $db->prepare($sql_propiedades);
+        $stmt_propiedades->execute([':user_id' => $authenticated_user['id']]);
+        $propiedades = $stmt_propiedades->fetchAll();
+        
+        foreach ($propiedades as $propiedad) {
+            $manzana = $propiedad['manzana'];
+            $villa = $propiedad['villa'];
+            
+            // Obtener etapas con progreso para esta propiedad
+            $sql_etapas = 'SELECT pc.id_etapa, pc.porcentaje, pc.drive_item_id, ec.nombre, ec.porcentaje as porcentaje_objetivo
+                           FROM progreso_construccion pc
+                           JOIN etapa_construccion ec ON ec.id = pc.id_etapa
+                           WHERE pc.mz = :manzana AND pc.villa = :villa AND pc.estado = 1
+                           GROUP BY pc.id_etapa
+                           ORDER BY pc.id_etapa';
+            
+            $stmt_etapas = $db->prepare($sql_etapas);
+            $stmt_etapas->execute([':manzana' => $manzana, ':villa' => $villa]);
+            $etapas = $stmt_etapas->fetchAll();
+            
+            // Si no hay datos de progreso, verificar si la propiedad tiene al menos 2 etapas con fotos
+            if (count($etapas) == 0) {
+                // Buscar propiedades con fotos pero sin porcentajes
+                $sql_fotos = 'SELECT COUNT(DISTINCT pc.id_etapa) as etapas_con_fotos
+                              FROM progreso_construccion pc
+                              WHERE pc.mz = :manzana AND pc.villa = :villa 
+                              AND pc.estado = 1 AND pc.drive_item_id IS NOT NULL';
+                $stmt_fotos = $db->prepare($sql_fotos);
+                $stmt_fotos->execute([':manzana' => $manzana, ':villa' => $villa]);
+                $etapas_con_fotos = $stmt_fotos->fetch()['etapas_con_fotos'];
+                
+                if ($etapas_con_fotos >= 2) {
+                    $mostrar_garantias = true;
+                    break;
+                }
+            } else {
+                // Obtener todas las etapas disponibles para calcular el total objetivo
+                $sql_todas_etapas = 'SELECT id, nombre, porcentaje FROM etapa_construccion WHERE estado = 1 ORDER BY id';
+                $stmt_todas = $db->prepare($sql_todas_etapas);
+                $stmt_todas->execute();
+                $todas_etapas = $stmt_todas->fetchAll();
+                
+                // Crear un mapa de etapas con progreso real
+                $etapas_con_progreso_real = [];
+                foreach ($etapas as $etapa) {
+                    $etapas_con_progreso_real[$etapa['id_etapa']] = $etapa;
+                }
+                
+                // Calcular progreso total
+                $total_progreso_objetivo = 0;
+                $total_progreso_real = 0;
+                
+                foreach ($todas_etapas as $etapa_objetivo) {
+                    $porcentaje_objetivo = $etapa_objetivo['porcentaje'];
+                    $total_progreso_objetivo += $porcentaje_objetivo;
+                    
+                    // Verificar si esta etapa tiene progreso real
+                    if (isset($etapas_con_progreso_real[$etapa_objetivo['id']])) {
+                        $etapa_real = $etapas_con_progreso_real[$etapa_objetivo['id']];
+                        $porcentaje_real = $etapa_real['porcentaje'] ?? 0;
+                        
+                        // Si no hay porcentaje real pero hay fotos, considerar como "en proceso" (50% del objetivo)
+                        if ($porcentaje_real == 0 && $etapa_real['drive_item_id']) {
+                            $porcentaje_real = $porcentaje_objetivo * 0.5; // 50% del objetivo de la etapa
+                        }
+                        
+                        $total_progreso_real += $porcentaje_real;
+                    }
+                }
+                
+                // Calcular porcentaje de progreso general
+                if ($total_progreso_objetivo > 0) {
+                    $porcentaje_promedio = ($total_progreso_real / $total_progreso_objetivo) * 100;
+                } else {
+                    $porcentaje_promedio = 0;
+                }
+                
+                // Umbral configurable (por defecto 50%)
+                $umbral_garantias = 50; // Se puede hacer configurable desde base de datos
+                
+                if ($porcentaje_promedio >= $umbral_garantias) {
+                    $mostrar_garantias = true;
+                    break; // Si una propiedad cumple, mostrar garantías
+                }
+            }
+        }
+    }
+    
     $role_id = isset($_GET['role_id']) ? (int)$_GET['role_id'] : 0;
 
     /* --------- Query base --------- */
@@ -34,6 +166,11 @@ try {
                   )';
         $params[':role_id'] = $role_id;
     }
+    
+    /* --------- Filtrar garantías según progreso de construcción --------- */
+    if (!$mostrar_garantias) {
+        $sql .= ' AND m.nombre != "Garantías"';
+    }
 
     $sql .= ' ORDER BY m.orden, m.nombre';
 
@@ -41,11 +178,10 @@ try {
     $stmt  = $db->prepare($sql);
     $stmt->execute($params);
     $menus = $stmt->fetchAll();
-
+    
     echo json_encode(['ok' => true, 'menus' => $menus]);
-
-} catch (Throwable $e) {
-    error_log('menu.php: ' . $e->getMessage());
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'mensaje' => 'Error interno']);
+    
+} catch (Exception $e) {
+    error_log("Menu API - Error: " . $e->getMessage());
+    echo json_encode(['ok' => false, 'error' => 'Error al obtener menús']);
 }

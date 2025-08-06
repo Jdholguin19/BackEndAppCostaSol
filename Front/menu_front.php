@@ -88,7 +88,7 @@
         <button id="logoutButton" class="logout-button" style="display: none;">Cerrar sesión</button>
     </div>
   </div>
-  
+
   <!-- Property Tabs -->
   <div class="property-tabs" id="propertyTabs" style="display: none;">
     <!-- Property tabs will be dynamically added here -->
@@ -341,7 +341,12 @@
   });
 
   /* ---------- Menú ---------- */
-  fetch(API_MENU).then(r=>r.json()).then(({ok,menus})=>{
+  const token = localStorage.getItem('cs_token');
+  fetch(API_MENU, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then(r=>r.json()).then(({ok,menus})=>{
     const grid=document.getElementById('menuGrid');
     document.getElementById('menuSpinner').remove();
     if(!ok){grid.textContent='Error menú';return;}
