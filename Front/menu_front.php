@@ -254,6 +254,12 @@
     }
 
 
+    if ( menu.id === 12 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'paletavegetal.php';          // <<<<<<
+        return;
+    }
+
 
     // …aquí podrías despachar otros módulos por nombre o id
     alert('Abrir módulo '+menu.id);
