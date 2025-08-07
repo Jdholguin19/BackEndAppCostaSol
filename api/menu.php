@@ -162,7 +162,12 @@ try {
                      SELECT 1
                        FROM rol_menu rm
                       WHERE rm.menu_id = m.id
-                        AND rm.rol_id  = :role_id
+                        AND (rm.rol_id = :role_id';
+        // Si el rol es Residente (2), incluir también menús de Cliente (1)
+        if ($role_id == 2) {
+            $sql .= ' OR rm.rol_id = 1';
+        }
+        $sql .= ')
                   )';
         $params[':role_id'] = $role_id;
     }

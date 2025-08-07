@@ -74,6 +74,9 @@ body{background:#f5f6f8}
   <!-- Área para mostrar notificaciones de éxito -->
   <div id="notificationArea" class="mt-3"></div>
 
+
+
+  
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

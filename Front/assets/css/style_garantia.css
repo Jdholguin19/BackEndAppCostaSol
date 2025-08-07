@@ -1,0 +1,253 @@
+/* Specific styles for garantias */
+.garantias-header {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.garantias-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    text-align: center;
+}
+
+.garantias-subtitle {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.5rem 0 0 0;
+    text-align: center;
+}
+
+.back-button {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+.garantias-container {
+    padding: 1rem 1.5rem;
+    padding-bottom: 5rem; /* Space for bottom navigation */
+}
+
+.garantia-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+}
+
+.garantia-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.garantia-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.garantia-icon {
+    width: 48px;
+    height: 48px;
+    background: #2d5a3d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.garantia-info {
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.garantia-categoria {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.25rem 0;
+}
+
+.garantia-elemento {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.garantia-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.garantia-detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.garantia-detail-icon {
+    width: 20px;
+    color: #2d5a3d;
+    font-size: 0.875rem;
+}
+
+.garantia-detail-text {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.garantia-detail-value {
+    font-weight: 600;
+    color: #2d5a3d;
+}
+
+.garantia-duracion {
+    background: #f0f9ff;
+    color: #0369a1;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.garantia-responsable {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Loading states */
+.spinner-border {
+    color: #2d5a3d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .garantia-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .garantia-info {
+        margin-left: 0;
+    }
+}
+
+    /* Styles for the new info cards */
+    .info-card-warning,
+    .info-card-procedure {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem; /* Add space below the cards */
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #f0f0f0;
+    }
+
+    /* Specific style for the warning card */
+    .info-card-warning {
+        background-color: #fffbe6; /* Light yellow background */
+        border-color: #fcd34d; /* Yellow border */
+        color: #b45309; /* Darker yellow text for the card */
+        /* Use flexbox for layout */
+        display: flex;
+        align-items: flex-start; /* Align icon and text at the top */
+        /* Remove gap here as we will manage spacing between flex items manually */
+    }
+    .info-card-warning .flex-container {
+    }
+
+    .info-card-warning .info-icon-warning {
+        font-size: 1.5rem; /* Adjust icon size */
+        color: #f59e0b; /* Yellow icon color */
+        flex-shrink: 0; /* Prevent icon from shrinking */
+    }
+
+    .info-card-warning .text-content {
+        flex-grow: 1; /* Allow text content to take remaining space */
+        text-align: justify;
+    }
+
+    .info-card-warning h4 {
+        font-size: 1.125rem; /* Title size */
+        font-weight: 600;
+        /* Keep title color */
+        color: #b45309; /* Title color */
+        margin-top: 0;
+        margin-bottom: 0.5rem; /* Space below title */
+    }
+
+    .info-card-warning p {
+        font-size: 0.875rem; /* Text size */
+        margin: 0;
+        /* Apply text color from the card, which is #b45309 */
+        color: inherit;
+    }
+     .info-card-warning .icon-title-container {
+        margin-right: 1rem; /* Add space between the icon/title and the paragraph */
+        line-height: 1.5;
+    }
+
+    /* Style for the procedure card title */
+    .info-card-procedure h4 {
+        font-size: 1.25rem; /* Larger title size */
+        font-weight: 600;
+        color: #1a1a1a; /* Dark grey title color */
+        margin-top: 0;
+        margin-bottom: 1rem; /* Space below title */
+    }
+
+    /* Styles for the ordered list */
+    .info-card-procedure ol {
+        padding-left: 1.5rem; /* Indent list items */
+        margin: 0;
+        color: #6b7280; /* Grey text color */
+        font-size: 0.875rem; /* List item text size */
+        line-height: 1.6;
+    }
+
+    .info-card-procedure li {
+        margin-bottom: 0.5rem; /* Space between list items */
+        text-align: justify;
+        
+    }
+
+    .info-card-procedure li:last-child {
+        margin-bottom: 0;
+    }

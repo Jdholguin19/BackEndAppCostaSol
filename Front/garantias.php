@@ -9,179 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
-
-<style>
-/* Specific styles for garantias */
-.garantias-header {
-    background: #ffffff;
-    padding: 1rem 1.5rem 0.5rem;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.garantias-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d5a3d;
-    margin: 0;
-    text-align: center;
-}
-
-.garantias-subtitle {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0.5rem 0 0 0;
-    text-align: center;
-}
-
-.back-button {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #2d5a3d;
-    font-size: 1.25rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-}
-
-.back-button:hover {
-    background-color: #f3f4f6;
-}
-
-.garantias-container {
-    padding: 1rem 1.5rem;
-    padding-bottom: 5rem; /* Space for bottom navigation */
-}
-
-.garantia-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #f0f0f0;
-    transition: all 0.2s ease;
-}
-
-.garantia-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.garantia-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-}
-
-.garantia-icon {
-    width: 48px;
-    height: 48px;
-    background: #2d5a3d;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.25rem;
-    flex-shrink: 0;
-}
-
-.garantia-info {
-    flex: 1;
-    margin-left: 1rem;
-}
-
-.garantia-categoria {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0 0 0.25rem 0;
-}
-
-.garantia-elemento {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0;
-}
-
-.garantia-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #f3f4f6;
-}
-
-.garantia-detail {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.garantia-detail-icon {
-    width: 20px;
-    color: #2d5a3d;
-    font-size: 0.875rem;
-}
-
-.garantia-detail-text {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0;
-}
-
-.garantia-detail-value {
-    font-weight: 600;
-    color: #2d5a3d;
-}
-
-.garantia-duracion {
-    background: #f0f9ff;
-    color: #0369a1;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.garantia-responsable {
-    background: #fef3c7;
-    color: #92400e;
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Loading states */
-.spinner-border {
-    color: #2d5a3d;
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
-    .garantia-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
-    
-    .garantia-info {
-        margin-left: 0;
-    }
-}
-</style>
+<link href="assets/css/style_garantia.css" rel="stylesheet">
 </head>
 <body>
 
@@ -200,10 +28,34 @@
 
 <!-- Main Content -->
 <div class="garantias-container">
+  <!-- Información importante -->
+
+ <div class="info-card-warning">
+  <div class="flex-container">
+    <div class="text-content">
+        <h4><i class="bi bi-exclamation-triangle-fill info-icon-warning"></i> Información importante</h4>
+        <p>Las garantías son válidas siempre y cuando se haya realizado el mantenimiento recomendado y el uso adecuado de los elementos, de acuerdo al manual de uso y mantenimiento.</p>
+    </div>
+    </div>
+  </div>
+
+
   <div id="garantias-list">
     <div class="text-center py-5" id="spinner">
       <div class="spinner-border"></div>
     </div>
+  </div>
+
+  <!-- Procedimiento de Reclamación -->
+  <div class="info-card-procedure">
+    <h4>Procedimiento de Reclamación</h4>
+    <ol>
+      <li>Identifique el problema y verifique si está cubierto por la garantía.</li>
+      <li>Tome fotografías que evidencien el problema.</li>
+      <li>Contacte al servicio al cliente a través de la sección PQR de esta aplicación.</li>
+      <li>Espere la confirmación de recepción de su reclamo en un plazo de 24-48 horas.</li>
+      <li>Un técnico agendará una visita para evaluar el problema y determinar si procede la garantía.</li>
+    </ol>
   </div>
 </div>
 

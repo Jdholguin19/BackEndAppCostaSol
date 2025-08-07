@@ -157,8 +157,8 @@ try{
                     'headings' => ['en' => $message_title, 'es' => $message_title],
                     'contents' => ['en' => $message_body, 'es' => $message_body],
                     'data' => ['pqr_id' => $pqrId],
-                    'ttl' => 86400,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
-                    'expire_in' => 86400  // Notificación se borra 24 horas después de ser leída (86400 segundos)
+                    'ttl' => 864000,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
+                    'expire_in' => 864000  // Notificación se borra 24 horas después de ser leída (86400 segundos)
 
                 ];
 
