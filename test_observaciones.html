@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Observaciones CTG</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Test de APIs de Observaciones CTG</h1>
+    
+    <div class="test-section">
+        <h3>1. Obtener Observaciones</h3>
+        <p>CTG ID: <input type="number" id="ctgId" value="1" min="1"></p>
+        <button onclick="getObservaciones()">Obtener Observaciones</button>
+        <div id="resultGet"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Actualizar Observaciones</h3>
+        <p>CTG ID: <input type="number" id="ctgIdUpdate" value="1" min="1"></p>
+        <textarea id="observacionesText" placeholder="Escriba las observaciones aquí..."></textarea>
+        <button onclick="updateObservaciones()">Actualizar Observaciones</button>
+        <div id="resultUpdate"></div>
+    </div>
+
+    <script>
+        // Simular token de responsable (reemplazar con token real para pruebas)
+        const token = 'token_responsable_ejemplo';
+        
+        function getObservaciones() {
+            const ctgId = document.getElementById('ctgId').value;
+            const resultDiv = document.getElementById('resultGet');
+            
+            fetch(`api/ctg/ctg_observaciones.php?ctg_id=${ctgId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    resultDiv.innerHTML = `<div class="success">✅ Éxito: "${data.observaciones || '(sin observaciones)'}"</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Error: ${data.mensaje}</div>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="error">❌ Error de conexión: ${error.message}</div>`;
+            });
+        }
+        
+        function updateObservaciones() {
+            const ctgId = document.getElementById('ctgIdUpdate').value;
+            const observaciones = document.getElementById('observacionesText').value;
+            const resultDiv = document.getElementById('resultUpdate');
+            
+            const formData = new FormData();
+            formData.append('ctg_id', ctgId);
+            formData.append('observaciones', observaciones);
+            
+            fetch('api/ctg/ctg_update_observaciones.php', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    resultDiv.innerHTML = `<div class="success">✅ Éxito: ${data.mensaje}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Error: ${data.mensaje}</div>`;
+                }
+            })
+            .catch(error => {
+                resultDiv.innerHTML = `<div class="error">❌ Error de conexión: ${error.message}</div>`;
+            });
+        }
+    </script>
+</body>
+</html>

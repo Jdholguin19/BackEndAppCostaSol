@@ -49,6 +49,25 @@ $id = (int)($_GET['id'] ?? 0);
 
   <!-- Área para mostrar notificaciones de éxito -->
   <div id="notificationArea" class="notification-area"></div>
+
+  <!-- Área de observaciones (solo visible para responsables) -->
+  <div id="observacionesContainer" class="observaciones-container">
+    <label for="txtObservaciones" class="observaciones-label">
+      <i class="bi bi-journal-text"></i> Observaciones del cliente
+    </label>
+    <textarea 
+      id="txtObservaciones" 
+      class="observaciones-textarea" 
+      placeholder="Escriba aquí las observaciones sobre este cliente..."
+      maxlength="700"
+    ></textarea>
+    <div class="observaciones-actions">
+      <button id="btnSaveObservaciones" class="observaciones-save-btn" type="button">
+        <i class="bi bi-check-circle"></i>
+        Guardar observaciones
+      </button>
+    </div>
+  </div>
 </div>
 
 
@@ -59,6 +78,8 @@ $id = (int)($_GET['id'] ?? 0);
 const END_RESP = '../../api/ctg/ctg_respuestas.php?ctg_id=<?=$id?>';
 const END_SEND = '../../api/ctg/ctg_insert_form.php';
 const END_UPDATE_ESTADO = '../../api/ctg/ctg_update_estado.php'; // Nuevo endpoint
+const END_OBSERVACIONES = '../../api/ctg/ctg_observaciones.php?ctg_id=<?=$id?>';
+const END_UPDATE_OBSERVACIONES = '../../api/ctg/ctg_update_observaciones.php';
 
 /* ------- obtener usuario autenticado ------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
@@ -76,6 +97,9 @@ if(!u.id) {
     const btnSend = document.getElementById('btnSend');
     const txtMensaje = document.getElementById('txtMensaje');
     const notificationArea = document.getElementById('notificationArea');
+    const observacionesContainer = document.getElementById('observacionesContainer');
+    const txtObservaciones = document.getElementById('txtObservaciones');
+    const btnSaveObservaciones = document.getElementById('btnSaveObservaciones');
 
     // Obtener el token de localStorage
     const token = localStorage.getItem('cs_token');
@@ -135,6 +159,86 @@ if(!u.id) {
           }, 5000);
         }
 
+        /* ------- Funciones para observaciones ------- */
+        function loadObservaciones() {
+          fetch(END_OBSERVACIONES, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          .then(r => {
+            if (r.status === 401) {
+              showNotification('Tu sesión ha expirado o no estás autorizado para ver las observaciones.', 'danger');
+              return Promise.reject('No autorizado');
+            }
+            if (r.status === 403) {
+              showNotification('No tienes permisos para ver las observaciones de este CTG.', 'warning');
+              return Promise.reject('Sin permisos');
+            }
+            return r.json();
+          })
+          .then(d => {
+            if (d.ok) {
+              txtObservaciones.value = d.observaciones || '';
+            } else {
+              console.error('Error al cargar observaciones:', d.mensaje);
+            }
+          })
+          .catch(err => {
+            console.error('Error al cargar observaciones:', err);
+            if (err !== 'No autorizado' && err !== 'Sin permisos') {
+              showNotification('Error al cargar las observaciones.', 'danger');
+            }
+          });
+        }
+
+        function saveObservaciones() {
+          const observaciones = txtObservaciones.value.trim();
+          
+          btnSaveObservaciones.disabled = true;
+          btnSaveObservaciones.innerHTML = '<i class="bi bi-hourglass-split"></i> Guardando...';
+
+          const formData = new FormData();
+          formData.append('ctg_id', <?=$id?>);
+          formData.append('observaciones', observaciones);
+
+          fetch(END_UPDATE_OBSERVACIONES, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          })
+          .then(r => {
+            if (r.status === 401) {
+              showNotification('Tu sesión ha expirado o no estás autorizado para guardar observaciones.', 'danger');
+              return Promise.reject('No autorizado');
+            }
+            if (r.status === 403) {
+              showNotification('No tienes permisos para guardar observaciones en este CTG.', 'warning');
+              return Promise.reject('Sin permisos');
+            }
+            return r.json();
+          })
+          .then(d => {
+            if (d.ok) {
+              showNotification('Observaciones guardadas correctamente!');
+            } else {
+              throw new Error(d.mensaje || 'Error desconocido');
+            }
+          })
+          .catch(err => {
+            console.error('Error al guardar observaciones:', err);
+            if (err !== 'No autorizado' && err !== 'Sin permisos') {
+              showNotification('Error al guardar las observaciones: ' + err.message, 'danger');
+            }
+          })
+          .finally(() => {
+            btnSaveObservaciones.disabled = false;
+            btnSaveObservaciones.innerHTML = '<i class="bi bi-check-circle"></i> Guardar observaciones';
+          });
+        }
+
         /* ------- cabecera CTG ------- */
         fetch(END_CTG, {
             headers: {
@@ -189,6 +293,10 @@ if(!u.id) {
           } else {
               addEstadoDropdown(p.estado_id); // p.estado_id debería venir en la respuesta de ctg_list.php
           }
+          
+          // Mostrar área de observaciones para responsables
+          observacionesContainer.classList.add('show');
+          loadObservaciones();
           }
           // --- FIN: Lógica para Responsables ---
 
@@ -593,6 +701,25 @@ if(!u.id) {
                 if (txtMensaje.value.trim()) {
                     frmRespuesta.dispatchEvent(new Event('submit'));
                 }
+            }
+        });
+
+        /* ------- Event listener para guardar observaciones ------- */
+        btnSaveObservaciones.addEventListener('click', function(e) {
+            e.preventDefault();
+            saveObservaciones();
+        });
+
+        /* ------- Auto-guardar observaciones al perder el foco ------- */
+        txtObservaciones.addEventListener('blur', function() {
+            // Solo auto-guardar si el usuario es responsable y hay cambios
+            if (isResponsable && txtObservaciones.value.trim() !== '') {
+                // Pequeño delay para evitar guardar mientras el usuario está escribiendo
+                setTimeout(() => {
+                    if (document.activeElement !== txtObservaciones) {
+                        saveObservaciones();
+                    }
+                }, 1000);
             }
         });
 
