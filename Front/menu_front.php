@@ -261,6 +261,12 @@
     }
 
 
+    if ( menu.id === 13 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'noticia.php';          // <<<<<<
+        return;
+    }
+
     // …aquí podrías despachar otros módulos por nombre o id
     alert('Abrir módulo '+menu.id);
   }

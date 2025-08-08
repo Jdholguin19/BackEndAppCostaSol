@@ -1,83 +1,57 @@
 <?php /* Front/ctg/ctg_detalle.php */
 $id = (int)($_GET['id'] ?? 0);
 ?>
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><title>CTG detalle</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTG Detalle | CostaSol</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="../assets/css/style_main.css" rel="stylesheet">
+<link href="../assets/css/style_ctg_detalle.css" rel="stylesheet">
+</head>
+<body>
 
-<style>
-/* —— layout global —— */
-body{background:#f5f6f8}
-.container{max-width:760px}
-
-/* —— cabecera & badges —— */
-.btn-back{padding:.25rem .5rem;font-size:1.25rem}
-.badge-dot{position:relative;padding-left:.9rem;font-size:.8rem}
-.badge-dot::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
- width:.55rem;height:.55rem;border-radius:50%}
-.badge-dot.abierto::before {background:#0d6efd}             /* ingresado */
-.badge-dot.proceso::before {background:#d4ac1d}
-.badge-dot.resuelto::before{background:#1f9d55}
-
-.msg-head{font-weight:600;margin-bottom:.25rem}
-
-/* —— lista de mensajes —— */
-.chat{list-style:none;padding:0}
-.chat li{display:flex;gap:.5rem;margin-bottom:1.25rem}
-
-.chat .bubble{
-   max-width:75%;padding:.7rem 1rem;border-radius:.75rem;position:relative;
-   background:#f8f9fa;font-size:.95rem
-}
-
-.chat .time{font-size:.75rem;color:#6c757d;margin-top:.25rem}
-.avatar-sm{width:40px;height:40px;border-radius:50%;object-fit:cover}
-
-/* ➊ el <li> que tenga la clase .right empuja el contenido hacia la derecha */
-.chat li.right{justify-content:flex-end}
-
-/* ➋ dentro de .right el avatar debe quedar después de la burbuja            */
-.chat li.right img{order:2;margin-left:.5rem}
-
-/* ➌ burbuja del responsable con color diferente                              */
-.chat li.right .bubble{background:#e9f2ff}
-
-</style>
-</head><body>
-
-<div class="container py-4" id="wrap">
-  <!-- cabecera -->
-  <div class="d-flex align-items-center mb-4">
-    <button class="btn btn-link text-dark btn-back" onclick="history.back()">
+<!-- Header Section -->
+<div class="ctg-detalle-header">
+  <div style="position: relative; text-align: center;">
+    <button class="back-button" onclick="history.back()">
       <i class="bi bi-arrow-left"></i>
     </button>
-    <h1 class="h5 mb-0 flex-grow-1 text-truncate" id="title">CTG</h1>
+    <div>
+      <h1 class="ctg-detalle-title" id="title">CTG</h1>
+    </div>
   </div>
+</div>
 
+<!-- Main Content -->
+<div class="ctg-detalle-container">
   <!-- detalle principal -->
-  <div id="headBox" class="mb-4"></div>
+  <div id="headBox" class="ctg-detalle-box"></div>
 
   <!-- hilo -->
-  <ul id="chat" class="chat mb-5"></ul>
+  <ul id="chat" class="chat-list"></ul>
 
-  <!-- —— caja nueva respuesta —— -->
-  <form id="frmRespuesta" enctype="multipart/form-data" class="card p-3">
-    <textarea id="txtMensaje" name="mensaje" class="form-control mb-2" rows="3" placeholder="Escriba su respuesta…" required></textarea>
-    <div class="d-flex justify-content-between">
-      <input type="file" name="archivo" accept="image/*,application/pdf" class="form-control w-auto form-control-sm">
-      <button id="btnSend" class="btn btn-primary btn-sm" type="submit">Enviar</button>
+  <!-- caja nueva respuesta -->
+  <form id="frmRespuesta" enctype="multipart/form-data" class="response-form">
+    <textarea id="txtMensaje" name="mensaje" class="response-textarea" rows="3" placeholder="Escriba su respuesta…" required></textarea>
+    <div class="response-actions">
+      <input type="file" name="archivo" accept="image/*,application/pdf" class="file-input">
+      <button id="btnSend" class="send-button" type="submit">
+        <i class="bi bi-send"></i>
+        Enviar
+      </button>
     </div>
   </form>
 
   <!-- Área para mostrar notificaciones de éxito -->
-  <div id="notificationArea" class="mt-3"></div>
-
-
-
-  
+  <div id="notificationArea" class="notification-area"></div>
 </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -136,12 +110,11 @@ if(!u.id) {
         function msgHTML(r){
           const esResp = Number(r.responsable_id) > 0;
           const dirClass = esResp ? 'right' : '';
-          const foto = r.url_foto || 'https://via.placeholder.com/40x40?text=%20';
+          const mensaje = r.mensaje.replace(/\n/g, '<br>'); // Convertir saltos de línea en HTML
 
           return `<li class="${dirClass}">
-                    <img src="${foto}" class="avatar-sm" alt="">
                     <div>
-                      <div class="bubble">${r.mensaje}</div>
+                      <div class="bubble">${mensaje}</div>
                       <div class="time">${fechaHora(r.fecha_respuesta)}</div>
                     </div>
                   </li>`;
@@ -207,7 +180,15 @@ if(!u.id) {
 
           // --- INICIO: Lógica para Responsables ---
           if (isResponsable) {
+                        // Actualizar el estado actual del CTG globalmente ANTES de crear el dropdown
+          currentCtgEstadoId = p.estado_id;
+          
+          // Si no hay estado_id, intentar encontrar por nombre
+          if (!p.estado_id && p.estado) {
+              addEstadoDropdownByName(p.estado);
+          } else {
               addEstadoDropdown(p.estado_id); // p.estado_id debería venir en la respuesta de ctg_list.php
+          }
           }
           // --- FIN: Lógica para Responsables ---
 
@@ -225,52 +206,67 @@ if(!u.id) {
             if (document.getElementById('selEstadoCTG')) {
                 return; // Ya existe, no añadir de nuevo
             }
+            
 
-            const selectHtml = `
-              <select id="selEstadoCTG" class="form-select form-select-sm w-auto ms-3">
-                <!-- Opciones se cargarán aquí -->
-</select>`;
 
+            // Crear select simple pero con estilos personalizados
+            const selectHTML = `
+                <div class="estado-selector-container">
+                    <select id="selEstadoCTG" class="custom-select">
+                        <option value="">Cargando...</option>
+                    </select>
+                </div>
+            `;
+
+            // Insertar después del título
             const titleElement = document.getElementById('title');
             if (titleElement) {
-                titleElement.insertAdjacentHTML('afterend', selectHtml);
+                titleElement.insertAdjacentHTML('afterend', selectHTML);
             }
 
-            const selEstadoCTG = document.getElementById('selEstadoCTG');
-
+            // Cargar estados
             fetch('../../api/ctg/ctg_estados.php')
                 .then(r => r.json())
                 .then(d => {
                     if (d.ok && d.estados) {
+                        const select = document.getElementById('selEstadoCTG');
+                        
+                        // Limpiar opciones
+                        select.innerHTML = '';
+                        
+                        // Agregar opciones (excluir ID 1)
                         d.estados.forEach(estado => {
-                            if (estado.id == 1) {
-                              return; // Saltar la opción con ID 1 (Ingresado)
+                            if (estado.id != 1) {
+                                const option = document.createElement('option');
+                                option.value = estado.id;
+                                option.textContent = estado.nombre;
+                                
+                                // Marcar como seleccionado si coincide
+                                if (estado.id == currentEstadoId) {
+                                    option.selected = true;
+                                }
+                                
+                                select.appendChild(option);
                             }
-                            const option = document.createElement('option');
-                            option.value = estado.id;
-                            option.textContent = estado.nombre;
-                            if (estado.id == currentEstadoId) {
-                                option.selected = true;
-                            }
-                            selEstadoCTG.appendChild(option);
                         });
+                        
 
-                        selEstadoCTG.addEventListener('change', handleEstadoChange);
-
+                        
+                        // Evento change
+                        select.addEventListener('change', function() {
+                            const selectedOption = this.options[this.selectedIndex];
+                            if (selectedOption.value) {
+                                handleEstadoChangeCustom(selectedOption.value, selectedOption.textContent);
+                            }
+                        });
+                        
                     } else {
-                        console.error('Error al cargar estados de CTG:', d.msg);
-                        if (selEstadoCTG) {
-                             selEstadoCTG.innerHTML = '<option value="">Error al cargar</option>';
-                             selEstadoCTG.disabled = true;
-                        }
+                        document.getElementById('selEstadoCTG').innerHTML = '<option value="">Error al cargar</option>';
                     }
                 })
                 .catch(err => {
-                    console.error('Error fetching CTG states:', err);
-                     if (selEstadoCTG) {
-                         selEstadoCTG.innerHTML = '<option value="">Error de red</option>';
-                         selEstadoCTG.disabled = true;
-                    }
+                    console.error('Error:', err);
+                    document.getElementById('selEstadoCTG').innerHTML = '<option value="">Error de red</option>';
                 });
         }
 
@@ -338,6 +334,150 @@ if(!u.id) {
             })
             .finally(()=>{ event.target.disabled = false; }); // Habilitar el select al finalizar
         } // FIN de la función handleEstadoChange
+
+        /* ------- Función personalizada para manejar el cambio de estado ------- */
+        function handleEstadoChangeCustom(newEstadoId, estadoNombre) {
+            const ctgId = <?=$id?>;
+
+            if (!newEstadoId) {
+                console.warn("Seleccione un estado válido.");
+                return;
+            }
+
+            fetch(END_UPDATE_ESTADO, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    ctg_id: ctgId,
+                    estado_id: newEstadoId
+                })
+            })
+            .then(r => {
+                if (r.status === 401 || r.status === 403) {
+                     showNotification('No tienes permiso para cambiar el estado del CTG.', 'danger');
+                     return Promise.reject('Permiso denegado o no autorizado');
+                }
+                return r.json();
+            })
+            .then(d => {
+                if (d.ok) {
+                    showNotification('Estado del CTG actualizado correctamente.');
+                    // Actualizar el estado actual global
+                    currentCtgEstadoId = newEstadoId;
+                    
+                    // Actualizar la visualización del badge de estado
+                    updateEstadoBadge(newEstadoId, estadoNombre);
+                    
+                    // Actualizar la opción seleccionada en el dropdown
+                    updateDropdownSelection(newEstadoId, estadoNombre);
+
+                    // Si el estado cambia a cerrado, ocultar el formulario de respuesta
+                    if (estadoNombre.toLowerCase().includes('cerr')) {
+                        if (frmRespuesta) frmRespuesta.style.display = 'none';
+                    } else {
+                         if (frmRespuesta) frmRespuesta.style.display = 'block';
+                    }
+
+                } else {
+                    showNotification('Error al actualizar el estado del CTG: ' + (d.msg || 'Desconocido'), 'danger');
+                }
+            })
+            .catch(err => {
+                console.error('Error updating CTG state:', err);
+                 if (err !== 'Permiso denegado o no autorizado') {
+                     showNotification('Error de red al actualizar el estado del CTG.', 'danger');
+                 }
+            });
+        }
+
+        /* ------- Función para crear dropdown por nombre de estado ------- */
+        function addEstadoDropdownByName(estadoNombre) {
+            if (document.getElementById('selEstadoCTG')) {
+                return; // Ya existe, no añadir de nuevo
+            }
+            
+
+
+            // Crear select simple pero con estilos personalizados
+            const selectHTML = `
+                <div class="estado-selector-container">
+                    <select id="selEstadoCTG" class="custom-select">
+                        <option value="">Cargando...</option>
+                    </select>
+                </div>
+            `;
+
+            // Insertar después del título
+            const titleElement = document.getElementById('title');
+            if (titleElement) {
+                titleElement.insertAdjacentHTML('afterend', selectHTML);
+            }
+
+            // Cargar estados
+            fetch('../../api/ctg/ctg_estados.php')
+                .then(r => r.json())
+                .then(d => {
+                    if (d.ok && d.estados) {
+                        const select = document.getElementById('selEstadoCTG');
+                        
+                        // Limpiar opciones
+                        select.innerHTML = '';
+                        
+                        // Agregar opciones (excluir ID 1)
+                        d.estados.forEach(estado => {
+                            if (estado.id != 1) {
+                                const option = document.createElement('option');
+                                option.value = estado.id;
+                                option.textContent = estado.nombre;
+                                
+                                // Marcar como seleccionado si coincide el nombre
+                                if (estado.nombre.toLowerCase() === estadoNombre.toLowerCase()) {
+                                    option.selected = true;
+                                }
+                                
+                                select.appendChild(option);
+                            }
+                        });
+                        
+                        // Evento change
+                        select.addEventListener('change', function() {
+                            const selectedOption = this.options[this.selectedIndex];
+                            if (selectedOption.value) {
+                                handleEstadoChangeCustom(selectedOption.value, selectedOption.textContent);
+                            }
+                        });
+                        
+                    } else {
+                        document.getElementById('selEstadoCTG').innerHTML = '<option value="">Error al cargar</option>';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    document.getElementById('selEstadoCTG').innerHTML = '<option value="">Error de red</option>';
+                });
+        }
+
+        /* ------- Función para actualizar la selección del dropdown ------- */
+        function updateDropdownSelection(estadoId, estadoNombre) {
+            const selectedText = document.getElementById('selectedText');
+            const dropdownOptions = document.getElementById('dropdownOptions');
+            
+            if (!selectedText || !dropdownOptions) return;
+            
+            // Actualizar texto del header
+            selectedText.textContent = estadoNombre;
+            
+            // Remover selección anterior y marcar nueva
+            dropdownOptions.querySelectorAll('.dropdown-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.getAttribute('data-value') == estadoId) {
+                    opt.classList.add('selected');
+                }
+            });
+        }
 
         // Función para actualizar el badge de estado en la cabecera (Opcional)
         function updateEstadoBadge(estadoId, estadoNombre) {
@@ -442,6 +582,18 @@ if(!u.id) {
                   }
             })
             .finally(()=>{btn.disabled=false;btn.textContent='Enviar';});
+        });
+
+        /* ------- Envío con Enter ------- */
+        txtMensaje.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevenir salto de línea
+                
+                // Solo enviar si hay texto
+                if (txtMensaje.value.trim()) {
+                    frmRespuesta.dispatchEvent(new Event('submit'));
+                }
+            }
         });
 
     } // FIN del bloque else si hay token

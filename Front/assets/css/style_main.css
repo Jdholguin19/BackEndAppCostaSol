@@ -356,7 +356,7 @@ body {
     border-radius: 12px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 1px 3px rgba(234, 16, 16, 0.94);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.204);
     border: 1px solid #f0f0f0;
     max-width: 480px; /* Limit max width */
     margin: 1rem auto; /* Center the card */

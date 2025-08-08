@@ -157,8 +157,8 @@ try{
                     'headings' => ['en' => $message_title, 'es' => $message_title],
                     'contents' => ['en' => $message_body, 'es' => $message_body],
                     'data' => ['ctg_id' => $ctgId],
-                    'ttl' => 86400,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
-                    'expire_in' => 86400  // Notificación se borra 24 horas después de ser leída (86400 segundos)
+                    'ttl' => 5,       // Notificación expira después de 24 horas si no se entrega (86400 segundos)
+                    'expire_in' => 5  // Notificación se borra 24 horas después de ser leída (86400 segundos)
 
                 ];
 

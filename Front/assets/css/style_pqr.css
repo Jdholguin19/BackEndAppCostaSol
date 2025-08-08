@@ -1,0 +1,238 @@
+/* Specific styles for PQR */
+.pqr-header {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.pqr-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    text-align: center;
+}
+
+.back-button {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+.pqr-container {
+    padding: 1rem 1.5rem;
+    padding-bottom: 5rem;
+}
+
+.pqr-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 0.5rem;
+}
+
+.order-select {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    background: #ffffff;
+    color: #1a1a1a;
+    flex: 1;
+    max-width: 200px;
+}
+
+.new-pqr-btn {
+    background: #39a452;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.new-pqr-btn:hover {
+    background: #1f4a2f;
+    transform: translateY(-1px);
+}
+
+.pqr-tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.pqr-tab {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.pqr-tab.active {
+    background: #39a452;
+    color: #ffffff;
+    border-color: #2d5a3d;
+}
+
+.pqr-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.pqr-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.pqr-header-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.pqr-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.pqr-date {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.pqr-badges {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.pqr-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.pqr-badge.tipo {
+    background: #6c757d;
+    color: #ffffff;
+}
+
+.pqr-badge.estado {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.pqr-badge.estado.enproceso {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.pqr-badge.estado.cerrado {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.pqr-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+}
+
+.pqr-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.pqr-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.pqr-responses {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* Loading states */
+.spinner-border {
+    color: #2d5a3d;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-state {
+    text-align: center;
+    padding: 2rem;
+}
+
+.alert {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .pqr-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .order-select {
+        max-width: none;
+    }
+}

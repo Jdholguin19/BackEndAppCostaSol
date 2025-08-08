@@ -1,0 +1,447 @@
+/* Specific styles for CTG Detalle */
+.ctg-detalle-header {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.ctg-detalle-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    text-align: center;
+}
+
+.back-button {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+/* Selector de estado mejorado */
+.estado-selector-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+}
+
+/* Select personalizado moderno */
+.custom-select {
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #2d5a3d;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    min-width: 160px;
+    outline: none;
+}
+
+.custom-select:hover {
+    border-color: #007aff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-select:focus {
+    border-color: #007aff;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+/* Estilos para las opciones del select */
+.custom-select option {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #ffffff;
+    color: #374151;
+    border: none;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    margin: 2px 0;
+}
+
+.custom-select option:hover {
+    background: #f8fafc;
+    color: #1f2937;
+    transform: translateX(4px);
+}
+
+.custom-select option:checked {
+    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 122, 255, 0.3);
+}
+
+/* Estilos específicos para cada estado */
+.custom-select option[value="2"] {
+    color: #059669;
+    border-left: 3px solid #059669;
+    padding-left: 1.25rem;
+}
+
+.custom-select option[value="3"] {
+    color: #dc2626;
+    border-left: 3px solid #dc2626;
+    padding-left: 1.25rem;
+}
+
+.custom-select option[value="4"] {
+    color: #7c3aed;
+    border-left: 3px solid #7c3aed;
+    padding-left: 1.25rem;
+}
+
+.custom-select option[value="5"] {
+    color: #1f9d55;
+    border-left: 3px solid #1f9d55;
+    padding-left: 1.25rem;
+}
+
+.ctg-detalle-container {
+    padding: 1rem 1.5rem;
+    padding-bottom: 1rem;
+    max-width: 760px;
+    margin: 0 auto;
+    background: #f0f2f5;
+    min-height: 100vh;
+}
+
+.ctg-detalle-box {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8e8e8;
+}
+
+/* Chat styles - WhatsApp inspired */
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    background: #f0f2f5;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.chat-list li {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-end;
+}
+
+.chat-list .bubble {
+    max-width: 90%;
+    padding: 0.875rem 1.125rem;
+    border-radius: 18px;
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    min-width: 120px;
+}
+
+.chat-list .bubble:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.chat-list .time {
+    font-size: 0.7rem;
+    color: #8e8e93;
+    margin-top: 0.375rem;
+    font-weight: 400;
+}
+
+/* Left aligned messages (user) */
+.chat-list li:not(.right) {
+    justify-content: flex-start;
+}
+
+.chat-list li:not(.right) .bubble {
+    background: #ffffff;
+    color: #1c1c1e;
+    border-bottom-left-radius: 6px;
+}
+
+.chat-list li:not(.right) .time {
+    text-align: left;
+    margin-left: 0.5rem;
+}
+
+/* Right aligned messages (responsable) */
+.chat-list li.right {
+    justify-content: flex-end;
+}
+
+.chat-list li.right .bubble {
+    background: #D8FDD2;
+    color: #000000;
+    border-bottom-right-radius: 6px;
+}
+
+.chat-list li.right .time {
+    text-align: right;
+    margin-right: 0.5rem;
+    color: #8e8e93;
+}
+
+/* Badge styles */
+.badge-dot {
+    position: relative;
+    padding-left: 0.9rem;
+    font-size: 0.8rem;
+}
+
+.badge-dot::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+}
+
+.badge-dot.abierto::before {
+    background: #0d6efd;
+}
+
+.badge-dot.proceso::before {
+    background: #d4ac1d;
+}
+
+.badge-dot.resuelto::before {
+    background: #1f9d55;
+}
+
+.msg-head {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+/* Response form - WhatsApp inspired */
+.response-form {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e8e8e8;
+    margin-bottom: 0;
+    position: relative;
+    z-index: 50;
+}
+
+.response-textarea {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+    resize: none;
+    margin-bottom: 1rem;
+    font-family: inherit;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    background: #f8f9fa;
+}
+
+.response-textarea:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    background: #ffffff;
+}
+
+.response-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+/* File input mejorado */
+.file-input {
+    flex: 1;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    color: #374151;
+    font-weight: 500;
+}
+
+.file-input:hover {
+    border-color: #007aff;
+    background: #f0f8ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-input:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    background: #ffffff;
+}
+
+/* Estilo para el texto del file input */
+.file-input::file-selector-button {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 0.75rem;
+}
+
+.file-input::file-selector-button:hover {
+    background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.send-button {
+    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
+    border: none;
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+    min-width: 120px;
+    justify-content: center;
+}
+
+.send-button:hover {
+    background: linear-gradient(135deg, #0056cc 0%, #004499 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+}
+
+.send-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 122, 255, 0.3);
+}
+
+.send-button:disabled {
+    background: #b0b0b0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.send-button i {
+    font-size: 1rem;
+}
+
+.notification-area {
+    margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .ctg-detalle-container {
+        padding: 0.5rem 0.75rem;
+        padding-bottom: 0.5rem;
+    }
+    
+    .chat-list {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    .chat-list .bubble {
+        max-width: 95%;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        min-width: 100px;
+    }
+    
+    .response-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    
+    .file-input {
+        order: 1;
+    }
+    
+    .send-button {
+        order: 2;
+        width: 100%;
+        border-radius: 12px;
+    }
+    
+    .response-form {
+        padding: 1rem;
+        border-radius: 16px;
+        margin-bottom: 0;
+    }
+    
+    #selEstadoCTG {
+        min-width: 120px;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+}
+
+/* Animation for new messages */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-list li {
+    animation: slideIn 0.3s ease-out;
+}
