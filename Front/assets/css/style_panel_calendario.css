@@ -1,0 +1,291 @@
+/* Specific styles for Panel Calendario */
+body {
+    background: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding-bottom: 80px; /* Space for bottom navigation */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header Section */
+.calendario-header {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin: -1rem auto 1rem auto;
+    width: calc(100% - 3rem);
+    max-width: 1200px;
+    box-sizing: border-box;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.calendario-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    text-align: center;
+    padding: 0 3rem; /* Space for buttons */
+}
+
+.back-button {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    z-index: 101;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+/* Select Styles */
+.form-select {
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    width: auto;
+    min-width: 200px;
+    box-sizing: border-box;
+}
+
+.form-select:focus {
+    border-color: #007aff;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    outline: none;
+}
+
+/* Calendar Container */
+#calendar {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8e8e8;
+}
+
+/* FullCalendar Customization */
+.fc {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.fc-toolbar {
+    margin-bottom: 1.5rem !important;
+}
+
+.fc-toolbar-title {
+    font-size: 1.5rem !important;
+    font-weight: 600 !important;
+    color: #2d5a3d !important;
+}
+
+.fc-button {
+    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 4px rgba(0, 122, 255, 0.2) !important;
+}
+
+.fc-button:hover {
+    background: linear-gradient(135deg, #0056cc 0%, #004499 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 122, 255, 0.3) !important;
+}
+
+.fc-button:active {
+    transform: translateY(0) !important;
+}
+
+.fc-button-primary:not(:disabled).fc-button-active {
+    background: linear-gradient(135deg, #0056cc 0%, #004499 100%) !important;
+    box-shadow: 0 2px 4px rgba(0, 122, 255, 0.3) !important;
+}
+
+/* Calendar Grid */
+.fc-daygrid-day {
+    border-color: #e8e8e8 !important;
+}
+
+.fc-daygrid-day-number {
+    color: #374151 !important;
+    font-weight: 500 !important;
+}
+
+.fc-day-today {
+    background-color: #f8f9ff !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%) !important;
+    color: white !important;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem;
+}
+
+/* Events */
+.fc-event {
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.2s ease !important;
+}
+
+.fc-event:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.fc-event-main {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.8rem !important;
+    line-height: 1.2 !important;
+}
+
+.fc-event-time {
+    font-weight: 600 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.fc-event-title {
+    font-weight: 500 !important;
+    color: white !important;
+}
+
+/* Time Grid */
+.fc-timegrid-slot {
+    border-color: #f0f0f0 !important;
+}
+
+.fc-timegrid-slot-label {
+    color: #6b7280 !important;
+    font-size: 0.8rem !important;
+}
+
+.fc-timegrid-now-indicator-line {
+    border-color: #007aff !important;
+    border-width: 2px !important;
+}
+
+.fc-timegrid-now-indicator-arrow {
+    border-color: #007aff !important;
+    border-width: 5px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .container {
+        padding: 0.5rem 1rem;
+        max-width: 100%;
+    }
+    
+    .calendario-header {
+        padding: 0.75rem 1rem 0.5rem;
+        margin: -0.5rem auto 1rem auto;
+        width: calc(100% - 2rem);
+    }
+    
+    .calendario-title {
+        font-size: 1.25rem;
+        padding: 0 2.5rem;
+    }
+    
+    .back-button {
+        left: 0.25rem;
+        font-size: 1.1rem;
+        padding: 0.4rem;
+    }
+    
+    .form-select {
+        min-width: 150px;
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    #calendar {
+        padding: 1rem;
+        margin: 0 -0.5rem;
+        border-radius: 12px;
+    }
+    
+    .fc-toolbar-title {
+        font-size: 1.25rem !important;
+    }
+    
+    .fc-button {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.85rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .calendario-header {
+        padding: 0.5rem 0.75rem 0.5rem;
+        margin: -0.5rem auto 1rem auto;
+        width: calc(100% - 1.5rem);
+    }
+    
+    .calendario-title {
+        font-size: 1.1rem;
+        padding: 0 2rem;
+    }
+    
+    .form-select {
+        min-width: 120px;
+        font-size: 0.85rem;
+        padding: 0.5rem 0.6rem;
+    }
+    
+    #calendar {
+        padding: 0.75rem;
+    }
+    
+    .fc-toolbar-title {
+        font-size: 1.1rem !important;
+    }
+    
+    .fc-button {
+        padding: 0.3rem 0.6rem !important;
+        font-size: 0.8rem !important;
+    }
+}

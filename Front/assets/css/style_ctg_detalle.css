@@ -551,33 +551,3 @@
     animation: slideIn 0.3s ease-out;
 }
 
-/* Scroll-to-bottom button */
-#scrollToBottomBtn {
-    display: none; /* Hidden by default */
-    position: fixed;
-    bottom: 2rem; /* Adjust as needed */
-    right: 2rem; /* Adjust as needed */
-    z-index: 99; /* Stay above other content */
-    width: 48px; /* Button size */
-    height: 48px; /* Button size */
-    border: none;
-    outline: none;
-    background-color: #007aff; /* Primary color */
-    color: white;
-    cursor: pointer;
-    border-radius: 50%; /* Make it circular */
-    padding: 0;
-    font-size: 1.5rem; /* Icon size */
-    box-shadow: 0 4px 8px rgba(0, 122, 255, 0.3); /* Subtle shadow */
-    transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
-    opacity: 0; /* Start completely transparent */
-}
-
-#scrollToBottomBtn.show {
-    opacity: 1; /* Fade in */
-}
-
-#scrollToBottomBtn:hover {
-    background-color: #0056cc; /* Darker shade on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
-}

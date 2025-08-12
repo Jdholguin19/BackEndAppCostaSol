@@ -1,46 +1,80 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><title>Nuevo CTG</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nuevo CTG</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-body{background:#f5f6f8}
-.container{max-width:600px}
-</style></head><body>
-<div class="container py-4">
-  <button class="btn btn-link" onclick="history.back()"><i class="bi bi-arrow-left"></i></button>
-  <h1 class="h4 mb-4">Nuevo CTG</h1>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="../assets/css/style_main.css" rel="stylesheet">
+<link href="../assets/css/style_ctg_nuevo.css" rel="stylesheet">
+</head>
+<body class="ctg-nuevo-page">
 
-  <form id="frmCtg" enctype="multipart/form-data" class="card p-4 shadow-sm needs-validation" novalidate>
+<div class="ctg-container">
+  <div class="ctg-header">
+    <h1 class="ctg-header-title">Nuevo CTG</h1>
+    <button class="ctg-back-btn" onclick="history.back()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+  </div>
+
+  <form id="frmCtg" enctype="multipart/form-data" class="ctg-form needs-validation" novalidate>
     <!-- propiedad -->
-    <label class="form-label">Propiedad</label>
-    <select id="selProp" name="id_propiedad" class="form-select mb-3" required></select>
-
-  
+    <label class="ctg-form-label">Propiedad</label>
+    <select id="selProp" name="id_propiedad" class="ctg-form-select" required></select>
 
     <!-- tipo -->
-    <label class="form-label">Tipo</label>
-    <select id="selTipo"   name="tipo_id"    class="form-select mb-3" required></select>
+    <label class="ctg-form-label">Tipo</label>
+    <select id="selTipo" name="tipo_id" class="ctg-form-select" required></select>
 
     <!-- subtipo -->
-    <label class="form-label">Sub-tipo</label>
-   <select id="selSub"    name="subtipo_id" class="form-select mb-3" required disabled>
+    <label class="ctg-form-label">Sub-tipo</label>
+    <select id="selSub" name="subtipo_id" class="ctg-form-select" required disabled>
       <option value="">— Seleccione tipo —</option>
     </select>
 
     <!-- descripción -->
-    <label class="form-label">Descripción</label>
-    <textarea name="descripcion" rows="4" class="form-control mb-3"
+    <label class="ctg-form-label">Descripción</label>
+    <textarea name="descripcion" rows="4" class="ctg-form-textarea"
               placeholder="Describa detalladamente su petición, queja o reclamo" required></textarea>
 
     <!-- adjunto -->
-    <label class="form-label">Adjunto (opcional)</label>
-    <input type="file" name="archivo" accept="image/*,application/pdf" class="form-control mb-4">
+    <label class="ctg-form-label">Adjunto (opcional)</label>
+    <input type="file" name="archivo" accept="image/*,application/pdf" class="ctg-file-input">
 
-    <div class="d-flex gap-2">
-      <button type="button" class="btn btn-outline-secondary w-50" onclick="history.back()">Cancelar</button>
-      <button class="btn btn-primary w-50" type="submit" id="btnSend">Enviar</button>
+    <div class="ctg-button-group">
+      <button type="button" class="ctg-btn-cancel" onclick="history.back()">Cancelar</button>
+      <button class="ctg-btn-submit" type="submit" id="btnSend">Enviar</button>
     </div>
   </form>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="bottom-nav-content">
+    <a href="../menu_front.php" class="nav-item">
+      <i class="bi bi-house"></i>
+      <span>Inicio</span>
+    </a>
+    <a href="../notificaciones.php" class="nav-item">
+      <i class="bi bi-bell"></i>
+      <span>Notificaciones</span>
+    </a>
+    <a href="../citas.php" class="nav-item">
+      <i class="bi bi-calendar"></i>
+      <span>Cita</span>
+    </a>
+    <a href="ctg.php" class="nav-item active">
+      <i class="bi bi-file-text"></i>
+      <span>CTG</span>
+    </a>
+    <a href="../pqr/pqr.php" class="nav-item">
+      <i class="bi bi-chat-dots"></i>
+      <span>PQR</span>
+    </a>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -54,7 +88,7 @@ const token = localStorage.getItem('cs_token');
 
 // Si no hay token, deshabilitar formulario y mostrar mensaje
 if (!token) {
-    const container = document.querySelector('.container');
+    const container = document.querySelector('.ctg-container');
     if (container) {
         container.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para crear un nuevo CTG.</div>';
     }
@@ -147,4 +181,5 @@ if (!token) {
 
 }
 </script>
-</body></html>
+</body>
+</html>

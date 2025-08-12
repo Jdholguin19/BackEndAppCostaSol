@@ -14,7 +14,7 @@
 
 <!-- Header Section -->
 <div class="ctg-header">
-  <div style="position: relative; text-align: center;">
+  <div style="position: relative; text-align: left;">
     <button class="back-button" onclick="history.back()">
       <i class="bi bi-arrow-left"></i>
     </button>

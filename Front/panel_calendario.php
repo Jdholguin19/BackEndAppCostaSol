@@ -7,7 +7,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+<link href="assets/css/style_main.css" rel="stylesheet">
+<link href="assets/css/style_panel_calendario.css" rel="stylesheet">
 
 <style>
 /* ancho máximo */
@@ -47,20 +48,48 @@
 .fc-event[style*="background-color: #ffc107"] *{color:#212529!important;}
 </style>
 
-
 </head>
 <body class="bg-light">
 
 <div class="container py-4">
+  <div class="calendario-header">
+    <h1 class="calendario-title">Calendario por responsable</h1>
+    <button class="back-button" id="btnBack">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+  </div>
+
   <div class="d-flex align-items-center gap-3 mb-3">
-    <h1 class="h4 mb-0">Calendario por responsable</h1>
     <select id="selResp" class="form-select w-auto"></select>
-        <button class="btn btn-link text-dark btn-back" id="btnBack">
-          <i class="bi bi-arrow-left"></i>
-      </button> 
   </div>
 
   <div id="calendar"></div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="bottom-nav-content">
+    <a href="menu_front.php" class="nav-item">
+      <i class="bi bi-house"></i>
+      <span>Inicio</span>
+    </a>
+    <a href="notificaciones.php" class="nav-item">
+      <i class="bi bi-bell"></i>
+      <span>Notificaciones</span>
+    </a>
+    <a href="citas.php" class="nav-item">
+      <i class="bi bi-calendar"></i>
+      <span>Cita</span>
+    </a>
+    <a href="ctg/ctg.php" class="nav-item">
+      <i class="bi bi-file-text"></i>
+      <span>CTG</span>
+    </a>
+    <a href="pqr/pqr.php" class="nav-item">
+      <i class="bi bi-chat-dots"></i>
+      <span>PQR</span>
+    </a>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
