@@ -1,7 +1,7 @@
-/* CTG Nuevo - Following the successful pattern from style_ctg.css */
+/* PQR Nuevo - Following the successful pattern from style_ctg.css */
 
 /* Body styles */
-.ctg-nuevo-page {
+.pqr-nuevo-page {
     background: #f0f2f5;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     padding-bottom: 80px;
@@ -9,7 +9,7 @@
 }
 
 /* Container */
-.ctg-container {
+.pqr-container {
     max-width: 100%;
     margin: 0 auto;
     padding: 0.5rem 0.75rem;
@@ -19,7 +19,7 @@
 }
 
 /* Header */
-.ctg-header {
+.pqr-header {
     background: #ffffff;
     padding: 1rem 0.75rem 0.75rem;
     border-bottom: 1px solid #f0f0f0;
@@ -32,7 +32,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.ctg-header-title {
+.pqr-header-title {
     font-size: 1.4rem;
     font-weight: 600;
     color: #2d5a3d;
@@ -41,7 +41,7 @@
     padding: 0 2.5rem;
 }
 
-.ctg-back-btn {
+.pqr-back-btn {
     position: absolute;
     left: 0.5rem;
     top: 50%;
@@ -57,12 +57,12 @@
     z-index: 101;
 }
 
-.ctg-back-btn:hover {
+.pqr-back-btn:hover {
     background-color: #f3f4f6;
 }
 
 /* Form */
-.ctg-form {
+.pqr-form {
     background: #ffffff;
     border-radius: 16px;
     padding: 1.25rem;
@@ -73,7 +73,7 @@
     box-sizing: border-box;
 }
 
-.ctg-form-label {
+.pqr-form-label {
     font-size: 1.1rem;
     font-weight: 600;
     color: #2d5a3d;
@@ -81,8 +81,8 @@
     display: block;
 }
 
-.ctg-form-select, 
-.ctg-form-textarea {
+.pqr-form-select, 
+.pqr-form-textarea {
     border: 2px solid #e8e8e8;
     border-radius: 12px;
     padding: 1rem 1.25rem;
@@ -96,24 +96,24 @@
     min-height: 3.5rem;
 }
 
-.ctg-form-select:focus, 
-.ctg-form-textarea:focus {
+.pqr-form-select:focus, 
+.pqr-form-textarea:focus {
     border-color: #007aff;
     box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
     outline: none;
 }
 
-.ctg-form-textarea {
+.pqr-form-textarea {
     resize: vertical;
     min-height: 120px;
 }
 
 /* File Input Mejorado */
-.ctg-file-input-wrapper {
+.pqr-file-input-wrapper {
     margin-bottom: 1.25rem;
 }
 
-.ctg-file-input {
+.pqr-file-input {
     width: 100%;
     border: 2px solid #e5e7eb;
     border-radius: 12px;
@@ -125,12 +125,12 @@
     cursor: pointer;
 }
 
-.ctg-file-input:hover {
+.pqr-file-input:hover {
     border-color: #007aff;
     background: #f0f8ff;
 }
 
-.ctg-file-input::file-selector-button {
+.pqr-file-input::file-selector-button {
     background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
     border: none;
     border-radius: 8px;
@@ -143,18 +143,18 @@
     margin-right: 0.75rem;
 }
 
-.ctg-file-input::file-selector-button:hover {
+.pqr-file-input::file-selector-button:hover {
     background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
 }
 
 /* Buttons */
-.ctg-button-group {
+.pqr-button-group {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
 }
 
-.ctg-btn-cancel {
+.pqr-btn-cancel {
     flex: 1;
     padding: 1.75rem 2rem;
     border: 2px solid #e8e8e8;
@@ -175,14 +175,14 @@
     min-height: 4.5rem;
 }
 
-.ctg-btn-cancel:hover {
+.pqr-btn-cancel:hover {
     border-color: #d1d5db;
     background: #f9fafb;
     color: #374151;
     text-decoration: none;
 }
 
-.ctg-btn-submit {
+.pqr-btn-submit {
     flex: 1;
     padding: 1.75rem 2rem;
     border: none;
@@ -202,13 +202,13 @@
     min-height: 4.5rem;
 }
 
-.ctg-btn-submit:hover:not(:disabled) {
+.pqr-btn-submit:hover:not(:disabled) {
     background: linear-gradient(135deg, #1e3a2a 0%, #142a1f 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(45, 90, 61, 0.4);
 }
 
-.ctg-btn-submit:disabled {
+.pqr-btn-submit:disabled {
     background: #d1d5db;
     cursor: not-allowed;
     transform: none;
@@ -217,42 +217,42 @@
 
 /* Responsive Design - Mobile First */
 @media (max-width: 480px) {
-    .ctg-container {
+    .pqr-container {
         padding: 0.75rem !important;
         max-width: 100% !important;
     }
     
-    .ctg-header {
+    .pqr-header {
         padding: 1rem 0.75rem 0.75rem !important;
         border-radius: 12px !important;
     }
     
-    .ctg-header-title {
+    .pqr-header-title {
         font-size: 1.4rem !important;
         padding: 0 1.5rem !important;
         font-weight: 600 !important;
     }
     
-    .ctg-back-btn {
+    .pqr-back-btn {
         left: 0.5rem !important;
         font-size: 1.4rem !important;
         padding: 0.6rem !important;
     }
     
-    .ctg-form {
+    .pqr-form {
         padding: 1rem !important;
         margin-bottom: 0.75rem !important;
         border-radius: 12px !important;
     }
     
-    .ctg-form-label {
+    .pqr-form-label {
         font-size: 1rem !important;
         margin-bottom: 0.75rem !important;
         font-weight: 600 !important;
     }
     
-    .ctg-form-select, 
-    .ctg-form-textarea {
+    .pqr-form-select, 
+    .pqr-form-textarea {
         padding: 1rem 1.25rem !important;
         font-size: 1rem !important;
         margin-bottom: 1rem !important;
@@ -260,24 +260,24 @@
         min-height: 3.2rem !important;
     }
     
-    .ctg-form-textarea {
+    .pqr-form-textarea {
         min-height: 100px !important;
     }
     
-    .ctg-file-input {
+    .pqr-file-input {
         padding: 1rem !important;
         min-height: 3.2rem !important;
         font-size: 1rem !important;
     }
     
-    .ctg-button-group {
+    .pqr-button-group {
         flex-direction: column !important;
         gap: 0.75rem !important;
         margin-top: 1.5rem !important;
     }
     
-    .ctg-btn-cancel, 
-    .ctg-btn-submit {
+    .pqr-btn-cancel, 
+    .pqr-btn-submit {
         padding: 1rem 1.25rem !important;
         font-size: 1rem !important;
         border-radius: 12px !important;
@@ -298,51 +298,51 @@
 
 /* Extra small devices */
 @media (max-width: 360px) {
-    .ctg-container {
+    .pqr-container {
         padding: 0.15rem 0.25rem;
     }
     
-    .ctg-header {
+    .pqr-header {
         padding: 0.6rem 0.25rem 0.4rem;
         margin-bottom: 0.5rem;
         border-radius: 10px;
     }
     
-    .ctg-header-title {
+    .pqr-header-title {
         font-size: 1.1rem;
         padding: 0 1.5rem;
     }
     
-    .ctg-form {
+    .pqr-form {
         padding: 0.6rem;
         border-radius: 10px;
     }
     
-    .ctg-form-label {
+    .pqr-form-label {
         font-size: 0.85rem;
         margin-bottom: 0.4rem;
     }
     
-    .ctg-form-select, 
-    .ctg-form-textarea {
+    .pqr-form-select, 
+    .pqr-form-textarea {
         padding: 0.6rem 0.75rem;
         font-size: 0.85rem;
         margin-bottom: 0.6rem;
         min-height: 2.5rem;
     }
     
-    .ctg-form-textarea {
+    .pqr-form-textarea {
         min-height: 70px;
     }
     
-    .ctg-file-input {
+    .pqr-file-input {
         padding: 0.6rem;
         min-height: 2.5rem;
         font-size: 0.85rem;
     }
     
-    .ctg-btn-cancel, 
-    .ctg-btn-submit {
+    .pqr-btn-cancel, 
+    .pqr-btn-submit {
         padding: 0.7rem 0.8rem;
         font-size: 0.85rem;
         min-height: 2.5rem;
@@ -350,57 +350,57 @@
 }
 
 @media (min-width: 481px) and (max-width: 767px) {
-    .ctg-container {
+    .pqr-container {
         padding: 0.75rem 1rem;
         max-width: 100%;
     }
     
-    .ctg-header {
+    .pqr-header {
         padding: 1.25rem 1rem 0.75rem;
         margin-bottom: 1rem;
     }
     
-    .ctg-header-title {
+    .pqr-header-title {
         font-size: 1.5rem;
         padding: 0 3rem;
     }
     
-    .ctg-back-btn {
+    .pqr-back-btn {
         left: 0.5rem;
         font-size: 1.5rem;
         padding: 0.6rem;
     }
     
-    .ctg-form {
+    .pqr-form {
         padding: 1.5rem;
         margin-bottom: 1rem;
     }
     
-    .ctg-form-label {
+    .pqr-form-label {
         font-size: 1.1rem;
         margin-bottom: 0.75rem;
     }
     
-    .ctg-form-select, 
-    .ctg-form-textarea {
+    .pqr-form-select, 
+    .pqr-form-textarea {
         padding: 1rem 1.25rem;
         font-size: 1.05rem;
         min-height: 3.5rem;
     }
     
-    .ctg-file-input {
+    .pqr-file-input {
         padding: 1rem;
         min-height: 3.5rem;
     }
     
-    .ctg-button-group {
+    .pqr-button-group {
         flex-direction: column;
         gap: 0.75rem;
         margin-top: 2rem;
     }
     
-    .ctg-btn-cancel, 
-    .ctg-btn-submit {
+    .pqr-btn-cancel, 
+    .pqr-btn-submit {
         padding: 1.1rem 1.5rem;
         font-size: 1.05rem;
         min-height: 3.5rem;
@@ -408,61 +408,61 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-    .ctg-container {
+    .pqr-container {
         max-width: 700px;
         padding: 1rem 1.5rem;
     }
     
-    .ctg-header {
+    .pqr-header {
         padding: 1.5rem 1.5rem 1rem;
         margin-bottom: 1.5rem;
     }
     
-    .ctg-header-title {
+    .pqr-header-title {
         font-size: 1.6rem;
         padding: 0 3.5rem;
     }
     
-    .ctg-back-btn {
+    .pqr-back-btn {
         left: 0.75rem;
         font-size: 1.6rem;
         padding: 0.7rem;
     }
     
-    .ctg-form {
+    .pqr-form {
         padding: 2rem;
         margin-bottom: 1.5rem;
     }
     
-    .ctg-form-label {
+    .pqr-form-label {
         font-size: 1.15rem;
         margin-bottom: 0.8rem;
     }
     
-    .ctg-form-select, 
-    .ctg-form-textarea {
+    .pqr-form-select, 
+    .pqr-form-textarea {
         padding: 1.1rem 1.4rem;
         font-size: 1.1rem;
         margin-bottom: 1.5rem;
         min-height: 3.8rem;
     }
     
-    .ctg-form-textarea {
+    .pqr-form-textarea {
         min-height: 140px;
     }
     
-    .ctg-file-input {
+    .pqr-file-input {
         padding: 1.1rem;
         min-height: 3.8rem;
     }
     
-    .ctg-button-group {
+    .pqr-button-group {
         gap: 1.25rem;
         margin-top: 2.5rem;
     }
     
-    .ctg-btn-cancel, 
-    .ctg-btn-submit {
+    .pqr-btn-cancel, 
+    .pqr-btn-submit {
         padding: 1.25rem 2rem;
         font-size: 1.1rem;
         min-height: 3.8rem;
@@ -470,61 +470,61 @@
 }
 
 @media (min-width: 1024px) {
-    .ctg-container {
+    .pqr-container {
         max-width: 800px;
         padding: 1.5rem 2rem;
     }
     
-    .ctg-header {
+    .pqr-header {
         padding: 1.75rem 2rem 1.25rem;
         margin-bottom: 2rem;
     }
     
-    .ctg-header-title {
+    .pqr-header-title {
         font-size: 1.8rem;
         padding: 0 4rem;
     }
     
-    .ctg-back-btn {
+    .pqr-back-btn {
         left: 1rem;
         font-size: 1.7rem;
         padding: 0.8rem;
     }
     
-    .ctg-form {
+    .pqr-form {
         padding: 2.5rem;
         margin-bottom: 2rem;
     }
     
-    .ctg-form-label {
+    .pqr-form-label {
         font-size: 1.2rem;
         margin-bottom: 1rem;
     }
     
-    .ctg-form-select, 
-    .ctg-form-textarea {
+    .pqr-form-select, 
+    .pqr-form-textarea {
         padding: 1.25rem 1.5rem;
         font-size: 1.15rem;
         margin-bottom: 1.75rem;
         min-height: 4rem;
     }
     
-    .ctg-form-textarea {
+    .pqr-form-textarea {
         min-height: 160px;
     }
     
-    .ctg-file-input {
+    .pqr-file-input {
         padding: 1.25rem;
         min-height: 4rem;
     }
     
-    .ctg-button-group {
+    .pqr-button-group {
         gap: 1.5rem;
         margin-top: 3rem;
     }
     
-    .ctg-btn-cancel, 
-    .ctg-btn-submit {
+    .pqr-btn-cancel, 
+    .pqr-btn-submit {
         padding: 1.5rem 2.5rem;
         font-size: 1.2rem;
         min-height: 4rem;

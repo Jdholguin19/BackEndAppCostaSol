@@ -1,42 +1,76 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><title>Nuevo PQR</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Nuevo PQR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-body{background:#f5f6f8}
-.container{max-width:600px}
-</style></head><body>
-<div class="container py-4">
-  <button class="btn btn-link" onclick="history.back()"><i class="bi bi-arrow-left"></i></button>
-  <h1 class="h4 mb-4">Nuevo PQR</h1>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="../assets/css/style_main.css" rel="stylesheet">
+<link href="../assets/css/style_pqr_nuevo.css" rel="stylesheet">
+</head>
+<body class="pqr-nuevo-page">
 
-  <form id="frmPqr" enctype="multipart/form-data" class="card p-4 shadow-sm needs-validation" novalidate>
+<div class="pqr-container">
+  <div class="pqr-header">
+    <h1 class="pqr-header-title">Nuevo PQR</h1>
+    <button class="pqr-back-btn" onclick="history.back()">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+  </div>
+
+  <form id="frmPqr" enctype="multipart/form-data" class="pqr-form needs-validation" novalidate>
     <!-- propiedad -->
-    <label class="form-label">Propiedad</label>
-    <select id="selProp" name="id_propiedad" class="form-select mb-3" required></select>
-
-  
+    <label class="pqr-form-label">Propiedad</label>
+    <select id="selProp" name="id_propiedad" class="pqr-form-select" required></select>
 
     <!-- tipo -->
-    <label class="form-label">Tipo</label>
-    <select id="selTipo"   name="tipo_id"    class="form-select mb-3" required></select>
-
-    <!-- subtipo -->
+    <label class="pqr-form-label">Tipo</label>
+    <select id="selTipo" name="tipo_id" class="pqr-form-select" required></select>
 
     <!-- descripción -->
-    <label class="form-label">Descripción</label>
-    <textarea name="descripcion" rows="4" class="form-control mb-3"
+    <label class="pqr-form-label">Descripción</label>
+    <textarea name="descripcion" rows="4" class="pqr-form-textarea"
               placeholder="Describa detalladamente su petición, queja o reclamo" required></textarea>
 
     <!-- adjunto -->
-    <label class="form-label">Adjunto (opcional)</label>
-    <input type="file" name="archivo" accept="image/*,application/pdf" class="form-control mb-4">
+    <label class="pqr-form-label">Adjunto (opcional)</label>
+    <div class="pqr-file-input-wrapper">
+        <input type="file" name="archivo" accept="image/*,application/pdf" class="pqr-file-input">
+    </div>
 
-    <div class="d-flex gap-2">
-      <button type="button" class="btn btn-outline-secondary w-50" onclick="history.back()">Cancelar</button>
-      <button class="btn btn-primary w-50" type="submit" id="btnSend">Enviar</button>
+    <div class="pqr-button-group">
+      <button type="button" class="pqr-btn-cancel" onclick="history.back()">Cancelar</button>
+      <button class="pqr-btn-submit" type="submit" id="btnSend">Enviar</button>
     </div>
   </form>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="bottom-nav-content">
+    <a href="../menu_front.php" class="nav-item">
+      <i class="bi bi-house"></i>
+      <span>Inicio</span>
+    </a>
+    <a href="../notificaciones.php" class="nav-item">
+      <i class="bi bi-bell"></i>
+      <span>Notificaciones</span>
+    </a>
+    <a href="../citas.php" class="nav-item">
+      <i class="bi bi-calendar"></i>
+      <span>Cita</span>
+    </a>
+    <a href="../ctg/ctg.php" class="nav-item">
+      <i class="bi bi-file-text"></i>
+      <span>CTG</span>
+    </a>
+    <a href="pqr.php" class="nav-item active">
+      <i class="bi bi-chat-dots"></i>
+      <span>PQR</span>
+    </a>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -50,7 +84,7 @@ const token = localStorage.getItem('cs_token');
 
 // Si no hay token, deshabilitar formulario y mostrar mensaje
 if (!token) {
-    const container = document.querySelector('.container');
+    const container = document.querySelector('.pqr-container');
     if (container) {
         container.innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para crear un nuevo PQR.</div>';
     }
@@ -127,4 +161,5 @@ if (!token) {
 
 }
 </script>
-</body></html>
+</body>
+</html>

@@ -42,7 +42,9 @@
 
     <!-- adjunto -->
     <label class="ctg-form-label">Adjunto (opcional)</label>
-    <input type="file" name="archivo" accept="image/*,application/pdf" class="ctg-file-input">
+    <div class="ctg-file-input-wrapper">
+        <input type="file" name="archivo" accept="image/*,application/pdf" class="ctg-file-input">
+    </div>
 
     <div class="ctg-button-group">
       <button type="button" class="ctg-btn-cancel" onclick="history.back()">Cancelar</button>

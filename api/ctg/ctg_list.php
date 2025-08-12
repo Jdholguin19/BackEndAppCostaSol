@@ -94,6 +94,13 @@ try{
         $params[':eid'] = $estadoId;
     }
 
+    // Añadir filtro por ctg_id si existe
+    $ctgId = isset($_GET['ctg_id']) ? (int)$_GET['ctg_id'] : 0;
+    if($ctgId) {
+        $conditions[] = 'p.id = :ctg_id';
+        $params[':ctg_id'] = $ctgId;
+    }
+
     if (!empty($conditions)) {
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
     }

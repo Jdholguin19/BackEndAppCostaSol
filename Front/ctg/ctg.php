@@ -14,7 +14,7 @@
 
 <!-- Header Section -->
 <div class="ctg-header">
-  <div style="position: relative; text-align: left;">
+  <div style="position: relative; text-align: center;">
     <button class="back-button" onclick="history.back()">
       <i class="bi bi-arrow-left"></i>
     </button>
@@ -128,7 +128,7 @@ if (!token) {
        return `
         <div class="ctg-card" onclick="verDetalle(${p.id})">
             <div class="ctg-header-card">
-                <h3 class="ctg-title">${p.subtipo || 'CTG'}</h3>
+                <h3 class="ctg-subtitle">${p.subtipo || 'CTG'}</h3>
                 <span class="ctg-date">${fecha}</span>
             </div>
             <div class="ctg-badges">

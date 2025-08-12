@@ -89,6 +89,13 @@ try{
         $params[':eid'] = $estadoId;
     }
 
+    // Añadir filtro por pqr_id si existe
+    $pqrId = isset($_GET['pqr_id']) ? (int)$_GET['pqr_id'] : 0;
+    if($pqrId) {
+        $conditions[] = 'p.id = :pqr_id';
+        $params[':pqr_id'] = $pqrId;
+    }
+
     if (!empty($conditions)) {
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
     }
