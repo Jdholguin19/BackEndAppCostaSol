@@ -1,34 +1,68 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><title>Citas</title>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Citas | CostaSol</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<style>
-body{background:#f5f6f8}
-.badge-estado{font-size:.8rem}
-.badge-estado.PROGRAMADO {background:#ffc107}
-.badge-estado.REALIZADO  {background:#198754}
-.badge-estado.CANCELADO  {background:#dc3545}
-.card-cita img{width:42px;height:42px;border-radius:50%;object-fit:cover}
-</style></head><body>
+<link href="assets/css/style_main.css" rel="stylesheet">
+<link href="assets/css/style_citas.css" rel="stylesheet">
+</head>
+<body>
 
-<div class="container py-4">
-  <!-- barra -->
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <button class="btn btn-link" onclick="history.back()">
+<!-- Header Section -->
+<div class="citas-header">
+<hr style="color:rgba(69, 67, 67, 0); margin-top: 1px; "></hr>
+  <div style="position: relative; text-align: center;">
+    <button class="back-button" onclick="history.back()">
       <i class="bi bi-arrow-left"></i>
     </button>
-    <h1 class="h4 mb-0">Citas</h1>
-
-    <!-- botón para la siguiente etapa (nuevo agendamiento) -->
-    <a href="cita_nueva.php" class="btn btn-primary btn-sm">
-      <i class="bi bi-plus"></i> Agendar
+    <div>
+      <h1 class="citas-title">Citas</h1>
+    </div>
+    <a href="cita_nueva.php" class="agendar-button">
+      <i class="bi bi-plus"></i>
+      Agendar
     </a>
   </div>
+  <hr style="color:rgba(69, 67, 67, 0); margin-top: 1px; "></hr>
+</div>
 
-  <h2 class="h6 mb-3">Próximas Citas</h2>
+<!-- Main Content -->
+<div class="container">
+  <h2 class="section-title">Próximas Citas</h2>
   <div id="citasWrap">
-    <div class="text-center py-5"><div class="spinner-border"></div></div>
+    <div class="loading-container">
+      <div class="spinner-border"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav">
+  <div class="bottom-nav-content">
+    <a href="menu_front.php" class="nav-item">
+      <i class="bi bi-house"></i>
+      <span>Inicio</span>
+    </a>
+    <a href="notificaciones.php" class="nav-item">
+      <i class="bi bi-bell"></i>
+      <span>Notificaciones</span>
+    </a>
+    <a href="citas.php" class="nav-item active">
+      <i class="bi bi-calendar"></i>
+      <span>Cita</span>
+    </a>
+    <a href="ctg/ctg.php" class="nav-item">
+      <i class="bi bi-file-text"></i>
+      <span>CTG</span>
+    </a>
+    <a href="pqr/pqr.php" class="nav-item">
+      <i class="bi bi-chat-dots"></i>
+      <span>PQR</span>
+    </a>
   </div>
 </div>
 
@@ -49,30 +83,31 @@ function fechaLarga(sqlDate){
 function card(c){
   const badge = `<span class="badge badge-estado ${c.estado}">${c.estado}</span>`;
   return `
-  <div class="card card-cita mb-3 shadow-sm">
-    <div class="card-body">
-      <div class="d-flex justify-content-between">
-        <h5 class="mb-1">${c.proposito}</h5>
-        <button class="btn btn-link btn-sm text-danger"
-                onclick="cancelar(${c.id})">Cancelar</button>
-      </div>
-
-      <p class="mb-1"><i class="bi bi-calendar me-1"></i>${fechaLarga(c.fecha)}</p>
-      <p class="mb-1"><i class="bi bi-clock me-1"></i>${c.hora}</p>
-      <p class="mb-2"><i class="bi bi-geo me-1"></i>${c.proyecto}</p>
-
-      <div class="d-flex align-items-center gap-2 mb-2">
-        <img src="${c.url_foto || 'https://via.placeholder.com/42'}">
-        <span>${c.responsable}</span>
-        ${badge}
-      </div>
-
-      ${c.estado==='PROGRAMADO'
-        ? `<div class="alert alert-info py-2 small mb-0">
-            Su cita está registrada y será confirmada pronto.
-           </div>`
-        : ''}
+  <div class="card card-cita">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+      <h5>${c.proposito}</h5>
+      <button class="cancel-button"
+              onclick="cancelar(${c.id})">
+        <i class="bi bi-x-circle"></i> Cancelar
+      </button>
     </div>
+
+    <p><i class="bi bi-calendar"></i>${fechaLarga(c.fecha)}</p>
+    <p><i class="bi bi-clock"></i>${c.hora}</p>
+    <p><i class="bi bi-geo-alt"></i>${c.proyecto}</p>
+
+    <div class="responsable-section">
+      <img src="${c.url_foto || 'https://via.placeholder.com/42'}" class="responsable-avatar">
+      <span class="responsable-name">${c.responsable}</span>
+      ${badge}
+    </div>
+
+    ${c.estado==='PROGRAMADO'
+      ? `<div class="alert alert-info">
+          <i class="bi bi-info-circle me-2"></i>
+          Su cita está registrada y será confirmada pronto.
+         </div>`
+      : ''}
   </div>`;
 }
 
@@ -81,12 +116,19 @@ fetch(`../api/citas_list.php?id_usuario=${u.id}`)
   .then(r=>r.json())
   .then(d=>{
      const wrap = document.getElementById('citasWrap');
-     if(!d.ok){ wrap.innerHTML = '<p class="text-danger">Error</p>'; return;}
-     if(!d.citas.length){ wrap.innerHTML='<p class="text-muted">No tiene citas agendadas.</p>'; return;}
+     if(!d.ok){ 
+       wrap.innerHTML = '<div class="error-state"><i class="bi bi-exclamation-triangle me-2"></i>Error al cargar las citas</div>'; 
+       return;
+     }
+     if(!d.citas.length){ 
+       wrap.innerHTML='<div class="empty-state"><i class="bi bi-calendar-x me-2"></i>No tiene citas agendadas.</div>'; 
+       return;
+     }
      wrap.innerHTML = d.citas.map(card).join('');
   });
 
 /* cancelar (solo maqueta) */
 function cancelar(id){ alert('Cancelar cita #'+id+' (pendiente)'); }
 </script>
-</body></html>
+</body>
+</html>

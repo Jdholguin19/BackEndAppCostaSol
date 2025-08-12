@@ -643,7 +643,7 @@ if(!u.id) {
         loadAndDisplayResponses();
 
         // Configurar polling para cargar respuestas cada 5 segundos
-        const pollingInterval = setInterval(loadAndDisplayResponses, 5000);
+        const pollingInterval = setInterval(loadAndDisplayResponses, 3000);
 
         // Limpiar el intervalo cuando el usuario sale de la página
         window.addEventListener('beforeunload', () => {

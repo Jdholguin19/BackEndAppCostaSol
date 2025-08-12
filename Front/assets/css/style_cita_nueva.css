@@ -1,0 +1,421 @@
+/* Specific styles for Cita Nueva */
+body {
+    background: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding-bottom: 80px; /* Space for bottom navigation */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Header Section */
+/* Header Section */
+.citas-header {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin: -1rem -1.5rem 1rem -1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.citas-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    text-align: center;
+    padding: 0 3rem; /* Space for buttons */
+}
+
+.back-button {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    z-index: 101;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+.cita-nueva-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0 0 1.5rem 0;
+}
+
+/* Form Sections */
+.form-section {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8e8e8;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-title i {
+    color: #007aff;
+    font-size: 1rem;
+}
+
+/* Select Styles */
+.form-select {
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-select:focus {
+    border-color: #007aff;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    outline: none;
+}
+
+
+
+
+
+/* Date and Time Lists */
+.date-time-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.date-slot, .time-slot {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    background: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #374151;
+    box-sizing: border-box;
+}
+
+.date-slot:hover, .time-slot:hover {
+    border-color: #09360ade;
+    background: #7cc77d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.15);
+}
+
+.date-slot.active, .time-slot.active {
+    border-color: #09360ade;
+    background: #00ff041e;
+    color: #09360ade;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+.date-slot i {
+    color: #208e01;
+    font-size: 0.85rem;
+}
+
+.date-slot.active i, .time-slot.active i {
+    color: #054b03;
+}
+
+.date-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.date-text {
+    font-weight: 500;
+}
+
+.date-availability {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+/* Loading States */
+.loading-container {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.spinner-border {
+    color: #007aff;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.cancel-button {
+    flex: 1;
+    padding: 0.875rem 1.5rem;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #6b7280;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.cancel-button:hover {
+    border-color: #d1d5db;
+    background: #f9fafb;
+    color: #374151;
+    text-decoration: none;
+}
+
+.confirm-button {
+    flex: 1;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+.confirm-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #0056cc 0%, #004499 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+}
+
+.confirm-button:disabled {
+    background: #d1d5db;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* Propósito Section Btoones*/
+.purpose-grid {
+    display: flex; /* Usar flexbox */
+    justify-content: center; /* Centrar los botones */
+    flex-wrap: wrap; /* Permitir que los elementos pasen a la siguiente línea si no caben */
+    gap: 0.8rem; /* Espacio entre los elementos */
+    margin-bottom: 1.5rem;
+    /* Remover width: 100%; si no quieres que el contenedor ocupe todo el ancho */
+}
+
+.purpose-button {
+    width: 150px; /* Establecer un ancho fijo para los botones (ajústalo según necesites) */
+    /* Eliminar max-width ya que ahora usamos un width fijo */
+    padding: 0.9rem 1.2rem; /* Aumentar el padding horizontal */
+    border: 2px solid #ced4da;
+    border-radius: 0.75rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    transition: 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: #374151;
+    box-sizing: border-box; /* Asegurar que padding y borde se incluyan en el ancho */
+}
+
+.purpose-button:hover {
+    border-color: #09360ade;
+    background: #7cc77d;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.15);
+}
+
+.purpose-button.active {
+    border-color: #09360ade;
+    background: #00ff041e;
+    color: #09360ade;
+}
+
+.purpose-button img {
+    width: 44px; /* Tamaño del icono */
+    height: 44px; /* Tamaño del icono */
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.purpose-button span {
+    font-size: 0.8rem; /* Tamaño de fuente */
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /*max-width: 100%; -- Ya no es tan crítico con ancho fijo */
+    padding: 0; /* Eliminar padding horizontal del span, ya manejado en el botón */
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .container {
+        padding: 0.5rem 1rem;
+        max-width: 100%;
+    }
+    
+    .citas-header {
+        padding: 0.75rem 0.75rem 0.5rem;
+        margin: -0.5rem -0.75rem 1rem -0.75rem;
+        width: 100%;
+    }
+    
+    .citas-title {
+        font-size: 1.1rem;
+        padding: 0 2.5rem;
+    }
+    
+    .back-button {
+        left: 0.25rem;
+        font-size: 1.1rem;
+        padding: 0.4rem;
+    }
+    
+    .form-section {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .purpose-grid {
+        gap: 0.5rem; /* Ajustar espacio en móviles */
+    }
+
+    .purpose-button {
+         width: 110px; /* Ajustar ancho fijo en móviles */
+         padding: 0.6rem 0.8rem; /* Ajustar padding en móviles */
+     }
+
+    .purpose-button img {
+        width: 40px; /* Ajustar tamaño del icono en móviles */
+        height: 40px; /* Ajustar tamaño del icono en móviles */
+    }
+
+    .purpose-button span {
+        font-size: 0.75rem; /* Ajustar tamaño de fuente en móviles */
+        line-height: 1.2;
+        /* padding: 0 0.15rem; -- Eliminar padding del span en móviles */
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .citas-header {
+        padding: 0.5rem 0.5rem 0.25rem;
+        margin: -0.5rem -0.5rem 1rem -0.5rem;
+    }
+    
+    .citas-title {
+        font-size: 1rem;
+        padding: 0 2rem;
+    }
+    
+    .form-section {
+        padding: 0.75rem;
+    }
+    
+    .purpose-grid {
+        gap: 0.4rem; /* Ajustar espacio en pantallas muy pequeñas */
+    }
+
+    .purpose-button {
+        width: 100px; /* Ajustar ancho fijo en pantallas muy pequeñas */
+        padding: 0.5rem 0.6rem; /* Ajustar padding en pantallas muy pequeñas */
+    }
+
+    .purpose-button img {
+        width: 36px; /* Ajustar tamaño del icono en pantallas muy pequeñas */
+        height: 36px; /* Ajustar tamaño del icono en pantallas muy pequeñas */
+    }
+
+    .purpose-button span {
+        font-size: 0.7rem; /* Ajustar tamaño de fuente en pantallas muy pequeñas */
+        /* padding: 0 0.1rem; -- Eliminar padding del span en pantallas muy pequeñas */
+    }
+    
+
+}
