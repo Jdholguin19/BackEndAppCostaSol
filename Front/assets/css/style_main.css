@@ -379,7 +379,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    max-width: 600px; /* Increased max-width for better spacing on larger screens */
+    max-width: 400px; /* Increased max-width for better spacing on larger screens */
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -391,7 +391,7 @@ body {
     gap: 0.25rem;
     text-decoration: none;
     color: #6b7280;
-    font-size: 0.85rem; /* Slightly larger font size for better readability */
+    font-size: 0.75rem; /* Slightly larger font size for better readability */
     font-weight: 500;
     transition: color 0.2s ease;
 }
@@ -401,7 +401,7 @@ body {
 }
 
 .nav-item i {
-    font-size: 1.5rem; /* Larger icons */
+    font-size: 1.25lrem; /* Larger icons */
     margin-bottom: 0.25rem;
 }
 

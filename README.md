@@ -211,7 +211,7 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 
 ## Observaciones Adicionales
 
-*   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada en esta revisión.
+*   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada.
 
 ---
 
