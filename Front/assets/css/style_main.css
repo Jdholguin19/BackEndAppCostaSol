@@ -379,7 +379,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    max-width: 400px;
+    max-width: 600px; /* Increased max-width for better spacing on larger screens */
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -391,7 +391,7 @@ body {
     gap: 0.25rem;
     text-decoration: none;
     color: #6b7280;
-    font-size: 0.75rem;
+    font-size: 0.85rem; /* Slightly larger font size for better readability */
     font-weight: 500;
     transition: color 0.2s ease;
 }
@@ -401,7 +401,7 @@ body {
 }
 
 .nav-item i {
-    font-size: 1.25rem;
+    font-size: 1.5rem; /* Larger icons */
     margin-bottom: 0.25rem;
 }
 
@@ -409,21 +409,28 @@ body {
     transform: scale(1.1);
 }
 
-/* Responsive adjustments */
-@media (min-width: 768px) {
-    .container {
-        max-width: 480px;
-        margin: 0 auto;
-    }
-    
-    .module-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* Responsive adjustments for bottom navigation */
+@media (min-width: 576px) {
+    .bottom-nav-content {
+        padding: 0 2rem; /* More padding on larger small screens */
     }
 }
 
-@media (min-width: 1024px) {
-    .module-grid {
-        grid-template-columns: repeat(4, 1fr);
+@media (min-width: 768px) {
+    .bottom-nav {
+        padding: 1rem 0; /* More vertical padding on tablets */
+    }
+    .nav-item {
+        font-size: 0.95rem; /* Even larger font size */
+    }
+    .nav-item i {
+        font-size: 1.8rem; /* Even larger icons */
+    }
+}
+
+@media (min-width: 992px) {
+    .bottom-nav-content {
+        max-width: 800px; /* Even wider on desktops */
     }
 }
 

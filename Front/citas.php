@@ -86,10 +86,20 @@ function card(c){
   <div class="card card-cita">
     <div class="d-flex justify-content-between align-items-start mb-3">
       <h5>${c.proposito}</h5>
-      <button class="cancel-button"
-              onclick="cancelar(${c.id})">
-        <i class="bi bi-x-circle"></i> Cancelar
-      </button>
+      <div>
+        ${c.estado==='PROGRAMADO'
+          ? `<button class="cancel-button"
+                    onclick="cancelar(${c.id})">
+              <i class="bi bi-x-circle"></i> Cancelar
+            </button>`
+          : ''}
+        ${c.estado==='CANCELADO'
+          ? `<button class="delete-button"
+                    onclick="eliminarCita(${c.id})">
+              <i class="bi bi-trash"></i> Eliminar
+            </button>`
+          : ''}
+      </div>
     </div>
 
     <p><i class="bi bi-calendar"></i>${fechaLarga(c.fecha)}</p>
@@ -112,7 +122,15 @@ function card(c){
 }
 
 /* cargar citas */
-fetch(`../api/citas_list.php?id_usuario=${u.id}`)
+let apiUrl = '';
+if (u.is_responsable && u.id === 3) {
+    apiUrl = `../api/citas_list.php?rol=admin_responsable`;
+} else if (u.is_responsable) {
+    apiUrl = `../api/citas_list.php?rol=responsable&id_responsable=${u.id}`;
+} else {
+    apiUrl = `../api/citas_list.php?rol=usuario&id_usuario=${u.id}`;
+}
+fetch(apiUrl)
   .then(r=>r.json())
   .then(d=>{
      const wrap = document.getElementById('citasWrap');
@@ -127,8 +145,77 @@ fetch(`../api/citas_list.php?id_usuario=${u.id}`)
      wrap.innerHTML = d.citas.map(card).join('');
   });
 
-/* cancelar (solo maqueta) */
-function cancelar(id){ alert('Cancelar cita #'+id+' (pendiente)'); }
+/* cancelar cita */
+async function cancelar(idCita){
+  if (!confirm('¿Está seguro que desea cancelar esta cita?')) {
+    return;
+  }
+
+  const idUsuario = u.id; // Obtener el ID del usuario del objeto 'u' global
+  let requestBody = `id_cita=${idCita}&id_usuario=${idUsuario}`;
+  if (u.is_responsable && u.id === 3) {
+    requestBody += `&is_admin_responsible=true`;
+  }
+
+  try {
+    const response = await fetch('../api/cita_cancelar.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: requestBody
+    });
+
+    const data = await response.json();
+
+    if (data.ok) {
+      alert('Cita cancelada exitosamente.');
+      // Opcional: Recargar las citas o eliminar la tarjeta de la cita cancelada del DOM
+      // Para simplificar, recargaremos la página para que la lista se actualice
+      location.reload();
+    } else {
+      alert('Error al cancelar la cita: ' + (data.message || 'Error desconocido.'));
+    }
+  } catch (error) {
+    console.error('Error en la solicitud de cancelación:', error);
+    alert('Error de conexión al intentar cancelar la cita.');
+  }
+}
+
+/* eliminar cita */
+async function eliminarCita(idCita){
+  if (!confirm('¿Está seguro que desea eliminar esta cita permanentemente?')) {
+    return;
+  }
+
+  const idUsuario = u.id; // Obtener el ID del usuario del objeto 'u' global
+  let requestBody = `id_cita=${idCita}&id_usuario=${idUsuario}`;
+  if (u.is_responsable && u.id === 3) {
+    requestBody += `&is_admin_responsible=true`;
+  }
+
+  try {
+    const response = await fetch('../api/cita_eliminar.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: requestBody
+    });
+
+    const data = await response.json();
+
+    if (data.ok) {
+      alert('Cita eliminada exitosamente.');
+      location.reload();
+    } else {
+      alert('Error al eliminar la cita: ' + (data.message || 'Error desconocido.'));
+    }
+  } catch (error) {
+    console.error('Error en la solicitud de eliminación:', error);
+    alert('Error de conexión al intentar eliminar la cita.');
+  }
+}
 </script>
 </body>
 </html>
