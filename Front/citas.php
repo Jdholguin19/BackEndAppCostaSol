@@ -124,11 +124,11 @@ function card(c){
 /* cargar citas */
 let apiUrl = '';
 if (u.is_responsable && u.id === 3) {
-    apiUrl = `../api/citas_list.php?rol=admin_responsable`;
+    apiUrl = `../api/cita/citas_list.php?rol=admin_responsable`;
 } else if (u.is_responsable) {
-    apiUrl = `../api/citas_list.php?rol=responsable&id_responsable=${u.id}`;
+    apiUrl = `../api/cita/citas_list.php?rol=responsable&id_responsable=${u.id}`;
 } else {
-    apiUrl = `../api/citas_list.php?rol=usuario&id_usuario=${u.id}`;
+    apiUrl = `../api/cita/citas_list.php?rol=usuario&id_usuario=${u.id}`;
 }
 fetch(apiUrl)
   .then(r=>r.json())
@@ -158,7 +158,7 @@ async function cancelar(idCita){
   }
 
   try {
-    const response = await fetch('../api/cita_cancelar.php', {
+    const response = await fetch('../api/cita/cita_cancelar.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -195,7 +195,7 @@ async function eliminarCita(idCita){
   }
 
   try {
-    const response = await fetch('../api/cita_eliminar.php', {
+    const response = await fetch('../api/cita/cita_eliminar.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

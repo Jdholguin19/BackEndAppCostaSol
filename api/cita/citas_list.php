@@ -1,6 +1,6 @@
 <?php
 /**
- * GET /api/citas_list.php?id_usuario=…
+ * GET /api/cita/citas_list.php?id_usuario=…
  * ▸ Devuelve todas las citas del usuario (próximas y pasadas)
  *   {
  *     ok   : true,
@@ -10,7 +10,7 @@
  *     ]
  *   }
  */
-require_once __DIR__.'/../config/db.php';
+require_once __DIR__.'/../../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
 

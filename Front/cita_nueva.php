@@ -168,7 +168,7 @@ propGrid.addEventListener('click',e=>{
 
   /* cargar días disponibles */
   fechaBox.innerHTML='<div class="loading-container"><div class="spinner-border"></div></div>';
-  fetch(`../api/dias_disponibles.php?proposito_id=${propositoId}`)
+  fetch(`../api/cita/dias_disponibles.php?proposito_id=${propositoId}`)
    .then(r=>r.json()).then(d=>{
      fechaBox.innerHTML='';
      if(!d.ok||!d.items.length){ fechaBox.innerHTML='<div class="empty-state">— Sin fechas —</div>'; return; }
@@ -194,7 +194,7 @@ fechaBox.addEventListener('click',e=>{
 
   /* cargar horas disponibles */
   horaBox.innerHTML='<div class="loading-container"><div class="spinner-border"></div></div>';
-  fetch(`../api/horas_disponibles.php?proposito_id=${propositoId}&fecha=${fechaSel}`)
+  fetch(`../api/cita/horas_disponibles.php?proposito_id=${propositoId}&fecha=${fechaSel}`)
    .then(r=>r.json()).then(d=>{
      horaBox.innerHTML='';
      if(!d.ok||!d.items.length){ horaBox.innerHTML='<div class="empty-state">— Sin horarios —</div>'; return; }
@@ -227,7 +227,7 @@ btnOk.onclick = ()=>{
   fd.append('fecha'       , fechaSel);
   fd.append('hora'        , horaSel);
 
-  fetch('../api/cita_create.php',{method:'POST',body:fd})
+  fetch('../api/cita/cita_create.php',{method:'POST',body:fd})
    .then(r=>r.json()).then(d=>{
       if(d.ok){ alert('Cita agendada ✔'); location.href='citas.php'; }
       else    { alert(d.msg||'No se pudo agendar'); btnOk.disabled=false; btnOk.innerHTML='<i class="bi bi-check-circle"></i> Confirmar'; }

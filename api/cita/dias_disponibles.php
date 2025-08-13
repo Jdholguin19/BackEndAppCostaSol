@@ -3,7 +3,7 @@
  * GET ?proposito_id=…
  * Devuelve los próximos 14 días con cupo disponible
  */
-require_once __DIR__.'/../config/db.php';
+require_once __DIR__.'/../../config/db.php';
  header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');

@@ -285,7 +285,7 @@ function initializeUserFunctions() {
             const metodo = data.id ? 'PUT' : 'POST';
             
             try {
-                const response = await fetch('user_crud.php', {
+                const response = await fetch('../api/user_crud.php', {
                     method: metodo,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)

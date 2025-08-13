@@ -52,7 +52,7 @@
 </div>
 
 <script>
-const API_REGISTER = 'user_crud.php'; // We will create this API endpoint
+const API_REGISTER = '../api/user_crud.php';
 const form = document.getElementById('registerForm');
 const msg = document.getElementById('msg');
 const registerBtn = document.getElementById('registerBtn');

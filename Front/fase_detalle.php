@@ -17,6 +17,7 @@
 <body>
 
 <!-- Header Section -->
+<hr style="color:rgba(69, 67, 67, 0.33); margin-top: 25px; ">
 <div class="fase-header">
   <div style="position: relative; text-align: center;">
     <button class="back-button" onclick="history.back()">

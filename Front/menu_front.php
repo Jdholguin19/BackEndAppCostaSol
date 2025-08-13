@@ -160,9 +160,11 @@
   const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
   if (!u.id) location.href = 'login_front.php';
 
+  const is_admin_responsible = (u.is_responsable && u.id === 3);
+
   /* ---------- Endpoints ---------- */
   const API_NEWS  = '../api/noticias.php?limit=10';
-  const API_MENU  = '../api/menu.php?role_id=' + u.rol_id;
+  const API_MENU  = is_admin_responsible ? '../api/menu.php' : '../api/menu.php?role_id=' + u.rol_id;
   const API_PROP  = '../api/obtener_propiedades.php?id_usuario=' + u.id;
   const API_FASE  = '../api/propiedad_fase.php?id_propiedad=';
 
@@ -249,14 +251,14 @@
 
     if ( menu.id === 11 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
-        location.href = 'mcm.php';          // <<<<<<
+        location.href = '../api/mcm.php';          // <<<<<<
         return;
     }
 
 
     if ( menu.id === 12 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
-        location.href = 'paletavegetal.php';          // <<<<<<
+        location.href = '../api/paletavegetal.php';          // <<<<<<
         return;
     }
 

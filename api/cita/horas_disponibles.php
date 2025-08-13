@@ -3,7 +3,7 @@
  * GET  ?proposito_id=…&fecha=YYYY-MM-DD
  * Devuelve array   [{responsable_id,hora}]
  */
-require_once __DIR__.'/../config/db.php';
+require_once __DIR__.'/../../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $prop   = (int)($_GET['proposito_id']??0);
