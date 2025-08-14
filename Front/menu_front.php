@@ -128,31 +128,10 @@
 
 </div>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <div class="bottom-nav-content">
-    <a href="#" class="nav-item active">
-      <i class="bi bi-house"></i>
-      <span>Inicio</span>
-    </a>
-    <a href="notificaciones.php" class="nav-item">
-      <i class="bi bi-bell"></i>
-      <span>Notificaciones</span>
-    </a>
-    <a href="citas.php" class="nav-item">
-      <i class="bi bi-calendar"></i>
-      <span>Cita</span>
-    </a>
-    <a href="ctg/ctg.php" class="nav-item">
-      <i class="bi bi-file-text"></i>
-      <span>CTG</span>
-    </a>
-    <a href="pqr/pqr.php" class="nav-item">
-      <i class="bi bi-chat-dots"></i>
-      <span>PQR</span>
-    </a>
-  </div>
-</div>
+<?php 
+$active_page = 'inicio';
+include 'includes/bottom_nav.php'; 
+?>
 
 <script>
   /* ---------- USER ---------- */
@@ -390,28 +369,65 @@
     document.getElementById('menuSpinner').remove();
     if(!ok){grid.textContent='Error menú';return;}
     
-    grid.innerHTML = ''; // Clear spinner
-    
-    menus.forEach(m=>{
-      const card = document.createElement('div');
-      card.className='menu-card';
-      card.onclick = () => openModule(m);
-      
-      const iconElement = icon(m.url_icono);
-      card.appendChild(iconElement);
-      
-      const title = document.createElement('h6');
-      title.textContent = m.nombre;
-      card.appendChild(title);
-      
-      if(m.descripcion) {
-        const desc = document.createElement('p');
-        desc.textContent = m.descripcion;
-        card.appendChild(desc);
-      }
-      
-      grid.appendChild(card);
-    });
+    const renderMenu = (menuItems) => {
+        grid.innerHTML = ''; // Clear grid before rendering
+        menuItems.forEach(m=> {
+            const card = document.createElement('div');
+            card.className='menu-card';
+            card.onclick = () => openModule(m);
+            
+            const iconElement = icon(m.url_icono);
+            card.appendChild(iconElement);
+            
+            const title = document.createElement('h6');
+            title.textContent = m.nombre;
+            card.appendChild(title);
+            
+            if(m.descripcion) {
+                const desc = document.createElement('p');
+                desc.textContent = m.descripcion;
+                card.appendChild(desc);
+            }
+            
+            grid.appendChild(card);
+        });
+    };
+
+    const initialMenus = menus.slice(0, 4);
+    const allMenus = menus;
+
+    renderMenu(initialMenus);
+
+    if (menus.length > 4) {
+        const verMasButton = document.createElement('button');
+        verMasButton.textContent = 'Ver más';
+        verMasButton.className = 'ver-mas-btn';
+        verMasButton.style.cssText = 'display: block;'; // Keep display block for initial state
+        verMasButton.style.margin = '20px auto'; // Keep margin for centering
+
+        const verMenosButton = document.createElement('button');
+        verMenosButton.textContent = 'Ver menos';
+        verMenosButton.className = 'ver-menos-btn';
+        verMenosButton.style.cssText = 'display: none;'; // Keep display none for initial state
+        verMenosButton.style.margin = '20px auto'; // Keep margin for centering
+
+        // Insert buttons after the grid
+        const container = grid.parentNode;
+        container.insertBefore(verMasButton, grid.nextSibling);
+        container.insertBefore(verMenosButton, verMasButton.nextSibling);
+
+        verMasButton.addEventListener('click', () => {
+            renderMenu(allMenus);
+            verMasButton.style.display = 'none';
+            verMenosButton.style.display = 'block';
+        });
+
+        verMenosButton.addEventListener('click', () => {
+            renderMenu(initialMenus);
+            verMenosButton.style.display = 'none';
+            verMasButton.style.display = 'block';
+        });
+    }
   });
 
   /* ---------- Logout ---------- */
