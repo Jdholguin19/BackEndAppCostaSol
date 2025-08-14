@@ -32,7 +32,7 @@
 
 <?php 
 $active_page = 'inicio';
-include 'includes/bottom_nav.php'; 
+include '../api/bottom_nav.php'; 
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>

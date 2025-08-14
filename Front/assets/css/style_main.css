@@ -100,15 +100,7 @@ body {
     padding-bottom: 5rem; /* Space for bottom navigation */
 }
 
-/* News card - Compact design with small images */
-.news-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #f0f0f0;
-}
+
 
 .news-header {
     display: flex;
@@ -186,7 +178,7 @@ body {
 .news-text h5 {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #040404;
     margin: 0 0 0.25rem 0;
     line-height: 1.3;
 }
@@ -225,6 +217,7 @@ body {
     background-color: #d1d5db;
     border: none;
     padding: 0;
+    margin: 0 5px -100px 5px;
 }
 
 .carousel-indicators .active {
@@ -233,6 +226,7 @@ body {
 
 /* Construction progress card */
 .construction-card {
+    margin-top: 10px;
     background: #ffffff;
     border-radius: 12px;
     padding: 1.5rem;
@@ -580,4 +574,25 @@ body {
     .ver-menos-btn {
         width: 250px; /* Fixed width for larger screens */
     }
+}
+
+/* Notification icon next to avatar */
+.notification-icon-link {
+    position: absolute;
+    left: -10px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2d5a3d !important; /* Green color */
+    font-size: 1.15rem; /* Icon size */
+    z-index: 1;
+}
+
+.notification-icon-link i {
+    
+}
+
+/* Adjust avatar container to make space for the icon */
+.avatar-container {
+    position: relative; /* Ensure positioning context for absolute icon */
+    padding-left: 30px; /* Make space for the icon on the left */
 }

@@ -84,6 +84,9 @@
     </div>
     <!-- Contenedor para el avatar y el botón de cerrar sesión -->
     <div class="avatar-container">
+        <a href="/Front/notificaciones.php" class="notification-icon-link">
+            <i class="bi bi-bell-fill"></i>
+        </a>
         <img src="" class="avatar" id="welcomeAvatar" alt="Avatar">
         <button id="logoutButton" class="logout-button" style="display: none;">Cerrar sesión</button>
     </div>
@@ -130,7 +133,7 @@
 
 <?php 
 $active_page = 'inicio';
-include 'includes/bottom_nav.php'; 
+include '../api/bottom_nav.php'; 
 ?>
 
 <script>
@@ -255,34 +258,30 @@ include 'includes/bottom_nav.php';
   /* ---------- Noticias ---------- */
   fetch(API_NEWS).then(r=>r.json()).then(({ok,noticias})=>{
     if(!ok){document.getElementById('newsSpinner').textContent='Error noticias';return;}
-    const row=document.getElementById('newsRow');row.innerHTML='';
-    
-    const newsCard = document.createElement('div');
-    newsCard.className = 'news-card';
-    newsCard.innerHTML = `
-      <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
-        <div class="carousel-inner">
-          ${noticias.map((n,i)=>`
-            <div class="carousel-item${i?'':' active'}">
-              <div class="news-content">
-                <img src="${n.url_imagen}" class="news-thumb" alt="">
-                <div class="news-text">
-                  <h5>${n.titulo}</h5>
-                  <p>${n.resumen}</p>
-                  <a href="${n.link_noticia}" target="_blank">
-                    Saber más <i class="bi bi-arrow-right-short"></i>
-                  </a>
-                </div>
+    const row=document.getElementById('newsRow');
+    row.innerHTML = `
+    <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+      <div class="carousel-inner">
+        ${noticias.map((n,i)=>`
+          <div class="carousel-item${i?'':' active'}">
+            <div class="news-content">
+              <img src="${n.url_imagen}" class="news-thumb" alt="">
+              <div class="news-text">
+                <h5>${n.titulo}</h5>
+                <p>${n.resumen}</p>
+                <a href="${n.link_noticia}" target="_blank">
+                  Saber más <i class="bi bi-arrow-right-short"></i>
+                </a>
               </div>
-            </div>`).join('')}
-        </div>
-        <br>
-        <div class="carousel-indicators outside">
-          ${noticias.map((_,i)=>`<button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="${i}"
-                    ${i?'':'class="active"'}></button>`).join('')}
-        </div>
-      </div>`;
-    row.appendChild(newsCard);
+            </div>
+          </div>`).join('')}
+      </div>
+      <br>
+      <div class="carousel-indicators">
+        ${noticias.map((_,i)=>`<button type="button" data-bs-target="#newsCarousel" data-bs-slide-to="${i}"
+                  ${i?'':'class="active"'}></button>`).join('')}
+      </div>
+    </div>`;
   });
 
   /* ---------- Propiedades ---------- */

@@ -61,7 +61,7 @@
 
 <?php 
 $active_page = 'inicio';
-include 'includes/bottom_nav.php'; 
+include '../api/bottom_nav.php'; 
 ?>
 
 <script>

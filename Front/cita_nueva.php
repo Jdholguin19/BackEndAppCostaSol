@@ -80,7 +80,7 @@
 
 <?php 
 $active_page = 'citas';
-include 'includes/bottom_nav.php'; 
+include '../api/bottom_nav.php'; 
 ?>
 
 <script>
