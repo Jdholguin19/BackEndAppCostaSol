@@ -101,6 +101,26 @@ body {
 }
 
 
+.Titulo {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
 
 .news-header {
     display: flex;
@@ -444,6 +464,10 @@ body {
 @media (max-width: 767px) {
     .welcome-card .btn {
         display: none; /* Hide logout button on mobile */
+    }
+
+    .back-button {
+        padding: 0.4rem;
     }
 }
 
