@@ -42,6 +42,11 @@ if ($tokenType === 'Bearer' && $token) {
     }
 }
 
+$is_admin_responsible_user = false;
+if ($authenticated_user && $is_responsable && $authenticated_user['id'] == 3) {
+    $is_admin_responsible_user = true;
+}
+
 if (!$authenticated_user) {
     http_response_code(401); // No autorizado
     exit(json_encode(['ok' => false, 'mensaje' => 'No autenticado o token invxc3xa1lido']));
@@ -73,14 +78,16 @@ try{
     $conditions = [];
     $params = [];
 
-    if ($is_responsable) {
-        // Responsable: Ver PQRs asignados a xc3xa9l
-        $conditions[] = 'p.responsable_id = :responsable_id';
-        $params[':responsable_id'] = $authenticated_user['id'];
-    } else {
-        // Usuario regular: Ver solo sus propios PQRs
-        $conditions[] = 'p.id_usuario = :user_id';
-        $params[':user_id'] = $authenticated_user['id'];
+    if (!$is_admin_responsible_user) {
+        if ($is_responsable) {
+            // Responsable: Ver PQRs asignados a él
+            $conditions[] = 'p.responsable_id = :responsable_id';
+            $params[':responsable_id'] = $authenticated_user['id'];
+        } else {
+            // Usuario regular: Ver solo sus propios PQRs
+            $conditions[] = 'p.id_usuario = :user_id';
+            $params[':user_id'] = $authenticated_user['id'];
+        }
     }
 
     // Axcc3xb1adir filtro por estado si existe
@@ -100,8 +107,15 @@ try{
         $sql .= ' WHERE ' . implode(' AND ', $conditions);
     }
 
-
-    // --- Fin Lxcc3xb3gica de Ordenacixc3xb3n ---
+    // Lógica de Ordenación
+    $sql .= ' ORDER BY ';
+    if ($orderBy === 'urgencia') {
+        // Necesitamos unir con la tabla de urgencia si no está ya unida
+        // Asumiendo que p.urgencia_id ya está disponible o se puede unir
+        $sql .= 'p.urgencia_id DESC, p.fecha_ingreso DESC';
+    } else { // Por defecto o si es 'fecha'
+        $sql .= 'p.fecha_ingreso DESC';
+    }
 
 
     $stmt = $db->prepare($sql);
@@ -112,6 +126,6 @@ try{
 }catch(Throwable $e){
     error_log('pqr_list: '.$e->getMessage());
     http_response_code(500);
-    echo json_encode(['ok'=>false,'msg'=>'Error interno']);
+    echo json_encode(['ok'=>false,'mensaje'=>'Error interno del servidor.']);
 }
 ?>

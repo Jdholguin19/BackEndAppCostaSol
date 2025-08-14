@@ -40,7 +40,7 @@ if (!$token) {
 
             /* --------- 2. Usuarios (incluye rol_id para edición) --------- */
             $usuarios = $db->query(
-              'SELECT u.id, u.nombres, u.apellidos, u.correo,
+              'SELECT u.id, u.url_foto_perfil, u.nombres, u.apellidos, u.correo,
                       u.rol_id, r.nombre AS rol
                  FROM usuario u
                  JOIN rol r ON r.id = u.rol_id
@@ -116,6 +116,7 @@ if (!$token) {
         <thead>
           <tr>
             <th>ID</th>
+            <th>Foto</th>
             <th>Nombres</th>
             <th>Apellidos</th>
             <th>Correo</th>
@@ -127,6 +128,7 @@ if (!$token) {
           <?php foreach ($usuarios as $u): ?>
             <tr>
               <td><?= $u['id'] ?></td>
+              <td><img src="<?= htmlspecialchars($u['url_foto_perfil'] ?? 'https://via.placeholder.com/30') ?>" alt="Foto" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;"></td>
               <td><?= htmlspecialchars($u['nombres']) ?></td>
               <td><?= htmlspecialchars($u['apellidos']) ?></td>
               <td><?= htmlspecialchars($u['correo']) ?></td>
