@@ -10,6 +10,27 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 
+<style>
+.notification-icon-link {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px; /* Espacio para que no se pegue al avatar */
+}
+.notification-badge {
+    position: absolute;
+    top: -2px;
+    right: -8px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    display: none; /* Oculto por defecto */
+    border: 2px solid white; /* Borde para resaltar */
+}
+</style>
+
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -86,6 +107,7 @@
     <div class="avatar-container">
         <a href="/Front/notificaciones.php" class="notification-icon-link">
             <i class="bi bi-bell-fill"></i>
+            <span class="notification-badge" id="notification-badge"></span>
         </a>
         <img src="" class="avatar" id="welcomeAvatar" alt="Avatar">
         <button id="logoutButton" class="logout-button" style="display: none;">Cerrar sesión</button>
@@ -137,10 +159,44 @@ include '../api/bottom_nav.php';
 ?>
 
 <script>
+  /* ---------- NOTIFICATIONS ---------- */
+  function fetchNotifications() {
+    const token = localStorage.getItem('cs_token');
+    if (!token) return; // No hacer nada si no hay token
+
+    fetch('../api/notificaciones_count.php', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+      .then(r => {
+        if (!r.ok) {
+          throw new Error(`HTTP error! status: ${r.status}`);
+        }
+        return r.json();
+      })
+      .then(data => {
+        if (data.status === 'success') {
+          const badge = document.getElementById('notification-badge');
+          if (data.count > 0) {
+            badge.textContent = data.count;
+            badge.style.display = 'block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+      })
+      .catch(error => console.error('Error fetching notifications:', error));
+  }
+
   /* ---------- USER ---------- */
   console.log('Valor en localStorage para cs_usuario:', localStorage.getItem('cs_usuario')); // Registro
   const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
-  if (!u.id) location.href = 'login_front.php';
+  if (!u.id) {
+    location.href = 'login_front.php';
+  } else {
+    fetchNotifications();
+  }
 
   const is_admin_responsible = (u.is_responsable && u.id === 3);
 

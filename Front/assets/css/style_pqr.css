@@ -13,6 +13,15 @@
     text-align: center;
 }
 
+
+.pqr-subtitle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #454545;
+    margin: 0;
+    text-align: left;
+}
+
 .back-button {
     position: absolute;
     left: 1rem;

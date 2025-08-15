@@ -87,6 +87,40 @@ if(!u.id) {
     document.getElementById('wrap').innerHTML = '<div class="alert alert-warning">Debes iniciar sesión para ver los detalles del PQR.</div>';
 } else { // Inicio del bloque else si hay usuario autenticado
 
+    /* ------- MARCAR NOTIFICACIONES COMO LEÍDAS ------- */
+    function markNotificationsAsRead() {
+        const pqrId = <?=$id?>;
+        if (!pqrId) return;
+
+        const token = localStorage.getItem('cs_token');
+        if (!token) return; // No hacer nada si no hay token
+
+        fetch('../../api/notificaciones_mark_read.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                type: 'pqr',
+                id: pqrId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Notificaciones de PQR marcadas como leídas.');
+            } else {
+                console.error('Error al marcar notificaciones como leídas:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error de red al marcar notificaciones:', error);
+        });
+    }
+    // Llamar a la función al cargar la página si hay un usuario logueado
+    markNotificationsAsRead();
+
     const END_PQR  = `../../api/pqr/pqr_list.php?pqr_id=<?=$id?>`;
 
     /* ------- refs DOM ------- */
