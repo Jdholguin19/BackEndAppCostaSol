@@ -30,7 +30,7 @@
   <div class="pqr-controls">
     <select id="selOrdenacion" class="order-select">
       <option value="fecha">Ordenar por Fecha</option>
-      <option value="nombre">Ordenar por Nombre</option>
+      <option value="urgencia">Ordenar por Urgencia</option>
     </select>
     <button class="new-pqr-btn" id="btnNuevo">
       <i class="bi bi-plus"></i>
@@ -52,31 +52,10 @@
   </div>
 </div>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <div class="bottom-nav-content">
-    <a href="../menu_front.php" class="nav-item">
-      <i class="bi bi-house"></i>
-      <span>Inicio</span>
-    </a>
-    <a href="../notificaciones.php" class="nav-item">
-      <i class="bi bi-bell"></i>
-      <span>Notificaciones</span>
-    </a>
-    <a href="../citas.php" class="nav-item">
-      <i class="bi bi-calendar"></i>
-      <span>Cita</span>
-    </a>
-    <a href="../ctg/ctg.php" class="nav-item">
-      <i class="bi bi-file-text"></i>
-      <span>CTG</span>
-    </a>
-    <a href="pqr.php" class="nav-item active">
-      <i class="bi bi-chat-dots"></i>
-      <span>PQR</span>
-    </a>
-  </div>
-</div>
+<?php 
+$active_page = 'inicio';
+include '../../api/bottom_nav.php'; 
+?>
 
 <script>
 /* ---------- constantes ---------- */
@@ -128,11 +107,10 @@ if (!token) {
        return `
         <div class="pqr-card" onclick="verDetalle(${p.id})">
             <div class="pqr-header-card">
-                <h3 class="pqr-title">${p.nombre || 'PQR'}</h3>
+                <h3 class="pqr-subtitle">${p.tipo || 'PQR'}</h3>
                 <span class="pqr-date">${fecha}</span>
             </div>
             <div class="pqr-badges">
-                <span class="pqr-badge tipo">${p.nombre}</span>
                 <span class="pqr-badge estado ${p.estado.toLowerCase()}">${p.estado}</span>
             </div>
             <p class="pqr-description">${short}</p>

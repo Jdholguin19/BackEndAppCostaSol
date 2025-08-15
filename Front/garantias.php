@@ -59,31 +59,10 @@
   </div>
 </div>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <div class="bottom-nav-content">
-    <a href="menu_front.php" class="nav-item">
-      <i class="bi bi-house"></i>
-      <span>Inicio</span>
-    </a>
-    <a href="notificaciones.php" class="nav-item">
-      <i class="bi bi-bell"></i>
-      <span>Notificaciones</span>
-    </a>
-    <a href="citas.php" class="nav-item">
-      <i class="bi bi-calendar"></i>
-      <span>Cita</span>
-    </a>
-    <a href="ctg/ctg.php" class="nav-item">
-      <i class="bi bi-file-text"></i>
-      <span>CTG</span>
-    </a>
-    <a href="pqr/pqr.php" class="nav-item">
-      <i class="bi bi-chat-dots"></i>
-      <span>PQR</span>
-    </a>
-  </div>
-</div>
+<?php 
+$active_page = 'inicio';
+include '../api/bottom_nav.php'; 
+?>
 
 <script>
 // Verificar autenticación
@@ -92,44 +71,15 @@ if (!u.id) location.href = 'login_front.php';
 
 const API_GARANTIAS = '../api/garantias.php';
 
-// Función para obtener icono según categoría
-function getIconForCategory(categoria) {
-    const categoryIcons = {
-        'Estructura': 'bi-building',
-        'Instalaciones': 'bi-lightning',
-        'Acabados': 'bi-palette',
-        'Sistema Eléctrico': 'bi-lightning-charge',
-        'Sistema Hidráulico': 'bi-droplet',
-        'Pintura': 'bi-brush',
-        'Carpintería': 'bi-hammer',
-        'Pisos': 'bi-grid-3x3',
-        'Techos': 'bi-house',
-        'Jardines': 'bi-flower1',
-        'Cerrajería': 'bi-key',
-        'default': 'bi-shield-check'
-    };
-    
-    for (const [key, icon] of Object.entries(categoryIcons)) {
-        if (categoria.toLowerCase().includes(key.toLowerCase())) {
-            return icon;
-        }
-    }
-    return categoryIcons.default;
-}
 
 // Función para crear tarjeta de garantía
 function createGarantiaCard(garantia) {
-    const icon = getIconForCategory(garantia.categoria);
     
     return `
         <div class="garantia-card">
             <div class="garantia-header">
-                <div class="garantia-icon">
-                    <i class="bi ${icon}"></i>
-                </div>
                 <div class="garantia-info">
                     <h3 class="garantia-categoria">${garantia.categoria}</h3>
-                    <p class="garantia-elemento">${garantia.elemento}</p>
                 </div>
             </div>
             <div class="garantia-details">
@@ -140,11 +90,17 @@ function createGarantiaCard(garantia) {
                     </p>
                 </div>
                 <div class="garantia-detail">
+                    <i class="bi bi-calendar-check garantia-detail-icon"></i>
+                    <p class="garantia-detail-text">
+                        Vigencia: <span class="garantia-detail-value">${garantia.vigencia}</span>
+                    </p>
+                </div>                 
+                <div class="garantia-detail">
                     <i class="bi bi-person garantia-detail-icon"></i>
                     <p class="garantia-detail-text">
                         Responsable: <span class="garantia-detail-value">${garantia.responsable}</span>
                     </p>
-                </div>
+                </div>               
             </div>
         </div>
     `;

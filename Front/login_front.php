@@ -34,11 +34,11 @@
     <img src="https://app.costasol.com.ec/iconos/LogoCostaSolVerde.svg" alt="CostaSol logo" class="logo">
   </div>
 
-  <!-- selector residente / trabajador -->
+
   <div class="tab-container">
-    <button id="btnResidente" class="tab-btn active">Residente</button>
-    <button id="btnTrabajador" class="tab-btn">Trabajador</button>
+    <button id="btnResidente" class="tab-btn active">Iniciar sesión</button>
   </div>
+
 
   <div class="form-container">
     <form id="loginForm">
@@ -71,21 +71,6 @@ const loginBtn = document.getElementById('loginBtn');
 const loginText = document.getElementById('loginText');
 const loginSpinner = document.getElementById('loginSpinner');
 
-/* --- selector de perfil (por si más adelante envías role_id) --- */
-let perfil = 'residente';
-
-document.getElementById('btnResidente').onclick = function(e) {
-  perfil = 'residente';
-  e.target.classList.add('active');
-  document.getElementById('btnTrabajador').classList.remove('active');
-};
-
-document.getElementById('btnTrabajador').onclick = function(e) {
-  perfil = 'trabajador';
-  e.target.classList.add('active');
-  document.getElementById('btnResidente').classList.remove('active');
-};
-
 /* --- redirección a registro --- */
 const registerBtn = document.getElementById('registerBtn');
 registerBtn.addEventListener('click', function() {
@@ -107,8 +92,7 @@ form.addEventListener('submit', async function(ev) {
   
   const payload = {
     correo: document.getElementById('correo').value.trim(),
-    contrasena: document.getElementById('contrasena').value,
-    perfil: perfil
+    contrasena: document.getElementById('contrasena').value
   };
 
   try {

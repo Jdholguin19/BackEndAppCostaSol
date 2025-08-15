@@ -7,75 +7,60 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/css/style_main.css" rel="stylesheet">
+<link href="assets/css/style_panel_calendario.css" rel="stylesheet">
 
-
-<style>
-/* ancho máximo */
-#calendar{max-width:1200px;margin:0 auto;}
-
-/* ---------- WEEK / DAY (timeGrid) ---------- */
-.fc-timegrid-event-harness,
-.fc-timegrid-event{
-  overflow:visible!important;
-  height:auto!important;          /* deja crecer alto si hace falta */
-}
-
-.fc-timegrid-event .fc-event-main-frame{
-  display:block!important;        /* anula flex */
-  white-space:normal!important;
-  overflow-wrap:anywhere;
-  word-break:break-all;
-}
-.fc-timegrid-event .fc-event-main{
-  padding:2px 4px;
-  line-height:1.15;
-}
-.fc-timegrid-event .fc-event-time{font-weight:600;display:block;}
-.fc-timegrid-event .fc-event-title{font-size:.78rem;word-break:break-all;}
-
-/* ---------- MONTH (dayGrid) ---------- */
-.fc-daygrid-event{display:block;width:100%;}
-.fc-daygrid-event .fc-event-main{
-  white-space:normal;
-  overflow-wrap:anywhere;
-  font-size:.75rem;
-  line-height:1.15;
-}
-
-/* ---------- texto oscuro sobre fondo amarillo ---------- */
-.fc-event[style*="background-color:#ffc107"] *,
-.fc-event[style*="background-color: #ffc107"] *{color:#212529!important;}
-</style>
 
 
 </head>
 <body class="bg-light">
 
 <div class="container py-4">
+  <div class="calendario-header">
+    <h1 class="calendario-title">Calendario por responsable</h1>
+    <button class="back-button" id="btnBack">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+  </div>
+
   <div class="d-flex align-items-center gap-3 mb-3">
-    <h1 class="h4 mb-0">Calendario por responsable</h1>
     <select id="selResp" class="form-select w-auto"></select>
-        <button class="btn btn-link text-dark btn-back" id="btnBack">
-          <i class="bi bi-arrow-left"></i>
-      </button> 
   </div>
 
   <div id="calendar"></div>
 </div>
 
+<?php 
+$active_page = 'inicio';
+include '../api/bottom_nav.php'; 
+?>
+
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script>
+const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
+if(!u.id) location.href='login.php';
+
 /* ---------- cargar responsables ---------- */
 const selResp=document.getElementById('selResp');
-fetch('../api/responsables_list.php')
-  .then(r=>r.json())
-  .then(d=>{
-    d.items.forEach(r=>{
-      selResp.insertAdjacentHTML('beforeend',
-        `<option value="${r.id}">${r.nombre}</option>`);
+const h1Title = document.querySelector('.calendario-title');
+
+let is_admin_responsible = (u.is_responsable && u.id === 3);
+
+if (!is_admin_responsible) {
+  selResp.style.display = 'none';
+  h1Title.textContent = 'Mi Calendario';
+  initCalendar();
+} else {
+  fetch('../api/responsables_list.php')
+    .then(r=>r.json())
+    .then(d=>{
+      d.items.forEach(r=>{
+        selResp.insertAdjacentHTML('beforeend',
+          `<option value="${r.id}">${r.nombre}</option>`);
+      });
+      initCalendar();
     });
-    initCalendar();
-  });
+}
 
 /* ---------- calendario ---------- */
 function initCalendar(){
@@ -108,7 +93,7 @@ function initCalendar(){
 
       events:(info,success,failure)=>{
         const p=new URLSearchParams({
-          responsable_id:selResp.value,
+          responsable_id: is_admin_responsible ? selResp.value : u.id,
           start:info.startStr,
           end  :info.endStr
         });
@@ -120,9 +105,10 @@ function initCalendar(){
     }
   );
   calendar.render();
-  selResp.onchange=()=>calendar.refetchEvents();
+  if (is_admin_responsible) {
+    selResp.onchange=()=>calendar.refetchEvents();
+  }
 }
-
 
 /* ---------- navegación ---------- */
 document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';

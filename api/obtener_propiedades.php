@@ -1,46 +1,51 @@
 <?php
-/**
- *  obtener_propiedades.php  – Lista las propiedades de un cliente
- *
- *  GET /app/obtener_propiedades.php?id_usuario=7
- *
- *  Respuesta:
- *  200 OK
- *  {
- *    "ok": true,
- *    "propiedades": [
- *      {
- *        "id": 12,
- *        "tipo":      "Casa",
- *        "urbanizacion": "Basilea",
- *        "estado":    "En construcción",
- *        "etapa":     "Estructura",
- *        "fecha_compra":      "2025-02-01",
- *        "fecha_entrega":     "2026-06-13",
- *        "manzana":   "3351",
- *        "solar":     "7",
- *        "villa":     "7"
- *      },
- *      ...
- *    ]
- *  }
- */
-
-require_once __DIR__ . '/../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
+require_once __DIR__ . '/../config/db.php';
 
-/* ---------- 1. Validar parámetros ---------- */
-$idUsuario = $_GET['id_usuario'] ?? null;
+// --- Lógica de Autenticación por Token ---
+$auth_id = null;
+$is_responsable = false;
 
-if (!ctype_digit((string)$idUsuario)) {
-    http_response_code(400);
-    exit(json_encode(['ok' => false, 'mensaje' => 'Parámetro id_usuario requerido']));
+$headers = getallheaders();
+$authHeader = $headers['Authorization'] ?? '';
+if (strpos($authHeader, 'Bearer ') === 0) {
+    $token = substr($authHeader, 7);
+    try {
+        $db = DB::getDB();
+        
+        // 1. Buscar en la tabla de usuarios
+        $stmt = $db->prepare('SELECT id FROM usuario WHERE token = :token');
+        $stmt->execute([':token' => $token]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            $auth_id = $user['id'];
+            $is_responsable = false;
+        } else {
+            // 2. Si no se encuentra, buscar en la tabla de responsables
+            $stmt_resp = $db->prepare('SELECT id FROM responsable WHERE token = :token');
+            $stmt_resp->execute([':token' => $token]);
+            $responsable = $stmt_resp->fetch(PDO::FETCH_ASSOC);
+            if ($responsable) {
+                $auth_id = $responsable['id'];
+                $is_responsable = true;
+            }
+        }
+    } catch (Exception $e) {
+        error_log('Token validation error: ' . $e->getMessage());
+    }
 }
+
+if ($auth_id === null) {
+    http_response_code(401);
+    echo json_encode(['ok' => false, 'mensaje' => 'No autorizado']);
+    exit();
+}
+// --- Fin Autenticación ---
 
 try {
     $db = DB::getDB();
 
-    /* ---------- 2. Query con joins para nombres descriptivos ---------- */
     $sql = 'SELECT
               p.id,
               tp.nombre          AS tipo,
@@ -56,12 +61,20 @@ try {
             JOIN tipo_propiedad         tp ON tp.id  = p.tipo_id
             JOIN urbanizacion           u  ON u.id   = p.id_urbanizacion
             JOIN estado_propiedad       ep ON ep.id  = p.estado_id
-            LEFT JOIN etapa_construccion ec ON ec.id = p.etapa_id
-            WHERE p.id_usuario = :uid
-            ORDER BY p.fecha_compra DESC';
+            LEFT JOIN etapa_construccion ec ON ec.id = p.etapa_id';
+
+    $params = [];
+
+    if (!$is_responsable) {
+        // Si no es responsable, filtrar por el ID del usuario autenticado
+        $sql .= ' WHERE p.id_usuario = :uid';
+        $params[':uid'] = $auth_id;
+    }
+
+    $sql .= ' ORDER BY p.fecha_compra DESC';
 
     $stmt = $db->prepare($sql);
-    $stmt->execute([':uid' => $idUsuario]);
+    $stmt->execute($params);
 
     $props = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -72,3 +85,4 @@ try {
     http_response_code(500);
     echo json_encode(['ok' => false, 'mensaje' => 'Error interno']);
 }
+?>

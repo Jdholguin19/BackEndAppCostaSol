@@ -100,14 +100,26 @@ body {
     padding-bottom: 5rem; /* Space for bottom navigation */
 }
 
-/* News card - Compact design with small images */
-.news-card {
-    background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #f0f0f0;
+
+.Titulo {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
 }
 
 .news-header {
@@ -186,7 +198,7 @@ body {
 .news-text h5 {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #1a1a1a;
+    color: #040404;
     margin: 0 0 0.25rem 0;
     line-height: 1.3;
 }
@@ -225,6 +237,7 @@ body {
     background-color: #d1d5db;
     border: none;
     padding: 0;
+    margin: 0 5px -100px 5px;
 }
 
 .carousel-indicators .active {
@@ -233,6 +246,7 @@ body {
 
 /* Construction progress card */
 .construction-card {
+    margin-top: 10px;
     background: #ffffff;
     border-radius: 12px;
     padding: 1.5rem;
@@ -379,7 +393,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    max-width: 400px;
+    max-width: 400px; /* Increased max-width for better spacing on larger screens */
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -391,7 +405,7 @@ body {
     gap: 0.25rem;
     text-decoration: none;
     color: #6b7280;
-    font-size: 0.75rem;
+    font-size: 0.75rem; /* Slightly larger font size for better readability */
     font-weight: 500;
     transition: color 0.2s ease;
 }
@@ -401,7 +415,7 @@ body {
 }
 
 .nav-item i {
-    font-size: 1.25rem;
+    font-size: 1.25lrem; /* Larger icons */
     margin-bottom: 0.25rem;
 }
 
@@ -409,21 +423,28 @@ body {
     transform: scale(1.1);
 }
 
-/* Responsive adjustments */
-@media (min-width: 768px) {
-    .container {
-        max-width: 480px;
-        margin: 0 auto;
-    }
-    
-    .module-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* Responsive adjustments for bottom navigation */
+@media (min-width: 576px) {
+    .bottom-nav-content {
+        padding: 0 2rem; /* More padding on larger small screens */
     }
 }
 
-@media (min-width: 1024px) {
-    .module-grid {
-        grid-template-columns: repeat(4, 1fr);
+@media (min-width: 768px) {
+    .bottom-nav {
+        padding: 1rem 0; /* More vertical padding on tablets */
+    }
+    .nav-item {
+        font-size: 0.95rem; /* Even larger font size */
+    }
+    .nav-item i {
+        font-size: 1.8rem; /* Even larger icons */
+    }
+}
+
+@media (min-width: 992px) {
+    .bottom-nav-content {
+        max-width: 800px; /* Even wider on desktops */
     }
 }
 
@@ -439,6 +460,16 @@ body {
 .mb-4 { margin-bottom: 1rem; }
 .mb-5 { margin-bottom: 1.25rem; }
 
+/* Hide elements that don't fit mobile design */
+@media (max-width: 767px) {
+    .welcome-card .btn {
+        display: none; /* Hide logout button on mobile */
+    }
+
+    .back-button {
+        padding: 0.4rem;
+    }
+}
 
 /* Loading states */
 .spinner-border {
@@ -520,43 +551,8 @@ body {
 }
 
 
-/* Estilos para la nueva tarjeta específica del mapa */
-.map-menu-card {
-    background: #ffffff; /* Fondo blanco */
-    border-radius: 12px; /* Bordes redondeados */
-    padding: 1rem; /* Padding interno (puedes ajustar) */
-    margin-bottom: 1rem; /* Espacio debajo de la tarjeta del mapa */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-    border: 1px solid #f0f0f0; /* Borde ligero */
-    overflow: hidden; /* Importante para contener el iframe con padding-top */
-}
-
-/* Asegúrate de que las reglas para .map-responsive-container y su iframe sigan presentes */
-.map-responsive-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    padding-top: 56.25%; /* Relación de aspecto 16:9 (ajusta si es necesario) */
-    /* margin-bottom: 1rem; /* Ya no es necesario si lo tiene map-menu-card */
-    border-radius: 8px; /* Bordes redondeados para el área del mapa */
-}
-
-.map-responsive-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-}
-
 /* Media query para pantallas pequeñas (hasta 767px) */
 @media (max-width: 767px) {
-
-    .welcome-card .btn {
-        display: none; /* Hide logout button on mobile */
-    }
-
     .logout-button {
         /* Ajustar el posicionamiento para pantallas pequeñas */
         right: calc(100% + 5px); /* Menos espacio a la izquierda en móviles */
@@ -564,13 +560,63 @@ body {
         padding: 3px 8px; /* Menos padding */
         /* Puedes añadir más ajustes si es necesario, por ejemplo, cambiar 'right' por 'left' si prefieres que aparezca a la derecha en móviles, aunque la solicitud original era a la izquierda. */
     }
-    
-    .map-menu-card {
-        padding: 0.75rem; /* Un poco menos padding en móviles */
-        margin-bottom: 0.75rem; /* Menos espacio debajo */
-    }
+}
 
-    .map-responsive-container {
-        padding-top: 75%; /* Relación 4:3 en móviles (ajusta si es necesario) */
+/* Styles for "Ver más" and "Ver menos" buttons */
+.ver-mas-btn,
+.ver-menos-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    width: calc(100% - 2rem); /* Adjust width for padding */
+    max-width: 300px; /* Limit max width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.ver-mas-btn {
+    background-color: #2d5a3d; /* Original green */
+}
+
+.ver-menos-btn {
+    background-color: #6c757d; /* Original gray */
+}
+
+@media (max-width: 575px) {
+    .ver-mas-btn,
+    .ver-menos-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        width: calc(100% - 2rem); /* Full width minus padding */
     }
+}
+
+@media (min-width: 576px) {
+    .ver-mas-btn,
+    .ver-menos-btn {
+        width: 250px; /* Fixed width for larger screens */
+    }
+}
+
+/* Notification icon next to avatar */
+.notification-icon-link {
+    position: absolute;
+    left: -10px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2d5a3d !important; /* Green color */
+    font-size: 1.15rem; /* Icon size */
+    z-index: 1;
+}
+
+.notification-icon-link i {
+    
+}
+
+/* Adjust avatar container to make space for the icon */
+.avatar-container {
+    position: relative; /* Ensure positioning context for absolute icon */
+    padding-left: 30px; /* Make space for the icon on the left */
 }

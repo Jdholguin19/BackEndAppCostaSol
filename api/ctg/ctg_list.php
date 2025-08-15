@@ -43,6 +43,11 @@ if ($tokenType === 'Bearer' && $token) {
     }
 }
 
+$is_admin_responsible_user = false;
+if ($authenticated_user && $is_responsable && $authenticated_user['id'] == 3) {
+    $is_admin_responsible_user = true;
+}
+
 if (!$authenticated_user) {
     http_response_code(401); // No autorizado
     exit(json_encode(['ok' => false, 'mensaje' => 'No autenticado o token invxc3xa1lido']));
@@ -59,7 +64,10 @@ try{
                 sp.nombre            AS subtipo,
                 ep.nombre            AS estado,
                 p.descripcion,
-                p.fecha_ingreso,
+                COALESCE(
+                    (SELECT MAX(r.fecha_respuesta) FROM respuesta_ctg r WHERE r.ctg_id = p.id),
+                    p.fecha_ingreso
+                ) AS fecha_ingreso,
                 p.url_problema,                    -- miniatura
                 pr.manzana,                        -- Mz
                 pr.villa,                          -- Villa
@@ -72,26 +80,35 @@ try{
         JOIN    tipo_ctg     tp ON tp.id = p.tipo_id
         JOIN    subtipo_ctg  sp ON sp.id = p.subtipo_id
         JOIN    estado_ctg   ep ON ep.id = p.estado_id
-        JOIN    propiedad    pr ON pr.id = p.id_propiedad
+        LEFT JOIN propiedad    pr ON pr.id = p.id_propiedad
         JOIN    urgencia_ctg up ON up.id = p.urgencia_id'; // <-- JOIN a la tabla de urgencia
 
     $conditions = [];
     $params = [];
 
-    if ($is_responsable) {
-        // Responsable: Ver CTGs asignados a xc3xa9l
-        $conditions[] = 'p.responsable_id = :responsable_id';
-        $params[':responsable_id'] = $authenticated_user['id'];
-    } else {
-        // Usuario regular: Ver solo sus propios CTGs
-        $conditions[] = 'p.id_usuario = :user_id';
-        $params[':user_id'] = $authenticated_user['id'];
+    if (!$is_admin_responsible_user) {
+        if ($is_responsable) {
+            // Responsable: Ver CTGs asignados a él
+            $conditions[] = 'p.responsable_id = :responsable_id';
+            $params[':responsable_id'] = $authenticated_user['id'];
+        } else {
+            // Usuario regular: Ver solo sus propios CTGs
+            $conditions[] = 'p.id_usuario = :user_id';
+            $params[':user_id'] = $authenticated_user['id'];
+        }
     }
 
     // Axcc3xb1adir filtro por estado si existe
     if($estadoId){
         $conditions[] = 'p.estado_id = :eid';
         $params[':eid'] = $estadoId;
+    }
+
+    // Añadir filtro por ctg_id si existe
+    $ctgId = isset($_GET['ctg_id']) ? (int)$_GET['ctg_id'] : 0;
+    if($ctgId) {
+        $conditions[] = 'p.id = :ctg_id';
+        $params[':ctg_id'] = $ctgId;
     }
 
     if (!empty($conditions)) {
@@ -117,6 +134,6 @@ try{
 }catch(Throwable $e){
     error_log('ctg_list: '.$e->getMessage());
     http_response_code(500);
-    echo json_encode(['ok'=>false,'msg'=>'Error interno']);
+    echo json_encode(['ok'=>false,'mensaje'=>'Error interno del servidor.']);
 }
 ?>

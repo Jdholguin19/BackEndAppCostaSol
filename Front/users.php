@@ -40,7 +40,7 @@ if (!$token) {
 
             /* --------- 2. Usuarios (incluye rol_id para edición) --------- */
             $usuarios = $db->query(
-              'SELECT u.id, u.nombres, u.apellidos, u.correo,
+              'SELECT u.id, u.url_foto_perfil, u.nombres, u.apellidos, u.correo,
                       u.rol_id, r.nombre AS rol
                  FROM usuario u
                  JOIN rol r ON r.id = u.rol_id
@@ -116,6 +116,7 @@ if (!$token) {
         <thead>
           <tr>
             <th>ID</th>
+            <th>Foto</th>
             <th>Nombres</th>
             <th>Apellidos</th>
             <th>Correo</th>
@@ -127,6 +128,7 @@ if (!$token) {
           <?php foreach ($usuarios as $u): ?>
             <tr>
               <td><?= $u['id'] ?></td>
+              <td><img src="<?= htmlspecialchars($u['url_foto_perfil'] ?? 'https://via.placeholder.com/30') ?>" alt="Foto" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;"></td>
               <td><?= htmlspecialchars($u['nombres']) ?></td>
               <td><?= htmlspecialchars($u['apellidos']) ?></td>
               <td><?= htmlspecialchars($u['correo']) ?></td>
@@ -185,31 +187,10 @@ if (!$token) {
   </div>
 </div>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <div class="bottom-nav-content">
-    <a href="menu_front.php" class="nav-item">
-      <i class="bi bi-house"></i>
-      <span>Inicio</span>
-    </a>
-    <a href="notificaciones.php" class="nav-item">
-      <i class="bi bi-bell"></i>
-      <span>Notificaciones</span>
-    </a>
-    <a href="citas.php" class="nav-item">
-      <i class="bi bi-calendar"></i>
-      <span>Cita</span>
-    </a>
-    <a href="ctg/ctg.php" class="nav-item">
-      <i class="bi bi-file-text"></i>
-      <span>CTG</span>
-    </a>
-    <a href="pqr/pqr.php" class="nav-item">
-      <i class="bi bi-chat-dots"></i>
-      <span>PQR</span>
-    </a>
-  </div>
-</div>
+<?php 
+$active_page = 'inicio';
+include '../api/bottom_nav.php'; 
+?>
 
 <?php endif; ?>
 
@@ -285,7 +266,7 @@ function initializeUserFunctions() {
             const metodo = data.id ? 'PUT' : 'POST';
             
             try {
-                const response = await fetch('user_crud.php', {
+                const response = await fetch('../api/user_crud.php', {
                     method: metodo,
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
