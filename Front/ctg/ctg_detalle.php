@@ -21,6 +21,9 @@ $id = (int)($_GET['id'] ?? 0);
     <button class="back-button" onclick="history.back()">
       <i class="bi bi-arrow-left"></i>
     </button>
+    <button id="btnToggleObservaciones" class="toggle-observaciones-button header-button" type="button">
+      <i class="bi bi-journal-text"></i>
+    </button>
     <div>
       <h1 class="ctg-detalle-title" id="title">CTG</h1>
     </div>
@@ -37,12 +40,16 @@ $id = (int)($_GET['id'] ?? 0);
 
   <!-- caja nueva respuesta -->
   <form id="frmRespuesta" enctype="multipart/form-data" class="response-form">
-    <textarea id="txtMensaje" name="mensaje" class="response-textarea" rows="3" placeholder="Escriba su respuesta…" required></textarea>
-    <div class="response-actions">
-      <input type="file" name="archivo" accept="image/*,application/pdf" class="file-input">
+    <div class="input-area">
+      <textarea id="txtMensaje" name="mensaje" class="response-textarea" rows="1" placeholder="Escriba su respuesta…" required></textarea>
       <button id="btnSend" class="send-button" type="submit">
         <i class="bi bi-send"></i>
-        Enviar
+      </button>
+    </div>
+    <div class="response-actions">
+      <input type="file" name="archivo" accept="image/*,application/pdf" class="file-input" id="fileInputHidden">
+      <button id="btnAttachFile" class="attach-file-button" type="button">
+        <i class="bi bi-paperclip"></i>
       </button>
     </div>
   </form>
@@ -134,6 +141,9 @@ if(!u.id) {
     const observacionesContainer = document.getElementById('observacionesContainer');
     const txtObservaciones = document.getElementById('txtObservaciones');
     const btnSaveObservaciones = document.getElementById('btnSaveObservaciones');
+    const btnToggleObservaciones = document.getElementById('btnToggleObservaciones');
+    const btnAttachFile = document.getElementById('btnAttachFile');
+    const fileInputHidden = document.getElementById('fileInputHidden');
 
     // Obtener el token de localStorage
     const token = localStorage.getItem('cs_token');
@@ -146,6 +156,16 @@ if(!u.id) {
 
     // Variable para almacenar el estado actual del CTG (para revertir si falla la actualización)
     let currentCtgEstadoId = null;
+
+    // Ocultar el botón de alternar observaciones si no es responsable
+    if (!isResponsable && btnToggleObservaciones) {
+        btnToggleObservaciones.style.display = 'none';
+    }
+
+    // Ocultar el contenedor de observaciones por defecto
+    if (observacionesContainer) {
+        observacionesContainer.classList.remove('show');
+    }
 
 
     // Verificar si hay token antes de hacer cualquier solicitud a APIs protegidas
@@ -693,7 +713,7 @@ if(!u.id) {
           fd.append('ctg_id', <?=$id?>);
 
           const btn=document.getElementById('btnSend');
-          btn.disabled=true; btn.textContent='Enviando…';
+
 
           fetch(END_SEND,{method:'POST',body:fd,
               headers: {
@@ -723,7 +743,7 @@ if(!u.id) {
                        showNotification('Error al enviar respuesta: ' + (errMsg || 'Desconocido'), 'danger');
                   }
             })
-            .finally(()=>{btn.disabled=false;btn.textContent='Enviar';});
+            .finally(()=>{btn.disabled=false;btn.textContent='➤';});
         });
 
         /* ------- Envío con Enter ------- */
@@ -738,11 +758,55 @@ if(!u.id) {
             }
         });
 
+        /* ------- Event listener para adjuntar archivo ------- */
+        if (btnAttachFile && fileInputHidden) {
+            btnAttachFile.addEventListener('click', function() {
+                fileInputHidden.click(); // Trigger click on the hidden file input
+            });
+        }
+
         /* ------- Event listener para guardar observaciones ------- */
         btnSaveObservaciones.addEventListener('click', function(e) {
             e.preventDefault();
             saveObservaciones();
         });
+
+        /* ------- Event listener para alternar observaciones ------- */
+        if (btnToggleObservaciones) {
+            btnToggleObservaciones.addEventListener('click', function() {
+                if (isResponsable) {
+                    toggleObservacionesModal();
+                }
+            });
+        }
+
+        function toggleObservacionesModal() {
+            const isShowing = observacionesContainer.classList.contains('show');
+            if (isShowing) {
+                // Hide modal
+                observacionesContainer.classList.remove('show');
+                const backdrop = document.getElementById('modalBackdrop');
+                if (backdrop) {
+                    backdrop.classList.remove('show');
+                    setTimeout(() => backdrop.remove(), 300); // Remove after transition
+                }
+                document.body.style.overflow = ''; // Restore scroll
+            } else {
+                // Show modal
+                let backdrop = document.getElementById('modalBackdrop');
+                if (!backdrop) {
+                    backdrop = document.createElement('div');
+                    backdrop.id = 'modalBackdrop';
+                    backdrop.classList.add('modal-backdrop');
+                    document.body.appendChild(backdrop);
+                    backdrop.addEventListener('click', toggleObservacionesModal); // Close on backdrop click
+                }
+                setTimeout(() => backdrop.classList.add('show'), 10); // Add show class after slight delay
+                observacionesContainer.classList.add('show');
+                loadObservaciones(); // Load observations when opened
+                document.body.style.overflow = 'hidden'; // Prevent scroll
+            }
+        }
 
         /* ------- Auto-guardar observaciones al perder el foco ------- */
         txtObservaciones.addEventListener('blur', function() {

@@ -192,6 +192,7 @@ include '../api/bottom_nav.php';
   /* ---------- USER ---------- */
   console.log('Valor en localStorage para cs_usuario:', localStorage.getItem('cs_usuario')); // Registro
   const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
+  const token = localStorage.getItem('cs_token');
   if (!u.id) {
     location.href = 'login_front.php';
   } else {
@@ -203,7 +204,7 @@ include '../api/bottom_nav.php';
   /* ---------- Endpoints ---------- */
   const API_NEWS  = '../api/noticias.php?limit=10';
   const API_MENU  = is_admin_responsible ? '../api/menu.php' : '../api/menu.php?role_id=' + u.rol_id;
-  const API_PROP  = '../api/obtener_propiedades.php?id_usuario=' + u.id;
+  const API_PROP  = u.is_responsable ? '../api/obtener_propiedades.php' : '../api/obtener_propiedades.php?id_usuario=' + u.id;
   const API_FASE  = '../api/propiedad_fase.php?id_propiedad=';
 
   /* ---------- Welcome ---------- */
@@ -386,7 +387,11 @@ include '../api/bottom_nav.php';
       .catch(()=>pintarAvance('Error al cargar',0));
   }
 
-  fetch(API_PROP).then(r=>r.json()).then(({ok,propiedades})=>{
+  fetch(API_PROP, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then(r=>r.json()).then(({ok,propiedades})=>{
     if(!ok||!propiedades.length) return;
     
     const tabsContainer = document.getElementById('propertyTabs');
@@ -420,7 +425,6 @@ include '../api/bottom_nav.php';
   });
 
   /* ---------- Menú ---------- */
-  const token = localStorage.getItem('cs_token');
   fetch(API_MENU, {
     headers: {
       'Authorization': `Bearer ${token}`
