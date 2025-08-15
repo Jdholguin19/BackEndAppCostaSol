@@ -11,24 +11,24 @@
 <link href="assets/css/style_main.css" rel="stylesheet">
 
 <style>
-.notification-icon-link {
-    position: relative;
-    display: inline-block;
-    margin-right: 15px; /* Espacio para que no se pegue al avatar */
-}
-.notification-badge {
-    position: absolute;
-    top: -2px;
-    right: -8px;
-    padding: 2px 6px;
-    border-radius: 50%;
-    background-color: red;
-    color: white;
-    font-size: 7px;
-    font-weight: bold;
-    display: none; /* Oculto por defecto */
-    border: 2px solid white; /* Borde para resaltar */
-}
+  .notification-icon-link {
+      position: relative;
+      display: inline-block;
+      margin-right: 15px; /* Espacio para que no se pegue al avatar */
+  }
+  .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -8px;
+      padding: 2px 6px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      font-size: 7px;
+      font-weight: bold;
+      display: none; /* Oculto por defecto */
+      border: 2px solid white; /* Borde para resaltar */
+  }
 </style>
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>

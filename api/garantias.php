@@ -12,13 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once '../config/db.php';
 
 try {
-    // Obtener la conexión a la base de datos
     $db = DB::getDB();
     
-    // Verificar token de autenticación
+    // 1. VERIFICAR TOKEN
     $headers = getallheaders();
     $token = null;
-    
+    $auth_id = null;
+    $is_responsable = false;
+
     if (isset($headers['Authorization'])) {
         $auth_header = $headers['Authorization'];
         if (strpos($auth_header, 'Bearer ') === 0) {
@@ -32,72 +33,83 @@ try {
         exit;
     }
     
-    // Verificar token en la base de datos (buscar en usuario y responsable)
-    $sql_verify = 'SELECT id, nombres, apellidos, rol_id, "usuario" as tipo FROM usuario WHERE token = :token AND token IS NOT NULL
-                   UNION ALL
-                   SELECT id, nombre as nombres, "" as apellidos, 0 as rol_id, "responsable" as tipo FROM responsable WHERE token = :token AND token IS NOT NULL';
-    $stmt_verify = $db->prepare($sql_verify);
-    $stmt_verify->execute([':token' => $token]);
-    $authenticated_user = $stmt_verify->fetch();
+    $stmt_user = $db->prepare('SELECT id FROM usuario WHERE token = :token AND token IS NOT NULL');
+    $stmt_user->execute([':token' => $token]);
+    $user = $stmt_user->fetch();
+
+    if ($user) {
+        $auth_id = $user['id'];
+    } else {
+        $stmt_resp = $db->prepare('SELECT id FROM responsable WHERE token = :token AND token IS NOT NULL');
+        $stmt_resp->execute([':token' => $token]);
+        $responsable = $stmt_resp->fetch();
+        if ($responsable) {
+            $auth_id = $responsable['id'];
+            $is_responsable = true;
+        }
+    }
     
-    if (!$authenticated_user) {
+    if (!$auth_id) {
         http_response_code(401);
         echo json_encode(['ok' => false, 'error' => 'Token inválido']);
         exit;
     }
-    
-    // Permitir acceso a todos los usuarios autenticados (incluyendo responsables)
-    // Los responsables tienen tipo "responsable", usuarios normales tienen tipo "usuario"
-    
-    // Obtener datos de garantías
-    $sql = 'SELECT id, nombre, tiempo_garantia_min, tiempo_garantia_max FROM tipo_ctg ORDER BY nombre';
+
+    // 2. OBTENER FECHA DE ENTREGA (si es un usuario normal)
+    $fecha_entrega_str = null;
+    if (!$is_responsable) {
+        $sql_propiedad = "SELECT fecha_entrega FROM propiedad WHERE id_usuario = :id_usuario AND fecha_entrega IS NOT NULL ORDER BY fecha_entrega DESC LIMIT 1";
+        $stmt_propiedad = $db->prepare($sql_propiedad);
+        $stmt_propiedad->execute([':id_usuario' => $auth_id]);
+        $propiedad = $stmt_propiedad->fetch(PDO::FETCH_ASSOC);
+        if ($propiedad) {
+            $fecha_entrega_str = $propiedad['fecha_entrega'];
+        }
+    }
+
+    // 3. OBTENER LISTA DE GARANTÍAS
+    $sql = 'SELECT id, nombre, tiempo_garantia_min, tiempo_garantia_max FROM tipo_ctg WHERE tiempo_garantia_max IS NOT NULL ORDER BY nombre';
     $stmt = $db->prepare($sql);
     $stmt->execute();
     $garantias = $stmt->fetchAll();
     
-    // Procesar los datos para formatear las duraciones
+    // 4. PROCESAR GARANTÍAS Y CALCULAR VIGENCIA
     $garantias_procesadas = [];
     foreach ($garantias as $garantia) {
-        $min = floatval($garantia['tiempo_garantia_min']);
+        // Formatear duración
         $max = floatval($garantia['tiempo_garantia_max']);
-        
-        // Convertir a formato legible
-        $duracion = '';
-        if ($min == $max) {
-            // Si son iguales, mostrar solo uno
-            if ($min >= 1) {
-                $duracion = $min == 1 ? '1 año' : $min . ' años';
-            } else {
-                $meses = intval($min * 12); // Usar intval en lugar de round para evitar +1
-                $duracion = $meses == 1 ? '1 mes' : $meses . ' meses';
-            }
+        $duracion_texto = '';
+        if ($max >= 1) {
+            $duracion_texto = ($max == 1) ? '1 año' : $max . ' años';
         } else {
-            // Si son diferentes, mostrar rango
-            $min_text = '';
-            $max_text = '';
-            
-            if ($min >= 1) {
-                $min_text = $min == 1 ? '1 año' : $min . ' años';
-            } else {
-                $meses_min = intval($min * 12); // Usar intval en lugar de round
-                $min_text = $meses_min == 1 ? '1 mes' : $meses_min . ' meses';
+            $meses = intval($max * 12);
+            $duracion_texto = ($meses == 1) ? '1 mes' : $meses . ' meses';
+        }
+
+        // Calcular vigencia
+        $vigencia_texto = 'No aplica'; // Valor por defecto
+        if ($fecha_entrega_str) {
+            try {
+                $fecha_entrega = new DateTime($fecha_entrega_str);
+                if ($max == 1.0) {
+                    $fecha_entrega->add(new DateInterval('P1Y'));
+                } elseif ($max == 0.6) {
+                    $fecha_entrega->add(new DateInterval('P6M'));
+                } elseif ($max == 0.3) {
+                    $fecha_entrega->add(new DateInterval('P3M'));
+                }
+                $vigencia_texto = $fecha_entrega->format('d/m/Y');
+            } catch (Exception $e) {
+                $vigencia_texto = 'Error';
             }
-            
-            if ($max >= 1) {
-                $max_text = $max == 1 ? '1 año' : $max . ' años';
-            } else {
-                $meses_max = intval($max * 12); // Usar intval en lugar de round
-                $max_text = $meses_max == 1 ? '1 mes' : $meses_max . ' meses';
-            }
-            
-            $duracion = $min_text . ' a ' . $max_text;
         }
         
         $garantias_procesadas[] = [
             'id' => $garantia['id'],
             'categoria' => $garantia['nombre'],
-            'elemento' => $garantia['nombre'], // Por ahora usamos el mismo nombre
-            'duracion' => $duracion,
+            'elemento' => $garantia['nombre'],
+            'duracion' => $duracion_texto,
+            'vigencia' => $vigencia_texto, // Nuevo campo con la fecha calculada
             'responsable' => 'Thalia Victoria Constructora'
         ];
     }

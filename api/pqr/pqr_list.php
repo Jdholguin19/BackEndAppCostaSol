@@ -63,7 +63,10 @@ try{
                 tp.nombre            AS tipo,
                 ep.nombre            AS estado,
                 p.descripcion,
-                p.fecha_ingreso,
+                COALESCE(
+                    (SELECT MAX(r.fecha_respuesta) FROM respuesta_pqr r WHERE r.pqr_id = p.id),
+                    p.fecha_ingreso
+                ) AS fecha_ingreso,
                 p.url_problema,                    -- miniatura
                 pr.manzana,                        -- Mz
                 pr.villa,                          -- Villa
