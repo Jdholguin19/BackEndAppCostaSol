@@ -3,7 +3,9 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
 // --- Lógica de Autenticación por Token ---
-$user = null;
+$auth_id = null;
+$is_responsable = false;
+
 $headers = getallheaders();
 $authHeader = $headers['Authorization'] ?? '';
 if (strpos($authHeader, 'Bearer ') === 0) {
@@ -12,21 +14,21 @@ if (strpos($authHeader, 'Bearer ') === 0) {
         $db = DB::getDB();
         
         // 1. Buscar en la tabla de usuarios
-        $stmt = $db->prepare('SELECT id, rol_id FROM usuario WHERE token = :token');
+        $stmt = $db->prepare('SELECT id FROM usuario WHERE token = :token');
         $stmt->execute([':token' => $token]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // 2. Si no se encuentra, buscar en la tabla de responsables
-        if (!$user) {
+        if ($user) {
+            $auth_id = $user['id'];
+            $is_responsable = false;
+        } else {
+            // 2. Si no se encuentra, buscar en la tabla de responsables
             $stmt_resp = $db->prepare('SELECT id FROM responsable WHERE token = :token');
             $stmt_resp->execute([':token' => $token]);
             $responsable = $stmt_resp->fetch(PDO::FETCH_ASSOC);
             if ($responsable) {
-                // Si es un responsable, construir el array de usuario manualmente
-                $user = [
-                    'id' => $responsable['id'],
-                    'rol_id' => 2 // El rol de responsable es 2
-                ];
+                $auth_id = $responsable['id'];
+                $is_responsable = true;
             }
         }
     } catch (Exception $e) {
@@ -34,15 +36,12 @@ if (strpos($authHeader, 'Bearer ') === 0) {
     }
 }
 
-if (!$user) {
+if ($auth_id === null) {
     http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'No autorizado', 'count' => 0]);
     exit();
 }
 // --- Fin Autenticación ---
-
-$id_usuario_actual = $user['id'];
-$id_rol_actual = $user['rol_id'];
 
 $total_notificaciones = 0;
 $sql = '';
@@ -51,7 +50,7 @@ $params = [];
 try {
     $db = DB::getDB();
 
-    if ($id_rol_actual == 2) { // Es un responsable: contar respuestas de usuarios no leídas en sus tickets asignados
+    if ($is_responsable) { // Es un responsable: contar respuestas de usuarios no leídas en sus tickets asignados
         $sql = "SELECT SUM(unread_count) as total_unread FROM (
                     SELECT COUNT(rc.id) as unread_count 
                     FROM respuesta_ctg rc
@@ -63,9 +62,7 @@ try {
                     JOIN pqr p ON rp.pqr_id = p.id
                     WHERE rp.usuario_id IS NOT NULL AND rp.leido = 0 AND p.responsable_id = ?
                 ) as combined_counts";
-        $params = [$id_usuario_actual, $id_usuario_actual];
-        $stmt = $db->prepare($sql);
-        $stmt->execute($params);
+        $params = [$auth_id, $auth_id];
     } else { // Es un usuario normal: contar respuestas de responsables no leídas
         $sql = "SELECT SUM(unread_count) as total_unread FROM (
                     SELECT COUNT(rc.id) as unread_count 
@@ -78,11 +75,11 @@ try {
                     JOIN pqr p ON rp.pqr_id = p.id
                     WHERE rp.responsable_id IS NOT NULL AND rp.leido = 0 AND p.id_usuario = ?
                 ) as combined_counts";
-        $params = [$id_usuario_actual, $id_usuario_actual];
-        $stmt = $db->prepare($sql);
-        $stmt->execute($params);
+        $params = [$auth_id, $auth_id];
     }
-
+    
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
     $fila = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($fila && $fila['total_unread'] !== null) {

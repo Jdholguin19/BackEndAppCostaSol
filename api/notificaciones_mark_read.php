@@ -3,7 +3,9 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
 // --- Lógica de Autenticación por Token ---
-$user = null;
+$auth_id = null;
+$is_responsable = false;
+
 $headers = getallheaders();
 $authHeader = $headers['Authorization'] ?? '';
 if (strpos($authHeader, 'Bearer ') === 0) {
@@ -12,21 +14,21 @@ if (strpos($authHeader, 'Bearer ') === 0) {
         $db = DB::getDB();
         
         // 1. Buscar en la tabla de usuarios
-        $stmt = $db->prepare('SELECT id, rol_id FROM usuario WHERE token = :token');
+        $stmt = $db->prepare('SELECT id FROM usuario WHERE token = :token');
         $stmt->execute([':token' => $token]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // 2. Si no se encuentra, buscar en la tabla de responsables
-        if (!$user) {
+        if ($user) {
+            $auth_id = $user['id'];
+            $is_responsable = false;
+        } else {
+            // 2. Si no se encuentra, buscar en la tabla de responsables
             $stmt_resp = $db->prepare('SELECT id FROM responsable WHERE token = :token');
             $stmt_resp->execute([':token' => $token]);
             $responsable = $stmt_resp->fetch(PDO::FETCH_ASSOC);
             if ($responsable) {
-                // Si es un responsable, construir el array de usuario manualmente
-                $user = [
-                    'id' => $responsable['id'],
-                    'rol_id' => 2 // El rol de responsable es 2
-                ];
+                $auth_id = $responsable['id'];
+                $is_responsable = true;
             }
         }
     } catch (Exception $e) {
@@ -34,7 +36,7 @@ if (strpos($authHeader, 'Bearer ') === 0) {
     }
 }
 
-if (!$user) {
+if ($auth_id === null) {
     http_response_code(401);
     echo json_encode(['status' => 'error', 'message' => 'No autorizado']);
     exit();
@@ -55,8 +57,6 @@ if (!isset($data['type']) || !isset($data['id'])) {
     exit();
 }
 
-$id_usuario_actual = $user['id'];
-$id_rol_actual = $user['rol_id'];
 $type = $data['type'];
 $id = (int)$data['id'];
 
@@ -66,21 +66,20 @@ $params = [];
 $table_respuesta = ($type == 'ctg') ? 'respuesta_ctg' : 'respuesta_pqr';
 $table_main = $type;
 $id_column_main = ($type == 'ctg') ? 'ctg_id' : 'pqr_id';
-$id_column_ticket_owner = 'id_usuario';
 
 try {
     $db = DB::getDB();
 
-    if ($id_rol_actual == 2) { // Es un responsable: marcar respuestas de usuario como leídas en sus tickets asignados
+    if ($is_responsable) { // Es un responsable: marcar respuestas de usuario como leídas en sus tickets asignados
         $sql = "UPDATE {$table_respuesta} r JOIN {$table_main} m ON r.{$id_column_main} = m.id 
                 SET r.leido = 1 
                 WHERE r.{$id_column_main} = ? AND m.responsable_id = ? AND r.usuario_id IS NOT NULL AND r.leido = 0";
-        $params = [$id, $id_usuario_actual];
+        $params = [$id, $auth_id];
     } else { // Es un usuario normal: marcar respuestas de responsables como leídas en su propio ticket
         $sql = "UPDATE {$table_respuesta} r JOIN {$table_main} m ON r.{$id_column_main} = m.id 
                 SET r.leido = 1 
-                WHERE r.{$id_column_main} = ? AND m.{$id_column_ticket_owner} = ? AND r.responsable_id IS NOT NULL AND r.leido = 0";
-        $params = [$id, $id_usuario_actual];
+                WHERE r.{$id_column_main} = ? AND m.id_usuario = ? AND r.responsable_id IS NOT NULL AND r.leido = 0";
+        $params = [$id, $auth_id];
     }
 
     $stmt = $db->prepare($sql);

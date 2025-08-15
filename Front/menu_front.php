@@ -24,7 +24,7 @@
     border-radius: 50%;
     background-color: red;
     color: white;
-    font-size: 12px;
+    font-size: 7px;
     font-weight: bold;
     display: none; /* Oculto por defecto */
     border: 2px solid white; /* Borde para resaltar */
@@ -179,7 +179,7 @@ include '../api/bottom_nav.php';
         if (data.status === 'success') {
           const badge = document.getElementById('notification-badge');
           if (data.count > 0) {
-            badge.textContent = data.count;
+            badge.textContent = data.count > 9 ? '+9' : data.count;
             badge.style.display = 'block';
           } else {
             badge.style.display = 'none';
