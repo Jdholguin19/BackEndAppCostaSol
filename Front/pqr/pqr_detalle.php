@@ -41,15 +41,13 @@ $id = (int)($_GET['id'] ?? 0);
   <!-- caja nueva respuesta -->
   <form id="frmRespuesta" enctype="multipart/form-data" class="response-form">
     <div class="input-area">
-      <textarea id="txtMensaje" name="mensaje" class="response-textarea" rows="1" placeholder="Escriba su respuesta…" required></textarea>
-      <button id="btnSend" class="send-button" type="submit">
-        <i class="bi bi-send"></i>
-      </button>
-    </div>
-    <div class="response-actions">
       <input type="file" name="archivo" accept="image/*,application/pdf" class="file-input" id="fileInputHidden">
       <button id="btnAttachFile" class="attach-file-button" type="button">
         <i class="bi bi-paperclip"></i>
+      </button>
+      <textarea id="txtMensaje" name="mensaje" class="response-textarea" rows="1" placeholder="Escriba su respuesta…" required></textarea>
+      <button id="btnSend" class="send-button" type="submit">
+        <i class="bi bi-send"></i>
       </button>
     </div>
   </form>
@@ -185,15 +183,31 @@ if(!u.id) {
           return `<span class="badge-dot ${cls}">${txt}</span>`;
         }
 
-        function msgHTML(r){
+        function msgHTML(r, index, responses){
           const esResp = Number(r.responsable_id) > 0;
           const dirClass = esResp ? 'right' : '';
           const mensaje = r.mensaje.replace(/\n/g, '<br>'); // Convertir saltos de línea en HTML
+          
+          // Determinar si mostrar la hora basado en la diferencia de tiempo
+          let showTime = true;
+          let timeClass = '';
+          
+          if (index > 0) {
+            const currentTime = new Date(r.fecha_respuesta);
+            const previousTime = new Date(responses[index - 1].fecha_respuesta);
+            const timeDiff = Math.abs(currentTime - previousTime) / (1000 * 60); // Diferencia en minutos
+            
+            // Si es el mismo usuario y menos de 5 minutos, ocultar hora
+            if (responses[index].responsable_id === responses[index - 1].responsable_id && timeDiff < 5) {
+              showTime = false;
+              timeClass = 'time-hidden';
+            }
+          }
 
-          return `<li class="${dirClass}">
+          return `<li class="${dirClass} ${showTime ? 'show-time' : ''}">
                     <div>
                       <div class="bubble">${mensaje}</div>
-                      <div class="time">${fechaHora(r.fecha_respuesta)}</div>
+                      <div class="time ${timeClass}">${fechaHora(r.fecha_respuesta)}</div>
                     </div>
                   </li>`;
         }
@@ -319,7 +333,7 @@ if(!u.id) {
           currentPqrEstadoId = p.estado_id;
 
           // Mostrar Manzana/Villa en el título si están disponibles
-          const mzVillaTitle = (p.manzana || p.villa) ? ` · Mz ${p.manzana} – Villa ${p.villa}` : '';
+          const mzVillaTitle = (p.manzana || p.villa) ? ` Mz ${p.manzana} – Villa ${p.villa}` : '';
           titleEl.textContent = `${mzVillaTitle}`; // Establecer el título con el y Mz/Villa
 
 
@@ -511,7 +525,7 @@ if(!u.id) {
             if (newResponsesString !== currentResponsesString) {
                 currentResponses = d.respuestas;
                 chat.innerHTML = currentResponses.length
-                  ? currentResponses.map(msgHTML).join('')
+                  ? currentResponses.map((r, index) => msgHTML(r, index, currentResponses)).join('')
                   : '<li class="text-muted">— Sin respuestas —</li>';
 
                 chat.scrollTop = chat.scrollHeight;
