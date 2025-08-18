@@ -28,7 +28,9 @@ $id = (int)($_GET['id'] ?? 0);
       <h1 class="ctg-detalle-title" id="title">CTG</h1>
     </div>
   </div>
-</div>
+</div> <!-- End of ctg-detalle-header -->
+
+<div id="notificationArea" class="notification-area"></div>
 
 <!-- Main Content -->
 <div class="ctg-detalle-container">

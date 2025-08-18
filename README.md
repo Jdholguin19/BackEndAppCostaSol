@@ -34,6 +34,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │   ├── pqr_respuestas.php
 │   │   ├── pqr_update_estado.php
 │   │   └── pqr_update_observaciones.php
+│   ├── bottom_nav.php              # API para obtener ítems de navegación inferior
 │   ├── calendario_responsable.php  # API para obtener datos del calendario de responsables
 │   ├── etapas_manzana_villa.php    # API para obtener etapas de construcción por manzana/villa
 │   ├── garantias.php               # API para obtener información de garantías
@@ -43,6 +44,8 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── menu.php                    # API para obtener ítems de menú según el rol
 │   ├── noticias.php                # API para gestionar noticias
 │   ├── notificaciones.php          # API para obtener notificaciones
+│   ├── notificaciones_count.php    # API para contar notificaciones no leídas
+│   ├── notificaciones_mark_read.php# API para marcar notificaciones como leídas
 │   ├── obtener_propiedades.php     # API para obtener propiedades de un usuario
 │   ├── paletavegetal.php           # API para servir el PDF de paleta vegetal
 │   ├── propiedad_fase.php          # API para obtener la fase de una propiedad
@@ -51,6 +54,14 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── update_player_id.php        # API para actualizar OneSignal Player ID
 │   ├── user_crud.php               # API para operaciones CRUD de usuarios
 │   └── validate_responsable.php    # API para validar tokens de responsables
+├── appcostasol/                  # Contiene una versión alternativa o anterior de la aplicación
+│   ├── api/                      # API de la versión alternativa
+│   │   └── login.php
+│   ├── config/                   # Configuración de la versión alternativa
+│   │   └── db.php
+│   └── Front/                    # Frontend de la versión alternativa
+│       ├── user_crud.php
+│       └── users.php
 ├── Front/                        # Contiene todas las páginas frontend (HTML/PHP) y sus assets
 │   ├── assets/                   # Archivos estáticos (CSS, JS, imágenes)
 │   │   └── css/                  # Hojas de estilo CSS
@@ -73,6 +84,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │   ├── ctg_detalle.php
 │   │   ├── ctg_nuevo.php
 │   │   └── ctg.php
+│   ├── includes/                 # Archivos de inclusión comunes (cabeceras, funciones, etc.)
 │   ├── pqr/                      # Páginas frontend para la gestión de PQR
 │   │   ├── pqr_detalle.php
 │   │   ├── pqr_nuevo.php
@@ -83,6 +95,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── garantias.php             # Página para ver información de garantías
 │   ├── login_front.php           # Página de inicio de sesión
 │   ├── menu_front.php            # Página del menú principal
+│   ├── menu2.php                 # Página alternativa del menú principal
 │   ├── noticia.php               # Página para la gestión de noticias (solo para admins)
 │   ├── notificaciones.php        # Página para ver notificaciones
 │   ├── panel_calendario.php      # Página del calendario de responsables
@@ -111,6 +124,20 @@ A continuación, se detalla la organización de los archivos y directorios princ
 
 
 ```
+
+## Archivos Clave para el Funcionamiento y Entendimiento
+
+Aunque la estructura de carpetas detalla todos los archivos, los siguientes son considerados esenciales para comprender el funcionamiento central de la aplicación:
+
+*   `config/db.php`: Configuración fundamental para la conexión a la base de datos.
+*   `portalao_appcostasol.sql`: El esquema completo de la base de datos, crucial para la configuración inicial y el entendimiento de los datos.
+*   `api/login.php`: Punto de entrada principal para la autenticación de usuarios en el backend.
+*   `Front/login_front.php`: La interfaz de usuario para el inicio de sesión.
+*   `Front/menu_front.php`: El panel principal del usuario después de iniciar sesión, donde se cargan las funcionalidades y se muestra el contador de notificaciones.
+*   `api/ctg/`, `api/pqr/`, `api/cita/`: Directorios que contienen la lógica de negocio central para las funcionalidades de CTG, PQR y Citas, respectivamente.
+*   `Front/ctg/`, `Front/pqr/`: Directorios que contienen las interfaces de usuario para las funcionalidades de CTG y PQR.
+*   `api/user_crud.php`: Maneja las operaciones CRUD para los usuarios.
+*   `Front/users.php`: Interfaz de usuario para la gestión de usuarios.
 
 ## Características y Funcionalidades Clave
 
@@ -144,8 +171,55 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   Acceso a documentos PDF como el Manual de Uso y Mantenimiento (`api/mcm.php`) y la Paleta Vegetal (`api/paletavegetal.php`).
 *   **Gestión de Usuarios (Administrador):**
     *   Funcionalidades CRUD (Crear, Leer, Actualizar, Eliminar) para usuarios (`users.php`, `api/user_crud.php`).
-*   **Notificaciones:**
+*   **Sistema de Notificaciones:**
     *   Visualización de notificaciones para los usuarios (`notificaciones.php`).
+    *   Contador de notificaciones no leídas en tiempo real en la barra de menú.
+    *   El contador se actualiza automáticamente al visualizar un ticket (CTG o PQR).
+    *   La lógica diferencia entre usuarios normales (ven respuestas de responsables) y responsables (ven respuestas de usuarios en sus tickets asignados).
+    *   El contador muestra el número exacto hasta 9, y "+9" para cantidades superiores.
+
+### Mejoras en la Visualización de Propiedades y Corrección de Errores
+
+Se han implementado mejoras para asegurar la correcta visualización de propiedades y se ha corregido un error crítico de inicialización:
+
+*   **Visibilidad de Propiedades para Responsables:**
+    *   Originalmente, los usuarios con rol de `responsable` no podían visualizar todas las propiedades debido a un filtrado excesivo en el frontend (`menu_front.php`).
+    *   La API `obtener_propiedades.php` ya estaba diseñada para permitir a los responsables ver todas las propiedades (al no aplicar un filtro de `id_usuario` si el usuario autenticado era un `responsable`).
+    *   **Solución:** Se modificó `Front/menu_front.php` para que la solicitud a `api/obtener_propiedades.php` no incluya el parámetro `id_usuario` cuando el usuario autenticado es un `responsable`. Esto permite que la lógica del backend funcione como se esperaba, mostrando todas las propiedades a los responsables.
+
+*   **Corrección de Error de Autenticación y Carga de Propiedades (`401 Unauthorized`):**
+    *   Se identificó un error donde las solicitudes a `api/obtener_propiedades.php` (tanto para usuarios regulares como para responsables) fallaban con un estado `401 Unauthorized`.
+    *   La causa fue que la llamada `fetch` en `Front/menu_front.php` para obtener propiedades no estaba incluyendo el encabezado `Authorization` con el token de sesión, a pesar de que la API lo requería.
+    *   **Solución:** Se añadió el encabezado `Authorization: Bearer <token>` a la solicitud `fetch` para `api/obtener_propiedades.php` en `Front/menu_front.php`.
+
+*   **Corrección de `Uncaught ReferenceError: Cannot access 'token' before initialization`:**
+    *   Tras la corrección anterior, surgió un `ReferenceError` en `Front/menu_front.php` porque la variable `token` se estaba utilizando en la llamada `fetch(API_PROP)` antes de que fuera declarada en ese ámbito.
+    *   **Solución:** Se reubicó la declaración `const token = localStorage.getItem('cs_token');` a una posición anterior en el script de `Front/menu_front.php`, asegurando que la variable `token` esté disponible y correctamente inicializada antes de cualquier uso.
+
+#### Nuevos Endpoints de API para Notificaciones
+
+Se han añadido los siguientes endpoints para gestionar el contador de notificaciones:
+
+*   `api/notificaciones_count.php`:
+    *   **Método:** `GET`
+    *   **Autenticación:** Requiere token de portador (`Bearer Token`).
+    *   **Función:** Devuelve el número de respuestas no leídas (`leido = 0`) para el usuario autenticado. La lógica se adapta según si el usuario es un cliente/residente o un responsable.
+
+*   `api/notificaciones_mark_read.php`:
+    *   **Método:** `POST`
+    *   **Autenticación:** Requiere token de portador (`Bearer Token`).
+    *   **Cuerpo (Body):** `{ "type": "ctg" | "pqr", "id": <id_del_ticket> }`
+    *   **Función:** Marca como leídas las respuestas de un ticket específico cuando un usuario lo visualiza.
+
+#### Cambios en la Base de Datos
+
+*   Se ha añadido una columna `leido` (TINYINT, default 0) a las tablas `respuesta_ctg` y `respuesta_pqr` para rastrear el estado de lectura de cada mensaje.
+
+#### Archivos Frontend Modificados
+
+*   `Front/menu_front.php`: Para mostrar el contador de notificaciones.
+*   `Front/ctg/ctg_detalle.php`: Para llamar a la API y marcar las notificaciones de CTG como leídas.
+*   `Front/pqr/pqr_detalle.php`: Para llamar a la API y marcar las notificaciones de PQR como leídas.
 *   **Integración con SharePoint:**
     *   Scripts para interactuar con SharePoint, probablemente para la gestión de documentos e imágenes relacionadas con el progreso de construcción.
 
@@ -211,7 +285,7 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 
 ## Observaciones Adicionales
 
-*   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada.
+*   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada en esta revisión.
 
 ---
 

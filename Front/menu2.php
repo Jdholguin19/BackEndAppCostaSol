@@ -243,42 +243,94 @@ include '../api/bottom_nav.php';
   }
 
   /* ---------- Menú ---------- */
-  const token = localStorage.getItem('cs_token');
-  fetch(API_MENU, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  }).then(r=>r.json()).then(({ok,menus})=>{
-    const grid=document.getElementById('menuGrid');
-    document.getElementById('menuSpinner').remove();
-    if(!ok){grid.textContent='Error menú';return;}
-    
-    grid.innerHTML = ''; // Clear spinner
-
-    // Filtramos el menú con id 15 (Ver más) para no mostrarlo en esta página
-    const menusFiltrados = menus.filter(menu => menu.id !== 15);
-    
-    menusFiltrados.forEach(m=>{
-      const card = document.createElement('div');
-      card.className='menu-card';
-      card.onclick = () => openModule(m);
-      
-      const iconElement = icon(m.url_icono);
-      card.appendChild(iconElement);
-      
-      const title = document.createElement('h6');
-      title.textContent = m.nombre;
-      card.appendChild(title);
-      
-      if(m.descripcion) {
-        const desc = document.createElement('p');
-        desc.textContent = m.descripcion;
-        card.appendChild(desc);
+  checkGarantiasStatus().then(hasActiveGarantias => {
+    const token = localStorage.getItem('cs_token');
+    fetch(API_MENU, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    }).then(r=>r.json()).then(({ok,menus})=>{
+      const grid=document.getElementById('menuGrid');
+      document.getElementById('menuSpinner').remove();
+      if(!ok){grid.textContent='Error menú';return;}
       
-      grid.appendChild(card);
+      grid.innerHTML = ''; // Clear spinner
+
+      // Filtramos el menú con id 15 (Ver más) para no mostrarlo en esta página
+      const menusFiltrados = menus.filter(menu => menu.id !== 15);
+      
+      menusFiltrados.forEach(m=>{
+        // Check if this is the Garantias module (menu.id === 6)
+        // and if there are no active warranties
+        const isGarantiasModule = (m.id === 6);
+        const shouldDisableGarantias = isGarantiasModule && !hasActiveGarantias;
+
+        const card = document.createElement('div');
+        card.className='menu-card';
+        if (shouldDisableGarantias) {
+            card.classList.add('disabled-card'); // Add a class for styling
+            card.onclick = () => {
+                alert('Todas tus garantías han expirado.');
+            }; // Override click to show alert
+        } else {
+            card.onclick = () => openModule(m);
+        }
+        
+        const iconElement = icon(m.url_icono);
+        card.appendChild(iconElement);
+        
+        const title = document.createElement('h6');
+        title.textContent = m.nombre;
+        card.appendChild(title);
+        
+        if(m.descripcion) {
+          const desc = document.createElement('p');
+          desc.textContent = m.descripcion;
+          card.appendChild(desc);
+        }
+        
+        grid.appendChild(card);
+      });
     });
   });
+
+  async function checkGarantiasStatus() {
+    const token = localStorage.getItem('cs_token');
+    if (!token) return false; // No token, assume no active warranties for safety
+
+    try {
+        const response = await fetch('../api/garantias.php', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (!data.ok || !data.garantias || data.garantias.length === 0) {
+            return false; // No data or no warranties, so no active warranties
+        }
+
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Normalize to start of day for comparison
+
+        for (const garantia of data.garantias) {
+            // Parse vigencia string "dd/mm/yyyy" to Date object
+            const parts = garantia.vigencia.split('/');
+            const vigenciaDate = new Date(parts[2], parts[1] - 1, parts[0]); // Year, Month (0-indexed), Day
+            vigenciaDate.setHours(0, 0, 0, 0); // Normalize
+
+            if (vigenciaDate >= currentDate) {
+                return true; // Found at least one active warranty
+            }
+        }
+        return false; // All warranties have expired
+    } catch (error) {
+        console.error('Error checking garantias status:', error);
+        return false; // On error, assume no active warranties
+    }
+  }
 
   /* ---------- Logout ---------- */
 

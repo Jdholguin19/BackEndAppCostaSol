@@ -102,7 +102,7 @@ try{
     }
 
     /* ---------- 4. obtener responsable aleatorio ---------- */
-    $respId = $db->query("SELECT id FROM responsable WHERE estado=1 ORDER BY RAND() LIMIT 1")
+    $respId = $db->query("SELECT id FROM responsable WHERE estado=1 AND id IN (1, 2) ORDER BY RAND() LIMIT 1")
                  ->fetchColumn();
 
     /* ---------- 5. crear numero_solicitud ---------- */
