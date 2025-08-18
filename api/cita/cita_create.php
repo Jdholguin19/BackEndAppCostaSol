@@ -7,6 +7,8 @@ $propiedad = (int)($_POST['id_propiedad']??0);
 $proposito = (int)($_POST['proposito_id']??0);
 $fecha = $_POST['fecha']??'';
 $hora  = $_POST['hora']??'';
+$observaciones = isset($_POST['observaciones']) ? trim($_POST['observaciones']) : null;
+
 if(!$uid||!$propiedad||!$proposito||
    !preg_match('/^\d{4}-\d{2}-\d{2}$/',$fecha)||
    !preg_match('/^\d{2}:\d{2}$/',$hora))
@@ -30,8 +32,7 @@ $resp=$db->prepare("
                  AND IFNULL(d.fecha_vigencia_hasta,'2999-12-31')
        AND TIME(:h) BETWEEN d.hora_inicio AND d.hora_fin
  LEFT   JOIN agendamiento_visitas v ON v.responsable_id=r.id
-       AND v.fecha_reunion=:f AND v.hora_reunion = TIME(:h) AND v.estado<>'CANCELADO'
- GROUP  BY r.id
+       AND v.fecha_reunion=:f AND v.hora_reunion = TIME(:h) AND v.estado<>'CANCELADO'\n GROUP  BY r.id
  ORDER  BY n ASC, RAND() ASC
  LIMIT 1");
 $resp->execute([':f'=>$fecha,':h'=>$hora, ':dia_calculated'=>$dia]);
@@ -42,11 +43,12 @@ if(!$respId) throw new Exception('Sin responsable');
 $ins=$db->prepare("
  INSERT INTO agendamiento_visitas
    (id_usuario,responsable_id,proposito_id,id_propiedad,
-    fecha_reunion,hora_reunion,estado)
- VALUES(:u,:r,:p,:prop,:f,:h,'PROGRAMADO')");
+    fecha_reunion,hora_reunion,estado,observaciones)
+ VALUES(:u,:r,:p,:prop,:f,:h,'PROGRAMADO',:obs)");
 $ins->execute([
  ':u'=>$uid,':r'=>$respId,':p'=>$proposito,':prop'=>$propiedad,
- ':f'=>$fecha,':h'=>$hora]);
+ ':f'=>$fecha,':h'=>$hora,':obs'=>$observaciones]);
+
 $db->commit();
 echo json_encode(['ok'=>true]);
 }catch(PDOException $e){

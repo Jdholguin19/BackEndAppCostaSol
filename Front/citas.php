@@ -9,6 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_citas.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -60,7 +61,7 @@ function fechaLarga(sqlDate){
 
 /* plantilla */
 function card(c){
-  const badge = `<span class="badge badge-estado ${c.estado}">${c.estado}</span>`;
+  const badge = `<span class="badge badge-estado ${c.estado}" data-cita-id="${c.id}" data-responsable-id="${c.responsable_id}">${c.estado}</span>`;
   return `
   <div class="card card-cita">
     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -84,6 +85,7 @@ function card(c){
     <p><i class="bi bi-calendar"></i>${fechaLarga(c.fecha)}</p>
     <p><i class="bi bi-clock"></i>${c.hora}</p>
     <p><i class="bi bi-geo-alt"></i>${c.proyecto}</p>
+    ${c.observaciones ? `<p><i class="bi bi-chat-right-text"></i>${c.observaciones}</p>` : ''}
 
     <div class="responsable-section">
       <img src="${c.url_foto || 'https://via.placeholder.com/42'}" class="responsable-avatar">
@@ -195,6 +197,88 @@ async function eliminarCita(idCita){
     alert('Error de conexión al intentar eliminar la cita.');
   }
 }
+
+// --- Lógica de actualización de estado ---
+const wrap = document.getElementById('citasWrap');
+
+function showStatusMenu(target, citaId, responsableId) {
+  // Verificar si el usuario es el responsable asignado
+  if (!u.is_responsable || u.id != responsableId) {
+    return;
+  }
+
+  // Eliminar cualquier popup existente
+  document.querySelectorAll('.status-popup').forEach(p => p.remove());
+
+  const popup = document.createElement('div');
+  popup.className = 'status-popup';
+
+  const statuses = ['PROGRAMADO', 'REALIZADO', 'CANCELADO'];
+  statuses.forEach(status => {
+    const option = document.createElement('button');
+    option.className = 'status-option';
+    option.textContent = status;
+    option.onclick = () => updateStatus(citaId, status);
+    popup.appendChild(option);
+  });
+
+  document.body.appendChild(popup);
+
+  // Posicionar el popup
+  const rect = target.getBoundingClientRect();
+  popup.style.left = `${rect.left}px`;
+  popup.style.top = `${rect.bottom + window.scrollY}px`;
+
+  // Cerrar el popup al hacer clic afuera
+  setTimeout(() => {
+    document.addEventListener('click', function closePopup(event) {
+      if (!popup.contains(event.target)) {
+        popup.remove();
+        document.removeEventListener('click', closePopup);
+      }
+    });
+  }, 0);
+}
+
+async function updateStatus(citaId, newStatus) {
+  const token = localStorage.getItem('cs_token');
+  if (!token) return;
+
+  try {
+    const response = await fetch('../api/cita/cita_update_estado.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        cita_id: citaId,
+        estado: newStatus
+      })
+    });
+
+    const data = await response.json();
+
+    if (data.ok) {
+      alert('Estado actualizado correctamente.');
+      location.reload(); // Recargar para ver el cambio
+    } else {
+      alert('Error al actualizar el estado: ' + (data.mensaje || 'Error desconocido.'));
+    }
+  } catch (error) {
+    console.error('Error en la solicitud de actualización de estado:', error);
+    alert('Error de conexión al intentar actualizar el estado.');
+  }
+}
+
+wrap.addEventListener('click', (e) => {
+  const badge = e.target.closest('.badge-estado');
+  if (badge) {
+    const citaId = badge.dataset.citaId;
+    const responsableId = badge.dataset.responsableId;
+    showStatusMenu(badge, citaId, responsableId);
+  }
+});
 </script>
 </body>
 </html>

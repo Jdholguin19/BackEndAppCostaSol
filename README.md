@@ -287,6 +287,33 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 
 *   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada en esta revisión.
 
+### Actualizaciones Recientes
+
+*   **Corrección en Carga de Propiedades para Citas Nuevas:**
+    *   Se solucionó un error en `Front/cita_nueva.php` que impedía la carga de propiedades en el selector.
+    *   **Causa:** La solicitud `fetch` a `api/obtener_propiedades.php` no incluía el token de autenticación en la cabecera `Authorization`.
+    *   **Solución:** Se modificó la llamada `fetch` para incluir el `Bearer Token`, asegurando la correcta autenticación y carga de los datos.
+
+*   **Visualización Dinámica de Módulos por Rol y Estado:**
+    *   **Ocultar Módulo "Selección Acabados":** Se implementó una lógica en `Front/menu_front.php` y `Front/menu2.php` para que el módulo "Selección Acabados" se oculte completamente para los usuarios con el rol de "Residente" (`rol_id = 2`).
+    *   **Desactivación de Módulos "Garantías" y "CTG":** Se extendió la funcionalidad para que el módulo "CTG" también se desactive (junto con "Garantías") si la garantía del usuario ha expirado. Esta restricción no se aplica a los usuarios "responsables".
+    *   **Corrección de Visualización de Menú Principal:** Se ajustó la lógica en `Front/menu_front.php` para asegurar que, aunque se oculte un módulo para un rol específico, la vista principal siempre muestre 4 módulos, cargando el siguiente disponible en la lista.
+
+Se han implementado las siguientes mejoras y correcciones en el proyecto:
+
+*   **Corrección de Error en Notificaciones CTG:**
+    *   Se resolvió un `TypeError: Cannot read properties of null (reading 'appendChild')` en `Front/ctg/ctg_detalle.php` añadiendo el elemento `<div id="notificationArea">` necesario para la visualización de alertas.
+*   **Restricción de Asignación de Responsables en CTG/PQR:**
+    *   Se modificaron los endpoints `api/ctg/ctg_create.php` y `api/pqr/pqr_create.php` para asegurar que los nuevos CTG y PQR solo sean asignados aleatoriamente a responsables con `id` 1 o 2, excluyendo al `id` 3.
+*   **Gestión Dinámica del Módulo de Garantías:**
+    *   Se implementó una lógica en `Front/menu_front.php` y `Front/menu2.php` para verificar la vigencia de las garantías de un usuario.
+    *   Si todas las garantías de un usuario han expirado, el módulo de "Garantías" en el menú principal se desactiva visualmente y su funcionalidad de clic se reemplaza por una alerta informativa.
+    *   Se añadió la función `checkGarantiasStatus()` para realizar esta verificación.
+    *   Se incluyeron estilos CSS para la clase `.disabled-card` en `Front/assets/css/style_main.css` para la representación visual de los módulos inactivos.
+*   **Actualización de la Estructura de Carpetas:**
+    *   Se actualizó el diagrama de la estructura de carpetas en este `README.md` para incluir la carpeta `appcostasol/` y el directorio `Front/includes/`.
+    *   También se añadieron los archivos `api/bottom_nav.php` y `Front/menu2.php` que faltaban en el diagrama.
+
 ---
 
 Este `README.md` proporciona una visión general completa del proyecto. Para detalles específicos de implementación o depuración, se recomienda revisar el código fuente de los archivos relevantes.

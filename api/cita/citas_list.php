@@ -53,6 +53,8 @@ try {
     $sql = "
        SELECT
             v.id,
+            v.responsable_id,
+            v.observaciones,
             pa.proposito,                                 -- nombre del propósito (tabla nueva)
             v.fecha_reunion              AS fecha,
             TIME_FORMAT(v.hora_reunion,'%H:%i') AS hora,

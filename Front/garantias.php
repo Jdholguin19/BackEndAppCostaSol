@@ -34,7 +34,7 @@
   <div class="flex-container">
     <div class="text-content">
         <h4><i class="bi bi-exclamation-triangle-fill info-icon-warning"></i> Información importante</h4>
-        <p>Las garantías son válidas siempre y cuando se haya realizado el mantenimiento recomendado y el uso adecuado de los elementos, de acuerdo al manual de uso y mantenimiento.</p>
+        <p>Las garantías son válidas siempre y cuando se haya realizado el mantenimiento recomendado y el uso adecuado de los elementos, de acuerdo al <a href="../api/mcm.php" target="_blank">manual de uso y mantenimiento</a>.</p>
     </div>
     </div>
   </div>

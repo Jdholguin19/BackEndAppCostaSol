@@ -439,13 +439,6 @@ include '../api/bottom_nav.php';
       const renderMenu = (menuItems) => {
           grid.innerHTML = ''; // Clear grid before rendering
           menuItems.forEach(m=> {
-              // Condición para ocultar el módulo a los residentes
-              const isAcabadosModule = m.id === 1;
-              const isResidente = u.rol_id === 2;
-              if (isAcabadosModule && isResidente) {
-                  return; // No renderizar este módulo
-              }
-
               // Check if this is the Garantias module (menu.id === 6)
               // and if there are no active warranties
               const isGarantiasModule = (m.id === 6);
@@ -484,8 +477,14 @@ include '../api/bottom_nav.php';
           });
       };
 
-      const initialMenus = menus.slice(0, 4);
-      const allMenus = menus;
+      // Filter menus for Residente role before slicing
+      const isResidente = u.rol_id === 2;
+      const availableMenus = isResidente 
+        ? menus.filter(m => m.id !== 1) 
+        : menus;
+
+      const initialMenus = availableMenus.slice(0, 4);
+      const allMenus = availableMenus;
 
       renderMenu(initialMenus);
 
