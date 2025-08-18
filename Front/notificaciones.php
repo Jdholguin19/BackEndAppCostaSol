@@ -23,6 +23,7 @@
   </div>
 </div>
 
+
 <!-- Main Content -->
 <div class="main-content">
   <div class="notifications-container">
