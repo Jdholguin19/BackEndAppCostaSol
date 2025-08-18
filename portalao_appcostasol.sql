@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-08-2025 a las 15:20:47
+-- Tiempo de generación: 18-08-2025 a las 22:45:14
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -35,23 +35,33 @@ CREATE TABLE `agendamiento_visitas` (
   `fecha_ingreso` datetime DEFAULT current_timestamp(),
   `fecha_reunion` date NOT NULL,
   `hora_reunion` time NOT NULL,
-  `estado` enum('PROGRAMADO','REALIZADO','CANCELADO') DEFAULT 'PROGRAMADO',
+  `estado` enum('PROGRAMADO','CONFIRMADO','CANCELADO') DEFAULT 'PROGRAMADO',
   `resultado` varchar(150) DEFAULT NULL,
   `fecha_actualizacion` datetime DEFAULT NULL ON UPDATE current_timestamp(),
-  `id_propiedad` bigint(20) UNSIGNED DEFAULT NULL
+  `id_propiedad` bigint(20) UNSIGNED DEFAULT NULL,
+  `observaciones` text DEFAULT NULL COMMENT 'Objetivo o descripcion breve de la visita proporcionada por el usario'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `agendamiento_visitas`
 --
 
-INSERT INTO `agendamiento_visitas` (`id`, `id_usuario`, `responsable_id`, `proposito_id`, `fecha_ingreso`, `fecha_reunion`, `hora_reunion`, `estado`, `resultado`, `fecha_actualizacion`, `id_propiedad`) VALUES
-(38, 9, 2, 1, '2025-08-13 11:15:58', '2025-08-14', '13:00:00', 'PROGRAMADO', NULL, NULL, 10),
-(39, 8, 1, 2, '2025-08-13 11:16:35', '2025-08-15', '10:00:00', 'PROGRAMADO', NULL, NULL, 5),
-(40, 9, 1, 3, '2025-08-13 11:16:59', '2025-08-25', '15:00:00', 'PROGRAMADO', NULL, NULL, 10),
-(41, 8, 2, 4, '2025-08-13 11:58:47', '2025-08-19', '12:00:00', 'PROGRAMADO', NULL, NULL, 5),
-(42, 8, 1, 1, '2025-08-13 12:15:23', '2025-08-27', '15:00:00', 'PROGRAMADO', NULL, NULL, 5),
-(43, 8, 2, 1, '2025-08-14 11:50:40', '2025-08-20', '13:00:00', 'PROGRAMADO', NULL, NULL, 5);
+INSERT INTO `agendamiento_visitas` (`id`, `id_usuario`, `responsable_id`, `proposito_id`, `fecha_ingreso`, `fecha_reunion`, `hora_reunion`, `estado`, `resultado`, `fecha_actualizacion`, `id_propiedad`, `observaciones`) VALUES
+(38, 9, 2, 1, '2025-08-13 11:15:58', '2025-08-14', '13:00:00', 'PROGRAMADO', NULL, NULL, 10, NULL),
+(39, 8, 1, 2, '2025-08-13 11:16:35', '2025-08-15', '10:00:00', 'PROGRAMADO', NULL, NULL, 5, NULL),
+(40, 9, 1, 3, '2025-08-13 11:16:59', '2025-08-25', '15:00:00', 'PROGRAMADO', NULL, NULL, 10, NULL),
+(41, 8, 2, 4, '2025-08-13 11:58:47', '2025-08-19', '12:00:00', 'PROGRAMADO', NULL, NULL, 5, NULL),
+(42, 8, 1, 1, '2025-08-13 12:15:23', '2025-08-27', '15:00:00', 'PROGRAMADO', NULL, NULL, 5, NULL),
+(43, 8, 2, 1, '2025-08-14 11:50:40', '2025-08-20', '13:00:00', 'PROGRAMADO', NULL, NULL, 5, NULL),
+(44, 8, 2, 1, '2025-08-18 12:45:04', '2025-08-19', '15:00:00', 'PROGRAMADO', NULL, NULL, 5, 'Revisar la pared'),
+(45, 8, 2, 1, '2025-08-18 12:45:31', '2025-08-26', '12:00:00', 'PROGRAMADO', NULL, NULL, 5, ''),
+(46, 8, 2, 1, '2025-08-18 12:45:59', '2025-08-19', '13:00:00', 'PROGRAMADO', NULL, NULL, 5, ''),
+(47, 8, 1, 2, '2025-08-18 12:47:40', '2025-08-21', '14:00:00', 'PROGRAMADO', NULL, NULL, 5, ''),
+(48, 8, 1, 3, '2025-08-18 12:48:10', '2025-08-22', '10:00:00', 'PROGRAMADO', NULL, NULL, 5, ''),
+(49, 8, 2, 1, '2025-08-18 12:48:17', '2025-08-21', '14:00:00', 'PROGRAMADO', NULL, NULL, 5, ''),
+(50, 8, 1, 4, '2025-08-18 12:48:28', '2025-08-20', '15:00:00', 'PROGRAMADO', NULL, NULL, 5, ''),
+(51, 8, 2, 2, '2025-08-18 12:48:39', '2025-08-22', '16:00:00', 'PROGRAMADO', NULL, '2025-08-18 13:06:02', 5, ''),
+(52, 8, 1, 1, '2025-08-18 12:48:46', '2025-08-22', '14:00:00', 'PROGRAMADO', NULL, NULL, 5, '');
 
 -- --------------------------------------------------------
 
@@ -222,7 +232,7 @@ INSERT INTO `menu` (`id`, `nombre`, `descripcion`, `url_icono`, `estado`, `orden
 (11, 'MCM', 'Manual de uso, Conservación Y\nMantenimiento de la vivienda', 'https://raw.githubusercontent.com/Jdholguin19/BackEndAppCostaSol/15d4cbb5e8fad6336a89f04567a6ca0ee0d7b5c2/imagenes/mcm.svg', 1, 2, '2025-08-06 10:32:06', '2025-08-14 09:22:10', NULL, 0),
 (12, 'Paleta Vegetal', 'Inspírate y ornamenta tu jardín ', 'https://raw.githubusercontent.com/Jdholguin19/BackEndAppCostaSol/67c46d5b804b0915b795839b6092fa44cbd49ec6/imagenes/tree.svg', 1, 3, '2025-08-06 10:32:06', '2025-08-14 09:22:53', NULL, 0),
 (13, 'Admin-Noticias', 'Crea nuevas notificas para los clientes', 'https://raw.githubusercontent.com/Jdholguin19/BackEndAppCostaSol/cd80644730b850cd6794d75e174a0df6e063f17d/imagenes/news.svg', 1, 13, '2025-08-06 10:32:06', '2025-08-06 14:46:47', NULL, 0),
-(14, 'Admin-Responsable', 'Administra tus responsables', 'https://cdn.prod.website-files.com/5f68a65d0932e3546d41cc61/5f9bb022fda3f6ccfb8e316a_1604038688273-admin%252B-best-shopify-apps.png', 1, 14, '2025-08-13 15:34:06', '2025-08-13 16:38:38', NULL, 0),
+(14, 'Admin-Responsable', 'Administra tus responsables', 'https://cdn.prod.website-files.com/5f68a65d0932e3546d41cc61/5f9bb022fda3f6ccfb8e316a_1604038688273-admin%252B-best-shopify-apps.png', 0, 14, '2025-08-13 15:34:06', '2025-08-18 11:03:19', NULL, 0),
 (15, 'Ver más', 'Explora todas las opciones', 'https://raw.githubusercontent.com/Jdholguin19/BackEndAppCostaSol/ab7c3531d7e648fa535cd942c4d9794737b65156/imagenes/vermas.svg', 1, 4, '2025-08-13 15:34:06', '2025-08-14 13:18:03', NULL, 0);
 
 -- --------------------------------------------------------
@@ -432,8 +442,8 @@ CREATE TABLE `responsable` (
 
 INSERT INTO `responsable` (`id`, `nombre`, `correo`, `contrasena_hash`, `url_foto_perfil`, `area`, `estado`, `fecha_ingreso`, `fecha_actualizacion`, `token`, `onesignal_player_id`, `fecha_actualizacion_player_id`) VALUES
 (1, 'Ana María Felix', 'coordinadorsac@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg', 'SAC', 1, '2025-06-24 11:03:35', '2025-08-18 08:06:30', 'En7lg2oM4ntrfKMdIr/ur8XZT+lA9Ey2', '4b2ad379-5372-40fe-9532-b46bb026fa7a', '2025-08-18 13:06:30'),
-(2, 'Carla Oquendo', 'servicioalcliente@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png', 'SAC', 1, '2025-06-24 11:07:21', '2025-08-18 08:17:47', 'bxbqOup88G+b0YWmmGqrDeFO9DM9APb5', 'b7c880b7-10a3-4d48-a66e-749b20ffbf92', '2025-08-18 13:17:47'),
-(3, 'Admin', 'admin@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://cdn.prod.website-files.com/5f68a65d0932e3546d41cc61/5f9bb022fda3f6ccfb8e316a_1604038688273-admin%252B-best-shopify-apps.png', 'SAC', 1, '2025-08-13 09:25:21', '2025-08-18 08:07:48', 'LGiZ/MkFRXkgqTIBg8gB+id2gVyxSe4W', 'ac37e2ab-53af-40d3-bd53-6547df90b2a8', '2025-08-18 13:07:48');
+(2, 'Carla Oquendo', 'servicioalcliente@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png', 'SAC', 1, '2025-06-24 11:07:21', '2025-08-18 15:42:14', 'cvrnkA/AWHsGX+rHM/KfARYHqBwqtylz', 'b7c880b7-10a3-4d48-a66e-749b20ffbf92', '2025-08-18 18:50:35'),
+(3, 'Admin', 'admin@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://cdn.prod.website-files.com/5f68a65d0932e3546d41cc61/5f9bb022fda3f6ccfb8e316a_1604038688273-admin%252B-best-shopify-apps.png', 'SAC', 1, '2025-08-13 09:25:21', '2025-08-18 15:31:03', 'rOYySaLolUkOFum3xevE/oRk1uZ/GjV+', 'ac37e2ab-53af-40d3-bd53-6547df90b2a8', '2025-08-18 20:31:03');
 
 -- --------------------------------------------------------
 
@@ -458,16 +468,16 @@ CREATE TABLE `responsable_disponibilidad` (
 --
 
 INSERT INTO `responsable_disponibilidad` (`id`, `responsable_id`, `dia_semana`, `hora_inicio`, `hora_fin`, `fecha_vigencia_desde`, `fecha_vigencia_hasta`, `activo`, `intervalo_minutos`) VALUES
-(1, 1, 1, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(2, 1, 2, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(3, 1, 3, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(4, 1, 4, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(5, 1, 5, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(6, 2, 1, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(7, 2, 2, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(8, 2, 3, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(9, 2, 4, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 45),
-(10, 2, 5, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 45);
+(1, 1, 1, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(2, 1, 2, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(3, 1, 3, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(4, 1, 4, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(5, 1, 5, '09:00:00', '17:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(6, 2, 1, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(7, 2, 2, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(8, 2, 3, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(9, 2, 4, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 60),
+(10, 2, 5, '08:00:00', '16:00:00', '2025-06-01', '2026-06-01', 1, 60);
 
 -- --------------------------------------------------------
 
@@ -540,16 +550,16 @@ CREATE TABLE `rol_menu` (
 --
 
 INSERT INTO `rol_menu` (`rol_id`, `menu_id`) VALUES
+(1, 1),
+(1, 2),
 (1, 3),
 (1, 4),
 (1, 5),
-(1, 6),
 (1, 8),
 (1, 9),
 (1, 12),
 (1, 15),
-(2, 1),
-(2, 2),
+(2, 6),
 (2, 11),
 (3, 7),
 (3, 10),
@@ -790,7 +800,7 @@ INSERT INTO `usuario` (`id`, `rol_id`, `nombres`, `apellidos`, `cedula`, `telefo
 (5, 1, 'Rafael', 'Romero', NULL, NULL, 'rromero@thaliavictoria.com.ec', '$2y$10$uqExlkQ7Xw6xfgzbQyqefOJmFOGrL4Qt.iMnUliWzb5iH9xVBZIou', 0, NULL, '2025-07-14 16:11:24', NULL, NULL, NULL),
 (6, 1, 'Jonathan', 'Quijano', NULL, NULL, 'jquijano@thaliavictoria.com.ec', '$2y$10$AEHyeOLBMhOPt0PhJdpy8e8WWyMM7jEbKg6MQiwfYjCH7ZHnp/at2', 0, NULL, '2025-07-14 16:12:49', NULL, NULL, NULL),
 (7, 1, 'Joffre', 'Holguin', NULL, NULL, 'joffreholguin19@gmail.com', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 1, 'https://cdn-icons-png.flaticon.com/512/9187/9187532.png', '2025-07-22 10:50:30', 'JEYSzRChFPbwcMEJGJK/+6RZxRrktqnP', NULL, NULL),
-(8, 2, 'Daniel', 'Alarcon', NULL, NULL, 'danielalarcon@gmail.com', '$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC', 1, 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png', '2025-07-24 16:06:19', '5GBl14/6nH+wAUu4RXG/cW2lmUE34fvW', '4b2ad379-5372-40fe-9532-b46bb026fa7a', '2025-08-18 13:19:41'),
+(8, 2, 'Daniel', 'Alarcon', NULL, NULL, 'danielalarcon@gmail.com', '$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC', 1, 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png', '2025-07-24 16:06:19', 'hEZA+bnmwffDkdk1EIm7iuoa7The83Fc', '4b2ad379-5372-40fe-9532-b46bb026fa7a', '2025-08-18 19:08:04'),
 (9, 1, 'Felipe', 'Pilligua', NULL, NULL, 'fepilligua@gmail.com', '$2y$10$reWiHb52f7EPZNo98Q3kz.H0Df6eFFB6FJrgll3nGywKhCmgl/hvC', 1, 'https://cdn-icons-png.flaticon.com/512/219/219983.png', '2025-07-28 08:42:37', '65oP60rZ0yYLCKdp22WUzpI07dl/KViI', NULL, '2025-08-14 14:24:51'),
 (10, 1, 'Jose', 'Tenesaca', NULL, NULL, 'josesaca@gmail.com', '$2y$10$8LEm..7rJ3ii/7QWAivJOuHJMjh3lQ4n/qEaqTI66Wu3YPKLcpble', 0, NULL, '2025-08-05 13:25:22', 'iCHj2yX2GP5NG9lt7+NCkN/wPFr7tH2D', NULL, '2025-08-05 18:32:06'),
 (11, 1, 'Martin', 'Mera', NULL, NULL, 'martin@gmial.com', '$2y$10$UtKsBWDz.Hdf5DPHSlmV5etztt5mez967KwQccui431EB5woBL4au', 0, 'https://cdn-icons-png.flaticon.com/512/219/219983.png', '2025-08-06 08:16:43', 'tDe030ZBD99SVoDhzEecbw4h/pEyY0v1', NULL, '2025-08-06 14:35:50'),
@@ -1031,7 +1041,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `agendamiento_visitas`
 --
 ALTER TABLE `agendamiento_visitas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `ctg`

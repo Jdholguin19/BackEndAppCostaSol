@@ -47,6 +47,15 @@
     <div id="propGrid" class="purpose-grid"></div>
   </div>
 
+  <!-- Observacion Section -->
+  <div class="form-section">
+    <label class="section-title">
+      <i class="bi bi-pencil-square"></i>
+      Objetivo de la visita (Opcional)
+    </label>
+    <textarea id="txtObservaciones" class="form-control" rows="3" placeholder="Escriba aquí una breve descripción del propósito de su visita..."></textarea>
+  </div>
+
   <!-- Fechas Section -->
   <div class="form-section">
     <label class="section-title">
@@ -116,7 +125,12 @@ function reset(lvl){
 }
 
 /* ---------- cargar propiedades ---------- */
-fetch('../api/obtener_propiedades.php?id_usuario='+u.id)
+const token = localStorage.getItem('cs_token');
+fetch('../api/obtener_propiedades.php?id_usuario='+u.id, {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+})
  .then(r=>r.json()).then(d=>{
    if(!d.ok) return;
    d.propiedades.forEach(p=>{
@@ -205,6 +219,7 @@ btnOk.onclick = ()=>{
   fd.append('proposito_id', propositoId);
   fd.append('fecha'       , fechaSel);
   fd.append('hora'        , horaSel);
+  fd.append('observaciones', document.getElementById('txtObservaciones').value);
 
   fetch('../api/cita/cita_create.php',{method:'POST',body:fd})
    .then(r=>r.json()).then(d=>{

@@ -289,6 +289,16 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 
 ### Actualizaciones Recientes
 
+*   **Corrección en Carga de Propiedades para Citas Nuevas:**
+    *   Se solucionó un error en `Front/cita_nueva.php` que impedía la carga de propiedades en el selector.
+    *   **Causa:** La solicitud `fetch` a `api/obtener_propiedades.php` no incluía el token de autenticación en la cabecera `Authorization`.
+    *   **Solución:** Se modificó la llamada `fetch` para incluir el `Bearer Token`, asegurando la correcta autenticación y carga de los datos.
+
+*   **Visualización Dinámica de Módulos por Rol y Estado:**
+    *   **Ocultar Módulo "Selección Acabados":** Se implementó una lógica en `Front/menu_front.php` y `Front/menu2.php` para que el módulo "Selección Acabados" se oculte completamente para los usuarios con el rol de "Residente" (`rol_id = 2`).
+    *   **Desactivación de Módulos "Garantías" y "CTG":** Se extendió la funcionalidad para que el módulo "CTG" también se desactive (junto con "Garantías") si la garantía del usuario ha expirado. Esta restricción no se aplica a los usuarios "responsables".
+    *   **Corrección de Visualización de Menú Principal:** Se ajustó la lógica en `Front/menu_front.php` para asegurar que, aunque se oculte un módulo para un rol específico, la vista principal siempre muestre 4 módulos, cargando el siguiente disponible en la lista.
+
 Se han implementado las siguientes mejoras y correcciones en el proyecto:
 
 *   **Corrección de Error en Notificaciones CTG:**
