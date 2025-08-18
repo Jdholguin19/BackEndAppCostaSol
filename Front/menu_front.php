@@ -425,45 +425,112 @@ include '../api/bottom_nav.php';
   });
 
   /* ---------- Menú ---------- */
-  fetch(API_MENU, {
-    headers: {
-      'Authorization': `Bearer ${token}`
-    }
-  }).then(r=>r.json()).then(({ok,menus})=>{
-    const grid=document.getElementById('menuGrid');
-    document.getElementById('menuSpinner').remove();
-    if(!ok){grid.textContent='Error menú';return;}
-    
-    const renderMenu = (menuItems) => {
-        grid.innerHTML = ''; // Clear grid before rendering
-        menuItems.forEach(m=> {
-            const card = document.createElement('div');
-            card.className='menu-card';
-            card.onclick = () => openModule(m);
-            
-            const iconElement = icon(m.url_icono);
-            card.appendChild(iconElement);
-            
-            const title = document.createElement('h6');
-            title.textContent = m.nombre;
-            card.appendChild(title);
-            
-            if(m.descripcion) {
-                const desc = document.createElement('p');
-                desc.textContent = m.descripcion;
-                card.appendChild(desc);
-            }
-            
-            grid.appendChild(card);
-        });
-    };
+  // Call checkGarantiasStatus before fetching API_MENU
+  checkGarantiasStatus().then(hasActiveGarantias => {
+    fetch(API_MENU, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(r=>r.json()).then(({ok,menus})=>{
+      const grid=document.getElementById('menuGrid');
+      document.getElementById('menuSpinner').remove();
+      if(!ok){grid.textContent='Error menú';return;}
+      
+      const renderMenu = (menuItems) => {
+          grid.innerHTML = ''; // Clear grid before rendering
+          menuItems.forEach(m=> {
+              // Condición para ocultar el módulo a los residentes
+              const isAcabadosModule = m.id === 1;
+              const isResidente = u.rol_id === 2;
+              if (isAcabadosModule && isResidente) {
+                  return; // No renderizar este módulo
+              }
 
-    const initialMenus = menus.slice(0, 4);
-    const allMenus = menus;
+              // Check if this is the Garantias module (menu.id === 6)
+              // and if there are no active warranties
+              const isGarantiasModule = (m.id === 6);
+              const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
+              const shouldDisable = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
 
-    renderMenu(initialMenus);
+              const card = document.createElement('div');
+              card.className='menu-card';
+              if (shouldDisable) {
+                  card.classList.add('disabled-card'); // Add a class for styling
+                  card.onclick = () => {
+                      if (isGarantiasModule) {
+                        alert('Todas tus garantías han expirado.');
+                      } else if (isCtgModule) {
+                        alert('El módulo CTG está desactivado porque su garantía ha expirado.');
+                      }
+                  }; // Override click to show alert
+              } else {
+                  card.onclick = () => openModule(m);
+              }
+              
+              const iconElement = icon(m.url_icono);
+              card.appendChild(iconElement);
+              
+              const title = document.createElement('h6');
+              title.textContent = m.nombre;
+              card.appendChild(title);
+              
+              if(m.descripcion) {
+                  const desc = document.createElement('p');
+                  desc.textContent = m.descripcion;
+                  card.appendChild(desc);
+              }
+              
+              grid.appendChild(card);
+          });
+      };
 
+      const initialMenus = menus.slice(0, 4);
+      const allMenus = menus;
+
+      renderMenu(initialMenus);
+
+    });
   });
+
+  // ... rest of the code ...
+
+  async function checkGarantiasStatus() {
+    const token = localStorage.getItem('cs_token');
+    if (!token) return false; // No token, assume no active warranties for safety
+
+    try {
+        const response = await fetch('../api/garantias.php', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (!data.ok || !data.garantias || data.garantias.length === 0) {
+            return false; // No data or no warranties, so no active warranties
+        }
+
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Normalize to start of day for comparison
+
+        for (const garantia of data.garantias) {
+            // Parse vigencia string "dd/mm/yyyy" to Date object
+            const parts = garantia.vigencia.split('/');
+            const vigenciaDate = new Date(parts[2], parts[1] - 1, parts[0]); // Year, Month (0-indexed), Day
+            vigenciaDate.setHours(0, 0, 0, 0); // Normalize
+
+            if (vigenciaDate >= currentDate) {
+                return true; // Found at least one active warranty
+            }
+        }
+        return false; // All warranties have expired
+    } catch (error) {
+        console.error('Error checking garantias status:', error);
+        return false; // On error, assume no active warranties
+    }
+  }
 
   /* ---------- Logout ---------- */
 

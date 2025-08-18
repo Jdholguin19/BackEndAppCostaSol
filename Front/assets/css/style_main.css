@@ -620,3 +620,25 @@ body {
     position: relative; /* Ensure positioning context for absolute icon */
     padding-left: 30px; /* Make space for the icon on the left */
 }
+
+/* Styles for disabled menu cards */
+.menu-card.disabled-card {
+    opacity: 0.5; /* Reduce opacity to make it look disabled */
+    pointer-events: none; /* Disable click events */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    background-color: #f0f0f0; /* Lighter background */
+    border-color: #e0e0e0; /* Lighter border */
+    box-shadow: none; /* Remove shadow */
+    transform: none; /* Remove hover transform */
+}
+
+.menu-card.disabled-card:hover {
+    transform: none; /* Ensure no transform on hover */
+    box-shadow: none; /* Ensure no shadow on hover */
+}
+
+.menu-card.disabled-card .menu-icon,
+.menu-card.disabled-card h6,
+.menu-card.disabled-card p {
+    color: #9e9e9e; /* Gray out text and icons */
+}
