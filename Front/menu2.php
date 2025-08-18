@@ -179,6 +179,13 @@ include '../api/bottom_nav.php';
         return;
     }*/
 
+    if ( menu.id === 1 ||
+        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        location.href = 'seleccion_acabados.php';          // <<<<<<
+        return;
+    } 
+
+
     if ( menu.id === 3 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
         location.href = 'citas.php';          // <<<<<<
@@ -260,18 +267,29 @@ include '../api/bottom_nav.php';
       const menusFiltrados = menus.filter(menu => menu.id !== 15);
       
       menusFiltrados.forEach(m=>{
-        // Check if this is the Garantias module (menu.id === 6)
-        // and if there are no active warranties
+        // Condición para ocultar el módulo a los residentes
+        const isAcabadosModule = m.id === 1;
+        const isResidente = u.rol_id === 2;
+        if (isAcabadosModule && isResidente) {
+            return; // No renderizar este módulo
+        }
+
         const isGarantiasModule = (m.id === 6);
-        const shouldDisableGarantias = isGarantiasModule && !hasActiveGarantias;
+        const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
+        const shouldDisableGarantias = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
 
         const card = document.createElement('div');
         card.className='menu-card';
+
         if (shouldDisableGarantias) {
-            card.classList.add('disabled-card'); // Add a class for styling
+            card.classList.add('disabled-card');
             card.onclick = () => {
-                alert('Todas tus garantías han expirado.');
-            }; // Override click to show alert
+                if (isGarantiasModule) {
+                    alert('Todas tus garantías han expirado.');
+                } else if (isCtgModule) {
+                    alert('El módulo CTG está desactivado porque su garantía ha expirado.');
+                }
+            };
         } else {
             card.onclick = () => openModule(m);
         }

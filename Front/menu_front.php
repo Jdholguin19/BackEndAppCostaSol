@@ -439,17 +439,29 @@ include '../api/bottom_nav.php';
       const renderMenu = (menuItems) => {
           grid.innerHTML = ''; // Clear grid before rendering
           menuItems.forEach(m=> {
+              // Condición para ocultar el módulo a los residentes
+              const isAcabadosModule = m.id === 1;
+              const isResidente = u.rol_id === 2;
+              if (isAcabadosModule && isResidente) {
+                  return; // No renderizar este módulo
+              }
+
               // Check if this is the Garantias module (menu.id === 6)
               // and if there are no active warranties
               const isGarantiasModule = (m.id === 6);
-              const shouldDisableGarantias = isGarantiasModule && !hasActiveGarantias;
+              const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
+              const shouldDisable = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
 
               const card = document.createElement('div');
               card.className='menu-card';
-              if (shouldDisableGarantias) {
+              if (shouldDisable) {
                   card.classList.add('disabled-card'); // Add a class for styling
                   card.onclick = () => {
-                      alert('Todas tus garantías han expirado.');
+                      if (isGarantiasModule) {
+                        alert('Todas tus garantías han expirado.');
+                      } else if (isCtgModule) {
+                        alert('El módulo CTG está desactivado porque su garantía ha expirado.');
+                      }
                   }; // Override click to show alert
               } else {
                   card.onclick = () => openModule(m);
