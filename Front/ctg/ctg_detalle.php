@@ -28,7 +28,9 @@ $id = (int)($_GET['id'] ?? 0);
       <h1 class="ctg-detalle-title" id="title">CTG</h1>
     </div>
   </div>
-</div>
+</div> <!-- End of ctg-detalle-header -->
+
+<div id="notificationArea" class="notification-area"></div>
 
 <!-- Main Content -->
 <div class="ctg-detalle-container">
@@ -52,8 +54,7 @@ $id = (int)($_GET['id'] ?? 0);
     </div>
   </form>
 
-  <!-- Área para mostrar notificaciones de éxito -->
-  <div id="notificationArea" class="notification-area"></div>
+
 
   <!-- Área de observaciones (solo visible para responsables) -->
   <div id="observacionesContainer" class="observaciones-container">
@@ -183,15 +184,31 @@ if(!u.id) {
           return `<span class="badge-dot ${cls}">${txt}</span>`;
         }
 
-        function msgHTML(r){
+        function msgHTML(r, index, responses){
           const esResp = Number(r.responsable_id) > 0;
           const dirClass = esResp ? 'right' : '';
           const mensaje = r.mensaje.replace(/\n/g, '<br>'); // Convertir saltos de línea en HTML
+          
+          // Determinar si mostrar la hora basado en la diferencia de tiempo
+          let showTime = true;
+          let timeClass = '';
+          
+          if (index > 0) {
+            const currentTime = new Date(r.fecha_respuesta);
+            const previousTime = new Date(responses[index - 1].fecha_respuesta);
+            const timeDiff = Math.abs(currentTime - previousTime) / (1000 * 60); // Diferencia en minutos
+            
+            // Si es el mismo usuario y menos de 5 minutos, ocultar hora
+            if (responses[index].responsable_id === responses[index - 1].responsable_id && timeDiff < 5) {
+              showTime = false;
+              timeClass = 'time-hidden';
+            }
+          }
 
-          return `<li class="${dirClass}">
+          return `<li class="${dirClass} ${showTime ? 'show-time' : ''}">
                     <div>
                       <div class="bubble">${mensaje}</div>
-                      <div class="time">${fechaHora(r.fecha_respuesta)}</div>
+                      <div class="time ${timeClass}">${fechaHora(r.fecha_respuesta)}</div>
                     </div>
                   </li>`;
         }
@@ -676,7 +693,7 @@ if(!u.id) {
             if (newResponsesString !== currentResponsesString) {
                 currentResponses = d.respuestas;
                 chat.innerHTML = currentResponses.length
-                  ? currentResponses.map(msgHTML).join('')
+                  ? currentResponses.map((r, index) => msgHTML(r, index, currentResponses)).join('')
                   : '<li class="text-muted">— Sin respuestas —</li>';
 
                 chat.scrollTop = chat.scrollHeight;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-08-2025 a las 19:49:18
+-- Tiempo de generación: 18-08-2025 a las 15:20:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -91,7 +91,7 @@ INSERT INTO `ctg` (`id`, `numero_solicitud`, `id_usuario`, `id_propiedad`, `tipo
 (7, 'SAC00007', 7, 3, 1, 1, 1, 'Arreglar el sistema', 2, NULL, NULL, NULL, 2, '2025-07-23 09:15:36', '2025-07-28 09:15:36', NULL, NULL, NULL),
 (17, 'SAC00008', 7, 3, 4, 12, 1, 'HOLS', 1, NULL, NULL, NULL, 1, '2025-07-23 16:26:26', '2025-07-28 16:26:26', NULL, NULL, NULL),
 (18, 'SAC00018', 8, 5, 1, 1, 1, 'Necesito ayuda con esto', 2, NULL, NULL, NULL, 1, '2025-07-24 16:09:34', '2025-07-29 16:09:34', NULL, NULL, NULL),
-(21, 'SAC00021', 8, 5, 8, 28, 2, 'Que tal', 1, NULL, NULL, NULL, 2, '2025-07-30 12:01:19', '2025-08-04 12:01:19', NULL, '2025-08-08 11:04:05', 'clientes es menso**'),
+(21, 'SAC00021', 8, 5, 8, 28, 2, 'Que tal', 1, NULL, NULL, NULL, 2, '2025-07-30 12:01:19', '2025-08-04 12:01:19', NULL, '2025-08-15 13:46:08', 'cambia muchacho'),
 (22, 'SAC00022', 8, 5, 6, 20, 1, 'No está bien puesto', 1, NULL, NULL, NULL, 2, '2025-08-13 15:16:20', '2025-08-18 15:16:20', NULL, '2025-08-13 16:44:30', 'juhjkhjn'),
 (23, 'SAC00023', 8, 5, 1, 3, 1, 'no cubre', 1, NULL, NULL, NULL, 3, '2025-08-15 08:56:43', '2025-08-20 08:56:43', NULL, NULL, NULL);
 
@@ -431,9 +431,9 @@ CREATE TABLE `responsable` (
 --
 
 INSERT INTO `responsable` (`id`, `nombre`, `correo`, `contrasena_hash`, `url_foto_perfil`, `area`, `estado`, `fecha_ingreso`, `fecha_actualizacion`, `token`, `onesignal_player_id`, `fecha_actualizacion_player_id`) VALUES
-(1, 'Ana María Felix', 'coordinadorsac@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg', 'SAC', 1, '2025-06-24 11:03:35', '2025-08-15 10:36:00', 'ukK/t1H21xMZny7KrSEMu1ij7wgvbtKf', '4b2ad379-5372-40fe-9532-b46bb026fa7a', '2025-08-15 15:36:00'),
-(2, 'Carla Oquendo', 'servicioalcliente@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png', 'SAC', 1, '2025-06-24 11:07:21', '2025-08-15 12:41:48', '8rfmBYNhoin05F6sFzzhdVLovqcNvZP9', 'b7c880b7-10a3-4d48-a66e-749b20ffbf92', '2025-08-15 17:41:48'),
-(3, 'Admin', 'admin@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://cdn.prod.website-files.com/5f68a65d0932e3546d41cc61/5f9bb022fda3f6ccfb8e316a_1604038688273-admin%252B-best-shopify-apps.png', 'SAC', 1, '2025-08-13 09:25:21', '2025-08-15 11:50:56', '6zRhS/CR69hEuKfAu+Ej1ZVXbAnW3T7X', 'ac37e2ab-53af-40d3-bd53-6547df90b2a8', '2025-08-15 16:50:56');
+(1, 'Ana María Felix', 'coordinadorsac@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg', 'SAC', 1, '2025-06-24 11:03:35', '2025-08-18 08:06:30', 'En7lg2oM4ntrfKMdIr/ur8XZT+lA9Ey2', '4b2ad379-5372-40fe-9532-b46bb026fa7a', '2025-08-18 13:06:30'),
+(2, 'Carla Oquendo', 'servicioalcliente@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png', 'SAC', 1, '2025-06-24 11:07:21', '2025-08-18 08:17:47', 'bxbqOup88G+b0YWmmGqrDeFO9DM9APb5', 'b7c880b7-10a3-4d48-a66e-749b20ffbf92', '2025-08-18 13:17:47'),
+(3, 'Admin', 'admin@thaliavictoria.com.ec', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 'https://cdn.prod.website-files.com/5f68a65d0932e3546d41cc61/5f9bb022fda3f6ccfb8e316a_1604038688273-admin%252B-best-shopify-apps.png', 'SAC', 1, '2025-08-13 09:25:21', '2025-08-18 08:07:48', 'LGiZ/MkFRXkgqTIBg8gB+id2gVyxSe4W', 'ac37e2ab-53af-40d3-bd53-6547df90b2a8', '2025-08-18 13:07:48');
 
 -- --------------------------------------------------------
 
@@ -790,7 +790,7 @@ INSERT INTO `usuario` (`id`, `rol_id`, `nombres`, `apellidos`, `cedula`, `telefo
 (5, 1, 'Rafael', 'Romero', NULL, NULL, 'rromero@thaliavictoria.com.ec', '$2y$10$uqExlkQ7Xw6xfgzbQyqefOJmFOGrL4Qt.iMnUliWzb5iH9xVBZIou', 0, NULL, '2025-07-14 16:11:24', NULL, NULL, NULL),
 (6, 1, 'Jonathan', 'Quijano', NULL, NULL, 'jquijano@thaliavictoria.com.ec', '$2y$10$AEHyeOLBMhOPt0PhJdpy8e8WWyMM7jEbKg6MQiwfYjCH7ZHnp/at2', 0, NULL, '2025-07-14 16:12:49', NULL, NULL, NULL),
 (7, 1, 'Joffre', 'Holguin', NULL, NULL, 'joffreholguin19@gmail.com', '$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa', 1, 'https://cdn-icons-png.flaticon.com/512/9187/9187532.png', '2025-07-22 10:50:30', 'JEYSzRChFPbwcMEJGJK/+6RZxRrktqnP', NULL, NULL),
-(8, 2, 'Daniel', 'Alarcon', NULL, NULL, 'danielalarcon@gmail.com', '$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC', 1, 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png', '2025-07-24 16:06:19', 'JPpKlQBk0BhYeite5i+rsT9mQ7iDYDMZ', 'b7c880b7-10a3-4d48-a66e-749b20ffbf92', '2025-08-15 15:35:35'),
+(8, 2, 'Daniel', 'Alarcon', NULL, NULL, 'danielalarcon@gmail.com', '$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC', 1, 'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png', '2025-07-24 16:06:19', '5GBl14/6nH+wAUu4RXG/cW2lmUE34fvW', '4b2ad379-5372-40fe-9532-b46bb026fa7a', '2025-08-18 13:19:41'),
 (9, 1, 'Felipe', 'Pilligua', NULL, NULL, 'fepilligua@gmail.com', '$2y$10$reWiHb52f7EPZNo98Q3kz.H0Df6eFFB6FJrgll3nGywKhCmgl/hvC', 1, 'https://cdn-icons-png.flaticon.com/512/219/219983.png', '2025-07-28 08:42:37', '65oP60rZ0yYLCKdp22WUzpI07dl/KViI', NULL, '2025-08-14 14:24:51'),
 (10, 1, 'Jose', 'Tenesaca', NULL, NULL, 'josesaca@gmail.com', '$2y$10$8LEm..7rJ3ii/7QWAivJOuHJMjh3lQ4n/qEaqTI66Wu3YPKLcpble', 0, NULL, '2025-08-05 13:25:22', 'iCHj2yX2GP5NG9lt7+NCkN/wPFr7tH2D', NULL, '2025-08-05 18:32:06'),
 (11, 1, 'Martin', 'Mera', NULL, NULL, 'martin@gmial.com', '$2y$10$UtKsBWDz.Hdf5DPHSlmV5etztt5mez967KwQccui431EB5woBL4au', 0, 'https://cdn-icons-png.flaticon.com/512/219/219983.png', '2025-08-06 08:16:43', 'tDe030ZBD99SVoDhzEecbw4h/pEyY0v1', NULL, '2025-08-06 14:35:50'),

@@ -41,7 +41,7 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 $linkHref = ''; // As per user's request
                 $linkActivePage = ''; // As per user's request
                 $linkName = 'Empresas'; // Override name
-                $linkIcon = 'bi-chat-dots'; // Override icon
+                $linkIcon = 'bi-building'; // Override icon
                 break;  
 
             case 6: // Garantias

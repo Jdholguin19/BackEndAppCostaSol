@@ -34,6 +34,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │   ├── pqr_respuestas.php
 │   │   ├── pqr_update_estado.php
 │   │   └── pqr_update_observaciones.php
+│   ├── bottom_nav.php              # API para obtener ítems de navegación inferior
 │   ├── calendario_responsable.php  # API para obtener datos del calendario de responsables
 │   ├── etapas_manzana_villa.php    # API para obtener etapas de construcción por manzana/villa
 │   ├── garantias.php               # API para obtener información de garantías
@@ -53,6 +54,14 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── update_player_id.php        # API para actualizar OneSignal Player ID
 │   ├── user_crud.php               # API para operaciones CRUD de usuarios
 │   └── validate_responsable.php    # API para validar tokens de responsables
+├── appcostasol/                  # Contiene una versión alternativa o anterior de la aplicación
+│   ├── api/                      # API de la versión alternativa
+│   │   └── login.php
+│   ├── config/                   # Configuración de la versión alternativa
+│   │   └── db.php
+│   └── Front/                    # Frontend de la versión alternativa
+│       ├── user_crud.php
+│       └── users.php
 ├── Front/                        # Contiene todas las páginas frontend (HTML/PHP) y sus assets
 │   ├── assets/                   # Archivos estáticos (CSS, JS, imágenes)
 │   │   └── css/                  # Hojas de estilo CSS
@@ -75,6 +84,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │   ├── ctg_detalle.php
 │   │   ├── ctg_nuevo.php
 │   │   └── ctg.php
+│   ├── includes/                 # Archivos de inclusión comunes (cabeceras, funciones, etc.)
 │   ├── pqr/                      # Páginas frontend para la gestión de PQR
 │   │   ├── pqr_detalle.php
 │   │   ├── pqr_nuevo.php
@@ -85,6 +95,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── garantias.php             # Página para ver información de garantías
 │   ├── login_front.php           # Página de inicio de sesión
 │   ├── menu_front.php            # Página del menú principal
+│   ├── menu2.php                 # Página alternativa del menú principal
 │   ├── noticia.php               # Página para la gestión de noticias (solo para admins)
 │   ├── notificaciones.php        # Página para ver notificaciones
 │   ├── panel_calendario.php      # Página del calendario de responsables
@@ -113,6 +124,20 @@ A continuación, se detalla la organización de los archivos y directorios princ
 
 
 ```
+
+## Archivos Clave para el Funcionamiento y Entendimiento
+
+Aunque la estructura de carpetas detalla todos los archivos, los siguientes son considerados esenciales para comprender el funcionamiento central de la aplicación:
+
+*   `config/db.php`: Configuración fundamental para la conexión a la base de datos.
+*   `portalao_appcostasol.sql`: El esquema completo de la base de datos, crucial para la configuración inicial y el entendimiento de los datos.
+*   `api/login.php`: Punto de entrada principal para la autenticación de usuarios en el backend.
+*   `Front/login_front.php`: La interfaz de usuario para el inicio de sesión.
+*   `Front/menu_front.php`: El panel principal del usuario después de iniciar sesión, donde se cargan las funcionalidades y se muestra el contador de notificaciones.
+*   `api/ctg/`, `api/pqr/`, `api/cita/`: Directorios que contienen la lógica de negocio central para las funcionalidades de CTG, PQR y Citas, respectivamente.
+*   `Front/ctg/`, `Front/pqr/`: Directorios que contienen las interfaces de usuario para las funcionalidades de CTG y PQR.
+*   `api/user_crud.php`: Maneja las operaciones CRUD para los usuarios.
+*   `Front/users.php`: Interfaz de usuario para la gestión de usuarios.
 
 ## Características y Funcionalidades Clave
 
