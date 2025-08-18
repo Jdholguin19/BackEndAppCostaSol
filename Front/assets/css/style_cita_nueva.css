@@ -15,7 +15,6 @@ body {
 }
 
 /* Header Section */
-/* Header Section */
 .citas-header {
     background: #ffffff;
     padding: 1rem 1.5rem 0.5rem;
@@ -57,13 +56,6 @@ body {
     background-color: #f3f4f6;
 }
 
-.cita-nueva-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d5a3d;
-    margin: 0 0 1.5rem 0;
-}
-
 /* Form Sections */
 .form-section {
     background: #ffffff;
@@ -92,7 +84,7 @@ body {
 }
 
 /* Select Styles */
-.form-select {
+.form-select, #datepicker {
     border: 2px solid #e8e8e8;
     border-radius: 12px;
     padding: 0.75rem 1rem;
@@ -103,76 +95,75 @@ body {
     box-sizing: border-box;
 }
 
-.form-select:focus {
+.form-select:focus, #datepicker:focus {
     border-color: #007aff;
     box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
     outline: none;
 }
 
-
-
-
-
-/* Date and Time Lists */
-.date-time-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+/* --- Flatpickr Customization --- */
+#calendar-container {
+    display: none; /* Hidden by default, shown by JS */
+    margin-top: 1rem;
 }
-
-.date-slot, .time-slot {
+.flatpickr-calendar {
     width: 100%;
-    padding: 1rem;
-    border: 2px solid #e8e8e8;
-    border-radius: 12px;
-    background: #ffffff;
+    box-shadow: none;
+    border: none;
+}
+.flatpickr-loading {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.8);
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #374151;
-    box-sizing: border-box;
+    justify-content: center;
+    z-index: 10;
 }
 
-.date-slot:hover, .time-slot:hover {
-    border-color: #09360ade;
-    background: #7cc77d;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.15);
+/* --- Time Slot Redesign --- */
+#horaList {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* For Firefox */
 }
 
-.date-slot.active, .time-slot.active {
-    border-color: #09360ade;
-    background: #00ff041e;
-    color: #09360ade;
-    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+#horaList::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
-.date-slot i {
-    color: #208e01;
-    font-size: 0.85rem;
+.time-slot {
+  flex: 0 0 auto;
+  padding: 12px 20px;
+  margin-right: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 25px;
+  background-color: #ffffff;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
 }
 
-.date-slot.active i, .time-slot.active i {
-    color: #054b03;
+.time-slot:hover {
+  background-color: #f5f5f5;
+  border-color: #ccc;
 }
 
-.date-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+.time-slot.active {
+  background-color: #2d5a3d;
+  color: #ffffff;
+  border-color: #2d5a3d;
+  transform: scale(1.05);
 }
 
-.date-text {
-    font-weight: 500;
-}
-
-.date-availability {
-    font-size: 0.75rem;
-    opacity: 0.7;
+#horaList .loading-container,
+#horaList .empty-state {
+    width: 100%;
+    text-align: center;
 }
 
 /* Loading States */
@@ -202,14 +193,11 @@ body {
     margin-top: 2rem;
 }
 
-.cancel-button {
+.cancel-button, .confirm-button {
     flex: 1;
     padding: 0.875rem 1.5rem;
-    border: 2px solid #e8e8e8;
     border-radius: 12px;
-    background: #ffffff;
-    color: #6b7280;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     text-decoration: none;
@@ -220,34 +208,29 @@ body {
     gap: 0.5rem;
 }
 
+.cancel-button {
+    border: 2px solid #e8e8e8;
+    background: #ffffff;
+    color: #6b7280;
+}
+
 .cancel-button:hover {
     border-color: #d1d5db;
     background: #f9fafb;
     color: #374151;
-    text-decoration: none;
 }
 
 .confirm-button {
-    flex: 1;
-    padding: 0.875rem 1.5rem;
     border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #007aff 0%, #0056cc 100%);
+    background: #2d5a3d;
     color: #ffffff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(45, 90, 61, 0.3);
 }
 
 .confirm-button:hover:not(:disabled) {
-    background: linear-gradient(135deg, #0056cc 0%, #004499 100%);
+    background: #1e3c28;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(45, 90, 61, 0.4);
 }
 
 .confirm-button:disabled {
@@ -256,7 +239,6 @@ body {
     transform: none;
     box-shadow: none;
 }
-
 
 /* Propósito Section Btoones*/
 .purpose-grid {
@@ -317,6 +299,7 @@ body {
     /*max-width: 100%; -- Ya no es tan crítico con ancho fijo */
     padding: 0; /* Eliminar padding horizontal del span, ya manejado en el botón */
 }
+
 
 
 
