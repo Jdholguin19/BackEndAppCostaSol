@@ -147,7 +147,10 @@ El proyecto ofrece las siguientes funcionalidades principales:
 *   **Autenticación y Autorización de Usuarios:**
     *   Inicio de sesión para usuarios (clientes/residentes) y responsables (personal).
     *   Autenticación basada en tokens.
-    *   Control de acceso basado en roles (`rol` y `rol_menu` en la base de datos).
+    *   **Control de Acceso Basado en Roles (RBAC):** El sistema implementa un control de acceso basado en roles utilizando las tablas `rol` y `rol_menu`.
+        *   **`rol`**: Define los tipos de usuarios (Cliente, Residente, SAC/Admin).
+        *   **`rol_menu`**: Asigna ítems de menú específicos a cada rol, controlando qué funcionalidades son visibles en el frontend (`Front/menu_front.php`, `Front/menu2.php`).
+        *   **Validación en Backend:** Los endpoints de la API (`api/menu.php`, `api/user_crud.php`, etc.) realizan validaciones en el lado del servidor basadas en el `rol_id` del usuario autenticado (obtenido del token) para asegurar que solo los usuarios con los permisos adecuados puedan ejecutar ciertas acciones o acceder a datos sensibles.
 *   **Gestión de Citas:**
     *   Creación de nuevas citas (`cita_nueva.php`, `api/cita/cita_create.php`).
     *   Listado de citas (filtrado por usuario, responsable o todas para el admin) (`citas.php`, `api/cita/citas_list.php`).
@@ -178,6 +181,137 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   El contador se actualiza automáticamente al visualizar un ticket (CTG o PQR).
     *   La lógica diferencia entre usuarios normales (ven respuestas de responsables) y responsables (ven respuestas de usuarios en sus tickets asignados).
     *   El contador muestra el número exacto hasta 9, y "+9" para cantidades superiores.
+
+## Resumen de Funcionalidades de la API (para Migración a Laravel)
+
+Esta sección detalla los endpoints de la API existentes y sus funcionalidades principales, sirviendo como referencia para la migración a un nuevo framework como Laravel.
+
+### Autenticación y Gestión de Usuarios
+
+*   **`api/login.php`**: Maneja el inicio de sesión de usuarios y responsables, devolviendo un token de autenticación.
+*   **Mecanismo de Autenticación:** El sistema utiliza un mecanismo de autenticación basado en tokens. Tras un inicio de sesión exitoso en `api/login.php`, el servidor genera un token JWT (JSON Web Token) o un token de sesión seguro y lo devuelve al cliente.
+*   **Manejo de Tokens en el Cliente:** El token recibido se almacena en el `localStorage` del navegador (clave `cs_token`). Para todas las solicitudes subsiguientes a endpoints protegidos de la API, este token debe incluirse en el encabezado `Authorization` como un `Bearer Token` (ej: `Authorization: Bearer <tu_token>`).
+*   **Validación de Sesión:** El backend valida la autenticidad y vigencia de este token en cada solicitud protegida para asegurar que el usuario tiene permiso para acceder al recurso.
+*   **`api/logout.php`**: Invalida la sesión del usuario.
+*   **`api/user_crud.php`**: Proporciona operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de usuarios.
+*   **`api/validate_responsable.php`**: Valida tokens específicos para responsables.
+*   **`api/update_player_id.php`**: Actualiza el ID de OneSignal Player para notificaciones push.
+
+### Gestión de Citas
+
+*   **`api/cita/cita_create.php`**: Crea una nueva cita.
+*   **`api/cita/citas_list.php`**: Lista citas, con opciones de filtrado por usuario o responsable.
+*   **`api/cita/cita_cancelar.php`**: Cancela una cita existente.
+*   **`api/cita/cita_eliminar.php`**: Elimina una cita (usualmente citas canceladas).
+*   **`api/cita/dias_disponibles.php`**: Obtiene los días disponibles para agendar citas por responsable.
+*   **`api/cita/horas_disponibles.php`**: Obtiene las horas disponibles para agendar citas en un día específico.
+
+### Gestión de CTG (Contingencias)
+
+*   **`api/ctg/ctg_create.php`**: Crea una nueva solicitud de contingencia.
+*   **`api/ctg/ctg_list.php`**: Lista las solicitudes de contingencia.
+*   **`api/ctg/ctg_estados.php`**: Proporciona los estados posibles para una CTG.
+*   **`api/ctg/ctg_insert_form.php`**: Inserta datos de formulario para una CTG.
+*   **`api/ctg/ctg_observaciones.php`**: Gestiona las observaciones de una CTG.
+*   **`api/ctg/ctg_respuestas.php`**: Gestiona las respuestas a una CTG.
+*   **`api/ctg/ctg_update_estado.php`**: Actualiza el estado de una CTG.
+*   **`api/ctg/ctg_update_observaciones.php`**: Actualiza las observaciones de una CTG.
+*   **`api/ctg/subtipo_ctg.php`**: Obtiene subtipos de CTG.
+*   **`api/ctg/tipo_ctg.php`**: Obtiene tipos de CTG.
+
+### Gestión de PQR (Peticiones, Quejas y Recomendaciones)
+
+*   **`api/pqr/pqr_create.php`**: Crea una nueva solicitud PQR.
+*   **`api/pqr/pqr_list.php`**: Lista las solicitudes PQR.
+*   **`api/pqr/pqr_estados.php`**: Proporciona los estados posibles para una PQR.
+*   **`api/pqr/pqr_insert_form.php`**: Inserta datos de formulario para una PQR.
+*   **`api/pqr/pqr_observaciones.php`**: Gestiona las observaciones de una PQR.
+*   **`api/pqr/pqr_respuestas.php`**: Gestiona las respuestas a una PQR.
+*   **`api/pqr/pqr_update_estado.php`**: Actualiza el estado de una PQR.
+*   **`api/pqr/pqr_update_observaciones.php`**: Actualiza las observaciones de una PQR.
+*   **`api/pqr/subtipo_pqr.php`**: Obtiene subtipos de PQR.
+*   **`api/pqr/tipo_pqr.php`**: Obtiene tipos de PQR.
+
+### Notificaciones
+
+*   **`api/notificaciones_count.php`**: Devuelve el número de notificaciones no leídas para el usuario autenticado.
+*   **`api/notificaciones_mark_read.php`**: Marca notificaciones específicas como leídas.
+*   **`api/notificaciones.php`**: Obtiene una lista de notificaciones.
+
+### Propiedades y Construcción
+
+*   **`api/obtener_propiedades.php`**: Obtiene propiedades, filtradas por usuario o todas para responsables.
+*   **`api/propiedad_fase.php`**: Obtiene la fase de construcción de una propiedad.
+*   **`api/etapas_manzana_villa.php`**: Obtiene etapas de construcción por manzana/villa.
+
+### Otros
+
+### Validación de Entradas y Manejo de Errores
+
+*   **Validación de Entradas:** Las APIs implementan validación de entradas en el lado del servidor para asegurar la integridad y seguridad de los datos. Esto incluye la verificación de tipos de datos, formatos y la presencia de campos obligatorios.
+*   **Respuestas de Error:** En caso de errores (validación fallida, autenticación/autorización denegada, errores internos del servidor), las APIs devuelven respuestas en formato JSON con una estructura consistente, incluyendo un campo `ok: false` y un `mensaje` descriptivo del error. Los códigos de estado HTTP (ej: 400 Bad Request, 401 Unauthorized, 403 Forbidden, 500 Internal Server Error) se utilizan para indicar la naturaleza del problema.
+
+*   **`api/bottom_nav.php`**: Obtiene ítems para la navegación inferior.
+*   **`api/calendario_responsable.php`**: Obtiene datos del calendario de responsables.
+*   **`api/garantias.php`**: Obtiene información de garantías.
+*   **`api/mcm.php`**: Sirve el manual de uso y mantenimiento (PDF).
+*   **`api/menu.php`**: Obtiene ítems de menú según el rol del usuario.
+*   **`api/noticias.php`**: Gestiona noticias.
+*   **`api/paletavegetal.php`**: Sirve el PDF de paleta vegetal.
+*   **`api/propositos.php`**: Obtiene propósitos de agendamiento.
+*   **`api/responsables_list.php`**: Lista responsables.
+
+## Resumen de Funcionalidades del Frontend (para Migración a Laravel)
+
+Esta sección describe las funcionalidades implementadas en el frontend de la aplicación, que interactúan con la API y proporcionan la experiencia de usuario.
+
+### Autenticación y Gestión de Sesión
+
+*   **`login_front.php`**: Interfaz de usuario para el inicio de sesión de usuarios y responsables. Maneja la recolección de credenciales y el envío a `api/login.php`. Almacena el token de autenticación y los datos del usuario en `localStorage`.
+*   **`register_front.php`**: Interfaz de usuario para el registro de nuevos usuarios. Recopila información básica (nombres, apellidos, correo, contraseña) y la envía a `api/user_crud.php` para la creación de un nuevo usuario con `rol_id: 1` (cliente).
+*   **`menu_front.php` / `menu2.php`**: Páginas principales post-autenticación. Muestran el nombre del usuario, avatar, y un menú dinámico basado en el rol. Incluyen la lógica para cerrar sesión (`api/logout.php`) y la integración con OneSignal para notificaciones push (`api/update_player_id.php`).
+
+### Gestión de Propiedades y Avance de Obra
+
+*   **`menu_front.php`**: Permite al usuario seleccionar entre sus propiedades asignadas (si tiene varias) a través de pestañas dinámicas.
+*   **`fase_detalle.php`**: Muestra el detalle de las etapas de construcción de una propiedad específica (manzana y villa), incluyendo el porcentaje de avance y fotos asociadas. Interactúa con `api/etapas_manzana_villa.php` y `api/propiedad_fase.php`.
+
+### Gestión de Citas
+
+*   **`citas.php`**: Muestra una lista de citas agendadas por el usuario o asignadas al responsable. Permite cancelar citas (`api/cita/cita_cancelar.php`) y, para administradores/responsables, actualizar el estado de las citas (`api/cita/cita_update_estado.php`).
+*   **`cita_nueva.php`**: Formulario para agendar una nueva cita. Permite seleccionar la propiedad, el propósito de la visita, la fecha (con un calendario interactivo `flatpickr.js`) y la hora (con un selector de rueda vertical). Interactúa con `api/obtener_propiedades.php`, `api/propositos.php`, `api/cita/dias_disponibles.php`, `api/cita/horas_disponibles.php` y `api/cita/cita_create.php`.
+
+### Gestión de CTG (Contingencias)
+
+*   **`ctg/ctg.php`**: Lista las solicitudes de contingencia del usuario, con opciones de filtrado por estado y ordenación. Permite navegar al detalle de cada CTG y crear nuevas solicitudes. Interactúa con `api/ctg/ctg_list.php` y `api/ctg/ctg_estados.php`.
+*   **`ctg/ctg_nuevo.php`**: Formulario para crear una nueva solicitud de contingencia. Permite seleccionar la propiedad, el tipo, el subtipo y añadir una descripción y un archivo adjunto. Interactúa con `api/obtener_propiedades.php`, `api/ctg/tipo_ctg.php`, `api/ctg/subtipo_ctg.php` y `api/ctg/ctg_create.php`.
+*   **`ctg/ctg_detalle.php`**: Muestra el hilo de conversación de una CTG específica. Permite al usuario enviar nuevas respuestas (con texto y adjuntos) y, si es responsable, actualizar el estado de la CTG y añadir/editar observaciones del cliente. Interactúa con `api/ctg/ctg_respuestas.php`, `api/ctg/ctg_insert_form.php`, `api/ctg/ctg_update_estado.php`, `api/ctg/ctg_observaciones.php` y `api/ctg/ctg_update_observaciones.php`. Incluye lógica para marcar notificaciones como leídas (`api/notificaciones_mark_read.php`).
+
+### Gestión de PQR (Peticiones, Quejas y Recomendaciones)
+
+*   **`pqr/pqr.php`**: Similar a CTG, lista las solicitudes PQR del usuario, con opciones de filtrado y ordenación. Permite navegar al detalle y crear nuevas solicitudes. Interactúa con `api/pqr/pqr_list.php` y `api/pqr/pqr_estados.php`.
+*   **`pqr/pqr_nuevo.php`**: Formulario para crear una nueva solicitud PQR. Permite seleccionar la propiedad, el tipo y añadir una descripción y un archivo adjunto. Interactúa con `api/obtener_propiedades.php`, `api/pqr/tipo_pqr.php` y `api/pqr/pqr_create.php`.
+*   **`pqr/pqr_detalle.php`**: Muestra el hilo de conversación de una PQR específica. Permite al usuario enviar nuevas respuestas (con texto y adjuntos) y, si es responsable, actualizar el estado de la PQR y añadir/editar observaciones del cliente. Interactúa con `api/pqr/pqr_respuestas.php`, `api/pqr/pqr_insert_form.php`, `api/pqr/pqr_update_estado.php`, `api/pqr/pqr_observaciones.php` y `api/pqr/pqr_update_observaciones.php`. Incluye lógica para marcar notificaciones como leídas (`api/notificaciones_mark_read.php`).
+
+### Notificaciones
+
+*   **`notificaciones.php`**: Muestra una lista de notificaciones para el usuario. Las notificaciones pueden ser respuestas a CTG o PQR. Interactúa con `api/notificaciones.php`.
+*   **`menu_front.php`**: Muestra un contador de notificaciones no leídas en tiempo real, que se actualiza periódicamente. Interactúa con `api/notificaciones_count.php`.
+
+### Otras Funcionalidades del Frontend
+
+*   **`garantias.php`**: Muestra información sobre las garantías del usuario, incluyendo su duración y vigencia. Incluye un procedimiento de reclamación. Interactúa con `api/garantias.php`.
+*   **`panel_calendario.php`**: Muestra un calendario de citas para los responsables. Los administradores pueden ver el calendario de todos los responsables. Utiliza FullCalendar.js. Interactúa con `api/responsables_list.php` y `api/calendario_responsable.php`.
+*   **`noticia.php`**: (Panel de administración) Permite a los administradores crear, listar y eliminar noticias. Interactúa con `api/noticias.php`.
+*   **`users.php`**: (Panel de administración) Permite a los responsables con permisos gestionar usuarios (CRUD). Interactúa con `api/user_crud.php`.
+*   **`seleccion_acabados.php`**: (Vacío en la lectura actual, pero su nombre sugiere una funcionalidad de selección de acabados).
+*   **`config/db.php`**: Aunque es un archivo de configuración de backend, es fundamental para entender cómo el frontend se conecta indirectamente a la base de datos a través de las APIs PHP.
+
+### Estilos y Componentes Reutilizables
+
+*   **`assets/css/*.css`**: Archivos CSS que definen la apariencia y el diseño de las diferentes secciones de la aplicación, siguiendo un estilo moderno y responsivo.
+*   **`bottom_nav.php` (incluido desde `api/`)**: Componente de navegación inferior reutilizable en varias páginas del frontend.
+*   **`style_main.css`**: Contiene estilos globales y componentes comunes utilizados en toda la aplicación.
 
 ### Mejoras en la Visualización de Propiedades y Corrección de Errores
 
@@ -224,6 +358,14 @@ Se han añadido los siguientes endpoints para gestionar el contador de notificac
 *   **Integración con SharePoint:**
     *   Scripts para interactuar con SharePoint, probablemente para la gestión de documentos e imágenes relacionadas con el progreso de construcción.
 
+## Gestión de Archivos y Almacenamiento
+
+La aplicación maneja la carga y visualización de archivos (imágenes, PDFs) en varias funcionalidades (CTG, PQR, Noticias, Progreso de Construcción).
+
+*   **Almacenamiento:** Los archivos adjuntos (imágenes de problemas/soluciones en CTG/PQR, imágenes de noticias, fotos de progreso de construcción) se almacenan actualmente en el **sistema de archivos local del servidor web**. Las rutas a estos archivos se guardan en la base de datos (campos `url_adjunto`, `url_problema`, `url_solucion`, `url_imagen` en tablas como `respuesta_ctg`, `respuesta_pqr`, `noticia`, `progreso_construccion`).
+*   **Integración con SharePoint:** La carpeta `SharePoint/` y los campos `ruta_descarga_sharepoint`, `ruta_visualizacion_sharepoint`, `drive_item_id` en la tabla `progreso_construccion` sugieren una integración existente o planificada con Microsoft SharePoint para la gestión de documentos y activos relacionados con el avance de obra. Esto implica que algunos archivos podrían residir en SharePoint y ser accedidos a través de URLs generadas por esta integración.
+*   **Consideraciones para la Migración:** Para la migración a Laravel, será crucial definir una estrategia de almacenamiento de archivos (Laravel Filesystem con S3, almacenamiento local, etc.) y adaptar la lógica de carga, acceso y visualización de archivos en consecuencia. La integración con SharePoint requerirá una revisión específica para asegurar su compatibilidad o reimplementación.
+
 ## Esquema de la Base de Datos
 
 El esquema de la base de datos se define en `portalao_appcostasol.sql` y está diseñado para soportar las funcionalidades de la aplicación. Las tablas clave incluyen:
@@ -250,11 +392,13 @@ El esquema de la base de datos se define en `portalao_appcostasol.sql` y está d
     *   HTML5
     *   CSS3
     *   JavaScript
-    *   Bootstrap (para el framework de UI y componentes)
-    *   FullCalendar (para la visualización de calendarios)
-    *   OneSignal (para la implementación de notificaciones push)
-    *   Featherlight (para lightboxes de imágenes)
-    *   jQuery (utilizado por Featherlight y posiblemente otros scripts)
+    *   **Bootstrap:** Framework de UI y componentes (v5.3.3, vía CDN).
+    *   **FullCalendar:** Para la visualización de calendarios (v6.1.11, vía CDN, utilizado en `panel_calendario.php`).
+    *   **OneSignal:** Para la implementación de notificaciones push (v16 SDK, vía CDN). La configuración (`appId`, `safari_web_id`) se realiza directamente en los scripts de `menu_front.php` y `login_front.php`. El `player_id` se actualiza en el backend a través de `api/update_player_id.php`.
+    *   **Featherlight:** Para lightboxes de imágenes (v1.7.14, vía CDN, utilizado en `fase_detalle.php` para ver fotos de progreso).
+    *   **jQuery:** (v3.x, vía CDN, utilizado por Featherlight y posiblemente otros scripts heredados).
+    *   **Flatpickr:** Selector de fechas interactivo (v4.6.13, vía CDN, utilizado en `Front/cita_nueva.php`).
+    *   **Bootstrap Icons:** (v1.11.3, vía CDN).
 
 ## Configuración e Instalación
 
