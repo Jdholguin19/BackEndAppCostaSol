@@ -10,6 +10,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_cita_nueva.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
 
@@ -62,7 +63,7 @@
       <i class="bi bi-calendar-event"></i>
       Seleccione fecha
     </label>
-    <div id="fechaList" class="date-time-list"></div>
+    <div id="calendar-container"></div> <!-- El calendario se renderizará aquí -->
   </div>
 
   <!-- Horas Section -->
@@ -71,7 +72,9 @@
       <i class="bi bi-clock"></i>
       Seleccione hora
     </label>
-    <div id="horaList" class="date-time-list"></div>
+    <div id="horaList-container">
+        <div id="horaList"></div>
+    </div>
   </div>
 
   <!-- Action Buttons -->
@@ -92,6 +95,10 @@ $active_page = 'citas';
 include '../api/bottom_nav.php'; 
 ?>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
 <script>
 /* ---------- usuario ---------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
@@ -100,27 +107,27 @@ if(!u.id) location.href='login.php';
 /* ---------- refs ---------- */
 const propSel  = document.getElementById('selProp');
 const propGrid = document.getElementById('propGrid');
-const fechaBox = document.getElementById('fechaList');
+const calendarContainer = document.getElementById('calendar-container');
 const horaBox  = document.getElementById('horaList');
 const btnOk    = document.getElementById('btnOk');
 
 /* ---------- estado local ---------- */
 let propositoId = 0, fechaSel='', horaSel='';
+let fp; // flatpickr instance
+let hourObserver; // IntersectionObserver for hours
 
 /* ---------- helpers ---------- */
-// ⇒ interpreta la fecha como LOCAL, sin tocar UTC
-const iso2esp = s => {
-  const [y, m, d] = s.split('-').map(Number);        // y=2025, m=6, d=30
-  return new Date(y, m - 1, d)                       // Date(2025,5,30) local
-         .toLocaleDateString('es-ES',{
-           weekday:'long', year:'numeric',
-           month:'long',  day:'numeric'
-         });
-};
-
 function reset(lvl){
-  if(lvl<=1){ fechaSel=''; fechaBox.innerHTML=''; }
-  if(lvl<=2){ horaSel=''; horaBox.innerHTML=''; }
+  if(lvl<=1){ 
+    fechaSel=''; 
+    if(fp) fp.clear();
+    calendarContainer.style.display = 'none';
+  }
+  if(lvl<=2){ 
+      horaSel=''; 
+      horaBox.innerHTML=''; 
+      if(hourObserver) hourObserver.disconnect();
+  }
   btnOk.disabled = !(propositoId && fechaSel && horaSel);
 }
 
@@ -151,62 +158,108 @@ fetch('../api/propositos.php').then(r=>r.json()).then(d=>{
   });
 });
 
+// --- Lógica del Calendario y Horas ---
+
+function fetchAvailableDays(year, month, instance) {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'flatpickr-loading';
+    instance.calendarContainer.appendChild(loadingDiv);
+
+    fetch(`../api/cita/dias_disponibles.php?proposito_id=${propositoId}&year=${year}&month=${month}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.ok) {
+                instance.set('enable', data.items);
+            }
+        })
+        .finally(() => {
+            if(instance.calendarContainer.contains(loadingDiv)) {
+                instance.calendarContainer.removeChild(loadingDiv);
+            }
+        });
+}
+
+function initializeCalendar() {
+    if (fp) {
+        fp.destroy();
+    }
+    fp = flatpickr(calendarContainer, {
+        locale: "es",
+        inline: true,
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        onReady: function(selectedDates, dateStr, instance) {
+            fetchAvailableDays(instance.currentYear, instance.currentMonth + 1, instance);
+        },
+        onMonthChange: function(selectedDates, dateStr, instance) {
+            fetchAvailableDays(instance.currentYear, instance.currentMonth + 1, instance);
+        },
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                fechaSel = dateStr;
+                loadHoras(fechaSel);
+            }
+        },
+    });
+}
+
+function setupHourObserver() {
+    if (hourObserver) {
+        hourObserver.disconnect();
+    }
+
+    const options = {
+        root: horaBox,
+        rootMargin: '-50% 0px -50% 0px',
+        threshold: 0
+    };
+
+    hourObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                horaBox.querySelectorAll('.time-slot').forEach(b => b.classList.remove('active'));
+                entry.target.classList.add('active');
+                horaSel = entry.target.dataset.hora;
+                btnOk.disabled = !(propositoId && fechaSel && horaSel);
+            }
+        });
+    }, options);
+
+    horaBox.querySelectorAll('.time-slot').forEach(slot => {
+        hourObserver.observe(slot);
+    });
+}
+
+function loadHoras(selectedDate) {
+    reset(2);
+    horaBox.innerHTML = '<div class="loading-container"><div class="spinner-border"></div></div>';
+    fetch(`../api/cita/horas_disponibles.php?proposito_id=${propositoId}&fecha=${selectedDate}`)
+        .then(r => r.json()).then(d => {
+            horaBox.innerHTML = '';
+            if (!d.ok || !d.items.length) {
+                horaBox.innerHTML = '<div class="empty-state">— Sin horarios —</div>';
+                return;
+            }
+            d.items.forEach(h => {
+                horaBox.insertAdjacentHTML('beforeend',
+                    `<button class="time-slot" data-hora="${h.hora}" data-resp="${h.responsable_id}">
+                     ${h.hora}</button>`);
+            });
+            setupHourObserver();
+        });
+}
+
 /* ---------- click propósito ---------- */
-propGrid.addEventListener('click',e=>{
-  const btn=e.target.closest('.purpose-button'); if(!btn) return;
-  propGrid.querySelectorAll('.purpose-button').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  propositoId = btn.dataset.id;
-  reset(1);
-
-  /* cargar días disponibles */
-  fechaBox.innerHTML='<div class="loading-container"><div class="spinner-border"></div></div>';
-  fetch(`../api/cita/dias_disponibles.php?proposito_id=${propositoId}`)
-   .then(r=>r.json()).then(d=>{
-     fechaBox.innerHTML='';
-     if(!d.ok||!d.items.length){ fechaBox.innerHTML='<div class="empty-state">— Sin fechas —</div>'; return; }
-     d.items.forEach(f=>{
-       fechaBox.insertAdjacentHTML('beforeend',
-         `<button class="date-slot" data-fecha="${f.fecha}">
-             <div class="date-info">
-               <span class="date-text"><i class="bi bi-calendar3"></i> ${iso2esp(f.fecha)}</span>
-               <span class="date-availability">${f.libres} horarios</span>
-             </div>
-          </button>`);
-     });
-   });
-});
-
-/* ---------- click día ---------- */
-fechaBox.addEventListener('click',e=>{
-  const btn=e.target.closest('.date-slot'); if(!btn) return;
-  fechaBox.querySelectorAll('.date-slot').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  fechaSel = btn.dataset.fecha;
-  reset(2);
-
-  /* cargar horas disponibles */
-  horaBox.innerHTML='<div class="loading-container"><div class="spinner-border"></div></div>';
-  fetch(`../api/cita/horas_disponibles.php?proposito_id=${propositoId}&fecha=${fechaSel}`)
-   .then(r=>r.json()).then(d=>{
-     horaBox.innerHTML='';
-     if(!d.ok||!d.items.length){ horaBox.innerHTML='<div class="empty-state">— Sin horarios —</div>'; return; }
-     d.items.forEach(h=>{
-       horaBox.insertAdjacentHTML('beforeend',
-         `<button class="time-slot" data-hora="${h.hora}" data-resp="${h.responsable_id}">
-             ${h.hora}</button>`);
-     });
-   });
-});
-
-/* ---------- click hora ---------- */
-horaBox.addEventListener('click',e=>{
-  const btn=e.target.closest('.time-slot'); if(!btn) return;
-  horaBox.querySelectorAll('.time-slot').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  horaSel = btn.dataset.hora;
-  respSel = btn.dataset.resp;       // puede ser útil si quieres mostrar "responsable asignado"
-  btnOk.disabled = !(propositoId && fechaSel && horaSel);
+propGrid.addEventListener('click', e => {
+    const btn = e.target.closest('.purpose-button');
+    if (!btn) return;
+    propGrid.querySelectorAll('.purpose-button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    propositoId = btn.dataset.id;
+    
+    reset(1);
+    calendarContainer.style.display = 'block';
+    initializeCalendar();
 });
 
 /* ---------- confirmar ---------- */
