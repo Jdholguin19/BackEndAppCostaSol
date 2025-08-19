@@ -72,7 +72,9 @@
       <i class="bi bi-clock"></i>
       Seleccione hora
     </label>
-    <div id="horaList" class="date-time-list"></div>
+    <div id="horaList-container">
+        <div id="horaList"></div>
+    </div>
   </div>
 
   <!-- Action Buttons -->
@@ -95,6 +97,8 @@ include '../api/bottom_nav.php';
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
 <script>
 /* ---------- usuario ---------- */
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
@@ -110,6 +114,7 @@ const btnOk    = document.getElementById('btnOk');
 /* ---------- estado local ---------- */
 let propositoId = 0, fechaSel='', horaSel='';
 let fp; // flatpickr instance
+let hourObserver; // IntersectionObserver for hours
 
 /* ---------- helpers ---------- */
 function reset(lvl){
@@ -118,7 +123,11 @@ function reset(lvl){
     if(fp) fp.clear();
     calendarContainer.style.display = 'none';
   }
-  if(lvl<=2){ horaSel=''; horaBox.innerHTML=''; }
+  if(lvl<=2){ 
+      horaSel=''; 
+      horaBox.innerHTML=''; 
+      if(hourObserver) hourObserver.disconnect();
+  }
   btnOk.disabled = !(propositoId && fechaSel && horaSel);
 }
 
@@ -194,6 +203,33 @@ function initializeCalendar() {
     });
 }
 
+function setupHourObserver() {
+    if (hourObserver) {
+        hourObserver.disconnect();
+    }
+
+    const options = {
+        root: horaBox,
+        rootMargin: '-50% 0px -50% 0px',
+        threshold: 0
+    };
+
+    hourObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                horaBox.querySelectorAll('.time-slot').forEach(b => b.classList.remove('active'));
+                entry.target.classList.add('active');
+                horaSel = entry.target.dataset.hora;
+                btnOk.disabled = !(propositoId && fechaSel && horaSel);
+            }
+        });
+    }, options);
+
+    horaBox.querySelectorAll('.time-slot').forEach(slot => {
+        hourObserver.observe(slot);
+    });
+}
+
 function loadHoras(selectedDate) {
     reset(2);
     horaBox.innerHTML = '<div class="loading-container"><div class="spinner-border"></div></div>';
@@ -209,6 +245,7 @@ function loadHoras(selectedDate) {
                     `<button class="time-slot" data-hora="${h.hora}" data-resp="${h.responsable_id}">
                      ${h.hora}</button>`);
             });
+            setupHourObserver();
         });
 }
 
@@ -224,18 +261,6 @@ propGrid.addEventListener('click', e => {
     calendarContainer.style.display = 'block';
     initializeCalendar();
 });
-
-/* ---------- click hora ---------- */
-horaBox.addEventListener('click', e => {
-    const btn = e.target.closest('.time-slot');
-    if (!btn) return;
-    horaBox.querySelectorAll('.time-slot').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    horaSel = btn.dataset.hora;
-    const respSel = btn.dataset.resp;
-    btnOk.disabled = !(propositoId && fechaSel && horaSel);
-});
-
 
 /* ---------- confirmar ---------- */
 btnOk.onclick = ()=>{

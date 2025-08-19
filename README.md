@@ -14,6 +14,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │   ├── cita_create.php
 │   │   ├── cita_eliminar.php
 │   │   ├── citas_list.php
+│   │   ├── cita_update_estado.php  # NUEVO: API para actualizar el estado de las citas
 │   │   ├── dias_disponibles.php
 │   │   └── horas_disponibles.php
 │   ├── ctg/                      # APIs relacionadas con la gestión de Contingencias (CTG)
@@ -288,6 +289,13 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 *   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada en esta revisión.
 
 ### Actualizaciones Recientes
+
+*   **Modernización del Selector de Fecha y Hora en Agendamiento:**
+    *   Se implementó un calendario interactivo (`flatpickr.js`) en `Front/cita_nueva.php` para la selección de fechas, reemplazando la lista anterior.
+    *   La API `api/cita/dias_disponibles.php` fue reescrita para soportar la consulta de disponibilidad por mes y año, optimizando la carga del calendario.
+    *   El selector de horas en `Front/cita_nueva.php` fue rediseñado con CSS para ofrecer una experiencia de "rueda" vertical con scroll (`scroll-snap`), similar a la de interfaces nativas.
+    *   Se añadió lógica JavaScript (`IntersectionObserver`) para detectar la hora seleccionada automáticamente al hacer scroll.
+    *   Esta implementación prepara la aplicación para futuras integraciones con servicios de calendario externos como Microsoft Graph API.
 
 *   **Corrección en Carga de Propiedades para Citas Nuevas:**
     *   Se solucionó un error en `Front/cita_nueva.php` que impedía la carga de propiedades en el selector.
