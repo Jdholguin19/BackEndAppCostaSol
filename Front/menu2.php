@@ -28,10 +28,31 @@
       if (u.id) {
           try {
               // Esperar un momento para que OneSignal esté completamente listo
-              await new Promise(resolve => setTimeout(resolve, 2000));
+              await new Promise(resolve => setTimeout(resolve, 3000));
               
-              // Obtener el Player ID usando acceso directo a la propiedad
-              const playerId = OneSignal.User.PushSubscription.id;
+              // Obtener el Player ID usando la API correcta de v17
+              let playerId = null;
+              
+              // Intentar obtener el Player ID de diferentes maneras según la versión
+              try {
+                  // Método para v17+
+                  if (OneSignal.User && OneSignal.User.PushSubscription) {
+                      playerId = OneSignal.User.PushSubscription.id;
+                  } else if (OneSignal.getUserId) {
+                      // Método alternativo para versiones anteriores
+                      playerId = await OneSignal.getUserId();
+                  }
+              } catch (e) {
+                  console.warn("Error al obtener Player ID con método principal:", e);
+                  // Intentar método alternativo
+                  try {
+                      if (OneSignal.getUserId) {
+                          playerId = await OneSignal.getUserId();
+                      }
+                  } catch (e2) {
+                      console.warn("Error con método alternativo:", e2);
+                  }
+              }
               
               console.log("OneSignal Player ID:", playerId);
 
@@ -46,7 +67,6 @@
                               'Authorization': `Bearer ${token}`
                           },
                           body: JSON.stringify({
-                              user_id: u.id,
                               onesignal_player_id: playerId
                           })
                       });
@@ -194,53 +214,53 @@ include '../api/bottom_nav.php';
 
 
     if ( menu.id === 6 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('GARANTIAS') ){
         location.href = 'garantias.php';          // <<<<<<
         return;
     }    
 
       if ( menu.id === 7 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('CALENDARIO') ){
         location.href = 'panel_calendario.php';          // <<<<<<
         return;
     }
 
       if ( menu.id === 8 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('NOTIFICACIONES') ){
         location.href = 'notificaciones.php';          // <<<<<<
         return;
     }  
 
 
       if ( menu.id === 9 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('PQR') ){
         location.href = 'pqr/pqr.php';          // <<<<<<
         return;
     }  
 
 
     if ( menu.id === 10 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('USER') ){
         location.href = 'users.php';          // <<<<<<
         return;
-    } 
+    }
 
     if ( menu.id === 11 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('MCM') ){
         location.href = '../api/mcm.php';          // <<<<<<
         return;
     }
 
 
     if ( menu.id === 12 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('VEGETAL') ){
         location.href = '../api/paletavegetal.php';          // <<<<<<
         return;
     }
 
 
     if ( menu.id === 13 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('NOTICIA') ){
         location.href = 'noticia.php';          // <<<<<<
         return;
     }

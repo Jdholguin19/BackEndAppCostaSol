@@ -466,6 +466,24 @@ Se han implementado las siguientes mejoras y correcciones en el proyecto:
     *   Se actualizó el diagrama de la estructura de carpetas en este `README.md` para incluir la carpeta `appcostasol/` y el directorio `Front/includes/`.
     *   También se añadieron los archivos `api/bottom_nav.php` y `Front/menu2.php` que faltaban en el diagrama.
 
+*   **Corrección del Error de OneSignal en Producción:**
+    *   Se resolvió el error crítico **"No autorizado para actualizar el Player ID de otro usuario"** que impedía el funcionamiento correcto de las notificaciones push en producción.
+    *   **Causa:** Discrepancia entre el `user_id` enviado desde el frontend (extraído del localStorage) y el ID del usuario autenticado obtenido del token.
+    *   **Solución Implementada:**
+        *   **Backend (`api/update_player_id.php`)**: Se eliminó la validación problemática que comparaba `user_id` con `authenticated_user_id`, ahora usa directamente el ID del usuario autenticado del token.
+        *   **Frontend (`Front/menu_front.php` y `Front/menu2.php`)**: Se eliminó el envío de `user_id` en las peticiones a la API, simplificando la estructura de datos enviada.
+        *   **Seguridad**: Se mantiene la autenticación basada en tokens, asegurando que cada usuario solo pueda actualizar su propio Player ID.
+    *   **Beneficios:**
+        *   ✅ Eliminación completa del error de autorización
+        *   ✅ Funcionamiento correcto de las notificaciones push OneSignal
+        *   ✅ Mayor robustez ante problemas de sincronización del localStorage
+        *   ✅ API simplificada y más segura
+        *   ✅ Compatibilidad con usuarios normales y responsables
+    *   **Archivos Modificados:**
+        *   `api/update_player_id.php` - Lógica de autorización corregida
+        *   `Front/menu_front.php` - Eliminado envío de user_id
+        *   `Front/menu2.php` - Eliminado envío de user_id
+
 ---
 
 Este `README.md` proporciona una visión general completa del proyecto. Para detalles específicos de implementación o depuración, se recomienda revisar el código fuente de los archivos relevantes.
