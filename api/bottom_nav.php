@@ -34,13 +34,13 @@ $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             case 3: // Agendar Visitas (Cita)
                 $linkHref = '/Front/citas.php';
                 $linkActivePage = 'citas';
-                $linkName = 'Cita'; // Override name
+                $linkName = 'Visitas'; // Override name
                 $linkIcon = 'bi-calendar'; // Override icon
                 break;
             case 4: // Empresas Aliadas (Empresas)
                 $linkHref = ''; // As per user's request
                 $linkActivePage = ''; // As per user's request
-                $linkName = 'Empresas'; // Override name
+                $linkName = 'Convenios'; // Override name
                 $linkIcon = 'bi-building'; // Override icon
                 break;  
 

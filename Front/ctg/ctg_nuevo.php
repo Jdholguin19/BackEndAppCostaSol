@@ -66,6 +66,7 @@ const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
 
 // Obtener el token de localStorage
 const token = localStorage.getItem('cs_token');
+const propSel  = document.getElementById('selProp');
 
 // Si no hay token, deshabilitar formulario y mostrar mensaje
 if (!token) {
@@ -75,18 +76,21 @@ if (!token) {
     }
 } else {
 
-    /* ---------- llenar propiedades ---------- */
-    // Asegúrate de que esta API (obtener_propiedades.php) también maneja token si es necesario
-    // Actualmente usa id_usuario en URL - si la cambiaste, ajusta aquí
-    fetch('../../api/obtener_propiedades.php?id_usuario='+u.id) // <-- Si obtener_propiedades.php usa token, ajusta esta llamada
+      /* ---------- cargar propiedades ---------- */
+      const token = localStorage.getItem('cs_token');
+      fetch('../../api/obtener_propiedades.php?id_usuario='+u.id, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       .then(r=>r.json()).then(d=>{
         if(!d.ok) return;
-        const sel = document.getElementById('selProp');
         d.propiedades.forEach(p=>{
-          sel.insertAdjacentHTML('beforeend',
+          propSel.insertAdjacentHTML('beforeend',
             `<option value="${p.id}">${p.urbanizacion} — Mz ${p.manzana} / Villa ${p.solar}</option>`);
         });
       });
+
 
     /* ---------- llenar tipos ---------- */
     // Asegúrate de que esta API (tipo_ctg.php) maneja token si es necesario
