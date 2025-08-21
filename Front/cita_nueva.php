@@ -150,11 +150,12 @@ fetch('../api/obtener_propiedades.php?id_usuario='+u.id, {
 fetch('../api/propositos.php').then(r=>r.json()).then(d=>{
   if(!d.ok) return;
   d.items.forEach(p=>{
-    const col=document.createElement('div'); col.className='col-4';
-    col.innerHTML = `<button class="purpose-button" data-id="${p.id}">
-        <img src="${p.url_icono||'https://via.placeholder.com/48'}" width="36">
-        <span>${p.proposito}</span></button>`;
-    propGrid.appendChild(col);
+    // Se inserta directamente el botón, sin el div contenedor `col-4`
+    propGrid.insertAdjacentHTML('beforeend', 
+      `<button class="purpose-button" data-id="${p.id}">
+          <img src="${p.url_icono||'https://via.placeholder.com/48'}" alt="Icono de ${p.proposito}">
+          <span>${p.proposito}</span>
+      </button>`);
   });
 });
 
@@ -281,6 +282,9 @@ btnOk.onclick = ()=>{
    })
    .catch(()=>{ alert('Error servidor'); btnOk.disabled=false; btnOk.innerHTML='<i class="bi bi-check-circle"></i> Confirmar'; });
 };
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
