@@ -1,18 +1,41 @@
 importScripts('https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js');
 
-// Escucha el evento 'notificationclick'
-self.addEventListener('notificationclick', function(event) {
-    console.log('[Service Worker] Notification click Received.', event);
+// Evento push para manejar notificaciones entrantes
+self.addEventListener('push', event => {
+  console.log('Service Worker: Push recibido', event);
 
-    // Cierra la notificacixc3xb3n
-    event.notification.close();
+  const data = event.data.json(); // OneSignal envía los datos como JSON
+  const title = data.headings ? data.headings.es : 'Nueva Notificación'; // Título en español
+  const options = {
+    body: data.contents ? data.contents.es : 'Mensaje de notificación', // Contenido en español
+    icon: data.icon || '/imagenes/icons/icon-192x192.png', // Icono (usa uno por defecto si no viene)
+    data: data.data // Datos adicionales (como ctg_id o pqr_id)
+  };
 
-    // Obtiene la URL a la que quieres redirigir
-    // Cambiamos la URL para que apunte a menu_front.php localmente
-    const targetUrl = 'http://localhost/Front/menu_front.php'; // *** MODIFICADO PARA LOCALHOST ***
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
+});
 
-    // Abre una nueva ventana o pestaxc3xb1a con la URL de destino
-    event.waitUntil(
-        clients.openWindow(targetUrl)
-    );
+// Evento click en la notificación
+self.addEventListener('notificationclick', event => {
+  console.log('Service Worker: Click en notificación', event);
+
+  event.notification.close(); // Cierra la notificación
+
+  const notificationData = event.notification.data;
+  const baseUrl = 'https://app.costasol.com.ec';
+  
+  // Lógica de redirección mejorada
+  let targetUrl = `${baseUrl}/Front/menu_front.php`; // URL por defecto
+
+  if (notificationData) {
+    if (notificationData.ctg_id) {
+      targetUrl = `${baseUrl}/Front/ctg/ctg_detalle.php?id=${notificationData.ctg_id}`;
+    } else if (notificationData.pqr_id) {
+      targetUrl = `${baseUrl}/Front/pqr/pqr_detalle.php?id=${notificationData.pqr_id}`;
+    }
+  }
+
+  event.waitUntil(clients.openWindow(targetUrl));
 });

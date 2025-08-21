@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "ec.com.costasol.app.twa",
+        "sha256_cert_fingerprints": ["42:98:99:F7:3C:9C:24:0C:ED:26:DB:85:3F:CB:3B:48:31:28:4F:76:C4:EC:E1:26:F9:F3:D7:17:33:2F:01:AE"]
+      }
+    }]

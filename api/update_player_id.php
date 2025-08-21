@@ -1,7 +1,7 @@
 <?php
 /**
  *  api/update_player_id.php
- *  POST  { "user_id": int, "onesignal_player_id": "..." }
+ *  POST  { "onesignal_player_id": "..." }
  *  Requires token in header Authorization: Bearer <token>
  *  OK    { "ok": true, "mensaje": "Player ID actualizado" }
  *  Error { "ok": false, "mensaje": "..." }
@@ -58,21 +58,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 /* ---------- 1. Entrada ---------- */
 $input = json_decode(file_get_contents('php://input'), true);
-$userId = (int)($input['user_id'] ?? 0);
 $oneSignalPlayerId = $input['onesignal_player_id'] ?? null;
 
 // Validar entrada
-if (!$userId || !$oneSignalPlayerId) {
+if (!$oneSignalPlayerId) {
     http_response_code(400);
-    exit(json_encode(['ok' => false, 'mensaje' => 'user_id y onesignal_player_id son requeridos']));
+    exit(json_encode(['ok' => false, 'mensaje' => 'onesignal_player_id es requerido']));
 }
 
-// Validar que el user_id proporcionado coincide con el usuario autenticado
-// CORRECCIÓN: Permitir que cada usuario solo actualice su propio Player ID
-if ($userId !== $authenticated_user_id) {
-     http_response_code(403);
-     exit(json_encode(['ok' => false, 'mensaje' => 'No autorizado para actualizar el Player ID de otro usuario']));
-}
+// Usar el ID del usuario autenticado directamente
+$userId = $authenticated_user_id;
 
 try {
     // Determinar en qué tabla actualizar (usuario o responsable)

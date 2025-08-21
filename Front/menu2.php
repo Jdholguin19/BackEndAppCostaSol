@@ -10,67 +10,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-          appId: "e77613c2-51f8-431d-9892-8b2463ecc817",
-          safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
-          notifyButton: {
-              enable: true,
-          },
-          allowLocalhostAsSecureOrigin: true,
-      });
-
-      // --- INICIO: Código para obtener y enviar el player_id ---
-      const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
-      if (u.id) {
-          try {
-              // Esperar un momento para que OneSignal esté completamente listo
-              await new Promise(resolve => setTimeout(resolve, 2000));
-              
-              // Obtener el Player ID usando acceso directo a la propiedad
-              const playerId = OneSignal.User.PushSubscription.id;
-              
-              console.log("OneSignal Player ID:", playerId);
-
-              if (playerId) {
-                  // Enviar el player_id al backend
-                  const token = localStorage.getItem('cs_token');
-                  if (token) {
-                      const response = await fetch('../api/update_player_id.php', {
-                          method: 'POST',
-                          headers: {
-                              'Content-Type': 'application/json',
-                              'Authorization': `Bearer ${token}`
-                          },
-                          body: JSON.stringify({
-                              user_id: u.id,
-                              onesignal_player_id: playerId
-                          })
-                      });
-                      const data = await response.json();
-                      if (data.ok) {
-                          console.log("Player ID actualizado en el servidor:", data.mensaje);
-                      } else {
-                          console.error("Error al actualizar Player ID en el servidor:", data.mensaje);
-                      }
-                  } else {
-                      console.warn("No hay token de autenticación para enviar el Player ID.");
-                  }
-              } else {
-                  console.warn("OneSignal Player ID es null - usuario puede no estar suscrito");
-              }
-          } catch (error) {
-              console.error("Error al obtener o enviar el OneSignal Player ID:", error);
-          }
-      } else {
-          console.warn("Usuario no logueado, no se puede enviar el Player ID.");
-      }
-      // --- FIN: Código para obtener y enviar el player_id ---
-  });
-</script>
 </head>
 <body>
 
@@ -194,53 +133,53 @@ include '../api/bottom_nav.php';
 
 
     if ( menu.id === 6 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('GARANTIAS') ){
         location.href = 'garantias.php';          // <<<<<<
         return;
     }    
 
       if ( menu.id === 7 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('CALENDARIO') ){
         location.href = 'panel_calendario.php';          // <<<<<<
         return;
     }
 
       if ( menu.id === 8 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('NOTIFICACIONES') ){
         location.href = 'notificaciones.php';          // <<<<<<
         return;
     }  
 
 
       if ( menu.id === 9 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('PQR') ){
         location.href = 'pqr/pqr.php';          // <<<<<<
         return;
     }  
 
 
     if ( menu.id === 10 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('USER') ){
         location.href = 'users.php';          // <<<<<<
         return;
-    } 
+    }
 
     if ( menu.id === 11 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('MCM') ){
         location.href = '../api/mcm.php';          // <<<<<<
         return;
     }
 
 
     if ( menu.id === 12 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('VEGETAL') ){
         location.href = '../api/paletavegetal.php';          // <<<<<<
         return;
     }
 
 
     if ( menu.id === 13 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
+        (menu.nombre || '').toUpperCase().includes('NOTICIA') ){
         location.href = 'noticia.php';          // <<<<<<
         return;
     }
