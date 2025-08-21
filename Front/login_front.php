@@ -11,7 +11,7 @@
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_login.css" rel="stylesheet">
 
-<script src="https://cdn.onesignal.com/sdks/web/v17/OneSignalSDK.page.js" defer></script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
 </head>
 <body>
