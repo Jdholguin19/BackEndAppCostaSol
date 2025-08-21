@@ -105,13 +105,19 @@ body {
 #calendar-container {
     display: none; /* Hidden by default, shown by JS */
     margin-top: 1rem;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center; /* Ensure content inside is centered */
 }
+
 .flatpickr-calendar {
-    width: 100%;
+    display: inline-block; /* Makes the calendar an inline element that can be centered */
     box-shadow: none;
     border: none;
-
+    margin: 0 auto; /* Additional centering for the calendar itself */
 }
+
 .flatpickr-loading {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -378,23 +384,22 @@ body {
     }
     
     .purpose-grid {
-        gap: 0.5rem; /* Ajustar espacio en móviles */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.5rem;
     }
 
     .purpose-button {
-         width: 110px; /* Ajustar ancho fijo en móviles */
-         padding: 0.6rem 0.8rem; /* Ajustar padding en móviles */
-     }
+        height: 125px; /* Altura reducida para tabletas y móviles */
+        padding: 0.6rem;
+    }
 
     .purpose-button img {
-        width: 40px; /* Ajustar tamaño del icono en móviles */
-        height: 40px; /* Ajustar tamaño del icono en móviles */
+        width: 40px;
+        height: 40px;
     }
 
     .purpose-button span {
-        font-size: 0.75rem; /* Ajustar tamaño de fuente en móviles */
-        line-height: 1.2;
-        /* padding: 0 0.15rem; -- Eliminar padding del span en móviles */
+        font-size: 0.8rem;
     }
     
     .action-buttons {
@@ -423,23 +428,23 @@ body {
     }
     
     .purpose-grid {
-        gap: 0.4rem; /* Ajustar espacio en pantallas muy pequeñas */
+        /* Mantiene 3 columnas en la mayoría de móviles y 2 en los más pequeños */
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 0.5rem;
     }
 
     .purpose-button {
-        width: 100px; /* Ajustar ancho fijo en pantallas muy pequeñas */
-        padding: 0.5rem 0.6rem; /* Ajustar padding en pantallas muy pequeñas */
+        height: 120px; /* Altura más reducida para móviles pequeños */
+        padding: 0.5rem;
     }
 
     .purpose-button img {
-        width: 36px; /* Ajustar tamaño del icono en pantallas muy pequeñas */
-        height: 36px; /* Ajustar tamaño del icono en pantallas muy pequeñas */
+        width: 38px;
+        height: 38px;
     }
 
     .purpose-button span {
-        font-size: 0.7rem; /* Ajustar tamaño de fuente en pantallas muy pequeñas */
-        /* padding: 0 0.1rem; -- Eliminar padding del span en pantallas muy pequeñas */
+        font-size: 0.75rem;
     }
     
-
 }
