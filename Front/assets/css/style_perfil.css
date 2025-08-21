@@ -1,0 +1,217 @@
+/* Front/assets/css/style_perfil.css */
+
+body {
+    background-color: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Section */
+.header-section {
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9e9e9;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.welcome-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.welcome-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.back-button:hover {
+    background-color: #f0f2f5;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+/* Main Content */
+.main-content {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    min-height: calc(100vh - 80px);
+}
+
+/* Profile Picture Section */
+.profile-picture-section {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 20px;
+    background-color: #ffffff;
+}
+
+.profile-picture-container {
+    text-align: center;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #e9e9e9;
+    margin-bottom: 15px;
+}
+
+.edit-picture-btn {
+    background: none;
+    border: none;
+    color: #25d366;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: background-color 0.2s;
+}
+
+.edit-picture-btn:hover {
+    background-color: #f0f2f5;
+}
+
+.edit-picture-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #f0f2f5;
+}
+
+/* Estilos para el input de archivo */
+#fileInput {
+    display: none;
+}
+
+/* Indicador de carga */
+.uploading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Profile Information */
+.profile-info {
+    padding: 0 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f2f5;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.info-icon i {
+    font-size: 20px;
+    color: #666;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.info-value {
+    font-size: 17px;
+    color: #333;
+    font-weight: 400;
+}
+
+/* Logout Section */
+.logout-section {
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+.logout-btn i {
+    font-size: 18px;
+}
+
+/* Loading spinner styles */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #007bff;
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

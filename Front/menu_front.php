@@ -29,6 +29,20 @@
       display: none; /* Oculto por defecto */
       border: 2px solid white; /* Borde para resaltar */
   }
+  
+  /* Estilos para el avatar clickeable */
+  .avatar {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .avatar:active {
+      transform: scale(0.95);
+  }
 </style>
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -136,7 +150,7 @@
             <i class="bi bi-bell-fill"></i>
             <span class="notification-badge" id="notification-badge"></span>
         </a>
-        <img src="" class="avatar" id="welcomeAvatar" alt="Avatar">
+        <img src="" class="avatar" id="welcomeAvatar" alt="Avatar" title="Ver perfil" style="cursor: pointer;">
         <button id="logoutButton" class="logout-button" style="display: none;">Cerrar sesión</button>
     </div>
   </div>
@@ -591,28 +605,13 @@ include '../api/bottom_nav.php';
 
 
   // Función para cerrar sesión (puedes llamarla desde un botón)
-  /* ---------- Logout Button ---------- */
+  /* ---------- Avatar Click - Redirigir a Perfil ---------- */
   document.getElementById('welcomeAvatar').addEventListener('click', function() {
-      const logoutButton = document.getElementById('logoutButton');
-      // Alternar la visibilidad del botón
-      if (logoutButton.style.display === 'none') {
-          logoutButton.style.display = 'block';
-      } else {
-          logoutButton.style.display = 'none';
-      }
+      // Redirigir a la página de perfil
+      window.location.href = 'perfil.php';
   });
 
-  // Ocultar el botón si se hace clic fuera de él o del avatar
-  document.addEventListener('click', function(event) {
-      const avatarContainer = document.querySelector('.avatar-container');
-      const logoutButton = document.getElementById('logoutButton');
-      // Si el clic no fue dentro del contenedor del avatar (que incluye el avatar y el botón)
-      if (!avatarContainer.contains(event.target) && logoutButton.style.display === 'block') {
-          logoutButton.style.display = 'none';
-      }
-  });
-
-  // Evento de clic para el botón de cerrar sesión
+  // Evento de clic para el botón de cerrar sesión (mantener por si se necesita en el futuro)
   document.getElementById('logoutButton').addEventListener('click', function() {
       logout(); // Llamar a la función de cerrar sesión existente
   });

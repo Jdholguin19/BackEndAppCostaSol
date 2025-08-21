@@ -53,6 +53,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── propositos.php              # API para obtener propósitos de agendamiento
 │   ├── responsables_list.php       # API para listar responsables
 │   ├── update_player_id.php        # API para actualizar OneSignal Player ID
+│   ├── update_profile_picture.php  # API para actualizar foto de perfil
 │   ├── user_crud.php               # API para operaciones CRUD de usuarios
 │   └── validate_responsable.php    # API para validar tokens de responsables
 ├── appcostasol/                  # Contiene una versión alternativa o anterior de la aplicación
@@ -78,6 +79,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │       ├── style_noticia.css
 │   │       ├── style_notifications.css
 │   │       ├── style_panel_calendario.css
+│   │       ├── style_perfil.css          # Estilos para la página de perfil
 │   │       ├── style_pqr_detalle.css
 │   │       ├── style_pqr_nuevo.css
 │   │       └── style_pqr.css
@@ -100,6 +102,7 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   ├── noticia.php               # Página para la gestión de noticias (solo para admins)
 │   ├── notificaciones.php        # Página para ver notificaciones
 │   ├── panel_calendario.php      # Página del calendario de responsables
+│   ├── perfil.php                # Página del perfil de usuario con gestión de foto
 │   ├── register_front.php        # Página de registro de usuario
 │   └── users.php                 # Página para la gestión de usuarios (solo para admins)
 ├── config/                       # Archivos de configuración
@@ -181,6 +184,11 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   El contador se actualiza automáticamente al visualizar un ticket (CTG o PQR).
     *   La lógica diferencia entre usuarios normales (ven respuestas de responsables) y responsables (ven respuestas de usuarios en sus tickets asignados).
     *   El contador muestra el número exacto hasta 9, y "+9" para cantidades superiores.
+*   **Gestión de Perfil de Usuario:**
+    *   Página de perfil completa (`perfil.php`) con información del usuario.
+    *   Funcionalidad para cambiar foto de perfil con subida de archivos.
+    *   Navegación directa desde el avatar en el menú principal.
+    *   Soporte para usuarios normales y responsables.
 
 ## Resumen de Funcionalidades de la API (para Migración a Laravel)
 
@@ -196,6 +204,7 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 *   **`api/user_crud.php`**: Proporciona operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de usuarios.
 *   **`api/validate_responsable.php`**: Valida tokens específicos para responsables.
 *   **`api/update_player_id.php`**: Actualiza el ID de OneSignal Player para notificaciones push.
+*   **`api/update_profile_picture.php`**: Actualiza la foto de perfil del usuario autenticado.
 
 ### Gestión de Citas
 
@@ -269,7 +278,7 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 
 *   **`login_front.php`**: Interfaz de usuario para el inicio de sesión de usuarios y responsables. Maneja la recolección de credenciales y el envío a `api/login.php`. Almacena el token de autenticación y los datos del usuario en `localStorage`.
 *   **`register_front.php`**: Interfaz de usuario para el registro de nuevos usuarios. Recopila información básica (nombres, apellidos, correo, contraseña) y la envía a `api/user_crud.php` para la creación de un nuevo usuario con `rol_id: 1` (cliente).
-*   **`menu_front.php` / `menu2.php`**: Páginas principales post-autenticación. Muestran el nombre del usuario, avatar, y un menú dinámico basado en el rol. Incluyen la lógica para cerrar sesión (`api/logout.php`) y la integración con OneSignal para notificaciones push (`api/update_player_id.php`).
+*   **`menu_front.php` / `menu2.php`**: Páginas principales post-autenticación. Muestran el nombre del usuario, avatar, y un menú dinámico basado en el rol. El avatar es clickeable y redirige al perfil del usuario. Incluyen la lógica para cerrar sesión (`api/logout.php`) y la integración con OneSignal para notificaciones push (`api/update_player_id.php`).
 
 ### Gestión de Propiedades y Avance de Obra
 
@@ -303,6 +312,7 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 *   **`garantias.php`**: Muestra información sobre las garantías del usuario, incluyendo su duración y vigencia. Incluye un procedimiento de reclamación. Interactúa con `api/garantias.php`.
 *   **`panel_calendario.php`**: Muestra un calendario de citas para los responsables. Los administradores pueden ver el calendario de todos los responsables. Utiliza FullCalendar.js. Interactúa con `api/responsables_list.php` y `api/calendario_responsable.php`.
 *   **`noticia.php`**: (Panel de administración) Permite a los administradores crear, listar y eliminar noticias. Interactúa con `api/noticias.php`.
+*   **`perfil.php`**: Página completa del perfil de usuario que permite ver información personal y cambiar la foto de perfil. Incluye funcionalidad de subida de archivos y navegación integrada.
 *   **`users.php`**: (Panel de administración) Permite a los responsables con permisos gestionar usuarios (CRUD). Interactúa con `api/user_crud.php`.
 *   **`seleccion_acabados.php`**: (Vacío en la lectura actual, pero su nombre sugiere una funcionalidad de selección de acabados).
 *   **`config/db.php`**: Aunque es un archivo de configuración de backend, es fundamental para entender cómo el frontend se conecta indirectamente a la base de datos a través de las APIs PHP.
@@ -324,7 +334,7 @@ Se han implementado mejoras para asegurar la correcta visualización de propieda
 
 *   **Corrección de Error de Autenticación y Carga de Propiedades (`401 Unauthorized`):**
     *   Se identificó un error donde las solicitudes a `api/obtener_propiedades.php` (tanto para usuarios regulares como para responsables) fallaban con un estado `401 Unauthorized`.
-    *   La causa fue que la llamada `fetch` en `Front/menu_front.php` para obtener propiedades no estaba incluyendo el encabezado `Authorization` con el token de sesión, a pesar de que la API lo requería.
+    *   **Causa:** La llamada `fetch` en `Front/menu_front.php` para obtener propiedades no estaba incluyendo el encabezado `Authorization` con el token de sesión, a pesar de que la API lo requería.
     *   **Solución:** Se añadió el encabezado `Authorization: Bearer <token>` a la solicitud `fetch` para `api/obtener_propiedades.php` en `Front/menu_front.php`.
 
 *   **Corrección de `Uncaught ReferenceError: Cannot access 'token' before initialization`:**
@@ -362,7 +372,7 @@ Se han añadido los siguientes endpoints para gestionar el contador de notificac
 
 La aplicación maneja la carga y visualización de archivos (imágenes, PDFs) en varias funcionalidades (CTG, PQR, Noticias, Progreso de Construcción).
 
-*   **Almacenamiento:** Los archivos adjuntos (imágenes de problemas/soluciones en CTG/PQR, imágenes de noticias, fotos de progreso de construcción) se almacenan actualmente en el **sistema de archivos local del servidor web**. Las rutas a estos archivos se guardan en la base de datos (campos `url_adjunto`, `url_problema`, `url_solucion`, `url_imagen` en tablas como `respuesta_ctg`, `respuesta_pqr`, `noticia`, `progreso_construccion`).
+*   **Almacenamiento:** Los archivos adjuntos (imágenes de problemas/soluciones en CTG/PQR, imágenes de noticias, fotos de progreso de construcción, fotos de perfil) se almacenan actualmente en el **sistema de archivos local del servidor web**. Las rutas a estos archivos se guardan en la base de datos (campos `url_adjunto`, `url_problema`, `url_solucion`, `url_imagen`, `url_foto_perfil` en tablas como `respuesta_ctg`, `respuesta_pqr`, `noticia`, `progreso_construccion`, `usuario`, `responsable`).
 *   **Integración con SharePoint:** La carpeta `SharePoint/` y los campos `ruta_descarga_sharepoint`, `ruta_visualizacion_sharepoint`, `drive_item_id` en la tabla `progreso_construccion` sugieren una integración existente o planificada con Microsoft SharePoint para la gestión de documentos y activos relacionados con el avance de obra. Esto implica que algunos archivos podrían residir en SharePoint y ser accedidos a través de URLs generadas por esta integración.
 *   **Consideraciones para la Migración:** Para la migración a Laravel, será crucial definir una estrategia de almacenamiento de archivos (Laravel Filesystem con S3, almacenamiento local, etc.) y adaptar la lógica de carga, acceso y visualización de archivos en consecuencia. La integración con SharePoint requerirá una revisión específica para asegurar su compatibilidad o reimplementación.
 
@@ -483,6 +493,32 @@ Se han implementado las siguientes mejoras y correcciones en el proyecto:
         *   `api/update_player_id.php` - Lógica de autorización corregida
         *   `Front/menu_front.php` - Eliminado envío de user_id
         *   `Front/menu2.php` - Eliminado envío de user_id
+
+---
+
+### Mejoras y Correcciones (Agosto 2025)
+
+*   **Mejoras de Diseño en "Nueva Cita" (`cita_nueva.php`):**
+    *   Se realizaron varios ajustes de CSS para mejorar la experiencia de usuario en la pantalla de agendamiento de citas.
+    *   **Cuadrícula de Propósitos:** Se estandarizó el tamaño de los botones de selección de propósito para que todos tengan las mismas dimensiones, independientemente del texto que contengan, y se hicieron responsivos.
+    *   **Centrado del Calendario:** Se corrigió un problema de alineación con el componente de calendario (Flatpickr), asegurando su centrado en todas las resoluciones mediante la aplicación de `max-width` y márgenes automáticos a su `div` contenedor.
+
+*   **Corrección de Lógica de Disponibilidad de Horas (`api/cita/horas_disponibles.php`):**
+    *   Se detectó y corrigió un error crítico que impedía mostrar los horarios disponibles en producción debido a una lógica con valores fijos.
+    *   Se reescribió el script para que calcule los horarios de forma dinámica basándose en las reglas de disponibilidad de la base de datos, asegurando consistencia con la lógica de `dias_disponibles.php`.
+
+*   **Generalización de Permisos para "Responsables" (`menu2.php` y `api/menu.php`):**
+    *   Se refactorizó el código para que todos los usuarios con el rol de "responsable" tengan acceso a las vistas de administrador, en lugar de solo un usuario con un ID específico (`id=3`).
+    *   Se eliminó la lógica "hardcodeada" y ahora el sistema se basa en el flag `is_responsable` para una mayor flexibilidad.
+    *   Se reparó una corrupción en el archivo `api/menu.php` causada por un error de escritura anterior.
+
+*   **Implementación de Sistema de Perfil de Usuario:**
+    *   Se creó una página completa de perfil (`Front/perfil.php`) con diseño tipo WhatsApp.
+    *   Se implementó funcionalidad para cambiar foto de perfil con subida de archivos.
+    *   Se creó nueva API (`api/update_profile_picture.php`) para gestionar fotos de perfil.
+    *   Se modificó `Front/menu_front.php` para que el avatar redirija al perfil.
+    *   Se agregaron estilos CSS (`Front/assets/css/style_perfil.css`) para la nueva funcionalidad.
+    *   El sistema maneja tanto usuarios normales como responsables.
 
 ---
 
