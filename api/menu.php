@@ -50,12 +50,12 @@ try {
     }
     
     $is_admin_responsible_user = false;
-    if ($authenticated_user && $is_responsable && $authenticated_user['id'] == 3) {
+    if ($authenticated_user && $is_responsable) {
         $is_admin_responsible_user = true;
     }
 
     /* --------- Verificar si el usuario es responsable --------- */
-    if ($authenticated_user && isset($authenticated_user['rol_id']) && $authenticated_user['rol_id'] == 3) {
+    if ($authenticated_user && $is_responsable) {
         // Si es responsable, siempre mostrar garantías
         $mostrar_garantias = true;
     } else {

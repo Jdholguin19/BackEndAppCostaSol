@@ -82,8 +82,10 @@ function card(c){
       </div>
     </div>
 
-    <p><i class="bi bi-calendar"></i>${fechaLarga(c.fecha)}</p>
-    <p><i class="bi bi-clock"></i>${c.hora}</p>
+    <div class="card-meta-row">
+      <p><i class="bi bi-calendar"></i>${fechaLarga(c.fecha)}</p>
+      <p><i class="bi bi-clock"></i>${c.hora}</p>
+    </div>
     <p><i class="bi bi-geo-alt"></i>${c.proyecto}</p>
     ${c.observaciones ? `<p><i class="bi bi-chat-right-text"></i>${c.observaciones}</p>` : ''}
 

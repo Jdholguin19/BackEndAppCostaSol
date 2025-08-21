@@ -68,7 +68,7 @@ include '../api/bottom_nav.php';
   const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
   if (!u.id) location.href = 'login_front.php';
 
-  const is_admin_responsible = (u.is_responsable && u.id === 3);
+  const is_admin_responsible = u.is_responsable; // Modificado: es verdadero para cualquier responsable
 
   /* ---------- Endpoints ---------- */
   const API_NEWS  = '../api/noticias.php?limit=10';
@@ -202,8 +202,8 @@ include '../api/bottom_nav.php';
       
       grid.innerHTML = ''; // Clear spinner
 
-      // Filtramos el menú con id 15 (Ver más) para no mostrarlo en esta página
-      const menusFiltrados = menus.filter(menu => menu.id !== 15);
+      // Filtramos el menú con id 15 (Ver más). Se convierte el ID a número para asegurar la comparación.
+      const menusFiltrados = menus.filter(menu => Number(menu.id) !== 15);
       
       menusFiltrados.forEach(m=>{
         // Condición para ocultar el módulo a los residentes
