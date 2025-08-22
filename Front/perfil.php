@@ -9,9 +9,114 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
-
 <link href="assets/css/style_perfil.css" rel="stylesheet">
 
+<style>
+  /* Estilos para el botón de resuscripción */
+  .resubscribe-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+
+  .resubscribe-btn:hover {
+      background-color: #218838;
+  }
+
+  /* Estilo para el botón en estado "Desuscrito" */
+  .unsubscribe-btn.unsubscribed-state {
+      background-color: transparent;
+      border: 1px solid #28a745;
+      color: #333;
+  }
+
+  /* Contenedor de botones de notificación para Flexbox */
+  .notification-buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+  }
+
+  /* Eliminar margen izquierdo hardcodeado */
+  #resubscribeBtn {
+      margin-left: 0 !important;
+  }
+
+  /* Estilos responsivos para los botones de notificación */
+  @media (max-width: 480px) {
+      .notification-buttons-container {
+          flex-direction: column;
+          align-items: stretch; /* Estira los botones al ancho completo */
+      }
+  }
+
+  /* --- ESTILOS PARA EL SWITCH DE NOTIFICACIONES --- */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+  }
+
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #28a745;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #28a745;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
+  }
+
+  .slider.round {
+    border-radius: 28px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+  /* --- FIN DE ESTILOS PARA EL SWITCH --- */
+</style>
 
 </head>
 <body>
@@ -86,6 +191,22 @@
       </div>
     </div>
 
+    <!-- Notificaciones -->
+    <div class="info-item">
+      <div class="info-icon">
+        <i class="bi bi-bell"></i>
+      </div>
+      <div class="info-content">
+        <div class="info-label">Notificaciones</div>
+        <div class="info-value">
+          <label class="switch">
+            <input type="checkbox" id="notificationSwitch">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Logout Button -->
@@ -96,6 +217,17 @@
     </button>
   </div>
 
+</div>
+
+<!-- Ventana emergente de confirmación de desuscripción -->
+<div id="unsubscribeModal" class="unsubscribe-modal">
+  <div class="unsubscribe-content">
+    <h3 class="unsubscribe-title">¿Seguro que quieres desuscribirte?</h3>
+    <div class="unsubscribe-buttons">
+      <button class="btn-no-thanks" onclick="hideUnsubscribeModal()">No, gracias</button>
+      <button class="btn-unsubscribe" onclick="unsubscribeFromNotifications()">Desuscribirse</button>
+    </div>
+  </div>
 </div>
 
 <?php 
@@ -128,18 +260,14 @@ include '../api/bottom_nav.php';
       const data = await response.json();
       
       if (data.ok) {
-        // Actualizar foto de perfil
         const profilePicture = document.getElementById('profilePicture');
         profilePicture.src = data.usuario.url_foto_perfil || 'https://via.placeholder.com/120x120?text=Usuario';
-        
-        // Actualizar información del usuario
         document.getElementById('userName').textContent = data.usuario.nombres || data.usuario.nombre || 'No disponible';
         document.getElementById('userCedula').textContent = data.usuario.cedula || 'No disponible';
         document.getElementById('userPhone').textContent = data.usuario.telefono || 'No disponible';
         document.getElementById('userEmail').textContent = data.usuario.email || 'No disponible';
       } else {
         console.error('Error al cargar datos del perfil:', data.mensaje);
-        // Mostrar valores por defecto
         document.getElementById('userName').textContent = u.nombres || u.nombre || 'No disponible';
         document.getElementById('userCedula').textContent = 'No disponible';
         document.getElementById('userPhone').textContent = 'No disponible';
@@ -147,7 +275,6 @@ include '../api/bottom_nav.php';
       }
     } catch (error) {
       console.error('Error al cargar perfil:', error);
-      // Mostrar valores por defecto en caso de error
       document.getElementById('userName').textContent = u.nombres || u.nombre || 'No disponible';
       document.getElementById('userCedula').textContent = 'No disponible';
       document.getElementById('userPhone').textContent = 'No disponible';
@@ -158,34 +285,23 @@ include '../api/bottom_nav.php';
   /* ---------- Upload Profile Picture ---------- */
   async function uploadProfilePicture(file) {
     const token = localStorage.getItem('cs_token');
-    if (!token) {
-      throw new Error('No hay token disponible');
-    }
+    if (!token) throw new Error('No hay token disponible');
 
-    // Crear FormData para enviar el archivo
     const formData = new FormData();
     formData.append('profile_picture', file);
 
     try {
       const response = await fetch('../api/update_profile_picture.php', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       });
 
       const data = await response.json();
       
       if (data.ok) {
-        // Actualizar la imagen en la interfaz
-        const profilePicture = document.getElementById('profilePicture');
-        profilePicture.src = data.url_foto_perfil;
-        
-        // Mostrar mensaje de éxito
+        document.getElementById('profilePicture').src = data.url_foto_perfil;
         alert('Foto de perfil actualizada correctamente');
-        
-        // Actualizar el localStorage si es necesario
         const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
         u.url_foto_perfil = data.url_foto_perfil;
         localStorage.setItem('cs_usuario', JSON.stringify(u));
@@ -198,11 +314,185 @@ include '../api/bottom_nav.php';
     }
   }
 
+  /* ---------- OneSignal Switch Logic ---------- */
+  const notificationSwitch = document.getElementById('notificationSwitch');
+
+  // Mostrar ventana emergente de desuscripción
+  function showUnsubscribeModal() {
+    const modal = document.getElementById('unsubscribeModal');
+    if (modal) {
+      modal.classList.add('show');
+    }
+  }
+
+  // Ocultar ventana emergente de desuscripción
+  function hideUnsubscribeModal() {
+    const modal = document.getElementById('unsubscribeModal');
+    if (modal) {
+      modal.classList.remove('show');
+    }
+  }
+
+  // Función para desuscribirse de las notificaciones
+  async function unsubscribeFromNotifications() {
+    try {
+      // Deshabilitar el switch durante el proceso
+      notificationSwitch.disabled = true;
+
+      // Ocultar la ventana emergente
+      hideUnsubscribeModal();
+
+      // Intentar desuscribirse de OneSignal
+      if (window.OneSignal) {
+        try {
+          // En OneSignal v16, intentar desuscribirse
+          if (window.OneSignal.setSubscription && typeof window.OneSignal.setSubscription === 'function') {
+            await window.OneSignal.setSubscription(false);
+            console.log('Desuscripción exitosa con OneSignal.setSubscription');
+          } else if (window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+            // Intentar con la API de User
+            await window.OneSignal.User.PushSubscription.optOut();
+            console.log('Desuscripción exitosa con User.PushSubscription.optOut');
+          } else {
+            // Fallback: usar la API nativa del navegador
+            console.log('Usando fallback para desuscripción');
+          }
+        } catch (e) {
+          console.warn('Error con OneSignal, usando fallback:', e);
+        }
+      }
+
+      // Obtener el token para actualizar el backend
+      const token = localStorage.getItem('cs_token');
+      if (token) {
+        try {
+          // Actualizar el Player ID a cadena vacía en el backend (temporalmente)
+          // TODO: Cambiar a null cuando la API esté actualizada
+          const response = await fetch('../api/update_player_id.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              onesignal_player_id: "" // Cadena vacía temporalmente en lugar de null
+            })
+          });
+          
+          const data = await response.json();
+          if (data.ok) {
+            console.log('Player ID eliminado del servidor:', data.mensaje);
+          } else {
+            console.warn('Error al eliminar Player ID del servidor:', data.mensaje);
+          }
+        } catch (e) {
+          console.warn('Error al comunicarse con el servidor:', e);
+        }
+      }
+
+      // Marcar en localStorage que el usuario se desuscribió
+      localStorage.setItem('onesignal_declined', 'true');
+      localStorage.setItem('onesignal_unsubscribed', 'true');
+      
+      // Eliminar cualquier Player ID almacenado
+      localStorage.removeItem('onesignal_player_id');
+
+      // Actualizar el switch
+      notificationSwitch.checked = false;
+      
+      // Mostrar mensaje de éxito
+      alert('Te has desuscrito exitosamente de las notificaciones push.');
+
+    } catch (error) {
+      console.error('Error al desuscribirse:', error);
+      alert('Error al desuscribirse. Por favor, inténtalo de nuevo.');
+      
+      // Revertir el switch en caso de error
+      notificationSwitch.checked = true;
+    } finally {
+      notificationSwitch.disabled = false;
+    }
+  }
+
+  // Función para volver a suscribirse a las notificaciones
+  async function resubscribeToNotifications() {
+    try {
+      // Deshabilitar el switch durante el proceso
+      notificationSwitch.disabled = true;
+
+      // Limpiar el estado de desuscripción
+      localStorage.removeItem('onesignal_unsubscribed');
+      localStorage.removeItem('onesignal_declined');
+
+      // Intentar suscribirse a OneSignal
+      if (window.OneSignal) {
+        try {
+          if (window.OneSignal.showSlidedownPrompt) {
+            await window.OneSignal.showSlidedownPrompt();
+          } else if (window.OneSignal.showNativePrompt) {
+            await window.OneSignal.showNativePrompt();
+          } else {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              console.log('Permisos de notificación concedidos');
+            }
+          }
+        } catch (e) {
+          console.warn('Error con OneSignal, usando fallback:', e);
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            console.log('Permisos de notificación concedidos');
+          }
+        }
+      }
+
+      // Esperar un momento y verificar si se suscribió
+      setTimeout(async () => {
+        try {
+          let isSubscribed = false;
+          
+          if (window.OneSignal && window.OneSignal.User && window.OneSignal.User.PushSubscription) {
+            const playerId = window.OneSignal.User.PushSubscription.id;
+            isSubscribed = !!playerId;
+            console.log('Player ID después de resuscripción:', playerId);
+          } else {
+            const permission = await Notification.requestPermission();
+            isSubscribed = permission === 'granted';
+            console.log('Permisos nativos después de resuscripción:', permission);
+          }
+          
+          if (isSubscribed) {
+            console.log('Usuario resuscrito exitosamente');
+            
+            // Actualizar el switch
+            notificationSwitch.checked = true;
+            
+            // Mostrar mensaje de éxito
+            alert('Te has resuscrito exitosamente a las notificaciones push.');
+          } else {
+            console.log('Usuario aún no está suscrito después del intento');
+            notificationSwitch.checked = false; // Revertir si no se suscribió
+          }
+          notificationSwitch.disabled = false;
+        } catch (e) {
+          console.warn('Error al verificar resuscripción:', e);
+          notificationSwitch.checked = false; // Revertir en caso de error
+          notificationSwitch.disabled = false;
+        }
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error al resuscribirse:', error);
+      alert('Error al resuscribirse. Por favor, inténtalo de nuevo.');
+      
+      // Revertir el switch en caso de error
+      notificationSwitch.checked = false;
+      notificationSwitch.disabled = false;
+    }
+  }
+
   /* ---------- Event Handlers ---------- */
-  
-  // Botón de volver
   document.getElementById('btnBack').onclick = () => {
-    // Intentar volver a la página anterior, si no hay historial, ir al menú
     if (document.referrer && document.referrer.includes(window.location.origin)) {
       history.back();
     } else {
@@ -210,30 +500,22 @@ include '../api/bottom_nav.php';
     }
   };
 
-  // Botón de editar foto
   document.getElementById('editPictureBtn').onclick = () => {
-    // Abrir el selector de archivos
     document.getElementById('fileInput').click();
   };
 
-  // Input de archivo - cuando se selecciona una imagen
   document.getElementById('fileInput').onchange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-
-    // Validar que sea una imagen
     if (!file.type.startsWith('image/')) {
       alert('Por favor selecciona solo archivos de imagen');
       return;
     }
-
-    // Validar tamaño (máximo 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert('La imagen es demasiado grande. Máximo 5MB permitido');
       return;
     }
 
-    // Mostrar indicador de carga
     const editBtn = document.getElementById('editPictureBtn');
     const originalText = editBtn.textContent;
     editBtn.textContent = 'Subiendo...';
@@ -241,24 +523,29 @@ include '../api/bottom_nav.php';
 
     try {
       await uploadProfilePicture(file);
-      // Limpiar el input
       event.target.value = '';
     } catch (error) {
-      console.error('Error al subir imagen:', error);
       alert('Error al subir la imagen. Intenta de nuevo.');
     } finally {
-      // Restaurar botón
       editBtn.textContent = originalText;
       editBtn.disabled = false;
     }
   };
 
-  // Botón de cerrar sesión
   document.getElementById('logoutBtn').onclick = async () => {
     if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
       await logout();
     }
   };
+
+  // Event listener para el switch de notificaciones
+  notificationSwitch.addEventListener('change', (event) => {
+    if (event.target.checked) {
+      resubscribeToNotifications();
+    } else {
+      showUnsubscribeModal();
+    }
+  });
 
   /* ---------- Logout Function ---------- */
   async function logout() { 
@@ -269,20 +556,11 @@ include '../api/bottom_nav.php';
     } 
     
     try { 
-      const response = await fetch('../api/logout.php', {
+      await fetch('../api/logout.php', {
         method: 'POST', 
-        headers: { 
-          'Content-Type': 'application/json' 
-        }, 
+        headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ token: token }) 
       });
-      
-      const data = await response.json();
-      if (data.ok) { 
-        console.log(data.mensaje);
-      } else { 
-        console.error('Error al cerrar sesión:', data.mensaje);
-      } 
     } catch (error) { 
       console.error('Error de conexión:', error);
     } finally {
@@ -293,8 +571,22 @@ include '../api/bottom_nav.php';
   }
 
   /* ---------- Initialize ---------- */
-  // Cargar datos del perfil cuando la página se carga
-  document.addEventListener('DOMContentLoaded', loadProfileData);
+  document.addEventListener('DOMContentLoaded', function() {
+    loadProfileData();
+    
+    // Verificar si el usuario ya está desuscrito y configurar el switch
+    const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
+    notificationSwitch.checked = !isUnsubscribed;
+
+    // Configurar los botones del modal
+    document.querySelector('.btn-no-thanks').onclick = () => {
+      hideUnsubscribeModal();
+      // Revertir el switch si el usuario cancela
+      notificationSwitch.checked = true;
+    };
+    
+    document.querySelector('.btn-unsubscribe').onclick = unsubscribeFromNotifications;
+  });
 
 </script>
 

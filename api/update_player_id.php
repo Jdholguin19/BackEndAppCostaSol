@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $input = json_decode(file_get_contents('php://input'), true);
 $oneSignalPlayerId = $input['onesignal_player_id'] ?? null;
 
-// Validar entrada
-if (!$oneSignalPlayerId) {
+// Validar entrada - permitir null para desuscripción
+if (!isset($input['onesignal_player_id'])) {
     http_response_code(400);
     exit(json_encode(['ok' => false, 'mensaje' => 'onesignal_player_id es requerido']));
 }
@@ -72,6 +72,20 @@ $userId = $authenticated_user_id;
 try {
     // Determinar en qué tabla actualizar (usuario o responsable)
     $table_to_update = $is_responsable ? 'responsable' : 'usuario';
+
+    // Si el Player ID es null o cadena vacía, solo limpiar el campo (desuscripción)
+    if ($oneSignalPlayerId === null || $oneSignalPlayerId === "") {
+        $sql = "UPDATE $table_to_update SET onesignal_player_id = NULL, fecha_actualizacion_player_id = NOW() WHERE id = :user_id";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':user_id' => $userId]);
+        
+        if ($stmt->rowCount() > 0) {
+            echo json_encode(['ok' => true, 'mensaje' => 'Player ID eliminado exitosamente (desuscripción)']);
+        } else {
+            echo json_encode(['ok' => true, 'mensaje' => 'Player ID ya estaba eliminado']);
+        }
+        exit;
+    }
 
     /* ---------- 2. Verificar si el Player ID ya existe para otro usuario ---------- */
     $sql_check = "SELECT id FROM $table_to_update WHERE onesignal_player_id = :player_id AND id != :user_id LIMIT 1";

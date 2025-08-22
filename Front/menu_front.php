@@ -10,41 +10,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 
-<style>
-  .notification-icon-link {
-      position: relative;
-      display: inline-block;
-      margin-right: 15px; /* Espacio para que no se pegue al avatar */
-  }
-  .notification-badge {
-      position: absolute;
-      top: -2px;
-      right: -8px;
-      padding: 2px 6px;
-      border-radius: 50%;
-      background-color: red;
-      color: white;
-      font-size: 7px;
-      font-weight: bold;
-      display: none; /* Oculto por defecto */
-      border: 2px solid white; /* Borde para resaltar */
-  }
-  
-  /* Estilos para el avatar clickeable */
-  .avatar {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .avatar:hover {
-      transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .avatar:active {
-      transform: scale(0.95);
-  }
-</style>
-
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -53,10 +18,15 @@
           appId: "e77613c2-51f8-431d-9892-8b2463ecc817",
           safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
           notifyButton: {
-              enable: true,
+              enable: false, // Deshabilitamos el botón de notificación por defecto
           },
           allowLocalhostAsSecureOrigin: true,
       });
+
+      // Verificar el estado de suscripción después de un delay para asegurar que OneSignal esté completamente inicializado
+      setTimeout(async () => {
+          await checkOneSignalSubscription(OneSignal);
+      }, 2000);
 
       // --- INICIO: Código para obtener y enviar el player_id ---
       const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
@@ -92,6 +62,15 @@
               console.log("OneSignal Player ID:", playerId);
 
               if (playerId) {
+                  // Verificar si el usuario ya se desuscribió antes de enviar el Player ID
+                  const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
+                  const isDeclined = localStorage.getItem('onesignal_declined') === 'true';
+                  
+                  if (isUnsubscribed || isDeclined) {
+                      console.log("Usuario desuscrito, no se enviará Player ID al servidor");
+                      return;
+                  }
+                  
                   // Enviar el player_id al backend
                   const token = localStorage.getItem('cs_token');
                   if (token) {
@@ -108,6 +87,12 @@
                       const data = await response.json();
                       if (data.ok) {
                           console.log("Player ID actualizado en el servidor:", data.mensaje);
+                          
+                          // Si tenemos un Player ID, significa que el usuario está suscrito
+                          // Verificar nuevamente el estado de suscripción
+                          setTimeout(async () => {
+                              await checkOneSignalSubscription(OneSignal);
+                          }, 1000);
                       } else {
                           console.error("Error al actualizar Player ID en el servidor:", data.mensaje);
                       }
@@ -125,6 +110,254 @@
       }
       // --- FIN: Código para obtener y enviar el player_id ---
   });
+
+  // Función para verificar el estado de suscripción de OneSignal
+  async function checkOneSignalSubscription(OneSignal) {
+      try {
+          // Verificar si el usuario ya se desuscribió activamente
+          const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
+          const isDeclined = localStorage.getItem('onesignal_declined') === 'true';
+          
+          // Si el usuario se desuscribió activamente, solo ocultar el icono pero permitir resuscripción
+          if (isUnsubscribed) {
+              console.log("Usuario se desuscribió activamente, ocultando icono pero permitiendo resuscripción");
+              hideOneSignalBell();
+              return;
+          }
+          
+          // Si solo rechazó inicialmente, mostrar la ventana emergente
+          if (isDeclined) {
+              console.log("Usuario rechazó inicialmente, mostrando ventana emergente para resuscripción");
+              showSubscriptionModal();
+              return;
+          }
+          
+          // Verificar si el usuario está suscrito usando la API correcta de v16
+          let isSubscribed = false;
+          
+          try {
+              // Método para v16 - verificar permisos de notificación
+              if (OneSignal.getNotificationPermission) {
+                  const permission = await OneSignal.getNotificationPermission();
+                  isSubscribed = permission === 'granted';
+                  console.log("Permisos de notificación:", permission);
+              } else if (OneSignal.isPushNotificationsEnabled) {
+                  isSubscribed = await OneSignal.isPushNotificationsEnabled();
+                  console.log("Push notifications enabled:", isSubscribed);
+              } else {
+                  // Fallback: verificar si hay player ID usando la API correcta
+                  try {
+                      // En v16, usar OneSignal.User.PushSubscription.id
+                      if (OneSignal.User && OneSignal.User.PushSubscription) {
+                          const playerId = OneSignal.User.PushSubscription.id;
+                          isSubscribed = !!playerId;
+                          console.log("Player ID desde User.PushSubscription:", playerId);
+                      } else {
+                          // Intentar con la API de permisos nativa del navegador
+                          const permission = await Notification.requestPermission();
+                          isSubscribed = permission === 'granted';
+                          console.log("Permisos nativos del navegador:", permission);
+                      }
+                  } catch (e) {
+                      console.warn("Error al obtener Player ID, usando permisos nativos:", e);
+                      const permission = await Notification.requestPermission();
+                      isSubscribed = permission === 'granted';
+                      console.log("Permisos nativos del navegador (fallback):", permission);
+                  }
+              }
+          } catch (e) {
+              console.warn("Error con método principal, usando fallback:", e);
+              // Fallback: verificar permisos nativos del navegador
+              try {
+                  const permission = await Notification.requestPermission();
+                  isSubscribed = permission === 'granted';
+                  console.log("Permisos nativos del navegador (fallback final):", permission);
+              } catch (e2) {
+                  console.warn("Error con fallback final:", e2);
+                  isSubscribed = false;
+              }
+          }
+          
+          console.log("Estado final de suscripción:", isSubscribed);
+          
+          if (isSubscribed) {
+              console.log("Usuario ya está suscrito a OneSignal");
+              // Ocultar completamente el icono de notificación de OneSignal
+              hideOneSignalBell();
+          } else {
+              console.log("Usuario no está suscrito a OneSignal");
+              // Mostrar la ventana emergente de suscripción
+              showSubscriptionModal();
+          }
+      } catch (error) {
+          console.error("Error al verificar suscripción de OneSignal:", error);
+          // En caso de error, mostrar la ventana emergente
+          showSubscriptionModal();
+      }
+  }
+
+  // Función para ocultar SOLO el icono de notificación de OneSignal
+  function hideOneSignalBell() {
+      // Solo ocultar elementos específicos del icono de notificación de OneSignal
+      const specificSelectors = [
+          '.onesignal-bell-launcher',
+          '.onesignal-bell-launcher-button',
+          '.onesignal-bell-launcher-icon',
+          '.onesignal-bell-launcher-container'
+      ];
+      
+      specificSelectors.forEach(selector => {
+          const elements = document.querySelectorAll(selector);
+          elements.forEach(element => {
+              // Solo ocultar si realmente es un elemento del icono de notificación
+              if (element && element.classList.contains('onesignal-bell-launcher')) {
+                  element.style.display = 'none';
+                  element.style.visibility = 'hidden';
+                  element.style.opacity = '0';
+                  element.style.pointerEvents = 'none';
+                  console.log("Elemento del icono de OneSignal ocultado:", element);
+              }
+          });
+      });
+      
+      // Agregar clase CSS específica solo para el icono
+      document.body.classList.add('onesignal-bell-hidden');
+      
+      // CSS inline más específico y seguro
+      const style = document.createElement('style');
+      style.id = 'onesignal-bell-hide-style';
+      style.textContent = `
+          .onesignal-bell-launcher,
+          .onesignal-bell-launcher *,
+          .onesignal-bell-launcher-button,
+          .onesignal-bell-launcher-icon,
+          .onesignal-bell-launcher-container {
+              display: none !important;
+              visibility: hidden !important;
+              opacity: 0 !important;
+              pointer-events: none !important;
+          }
+      `;
+      
+      // Evitar duplicar estilos
+      const existingStyle = document.getElementById('onesignal-bell-hide-style');
+      if (!existingStyle) {
+          document.head.appendChild(style);
+      }
+      
+      console.log("Icono de OneSignal ocultado de forma segura");
+  }
+
+  // Función para limpiar completamente el estado de OneSignal
+  function clearOneSignalState() {
+      // Limpiar localStorage
+      localStorage.removeItem('onesignal_player_id');
+      localStorage.setItem('onesignal_declined', 'true');
+      localStorage.setItem('onesignal_unsubscribed', 'true');
+      
+      // Ocultar el icono
+      hideOneSignalBell();
+      
+      console.log("Estado de OneSignal limpiado completamente");
+  }
+
+  // Función para mostrar la ventana emergente de suscripción
+  function showSubscriptionModal() {
+      const modal = document.getElementById('subscriptionModal');
+      if (modal) {
+          modal.classList.add('show');
+      }
+  }
+
+  // Función para ocultar la ventana emergente
+  function hideSubscriptionModal() {
+      const modal = document.getElementById('subscriptionModal');
+      if (modal) {
+          modal.classList.remove('show');
+      }
+  }
+
+    // Función para suscribir al usuario
+  async function subscribeToNotifications() {
+      try {
+          // Ocultar la ventana emergente
+          hideSubscriptionModal();
+          
+          // Limpiar el estado de desuscripción para permitir resuscripción
+          localStorage.removeItem('onesignal_unsubscribed');
+          localStorage.removeItem('onesignal_declined');
+          
+          // Suscribir al usuario usando la API correcta de v16
+          try {
+              if (OneSignal.showSlidedownPrompt) {
+                  await OneSignal.showSlidedownPrompt();
+              } else if (OneSignal.showNativePrompt) {
+                  await OneSignal.showNativePrompt();
+              } else {
+                  // Fallback: solicitar permisos directamente
+                  const permission = await Notification.requestPermission();
+                  if (permission === 'granted') {
+                      console.log("Permisos de notificación concedidos");
+                  }
+              }
+          } catch (e) {
+              console.warn("Error con prompt de OneSignal, usando fallback:", e);
+              // Fallback: solicitar permisos directamente
+              const permission = await Notification.requestPermission();
+              if (permission === 'granted') {
+                  console.log("Permisos de notificación concedidos");
+              }
+          }
+          
+          // Esperar un momento y verificar si se suscribió
+          setTimeout(async () => {
+              try {
+                  let isSubscribed = false;
+                  
+                  if (OneSignal.getNotificationPermission) {
+                      const permission = await OneSignal.getNotificationPermission();
+                      isSubscribed = permission === 'granted';
+                      console.log("Permisos después de suscribir:", permission);
+                  } else if (OneSignal.isPushNotificationsEnabled) {
+                      isSubscribed = await OneSignal.isPushNotificationsEnabled();
+                      console.log("Push notifications enabled después de suscribir:", isSubscribed);
+                  } else {
+                      // Verificar con la API correcta de v16
+                      if (OneSignal.User && OneSignal.User.PushSubscription) {
+                          const playerId = OneSignal.User.PushSubscription.id;
+                          isSubscribed = !!playerId;
+                          console.log("Player ID después de suscribir:", playerId);
+                      } else {
+                          // Usar permisos nativos del navegador
+                          const permission = await Notification.requestPermission();
+                          isSubscribed = permission === 'granted';
+                          console.log("Permisos nativos después de suscribir:", permission);
+                      }
+                  }
+                  
+                  if (isSubscribed) {
+                      console.log("Usuario suscrito exitosamente");
+                      hideOneSignalBell();
+                  } else {
+                      console.log("Usuario aún no está suscrito después del intento");
+                  }
+              } catch (e) {
+                  console.warn("Error al verificar suscripción después de suscribir:", e);
+              }
+          }, 2000);
+      } catch (error) {
+          console.error("Error al suscribir:", error);
+          alert("Error al suscribirse a las notificaciones. Por favor, inténtelo de nuevo.");
+      }
+  }
+
+  // Función para rechazar la suscripción
+  function declineNotifications() {
+      hideSubscriptionModal();
+      // Guardar en localStorage que el usuario rechazó
+      localStorage.setItem('onesignal_declined', 'true');
+      console.log("Usuario rechazó las notificaciones");
+  }
 </script>
 <script>
   if ("serviceWorker" in navigator) {
@@ -194,6 +427,17 @@
 
 </div>
 
+<!-- Ventana emergente de suscripción a notificaciones -->
+<div id="subscriptionModal" class="subscription-modal">
+  <div class="subscription-content">
+    <h3 class="subscription-title">Estate al tanto de todas las novedades</h3>
+    <div class="subscription-buttons">
+      <button class="btn-decline" onclick="declineNotifications()">No, gracias</button>
+      <button class="btn-subscribe" onclick="subscribeToNotifications()">Subscribirse</button>
+    </div>
+  </div>
+</div>
+
 <?php 
 $active_page = 'inicio';
 include '../api/bottom_nav.php'; 
@@ -240,11 +484,11 @@ include '../api/bottom_nav.php';
     fetchNotifications();
   }
 
-  const is_admin_responsible = (u.is_responsable && u.id === 3);
+  const is_admin_responsable = (u.is_responsable && u.id === 3);
 
   /* ---------- Endpoints ---------- */
   const API_NEWS  = '../api/noticias.php?limit=10';
-  const API_MENU  = is_admin_responsible ? '../api/menu.php' : '../api/menu.php?role_id=' + u.rol_id;
+  const API_MENU  = is_admin_responsable ? '../api/menu.php' : '../api/menu.php?role_id=' + u.rol_id;
   const API_PROP  = u.is_responsable ? '../api/obtener_propiedades.php' : '../api/obtener_propiedades.php?id_usuario=' + u.id;
   const API_FASE  = '../api/propiedad_fase.php?id_propiedad=';
 
@@ -614,6 +858,108 @@ include '../api/bottom_nav.php';
   // Evento de clic para el botón de cerrar sesión (mantener por si se necesita en el futuro)
   document.getElementById('logoutButton').addEventListener('click', function() {
       logout(); // Llamar a la función de cerrar sesión existente
+  });
+
+  // Verificar si el usuario ya rechazó las notificaciones al cargar la página
+  document.addEventListener('DOMContentLoaded', function() {
+      // Verificar si el usuario se desuscribió activamente
+      const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
+      const declined = localStorage.getItem('onesignal_declined');
+      
+      if (isUnsubscribed || declined === 'true') {
+          // Si el usuario ya se desuscribió o rechazó, ocultar la ventana emergente
+          const modal = document.getElementById('subscriptionModal');
+          if (modal) {
+              modal.style.display = 'none';
+          }
+          
+          // Limpiar completamente el estado de OneSignal
+          if (isUnsubscribed) {
+              clearOneSignalState();
+          }
+      }
+      
+      // Verificar periódicamente si aparece el icono de OneSignal y ocultarlo
+      setInterval(() => {
+          // Solo ocultar si el usuario está desuscrito activamente
+          const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
+          
+          if (isUnsubscribed) {
+              const oneSignalBellElements = document.querySelectorAll('.onesignal-bell-launcher, .onesignal-bell-launcher-button, .onesignal-bell-launcher-icon, .onesignal-bell-launcher-container');
+              if (oneSignalBellElements.length > 0) {
+                  oneSignalBellElements.forEach(element => {
+                      // Solo ocultar elementos específicos del icono de notificación
+                      if (element && (element.classList.contains('onesignal-bell-launcher') || 
+                          element.classList.contains('onesignal-bell-launcher-button') ||
+                          element.classList.contains('onesignal-bell-launcher-icon') ||
+                          element.classList.contains('onesignal-bell-launcher-container'))) {
+                          element.style.display = 'none';
+                          element.style.visibility = 'hidden';
+                          element.style.opacity = '0';
+                          element.style.pointerEvents = 'none';
+                      }
+                  });
+              }
+          }
+      }, 1000); // Verificar cada segundo
+      
+      // Observer para detectar cuando se agregan elementos del icono de OneSignal al DOM
+      const observer = new MutationObserver((mutations) => {
+          // Solo ocultar si el usuario está desuscrito activamente
+          const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
+          
+          if (isUnsubscribed) {
+              mutations.forEach((mutation) => {
+                  mutation.addedNodes.forEach((node) => {
+                      if (node.nodeType === Node.ELEMENT_NODE) {
+                          // Verificar si el nodo agregado es específicamente del icono de notificación de OneSignal
+                          if (node.classList && (
+                              node.classList.contains('onesignal-bell-launcher') ||
+                              node.classList.contains('onesignal-bell-launcher-button') ||
+                              node.classList.contains('onesignal-bell-launcher-icon') ||
+                              node.classList.contains('onesignal-bell-launcher-container')
+                          )) {
+                              // Ocultar inmediatamente solo si es el icono de notificación
+                              node.style.display = 'none';
+                              node.style.visibility = 'hidden';
+                              node.style.opacity = '0';
+                              node.style.pointerEvents = 'none';
+                              console.log("Elemento del icono de OneSignal detectado y ocultado:", node);
+                          }
+                          
+                          // Verificar también en los hijos del nodo, pero solo elementos específicos del icono
+                          const oneSignalBellChildren = node.querySelectorAll('.onesignal-bell-launcher, .onesignal-bell-launcher-button, .onesignal-bell-launcher-icon, .onesignal-bell-launcher-container');
+                          oneSignalBellChildren.forEach(element => {
+                              // Solo ocultar si realmente es un elemento del icono de notificación
+                              if (element && (element.classList.contains('onesignal-bell-launcher') || 
+                                  element.classList.contains('onesignal-bell-launcher-button') ||
+                                  element.classList.contains('onesignal-bell-launcher-icon') ||
+                                  element.classList.contains('onesignal-bell-launcher-container'))) {
+                                  element.style.display = 'none';
+                                  element.style.visibility = 'hidden';
+                                  element.style.opacity = '0';
+                                  element.style.pointerEvents = 'none';
+                              }
+                          });
+                      }
+                  });
+              });
+          }
+      });
+      
+      // Iniciar la observación
+      observer.observe(document.body, {
+          childList: true,
+          subtree: true
+      });
+      
+      // Verificación adicional después de que la página esté completamente cargada
+      setTimeout(() => {
+          // Si OneSignal ya está disponible, verificar el estado
+          if (window.OneSignal) {
+              checkOneSignalSubscription(window.OneSignal);
+          }
+      }, 5000); // Esperar 5 segundos para asegurar que OneSignal esté completamente inicializado
   });
 
 </script>

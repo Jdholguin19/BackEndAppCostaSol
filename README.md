@@ -184,11 +184,22 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   El contador se actualiza automáticamente al visualizar un ticket (CTG o PQR).
     *   La lógica diferencia entre usuarios normales (ven respuestas de responsables) y responsables (ven respuestas de usuarios en sus tickets asignados).
     *   El contador muestra el número exacto hasta 9, y "+9" para cantidades superiores.
+    *   **Sistema Avanzado de Notificaciones Push OneSignal:**
+        *   Ventana emergente personalizada para suscripción con diseño de psicología inversa.
+        *   Ocultación completa del icono rojo molesto de OneSignal.
+        *   Gestión de desuscripción y resuscripción desde el perfil de usuario.
+        *   Sincronización automática del estado entre páginas.
+        *   Interfaz completamente responsiva para todos los dispositivos.
 *   **Gestión de Perfil de Usuario:**
     *   Página de perfil completa (`perfil.php`) con información del usuario.
     *   Funcionalidad para cambiar foto de perfil con subida de archivos.
     *   Navegación directa desde el avatar en el menú principal.
     *   Soporte para usuarios normales y responsables.
+    *   **Gestión Avanzada de Notificaciones desde el Perfil:**
+        *   Nueva sección de notificaciones con opción de desuscripción.
+        *   Ventana emergente de confirmación con diseño de psicología inversa.
+        *   Funcionalidad de resuscripción para volver a activar notificaciones.
+        *   Sincronización automática del estado con el menú principal.
 
 ## Resumen de Funcionalidades de la API (para Migración a Laravel)
 
@@ -278,7 +289,12 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 
 *   **`login_front.php`**: Interfaz de usuario para el inicio de sesión de usuarios y responsables. Maneja la recolección de credenciales y el envío a `api/login.php`. Almacena el token de autenticación y los datos del usuario en `localStorage`.
 *   **`register_front.php`**: Interfaz de usuario para el registro de nuevos usuarios. Recopila información básica (nombres, apellidos, correo, contraseña) y la envía a `api/user_crud.php` para la creación de un nuevo usuario con `rol_id: 1` (cliente).
-*   **`menu_front.php` / `menu2.php`**: Páginas principales post-autenticación. Muestran el nombre del usuario, avatar, y un menú dinámico basado en el rol. El avatar es clickeable y redirige al perfil del usuario. Incluyen la lógica para cerrar sesión (`api/logout.php`) y la integración con OneSignal para notificaciones push (`api/update_player_id.php`).
+*   **`menu_front.php` / `menu2.php`**: Páginas principales post-autenticación. Muestran el nombre del usuario, avatar, y un menú dinámico basado en el rol. El avatar es clickeable y redirige al perfil del usuario. Incluyen la lógica para cerrar sesión (`api/logout.php`) y la integración con OneSignal para notificaciones push (`api/update_player_id.php`). **Nuevas funcionalidades incluyen:**
+    *   Sistema avanzado de gestión de notificaciones OneSignal con ventana emergente personalizada.
+    *   Ocultación completa del icono rojo molesto de OneSignal.
+    *   Psicología inversa en la interfaz de suscripción para mejorar la conversión.
+    *   Detección inteligente del estado de suscripción con múltiples fallbacks.
+    *   Sincronización automática del estado con la página de perfil.
 
 ### Gestión de Propiedades y Avance de Obra
 
@@ -312,7 +328,11 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 *   **`garantias.php`**: Muestra información sobre las garantías del usuario, incluyendo su duración y vigencia. Incluye un procedimiento de reclamación. Interactúa con `api/garantias.php`.
 *   **`panel_calendario.php`**: Muestra un calendario de citas para los responsables. Los administradores pueden ver el calendario de todos los responsables. Utiliza FullCalendar.js. Interactúa con `api/responsables_list.php` y `api/calendario_responsable.php`.
 *   **`noticia.php`**: (Panel de administración) Permite a los administradores crear, listar y eliminar noticias. Interactúa con `api/noticias.php`.
-*   **`perfil.php`**: Página completa del perfil de usuario que permite ver información personal y cambiar la foto de perfil. Incluye funcionalidad de subida de archivos y navegación integrada.
+*   **`perfil.php`**: Página completa del perfil de usuario que permite ver información personal y cambiar la foto de perfil. Incluye funcionalidad de subida de archivos y navegación integrada. **Nuevas funcionalidades incluyen:**
+    *   Gestión avanzada de notificaciones con opción de desuscripción.
+    *   Ventana emergente de confirmación con diseño de psicología inversa.
+    *   Funcionalidad de resuscripción para reactivar notificaciones.
+    *   Sincronización automática del estado con el menú principal.
 *   **`users.php`**: (Panel de administración) Permite a los responsables con permisos gestionar usuarios (CRUD). Interactúa con `api/user_crud.php`.
 *   **`seleccion_acabados.php`**: (Vacío en la lectura actual, pero su nombre sugiere una funcionalidad de selección de acabados).
 *   **`config/db.php`**: Aunque es un archivo de configuración de backend, es fundamental para entender cómo el frontend se conecta indirectamente a la base de datos a través de las APIs PHP.
@@ -461,6 +481,18 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
     *   **Desactivación de Módulos "Garantías" y "CTG":** Se extendió la funcionalidad para que el módulo "CTG" también se desactive (junto con "Garantías") si la garantía del usuario ha expirado. Esta restricción no se aplica a los usuarios "responsables".
     *   **Corrección de Visualización de Menú Principal:** Se ajustó la lógica en `Front/menu_front.php` para asegurar que, aunque se oculte un módulo para un rol específico, la vista principal siempre muestre 4 módulos, cargando el siguiente disponible en la lista.
 
+*   **Sistema Avanzado de Gestión de Notificaciones OneSignal (Diciembre 2024):**
+    *   **Ventana Emergente Personalizada de Suscripción:** Se implementó en `Front/menu_front.php` una ventana emergente elegante y responsiva que reemplaza el icono rojo molesto de OneSignal con una interfaz personalizada que incluye el mensaje "Estate al tanto de todas las novedades" y botones "No, gracias" y "Subscribirse".
+    *   **Psicología Inversa en la Interfaz:** El botón "No, gracias" se implementó en color rojo para crear psicología inversa y hacer que el usuario se sienta más inclinado a hacer clic en "Subscribirse".
+    *   **Detección Inteligente del Estado de Suscripción:** Se implementó un sistema robusto que verifica correctamente si el usuario está suscrito a OneSignal usando la API v16, con múltiples fallbacks y verificación periódica del estado.
+    *   **Ocultación Completa del Icono de OneSignal:** Se implementaron múltiples estrategias para ocultar completamente el icono rojo de notificación de OneSignal: CSS con `!important`, JavaScript dinámico, MutationObserver para elementos que aparezcan después, y verificación periódica como respaldo.
+    *   **Gestión de Desuscripción desde el Perfil:** Se agregó en `Front/perfil.php` una nueva sección de notificaciones con opción para desuscribirse, incluyendo una ventana emergente de confirmación con el mismo diseño de psicología inversa.
+    *   **Funcionalidad de Resuscripción:** Se implementó la capacidad de volver a suscribirse a las notificaciones desde el perfil, con sincronización automática del estado entre páginas.
+    *   **Sincronización de Estado entre Páginas:** El estado de suscripción se mantiene consistente entre `menu_front.php` y `perfil.php`, con persistencia en localStorage y sincronización con el backend.
+    *   **Estilos Completamente Responsivos:** La ventana emergente de suscripción se adapta perfectamente a todos los tamaños de pantalla: ultra grandes (4K+), desktop, tablets, móviles grandes, móviles pequeños, orientación landscape, modo oscuro del sistema, dispositivos táctiles y pantallas de alta densidad.
+    *   **Manejo Robusto de Errores:** Se implementó manejo de errores para diferentes versiones de la API de OneSignal, con fallbacks a la API nativa del navegador cuando sea necesario.
+    *   **Optimización de Performance:** Se implementó verificación inteligente que solo oculta elementos cuando es necesario, evitando procesamiento innecesario en usuarios suscritos.
+
 Se han implementado las siguientes mejoras y correcciones en el proyecto:
 
 *   **Corrección de Error en Notificaciones CTG:**
@@ -519,6 +551,32 @@ Se han implementado las siguientes mejoras y correcciones en el proyecto:
     *   Se modificó `Front/menu_front.php` para que el avatar redirija al perfil.
     *   Se agregaron estilos CSS (`Front/assets/css/style_perfil.css`) para la nueva funcionalidad.
     *   El sistema maneja tanto usuarios normales como responsables.
+
+---
+
+### Mejoras y Correcciones (Diciembre 2024 - Enero 2025)
+
+*   **Implementación de Switch de Notificaciones en Perfil de Usuario:**
+    *   Se reemplazó el sistema de botones separados por un switch moderno y intuitivo en `Front/perfil.php` para la gestión de notificaciones OneSignal.
+    *   **Interfaz Mejorada:** Se implementó un switch tipo toggle que reemplaza los botones "Desuscribirse" y "Volver a suscribirse" por una interfaz más moderna y fácil de usar.
+    *   **Lógica del Switch:** 
+        *   **Activado (ON)**: Intenta resuscribir al usuario a OneSignal automáticamente
+        *   **Desactivado (OFF)**: Muestra modal de confirmación para desuscripción
+        *   **Estado Sincronizado**: Se mantiene sincronizado con localStorage y el estado del servidor
+    *   **Modal de Confirmación:** Se implementó una ventana emergente elegante que confirma la desuscripción con botones "No, gracias" y "Desuscribirse", manteniendo el diseño de psicología inversa.
+    *   **Manejo de Estados:** El switch se inicializa automáticamente según el estado actual del usuario y maneja errores revirtiendo el estado en caso de fallo.
+    *   **API Mejorada:** Se corrigió `api/update_player_id.php` para manejar tanto valores `null` como cadenas vacías `""` para indicar desuscripción, resolviendo el error "onesignal_player_id es requerido".
+    *   **Compatibilidad:** La solución funciona tanto con la API actual (cadena vacía) como con futuras versiones (null), asegurando compatibilidad inmediata y futura.
+    *   **Funcionalidades Implementadas:**
+        *   ✅ Switch moderno tipo toggle para activar/desactivar notificaciones
+        *   ✅ Modal de confirmación con diseño de psicología inversa
+        *   ✅ Sincronización automática del estado con localStorage y backend
+        *   ✅ Manejo robusto de errores con reversión automática del estado
+        *   ✅ Integración completa con OneSignal API v16
+        *   ✅ Soporte para usuarios normales y responsables
+    *   **Archivos Modificados:**
+        *   `Front/perfil.php` - Implementación completa del switch de notificaciones
+        *   `api/update_player_id.php` - Soporte para desuscripción con valores null y cadenas vacías
 
 ---
 
