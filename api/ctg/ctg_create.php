@@ -128,10 +128,52 @@ try{
         ':resp'=>$respId
     ]);
 
+    // --- INICIO: Lógica de envío de correo a responsable ---
+    require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
+
+    // Obtener correo del responsable
+    $sql_resp_email = 'SELECT correo FROM responsable WHERE id = :resp_id LIMIT 1';
+    $stmt_resp_email = $db->prepare($sql_resp_email);
+    $stmt_resp_email->execute([':resp_id' => $respId]);
+    $correoResponsable = $stmt_resp_email->fetchColumn();
+
+    // Obtener nombre del cliente
+    $sql_cliente_nombre = 'SELECT nombres, apellidos FROM usuario WHERE id = :user_id LIMIT 1';
+    $stmt_cliente_nombre = $db->prepare($sql_cliente_nombre);
+    $stmt_cliente_nombre->execute([':user_id' => $authenticated_user_id]);
+    $cliente_data = $stmt_cliente_nombre->fetch(PDO::FETCH_ASSOC);
+    $nombreCliente = trim($cliente_data['nombres'] . ' ' . $cliente_data['apellidos']);
+
+    // Obtener nombre del tipo de CTG
+    $sql_tipo_ctg_nombre = 'SELECT nombre FROM tipo_ctg WHERE id = :tipo_id LIMIT 1';
+    $stmt_tipo_ctg_nombre = $db->prepare($sql_tipo_ctg_nombre);
+    $stmt_tipo_ctg_nombre->execute([':tipo_id' => $tipo]);
+    $tipoTicket = $stmt_tipo_ctg_nombre->fetchColumn();
+
+    // Obtener nombre de la propiedad
+    $sql_propiedad_nombre = 'SELECT CONCAT("Manzana ", manzana, ", Villa ", villa) AS nombre_propiedad FROM propiedad WHERE id = :prop_id LIMIT 1';
+    $stmt_propiedad_nombre = $db->prepare($sql_propiedad_nombre);
+    $stmt_propiedad_nombre->execute([':prop_id' => $pid]);
+    $nombrePropiedad = $stmt_propiedad_nombre->fetchColumn();
+
+    // Enviar correo si se obtuvo el correo del responsable
+    if ($correoResponsable) {
+        enviarNotificacionResponsable(
+            $correoResponsable,
+            $nombreCliente,
+            "CTG", // Tipo de solicitud
+            $tipoTicket,
+            $nombrePropiedad
+        );
+    } else {
+        error_log("No se pudo obtener el correo del responsable con ID: " . $respId);
+    }
+    // --- FIN: Lógica de envío de correo a responsable ---
+
     echo json_encode(['ok'=>true,'id'=>$db->lastInsertId(),'numero'=>$numero]);
 
 }catch(Throwable $e){
     error_log('ctg_create: '.$e->getMessage());
     http_response_code(500);
-    echo json_encode(['ok'=>false,'msg'=>'Error interno']);
+    echo json_encode(['ok'=>false,'msg'=>'Error interno: ' . $e->getMessage()]);
 }

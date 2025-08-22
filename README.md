@@ -64,6 +64,12 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   └── Front/                    # Frontend de la versión alternativa
 │       ├── user_crud.php
 │       └── users.php
+├── correos/                  # Contiene scripts para el envío de correos electrónicos
+│   ├── EnviarCorreoNotificacionResponsable.php # Función para enviar notificaciones a responsables
+│   ├── EnviarCorreoNumeros.php
+│   ├── EnviarCorreoPlantilla.php
+│   ├── EnviarCorreoReciboPago.php
+│   └── EnviarCorreos.php
 ├── Front/                        # Contiene todas las páginas frontend (HTML/PHP) y sus assets
 │   ├── assets/                   # Archivos estáticos (CSS, JS, imágenes)
 │   │   └── css/                  # Hojas de estilo CSS
@@ -201,9 +207,9 @@ El proyecto ofrece las siguientes funcionalidades principales:
         *   Funcionalidad de resuscripción para volver a activar notificaciones.
         *   Sincronización automática del estado con el menú principal.
 
-## Resumen de Funcionalidades de la API (para Migración a Laravel)
+## Resumen de Funcionalidades de la API.
 
-Esta sección detalla los endpoints de la API existentes y sus funcionalidades principales, sirviendo como referencia para la migración a un nuevo framework como Laravel.
+Esta sección detalla los endpoints de la API existentes y sus funcionalidades principales, sirviendo como referencia.
 
 ### Autenticación y Gestión de Usuarios
 
@@ -529,6 +535,23 @@ Se han implementado las siguientes mejoras y correcciones en el proyecto:
 ---
 
 ### Mejoras y Correcciones (Agosto 2025)
+
+*   **Sistema de Notificación por Correo para Nuevos CTG/PQR:**
+    *   Se implementó un sistema para enviar notificaciones por correo electrónico al responsable asignado cuando un cliente crea un nuevo CTG o PQR.
+    *   **Remitente:** Los correos se envían desde `sistemas@thaliavictoria.com.ec`.
+    *   **Contenido:** El correo incluye el nombre del cliente, el tipo de solicitud (CTG o PQR), el tipo específico del ticket y el nombre de la propiedad relacionada.
+    *   **Asignación de Responsables:** La asignación de responsables para nuevos CTG/PQR se realiza de forma **aleatoria** entre los responsables con ID 1 y 2. El responsable con ID 3 sigue **excluido** de esta asignación.
+    *   **Archivos Involucrados:**
+        *   `correos/EnviarCorreoNotificacionResponsable.php` (Nuevo archivo: Contiene la lógica para obtener tokens de acceso y enviar correos a través de Microsoft Graph API).
+        *   `api/ctg/ctg_create.php` (Modificado: Se añadió la lógica para obtener los datos necesarios y llamar a la función de envío de correo tras la creación de un CTG).
+        *   `api/pqr/pqr_create.php` (Modificado: Se añadió la lógica para obtener los datos necesarios y llamar a la función de envío de correo tras la creación de un PQR).
+
+*   **Corrección en la Obtención del Nombre de Propiedad para Notificaciones:**
+    *   Se corrigió un error donde la consulta para obtener el nombre de la propiedad en las notificaciones generaba un error de columna no encontrada.
+    *   **Solución:** Ahora se concatenan los campos `manzana` y `villa` de la tabla `propiedad` para formar un identificador descriptivo de la propiedad (ej. "Manzana X, Villa Y").
+    *   **Archivos Modificados:**
+        *   `api/ctg/ctg_create.php`
+        *   `api/pqr/pqr_create.php`
 
 *   **Mejoras de Diseño en "Nueva Cita" (`cita_nueva.php`):**
     *   Se realizaron varios ajustes de CSS para mejorar la experiencia de usuario en la pantalla de agendamiento de citas.
