@@ -553,6 +553,15 @@ Se han implementado las siguientes mejoras y correcciones en el proyecto:
         *   `api/ctg/ctg_create.php`
         *   `api/pqr/pqr_create.php`
 
+*   **Sistema de Notificación por Correo para Nuevas Citas:**
+    *   Se implementó un sistema para enviar notificaciones por correo electrónico al responsable asignado cuando un cliente agenda una nueva cita.
+    *   **Remitente:** Los correos se envían desde `sistemas@thaliavictoria.com.ec`.
+    *   **Contenido:** El correo incluye el nombre del cliente, el propósito de la cita, la fecha, la hora y el nombre de la propiedad relacionada.
+    *   **Asignación de Responsables:** La asignación de responsables para citas se basa en un balanceo de carga (responsable con menos citas asignadas) y disponibilidad, con un desempate aleatorio. El responsable con ID 3 sigue **excluido** de esta asignación.
+    *   **Archivos Involucrados:**
+        *   `correos/EnviarCorreoNotificacionResponsable.php` (Modificado: Ahora acepta parámetros de fecha y hora para citas).
+        *   `api/cita/cita_create.php` (Modificado: Se añadió la lógica para obtener los datos necesarios y llamar a la función de envío de correo tras la creación de una cita).
+
 *   **Mejoras de Diseño en "Nueva Cita" (`cita_nueva.php`):**
     *   Se realizaron varios ajustes de CSS para mejorar la experiencia de usuario en la pantalla de agendamiento de citas.
     *   **Cuadrícula de Propósitos:** Se estandarizó el tamaño de los botones de selección de propósito para que todos tengan las mismas dimensiones, independientemente del texto que contengan, y se hicieron responsivos.

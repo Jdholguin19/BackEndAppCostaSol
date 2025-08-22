@@ -49,11 +49,55 @@ $ins->execute([
  ':u'=>$uid,':r'=>$respId,':p'=>$proposito,':prop'=>$propiedad,
  ':f'=>$fecha,':h'=>$hora,':obs'=>$observaciones]);
 
+// --- INICIO: Lógica de envío de correo a responsable para citas ---
+require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
+
+// Obtener correo del responsable
+$sql_resp_email = 'SELECT correo FROM responsable WHERE id = :resp_id LIMIT 1';
+$stmt_resp_email = $db->prepare($sql_resp_email);
+$stmt_resp_email->execute([':resp_id' => $respId]);
+$correoResponsable = $stmt_resp_email->fetchColumn();
+
+// Obtener nombre del cliente
+$sql_cliente_nombre = 'SELECT nombres, apellidos FROM usuario WHERE id = :user_id LIMIT 1';
+$stmt_cliente_nombre = $db->prepare($sql_cliente_nombre);
+$stmt_cliente_nombre->execute([':user_id' => $uid]);
+$cliente_data = $stmt_cliente_nombre->fetch(PDO::FETCH_ASSOC);
+$nombreCliente = trim($cliente_data['nombres'] . ' ' . $cliente_data['apellidos']);
+
+// Obtener nombre del propósito de la cita
+$sql_proposito_nombre = 'SELECT proposito FROM proposito_agendamiento WHERE id = :proposito_id LIMIT 1';
+$stmt_proposito_nombre = $db->prepare($sql_proposito_nombre);
+$stmt_proposito_nombre->execute([':proposito_id' => $proposito]);
+$tipoTicket = $stmt_proposito_nombre->fetchColumn(); // Usamos tipoTicket para el propósito
+
+// Obtener nombre de la propiedad (Manzana, Villa)
+$sql_propiedad_nombre = 'SELECT CONCAT("Manzana ", manzana, ", Villa ", villa) AS nombre_propiedad FROM propiedad WHERE id = :prop_id LIMIT 1';
+$stmt_propiedad_nombre = $db->prepare($sql_propiedad_nombre);
+$stmt_propiedad_nombre->execute([':prop_id' => $propiedad]);
+$nombrePropiedad = $stmt_propiedad_nombre->fetchColumn();
+
+// Enviar correo si se obtuvo el correo del responsable
+if ($correoResponsable) {
+    enviarNotificacionResponsable(
+        $correoResponsable,
+        $nombreCliente,
+        "Cita", // Tipo de solicitud
+        $tipoTicket, // Propósito de la cita
+        $nombrePropiedad,
+        $fecha,
+        $hora
+    );
+} else {
+    error_log("No se pudo obtener el correo del responsable con ID: " . $respId);
+}
+// --- FIN: Lógica de envío de correo a responsable para citas ---
+
 $db->commit();
 echo json_encode(['ok'=>true]);
 }catch(PDOException $e){
  $db->rollBack();
  if($e->errorInfo[1]==1062)
       echo json_encode(['ok'=>false,'msg'=>'Horario ya reservado']);
- else{ http_response_code(500); echo json_encode(['ok'=>false]); }
+ else{ http_response_code(500); echo json_encode(['ok'=>false,'msg'=>'Error interno: ' . $e->getMessage()]); }
 }

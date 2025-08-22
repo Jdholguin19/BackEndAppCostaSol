@@ -79,7 +79,7 @@ function sendEmail($accessToken, $fromEmail, $toEmail, $subject, $body) {
     return ['success' => 'Email sent successfully'];
 }
 
-function enviarNotificacionResponsable($correoResponsable, $nombreCliente, $tipoSolicitud, $tipoTicket, $nombrePropiedad) {
+function enviarNotificacionResponsable($correoResponsable, $nombreCliente, $tipoSolicitud, $tipoTicket, $nombrePropiedad, $fecha = null, $hora = null) {
     $tenantId = 'b9618ac6-2648-41ed-bb4f-03bcd94a7493'; // Id. de directorio (inquilino)
     $clientId = 'd8f17735-bbd4-4fc4-a193-fd9b645880be'; // Id. de aplicación (cliente)
     $clientSecret = 'e7X8Q~OtM4X~LZ.i5wHvIIukGHK8Tb4yq3Xkpbat'; // Secreto del cliente (Valor)
@@ -92,9 +92,17 @@ function enviarNotificacionResponsable($correoResponsable, $nombreCliente, $tipo
         <p>Detalles:</p>
         <ul>
             <li><strong>Tipo:</strong> " . $tipoTicket . "</li>
-            <li><strong>Propiedad:</strong> " . $nombrePropiedad . "</li>
+            <li><strong>Propiedad:</strong> " . $nombrePropiedad . "</li>";
+
+    if ($fecha && $hora) {
+        $body .= "
+            <li><strong>Fecha:</strong> " . $fecha . "</li>
+            <li><strong>Hora:</strong> " . $hora . "</li>";
+    }
+
+    $body .= "
         </ul>
-        <p>Por favor, revise la aplicación para más detalles.</p>
+        <p>Por favor, revise la aplicación para más detalles o precione <a href='https://app.costasol.com.ec'>aquí</a>.</p>
         <br>
         <p>Este correo es generado automáticamente. No es necesario responder.</p>
         <p>Atentamente, CostaSol</p>
