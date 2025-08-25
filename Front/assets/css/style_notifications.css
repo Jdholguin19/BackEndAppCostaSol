@@ -281,3 +281,16 @@ body {
         padding: 1.5rem 2rem;
     }
 } 
+
+/* --- Attachment Image Styles --- */
+.notification-attachment-image {
+  margin-top: 8px;
+}
+
+.notification-attachment-image img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+}

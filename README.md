@@ -6,18 +6,49 @@ Este proyecto es una aplicación web integral diseñada para la gestión de prop
 
 A continuación, se detalla la organización de los archivos y directorios principales del proyecto:
 
-```
-. (Raíz del Proyecto)
-├── api/                          # Contiene todos los endpoints de la API backend
-│   ├── cita/                     # APIs relacionadas con la gestión de citas
+C:.
+├── antiguo.php
+├── index.php
+├── manifest.json
+├── Manual_de_uso.pdf
+├── OneSignalSDKWorker.js
+├── paleta_vegetal.pdf
+├── portalao_appcostasol.sql
+├── README.md
+├── .well-known
+│   └── assetlinks.json
+├── api
+│   ├── bottom_nav.php
+│   ├── calendario_responsable.php
+│   ├── etapas_manzana_villa.php
+│   ├── garantias.php
+│   ├── login.php
+│   ├── logout.php
+│   ├── mcm.php
+│   ├── menu.php
+│   ├── noticias.php
+│   ├── notificaciones.php
+│   ├── notificaciones_count.php
+│   ├── notificaciones_mark_read.php
+│   ├── obtener_propiedades.php
+│   ├── paletavegetal.php
+│   ├── perfil.php
+│   ├── propiedad_fase.php
+│   ├── propositos.php
+│   ├── responsables_list.php
+│   ├── update_player_id.php
+│   ├── update_profile_picture.php
+│   ├── user_crud.php
+│   ├── validate_responsable.php
+│   ├── cita
+│   │   ├── citas_list.php
 │   │   ├── cita_cancelar.php
 │   │   ├── cita_create.php
 │   │   ├── cita_eliminar.php
-│   │   ├── citas_list.php
-│   │   ├── cita_update_estado.php  # NUEVO: API para actualizar el estado de las citas
+│   │   ├── cita_update_estado.php
 │   │   ├── dias_disponibles.php
 │   │   └── horas_disponibles.php
-│   ├── ctg/                      # APIs relacionadas con la gestión de Contingencias (CTG)
+│   ├── ctg
 │   │   ├── ctg_create.php
 │   │   ├── ctg_estados.php
 │   │   ├── ctg_insert_form.php
@@ -25,59 +56,60 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │   ├── ctg_observaciones.php
 │   │   ├── ctg_respuestas.php
 │   │   ├── ctg_update_estado.php
-│   │   └── ctg_update_observaciones.php
-│   ├── pqr/                      # APIs relacionadas con la gestión de Peticiones, Quejas y Recomendaciones (PQR)
-│   │   ├── pqr_create.php
-│   │   ├── pqr_estados.php
-│   │   ├── pqr_insert_form.php
-│   │   ├── pqr_list.php
-│   │   ├── pqr_observaciones.php
-│   │   ├── pqr_respuestas.php
-│   │   ├── pqr_update_estado.php
-│   │   └── pqr_update_observaciones.php
-│   ├── bottom_nav.php              # API para obtener ítems de navegación inferior
-│   ├── calendario_responsable.php  # API para obtener datos del calendario de responsables
-│   ├── etapas_manzana_villa.php    # API para obtener etapas de construcción por manzana/villa
-│   ├── garantias.php               # API para obtener información de garantías
-│   ├── login.php                   # API para autenticación de usuarios y responsables
-│   ├── logout.php                  # API para cerrar sesión
-│   ├── mcm.php                     # API para servir el manual de uso y mantenimiento (PDF)
-│   ├── menu.php                    # API para obtener ítems de menú según el rol
-│   ├── noticias.php                # API para gestionar noticias
-│   ├── notificaciones.php          # API para obtener notificaciones
-│   ├── notificaciones_count.php    # API para contar notificaciones no leídas
-│   ├── notificaciones_mark_read.php# API para marcar notificaciones como leídas
-│   ├── obtener_propiedades.php     # API para obtener propiedades de un usuario
-│   ├── paletavegetal.php           # API para servir el PDF de paleta vegetal
-│   ├── propiedad_fase.php          # API para obtener la fase de una propiedad
-│   ├── propositos.php              # API para obtener propósitos de agendamiento
-│   ├── responsables_list.php       # API para listar responsables
-│   ├── update_player_id.php        # API para actualizar OneSignal Player ID
-│   ├── update_profile_picture.php  # API para actualizar foto de perfil
-│   ├── user_crud.php               # API para operaciones CRUD de usuarios
-│   └── validate_responsable.php    # API para validar tokens de responsables
-├── appcostasol/                  # Contiene una versión alternativa o anterior de la aplicación
-│   ├── api/                      # API de la versión alternativa
+│   │   ├── ctg_update_observaciones.php
+│   │   ├── subtipo_ctg.php
+│   │   └── tipo_ctg.php
+│   ├── helpers
+│   │   └── notificaciones.php
+│   └── pqr
+│       ├── pqr_create.php
+│       ├── pqr_estados.php
+│       ├── pqr_insert_form.php
+│       ├── pqr_list.php
+│       ├── pqr_observaciones.php
+│       ├── pqr_respuestas.php
+│       ├── pqr_update_estado.php
+│       ├── pqr_update_observaciones.php
+│       ├── subtipo_pqr.php
+│       └── tipo_pqr.php
+├── appcostasol
+│   ├── api
 │   │   └── login.php
-│   ├── config/                   # Configuración de la versión alternativa
+│   ├── config
 │   │   └── db.php
-│   └── Front/                    # Frontend de la versión alternativa
-│       ├── user_crud.php
-│       └── users.php
-├── correos/                  # Contiene scripts para el envío de correos electrónicos
-│   ├── EnviarCorreoNotificacionResponsable.php # Función para enviar notificaciones a responsables
+│   └── Front
+│       ├── users.php
+│       └── user_crud.php
+├── config
+│   └── db.php
+├── correos
+│   ├── EnviarCorreoNotificacionResponsable.php
 │   ├── EnviarCorreoNumeros.php
 │   ├── EnviarCorreoPlantilla.php
 │   ├── EnviarCorreoReciboPago.php
 │   └── EnviarCorreos.php
-├── Front/                        # Contiene todas las páginas frontend (HTML/PHP) y sus assets
-│   ├── assets/                   # Archivos estáticos (CSS, JS, imágenes)
-│   │   └── css/                  # Hojas de estilo CSS
-│   │       ├── style_cita_nueva.css
+├── Front
+│   ├── citas.php
+│   ├── cita_nueva.php
+│   ├── fase_detalle.php
+│   ├── garantias.php
+│   ├── login_front.php
+│   ├── menu2.php
+│   ├── menu_front.php
+│   ├── noticia.php
+│   ├── notificaciones.php
+│   ├── panel_calendario.php
+│   ├── perfil.php
+│   ├── register_front.php
+│   ├── selec_acabado.php
+│   ├── users.php
+│   ├── assets
+│   │   └── css
 │   │       ├── style_citas.css
+│   │       ├── style_cita_nueva.css
+│   │       ├── style_ctg.css
 │   │       ├── style_ctg_detalle.css
 │   │       ├── style_ctg_nuevo.css
-│   │       ├── style_ctg.css
 │   │       ├── style_fdetale.css
 │   │       ├── style_garantia.css
 │   │       ├── style_login.css
@@ -85,54 +117,37 @@ A continuación, se detalla la organización de los archivos y directorios princ
 │   │       ├── style_noticia.css
 │   │       ├── style_notifications.css
 │   │       ├── style_panel_calendario.css
-│   │       ├── style_perfil.css          # Estilos para la página de perfil
+│   │       ├── style_perfil.css
+│   │       ├── style_pqr.css
 │   │       ├── style_pqr_detalle.css
 │   │       ├── style_pqr_nuevo.css
-│   │       └── style_pqr.css
-│   ├── ctg/                      # Páginas frontend para la gestión de CTG
+│   │       └── style_users.css
+│   ├── ctg
+│   │   ├── ctg.php
 │   │   ├── ctg_detalle.php
-│   │   ├── ctg_nuevo.php
-│   │   └── ctg.php
-│   ├── includes/                 # Archivos de inclusión comunes (cabeceras, funciones, etc.)
-│   ├── pqr/                      # Páginas frontend para la gestión de PQR
-│   │   ├── pqr_detalle.php
-│   │   ├── pqr_nuevo.php
-│   │   └── pqr.php
-│   ├── cita_nueva.php            # Página para agendar nuevas citas
-│   ├── citas.php                 # Página para listar y gestionar citas
-│   ├── fase_detalle.php          # Página para ver detalles de etapas de construcción
-│   ├── garantias.php             # Página para ver información de garantías
-│   ├── login_front.php           # Página de inicio de sesión
-│   ├── menu_front.php            # Página del menú principal
-│   ├── menu2.php                 # Página alternativa del menú principal
-│   ├── noticia.php               # Página para la gestión de noticias (solo para admins)
-│   ├── notificaciones.php        # Página para ver notificaciones
-│   ├── panel_calendario.php      # Página del calendario de responsables
-│   ├── perfil.php                # Página del perfil de usuario con gestión de foto
-│   ├── register_front.php        # Página de registro de usuario
-│   └── users.php                 # Página para la gestión de usuarios (solo para admins)
-├── config/                       # Archivos de configuración
-│   └── db.php                    # Configuración de conexión a la base de datos
-├── imagenes/                     # Almacena varios assets de imagen utilizados en la aplicación
-│   ├── admin.svg
-│   ├── CalendarioResp.svg
-│   ├── mcm.svg
-│   ├── news.svg
-│   ├── notificacion.svg
-│   ├── pqr.svg
-│   └── tree.svg
-├── SharePoint/                   # Scripts relacionados con la integración de SharePoint
+│   │   └── ctg_nuevo.phpe
+│   └── pqr
+│       ├── pqr.php
+│       ├── pqr_detalle.php
+│       └── pqr_nuevo.php
+├── imagenes
+│   └── icons
+│       ├── icon-192x192.png
+│       ├── icon-256x256.png
+│       ├── icon-384x384.png
+│       └── icon-512x512.png
+├── ImagenesCTG_problema
+├── ImagenesCTG_respuestas
+├── ImagenesNoticias
+├── ImagenesPerfil
+├── ImagenesPQR_problema
+├── ImagenesPQR_respuestas
+├── ImagenesPQR_solucion
+├── SharePoint
 │   ├── ExtraerURL.php
-│   ├── mostrar_imagen.php
-│   └── MostrarImagenes.php
-├── .geminiignore                 # Archivo de configuración para ignorar rutas por Gemini
-├── GEMINI.md                     # Documentación específica de Gemini
-├── Manual_de_uso.pdf             # Manual de uso de la aplicación
-├── OneSignalSDKWorker.js         # Script de servicio de OneSignal para notificaciones push
-├── paleta_vegetal.pdf            # Documento PDF de paleta vegetal
-├── portalao_appcostasol.sql      # Esquema de la base de datos y datos de ejemplo
-
-
+│   ├── MostrarImagenes.php
+│   └── mostrar_imagen.php
+└── uploads
 ```
 
 ## Archivos Clave para el Funcionamiento y Entendimiento
@@ -486,8 +501,11 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
     *   **Ocultar Módulo "Selección Acabados":** Se implementó una lógica en `Front/menu_front.php` y `Front/menu2.php` para que el módulo "Selección Acabados" se oculte completamente para los usuarios con el rol de "Residente" (`rol_id = 2`).
     *   **Desactivación de Módulos "Garantías" y "CTG":** Se extendió la funcionalidad para que el módulo "CTG" también se desactive (junto con "Garantías") si la garantía del usuario ha expirado. Esta restricción no se aplica a los usuarios "responsables".
     *   **Corrección de Visualización de Menú Principal:** Se ajustó la lógica en `Front/menu_front.php` para asegurar que, aunque se oculte un módulo para un rol específico, la vista principal siempre muestre 4 módulos, cargando el siguiente disponible en la lista.
+    *   **Módulo de Notificaciones:**                                                                                                                                                      │
+    *   **Previsualización de Imágenes:** Se mejoró la página de notificaciones (`notificaciones.php`) para que, si una notificación está asociada a un adjunto de imagen,             │
+     se muestre una vista previa en miniatura (50x50px) directamente en la tarjeta de notificación, haciéndolas más informativas y visuales. 
 
-*   **Sistema Avanzado de Gestión de Notificaciones OneSignal (Diciembre 2024):**
+    *   **Sistema Avanzado de Gestión de Notificaciones OneSignal (Diciembre 2024):**
     *   **Ventana Emergente Personalizada de Suscripción:** Se implementó en `Front/menu_front.php` una ventana emergente elegante y responsiva que reemplaza el icono rojo molesto de OneSignal con una interfaz personalizada que incluye el mensaje "Estate al tanto de todas las novedades" y botones "No, gracias" y "Subscribirse".
     *   **Psicología Inversa en la Interfaz:** El botón "No, gracias" se implementó en color rojo para crear psicología inversa y hacer que el usuario se sienta más inclinado a hacer clic en "Subscribirse".
     *   **Detección Inteligente del Estado de Suscripción:** Se implementó un sistema robusto que verifica correctamente si el usuario está suscrito a OneSignal usando la API v16, con múltiples fallbacks y verificación periódica del estado.
