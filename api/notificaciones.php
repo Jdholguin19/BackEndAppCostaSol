@@ -62,86 +62,64 @@ if (!$authenticated_user) {
 
 
 try {
-    $conditions_ctg = []; // Condiciones específicas para la parte CTG
-    $conditions_pqr = []; // Condiciones específicas para la parte PQR
-    $params = []; // Parámetros para bindeo
+    $conditions_ctg = [];
+    $conditions_pqr = [];
+    $conditions_citas = [];
+    $params = [];
 
     if ($is_responsable) {
-        // Responsable: Mostrar respuestas de clientes para CTGs/PQRs asignados a él.
-        $conditions_ctg[] = 'rp.usuario_id IS NOT NULL'; // Respuesta de un cliente (para CTG)
-        $conditions_ctg[] = 'p.responsable_id = :responsable_id'; // CTG asignado (para CTG)
+        $responsable_id = $authenticated_user['id'];
+        // Notificaciones de CTG: respuestas de clientes a mis CTGs
+        $conditions_ctg[] = 'rp.usuario_id IS NOT NULL';
+        $conditions_ctg[] = 'p.responsable_id = :responsable_id';
+        $params[':responsable_id'] = $responsable_id;
 
-        // Necesitamos condiciones equivalentes para PQR
-        $conditions_pqr[] = 'rpq.usuario_id IS NOT NULL'; // Respuesta de un cliente (para PQR)
-        $conditions_pqr[] = 'pq.responsable_id = :responsable_id_pqr'; // PQR asignado (for PQR)
+        // Notificaciones de PQR: respuestas de clientes a mis PQRs
+        $conditions_pqr[] = 'rpq.usuario_id IS NOT NULL';
+        $conditions_pqr[] = 'pq.responsable_id = :responsable_id_pqr';
+        $params[':responsable_id_pqr'] = $responsable_id;
 
-        $params[':responsable_id'] = $authenticated_user['id'];
-        $params[':responsable_id_pqr'] = $authenticated_user['id'];
-
+        // Notificaciones de Citas: nuevas citas asignadas a mí que no he leído
+        $conditions_citas[] = 'a.responsable_id = :responsable_id_cita';
+        $conditions_citas[] = 'a.leido = 0';
+        $params[':responsable_id_cita'] = $responsable_id;
 
     } else {
-        // Cliente: SOLO mostrar respuestas de responsables para sus CTGs/PQRs
-        // NO mostrar sus propias respuestas ni las de otros clientes
+        $user_id = $authenticated_user['id'];
+        // Notificaciones de CTG: respuestas de responsables a mis CTGs
+        $conditions_ctg[] = 'rp.responsable_id IS NOT NULL';
+        $conditions_ctg[] = 'p.id_usuario = :user_id';
+        $params[':user_id'] = $user_id;
 
-        // Para CTG:
-        $conditions_ctg[] = 'rp.responsable_id IS NOT NULL'; // Solo respuestas de responsables (para CTG)
-        $conditions_ctg[] = 'rp.responsable_id = p.responsable_id'; // Del responsable asignado al CTG (para CTG)
-        $conditions_ctg[] = 'p.id_usuario = :user_id'; // CTG del cliente autenticado (para CTG)
-
-        // Para PQR:
-        $conditions_pqr[] = 'rpq.responsable_id IS NOT NULL'; // Solo respuestas de responsables (for PQR)
-        $conditions_pqr[] = 'rpq.responsable_id = pq.responsable_id'; // Del responsable asignado al PQR (for PQR)
-        $conditions_pqr[] = 'pq.id_usuario = :user_id_pqr'; // PQR del cliente autenticado (for PQR)
-
-        $params[':user_id'] = $authenticated_user['id']; // ID del cliente para filtrar CTGs
-        $params[':user_id_pqr'] = $authenticated_user['id']; // ID del cliente para filtrar PQRs
+        // Notificaciones de PQR: respuestas de responsables a mis PQRs
+        $conditions_pqr[] = 'rpq.responsable_id IS NOT NULL';
+        $conditions_pqr[] = 'pq.id_usuario = :user_id_pqr';
+        $params[':user_id_pqr'] = $user_id;
+        
+        // Los clientes no reciben notificaciones de citas en esta vista
+        $conditions_citas[] = '1=0'; 
     }
 
-
-    // Construir la consulta para notificaciones de CTG con sus condiciones
-    $sql_ctg = "SELECT
-                rp.ctg_id AS solicitud_id,
-                'CTG' AS tipo_solicitud,
-                rp.mensaje,
-                COALESCE(u.nombres , resp.nombre) AS usuario,
-                rp.fecha_respuesta,
-                rp.url_adjunto,
-                pr.manzana,
-                pr.villa
-            FROM respuesta_ctg rp
-            LEFT JOIN usuario u ON rp.usuario_id = u.id
-            LEFT JOIN responsable resp ON rp.responsable_id = resp.id
-            JOIN ctg p ON rp.ctg_id = p.id
-            JOIN propiedad pr ON p.id_propiedad = pr.id";
-
+    // --- Consulta para CTG ---
+    $sql_ctg = "SELECT rp.ctg_id AS solicitud_id, CONVERT('CTG' USING utf8mb4) AS tipo_solicitud, CONVERT(rp.mensaje USING utf8mb4) AS mensaje, CONVERT(COALESCE(u.nombres , resp.nombre) USING utf8mb4) AS usuario, rp.fecha_respuesta, CONVERT(rp.url_adjunto USING utf8mb4) AS url_adjunto, CONVERT(pr.manzana USING utf8mb4) AS manzana, CONVERT(pr.villa USING utf8mb4) AS villa FROM respuesta_ctg rp LEFT JOIN usuario u ON rp.usuario_id = u.id LEFT JOIN responsable resp ON rp.responsable_id = resp.id JOIN ctg p ON rp.ctg_id = p.id JOIN propiedad pr ON p.id_propiedad = pr.id";
     if (!empty($conditions_ctg)) {
         $sql_ctg .= ' WHERE ' . implode(' AND ', $conditions_ctg);
     }
 
-    // Construir la consulta para notificaciones de PQR con sus condiciones
-    $sql_pqr = "SELECT
-                rpq.pqr_id AS solicitud_id,
-                'PQR' AS tipo_solicitud,
-                rpq.mensaje,
-                COALESCE(us.nombres , respn.nombre) AS usuario,
-                rpq.fecha_respuesta,
-                rpq.url_adjunto,
-                prp.manzana,
-                prp.villa
-            FROM respuesta_pqr rpq
-            LEFT JOIN usuario us ON rpq.usuario_id = us.id
-            LEFT JOIN responsable respn ON rpq.responsable_id = respn.id
-            JOIN pqr pq ON rpq.pqr_id = pq.id
-            JOIN propiedad prp ON pq.id_propiedad = prp.id";
-
+    // --- Consulta para PQR ---
+    $sql_pqr = "SELECT rpq.pqr_id AS solicitud_id, CONVERT('PQR' USING utf8mb4) AS tipo_solicitud, CONVERT(rpq.mensaje USING utf8mb4) AS mensaje, CONVERT(COALESCE(us.nombres , respn.nombre) USING utf8mb4) AS usuario, rpq.fecha_respuesta, CONVERT(rpq.url_adjunto USING utf8mb4) AS url_adjunto, CONVERT(prp.manzana USING utf8mb4) AS manzana, CONVERT(prp.villa USING utf8mb4) AS villa FROM respuesta_pqr rpq LEFT JOIN usuario us ON rpq.usuario_id = us.id LEFT JOIN responsable respn ON rpq.responsable_id = respn.id JOIN pqr pq ON rpq.pqr_id = pq.id JOIN propiedad prp ON pq.id_propiedad = prp.id";
     if (!empty($conditions_pqr)) {
         $sql_pqr .= ' WHERE ' . implode(' AND ', $conditions_pqr);
     }
 
+    // --- Consulta para Citas ---
+    $sql_citas = "SELECT a.id AS solicitud_id, CONVERT('Cita' USING utf8mb4) AS tipo_solicitud, CONVERT(pa.proposito USING utf8mb4) AS mensaje, CONVERT(u.nombres USING utf8mb4) AS usuario, a.fecha_ingreso AS fecha_respuesta, NULL AS url_adjunto, CONVERT(pr.manzana USING utf8mb4) AS manzana, CONVERT(pr.villa USING utf8mb4) AS villa FROM agendamiento_visitas a JOIN usuario u ON a.id_usuario = u.id JOIN propiedad pr ON a.id_propiedad = pr.id JOIN proposito_agendamiento pa ON a.proposito_id = pa.id";
+    if (!empty($conditions_citas)) {
+        $sql_citas .= ' WHERE ' . implode(' AND ', $conditions_citas);
+    }
 
-    // Combinar ambas consultas con UNION ALL y aplicar ORDER BY y LIMIT al resultado combinado
-    $sql = "(" . $sql_ctg . ") UNION ALL (" . $sql_pqr . ") ORDER BY fecha_respuesta DESC LIMIT 20";
-
+    // --- Combinar las 3 consultas ---
+    $sql = "($sql_ctg) UNION ALL ($sql_pqr) UNION ALL ($sql_citas) ORDER BY fecha_respuesta DESC LIMIT 20";
 
     $stmt = $db->prepare($sql);
 

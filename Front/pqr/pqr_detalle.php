@@ -12,6 +12,7 @@ $id = (int)($_GET['id'] ?? 0);
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="../assets/css/style_main.css" rel="stylesheet">
 <link href="../assets/css/style_pqr_detalle.css" rel="stylesheet">
+<link href="//cdn.jsdelivr.net/npm/featherlight@1.7.14/release/featherlight.min.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 
@@ -78,6 +79,8 @@ $id = (int)($_GET['id'] ?? 0);
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="//code.jquery.com/jquery-latest.js"></script>
+<script src="//cdn.jsdelivr.net/npm/featherlight@1.7.14/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
 /* ------- rutas ------- */
 const END_RESP = '../../api/pqr/pqr_respuestas.php?pqr_id=<?=$id?>';
@@ -195,7 +198,7 @@ if(!u.id) {
               if (/\.(jpeg|jpg|gif|png)$/i.test(r.url_adjunto)) {
                 adjuntoHTML = `
                   <div class="attachment-container">
-                    <a href="${r.url_adjunto}" target="_blank" rel="noopener noreferrer">
+                    <a href="${r.url_adjunto}" data-featherlight="image">
                       <img src="${r.url_adjunto}" alt="Archivo adjunto" class="chat-image">
                     </a>
                   </div>`;
@@ -370,7 +373,7 @@ if(!u.id) {
           if (p.url_problema) {
               problemaImgHTML = `
                 <div class="problema-image-container mt-3">
-                  <a href="${p.url_problema}" target="_blank" rel="noopener noreferrer" title="Ver imagen completa">
+                  <a href="${p.url_problema}" data-featherlight="image" title="Ver imagen completa">
                     <img src="${p.url_problema}" alt="Imagen del Problema" class="problema-image">
                   </a>
                 </div>

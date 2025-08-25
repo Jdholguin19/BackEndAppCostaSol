@@ -49,6 +49,31 @@ $ins->execute([
  ':u'=>$uid,':r'=>$respId,':p'=>$proposito,':prop'=>$propiedad,
  ':f'=>$fecha,':h'=>$hora,':obs'=>$observaciones]);
 
+// --- INICIO: Lógica para enviar Notificación Push ---
+require_once __DIR__ . '/../helpers/notificaciones.php';
+
+// Obtener el ID de la cita recién creada
+$lastInsertId = $db->lastInsertId();
+
+// Obtener el Player ID del responsable
+$sql_get_player_id = 'SELECT onesignal_player_id FROM responsable WHERE id = :resp_id LIMIT 1';
+$stmt_get_player_id = $db->prepare($sql_get_player_id);
+$stmt_get_player_id->execute([':resp_id' => $respId]);
+$oneSignalPlayerId = $stmt_get_player_id->fetchColumn();
+
+// Obtener el nombre del propósito para el cuerpo de la notificación
+$sql_proposito_nombre_push = 'SELECT proposito FROM proposito_agendamiento WHERE id = :proposito_id LIMIT 1';
+$stmt_proposito_nombre_push = $db->prepare($sql_proposito_nombre_push);
+$stmt_proposito_nombre_push->execute([':proposito_id' => $proposito]);
+$nombreProposito = $stmt_proposito_nombre_push->fetchColumn();
+
+if ($oneSignalPlayerId) {
+    $message_title = "Tienes una nueva cita";
+    $message_body = "Tipo: " . ($nombreProposito ?: 'No especificado');
+    send_one_signal_notification($message_title, $message_body, $oneSignalPlayerId, ['cita_id' => $lastInsertId]);
+}
+// --- FIN: Lógica para enviar Notificación Push ---
+
 // --- INICIO: Lógica de envío de correo a responsable para citas ---
 require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
 

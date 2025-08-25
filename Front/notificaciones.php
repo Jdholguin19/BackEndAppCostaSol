@@ -97,6 +97,10 @@ if (!token) {
                         detailPageUrl = `pqr/pqr_detalle.php?id=${notif.solicitud_id}`;
                         typeClass = 'type-pqr';
                         notificationTitle = 'Nuevo mensaje a su PQR';
+                    } else if (notif.tipo_solicitud === 'Cita') {
+                        detailPageUrl = `citas.php`; // Enlace a la lista de citas
+                        typeClass = 'type-cita';
+                        notificationTitle = 'Nueva Cita Programada';
                     }
                     // --- FIN Lógica para construir el enlace y la presentación dinámicamente ---
 
@@ -116,26 +120,28 @@ if (!token) {
                                 <h3 class="notification-title">${notificationTitle} <br>- Mz ${notif.manzana} - Villa ${notif.villa} - </h3>
                                 <span class="notification-type ${typeClass}">${notif.tipo_solicitud}</span>
                             </div>
-                            <p class="notification-message">${notif.mensaje}</p>
-                            ${(() => {
-                                if (!notif.url_adjunto) return '';
+                            <div class="notification-body">
+                                <p class="notification-message">${notif.mensaje}</p>
+                                ${(() => {
+                                    if (!notif.url_adjunto) return '';
 
-                                // Check if the attachment is an image by extension
-                                if (/\.(jpeg|jpg|gif|png)$/i.test(notif.url_adjunto)) {
-                                    return `
-                                    <div class="notification-attachment-image">
-                                        <img src="${notif.url_adjunto}" alt="Adjunto">
-                                    </div>`;
-                                } else {
-                                    // Fallback for non-image files
-                                    return `
-                                    <div class="notification-attachment">
-                                        <a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">
-                                            <i class="bi bi-file-earmark-text"></i> Ver adjunto
-                                        </a>
-                                    </div>`;
-                                }
-                            })()}
+                                    // Check if the attachment is an image by extension
+                                    if (/\.(jpeg|jpg|gif|png)$/i.test(notif.url_adjunto)) {
+                                        return `
+                                        <div class="notification-attachment-image">
+                                            <img src="${notif.url_adjunto}" alt="Adjunto">
+                                        </div>`;
+                                    } else {
+                                        // Fallback for non-image files
+                                        return `
+                                        <div class="notification-attachment">
+                                            <a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">
+                                                <i class="bi bi-file-earmark-text"></i> Ver adjunto
+                                            </a>
+                                        </div>`;
+                                    }
+                                })()}
+                            </div>
                             <div class="notification-meta">
                                 <span class="notification-user">Por: ${notif.usuario}</span>
                                 <span class="notification-date">${fechaFormateada}</span>
