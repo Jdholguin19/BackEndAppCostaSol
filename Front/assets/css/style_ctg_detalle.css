@@ -706,3 +706,67 @@ body {
 .chat-list li {
     animation: slideIn 0.3s ease-out;
 }
+
+/* --- Attachment Styles --- */
+.attachment-container a {
+  display: block;
+  text-decoration: none;
+}
+
+.chat-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block; /* Make image a block element */
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.chat-image:hover {
+  opacity: 0.8;
+}
+
+.file-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.file-link:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.file-link i {
+  font-size: 1.5em; /* Make icon bigger */
+}
+
+/* If there's an attachment, add some space for the text below it */
+.bubble-text:not(:empty) {
+  margin-top: 8px;
+}
+
+/* --- Styles for Initial Problem Image --- */
+.problema-image-container {
+  text-align: center; /* Center the image container */
+}
+
+.problema-image {
+  width: 120px;  /* Set a fixed width */
+  height: 120px; /* Set a fixed height to make it square */
+  object-fit: cover; /* Crop the image to fit the square without distortion */
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.problema-image:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Increased shadow slightly for more pop */
+  transform: scale(1.05); /* Enlarge the image slightly on hover */
+}

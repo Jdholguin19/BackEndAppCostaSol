@@ -184,34 +184,62 @@ if(!u.id) {
           return `<span class="badge-dot ${cls}">${txt}</span>`;
         }
 
-        function msgHTML(r, index, responses){
-          const esResp = Number(r.responsable_id) > 0;
-          const dirClass = esResp ? 'right' : '';
-          const mensaje = r.mensaje.replace(/\n/g, '<br>'); // Convertir saltos de línea en HTML
-          
-          // Determinar si mostrar la hora basado en la diferencia de tiempo
-          let showTime = true;
-          let timeClass = '';
-          
-          if (index > 0) {
-            const currentTime = new Date(r.fecha_respuesta);
-            const previousTime = new Date(responses[index - 1].fecha_respuesta);
-            const timeDiff = Math.abs(currentTime - previousTime) / (1000 * 60); // Diferencia en minutos
-            
-            // Si es el mismo usuario y menos de 5 minutos, ocultar hora
-            if (responses[index].responsable_id === responses[index - 1].responsable_id && timeDiff < 5) {
-              showTime = false;
-              timeClass = 'time-hidden';
-            }
-          }
+                  function msgHTML(r, index, responses){
+            const esResp = Number(r.responsable_id) > 0;
+            const dirClass = esResp ? 'right' : '';
+            const mensaje = r.mensaje.replace(/\n/g, '<br>');
 
-          return `<li class="${dirClass} ${showTime ? 'show-time' : ''}">
-                    <div>
-                      <div class="bubble">${mensaje}</div>
-                      <div class="time ${timeClass}">${fechaHora(r.fecha_respuesta)}</div>
-                    </div>
-                  </li>`;
-        }
+            // --- INICIO: Lógica para el adjunto ---
+            let adjuntoHTML = '';
+            if (r.url_adjunto) {
+              // Verificar si es una imagen o un PDF por la extensión
+              if (/\.(jpeg|jpg|gif|png)$/i.test(r.url_adjunto)) {
+                adjuntoHTML = `
+                  <div class="attachment-container">
+                    <a href="${r.url_adjunto}" target="_blank" rel="noopener noreferrer">
+                      <img src="${r.url_adjunto}" alt="Archivo adjunto" class="chat-image">
+                    </a>
+                  </div>`;
+              } else { // Asumir que es otro tipo de archivo, como PDF
+                  adjuntoHTML = `
+                  <div class="attachment-container">
+                      <a href="${r.url_adjunto}" target="_blank" rel="noopener noreferrer" class="file-link">
+                          <i class="bi bi-file-earmark-text"></i>
+                          Ver Archivo Adjunto
+                      </a>
+                  </div>`;
+              }
+            }
+            // --- FIN: Lógica para el adjunto ---
+
+            // Determinar si mostrar la hora basado en la diferencia de tiempo
+            let showTime = true;
+            let timeClass = '';
+            
+            if (index > 0) {
+              const currentTime = new Date(r.fecha_respuesta);
+              const previousTime = new Date(responses[index - 1].fecha_respuesta);
+              const timeDiff = Math.abs(currentTime - previousTime) / (1000 * 60); // Diferencia en minutos
+              
+              if (r.responsable_id === responses[index-1].responsable_id && r.usuario_id === responses[index-1].usuario_id && timeDiff < 5) {
+                showTime = false;
+                timeClass = 'time-hidden';
+              }
+            }
+
+            // Si hay mensaje de texto, se muestra. Si no, se oculta el div.
+            const mensajeHTML = mensaje ? `<div class="bubble-text">${mensaje}</div>` : '';
+
+            return `<li class="${dirClass} ${showTime ? 'show-time' : ''}">
+                      <div>
+                        <div class="bubble">
+                          ${adjuntoHTML}
+                          ${mensajeHTML}
+                        </div>
+                        <div class="time ${timeClass}">${fechaHora(r.fecha_respuesta)}</div>
+                      </div>
+                    </li>`;
+          }
 
         function showNotification(message, type = 'success') {
           const alertDiv = document.createElement('div');
@@ -338,13 +366,26 @@ if(!u.id) {
           titleEl.textContent = `${p.subtipo}${mzVillaTitle}`; // Establecer el título con el subtipo y Mz/Villa
 
 
+          // --- Lógica para mostrar la imagen del problema ---
+          let problemaImgHTML = '';
+          if (p.url_problema) {
+              problemaImgHTML = `
+                <div class="problema-image-container mt-3">
+                  <a href="${p.url_problema}" target="_blank" rel="noopener noreferrer" title="Ver imagen completa">
+                    <img src="${p.url_problema}" alt="Imagen del Problema" class="problema-image">
+                  </a>
+                </div>
+              `;
+          }
+
           headBox.innerHTML = `
             <p class="mb-1">
               <span class="badge bg-secondary me-1">${p.tipo}</span>
               ${badgeEstado(p.estado)}
             </p>
             <p class="small text-muted mb-2">${fechaHora(p.fecha_ingreso)}</p>
-            <div class="p-3 rounded bg-white border">${p.descripcion}</div>`;
+            <div class="p-3 rounded bg-white border">${p.descripcion}</div>
+            ${problemaImgHTML}`;
 
           // Si el CTG está cerrado, ocultar el formulario de respuesta
           if (p.estado.toLowerCase().includes('cerr')) {

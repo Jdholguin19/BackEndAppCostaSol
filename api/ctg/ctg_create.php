@@ -83,7 +83,7 @@ try{
     /* ---------- 3. gestionar adjunto ---------- */
     $urlProblema = null;
     if(!empty($_FILES['archivo']['tmp_name'])){
-         $uploadDir = __DIR__.'/../ImagenesPQR_problema/';
+         $uploadDir = __DIR__.'/../../ImagenesCTG_problema/';
          if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true); // Crear directorio si no existe
         }
@@ -92,7 +92,7 @@ try{
             $dest = $uploadDir.$name;
             if(move_uploaded_file($_FILES['archivo']['tmp_name'],$dest)){
                 // Asegúrate de que esta URL es correcta para acceso público
-                $urlProblema = "https://app.costasol.com.ec/ImagenesPQR_problema/$name";
+                $urlProblema = "https://app.costasol.com.ec/ImagenesCTG_problema/$name";
             } else {
                 error_log('Error al mover archivo subido para CTG problema.');
             }

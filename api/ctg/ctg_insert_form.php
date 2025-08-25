@@ -66,7 +66,7 @@ try{
     /* ---------- 2. gestionar adjunto ---------- */
     $urlAdjunto = null;
     if(!empty($_FILES['archivo']['tmp_name'])){
-        $uploadDir = __DIR__.'/../ImagenesPQR_respuestas/';
+        $uploadDir = __DIR__.'/../../ImagenesCTG_respuestas/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true); // Crear directorio si no existe
         }
@@ -74,7 +74,7 @@ try{
             $name = uniqid().'-'.basename($_FILES['archivo']['name']);
             $dest = $uploadDir.$name;
             if(move_uploaded_file($_FILES['archivo']['tmp_name'],$dest)){
-                $urlAdjunto = "https://app.costasol.com.ec/ImagenesPQR_respuestas/$name";
+                $urlAdjunto = "https://app.costasol.com.ec/ImagenesCTG_respuestas/$name";
             } else {
                  error_log('Error al mover archivo subido para CTG respuesta.');
             }

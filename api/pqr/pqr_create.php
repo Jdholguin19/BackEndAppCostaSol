@@ -75,7 +75,7 @@ try{
     /* ---------- 3. gestionar adjunto ---------- */
     $urlProblema = null;
     if(!empty($_FILES['archivo']['tmp_name'])){
-         $uploadDir = __DIR__.'/../ImagenesPQR_problema/';
+         $uploadDir = __DIR__.'/../../ImagenesPQR_problema/';
          if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true); // Crear directorio si no existe
         }
