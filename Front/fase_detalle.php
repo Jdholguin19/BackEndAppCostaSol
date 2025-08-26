@@ -69,8 +69,9 @@ function createStageCard(stage, index) {
            </div>`
         : '';
 
+    // Pass the event to toggleStage to check the click target
     return `
-        <div class="stage-card" onclick="toggleStage(${index})">
+        <div class="stage-card" onclick="toggleStage(this, event)">
             <div class="stage-header">
                 <h3 class="stage-name">${stage.etapa}</h3>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -78,7 +79,7 @@ function createStageCard(stage, index) {
                     <i class="bi bi-chevron-down chevron-icon"></i>
                 </div>
             </div>
-            <div class="stage-content" id="content-${index}">
+            <div class="stage-content">
                 <p class="stage-description">${stage.descripcion || 'Sin descripción disponible'}</p>
                 ${photosHTML}
             </div>
@@ -86,17 +87,22 @@ function createStageCard(stage, index) {
     `;
 }
 
-function toggleStage(index) {
-    const card = document.querySelector(`#stages-list .stage-card:nth-child(${index + 1})`);
-    const content = document.getElementById(`content-${index}`);
-    const chevron = card.querySelector('.chevron-icon');
+function toggleStage(cardElement, event) {
+    // Check if the click originated from an anchor tag (like the ones for Featherlight)
+    if (event.target.closest('a')) {
+        return; // Do nothing, let Featherlight handle the click
+    }
+
+    const content = cardElement.querySelector('.stage-content');
+    const chevron = cardElement.querySelector('.chevron-icon');
     
-    if (content.classList.contains('show')) {
-        content.classList.remove('show');
-        card.classList.remove('expanded');
+    // Toggle expansion state
+    if (cardElement.classList.contains('expanded')) {
+        content.style.display = 'none';
+        cardElement.classList.remove('expanded');
     } else {
-        content.classList.add('show');
-        card.classList.add('expanded');
+        content.style.display = 'block';
+        cardElement.classList.add('expanded');
     }
 }
 
@@ -114,12 +120,11 @@ fetch(ENDPOINT).then(r=>r.json()).then(d=>{
   const stagesList = document.getElementById('stages-list');
   
   d.etapas.forEach((stage, index) => {
-    console.log(`Etapa ${index}: ${stage.etapa} - Porcentaje: ${stage.porcentaje} - Estado: ${stage.estado}`);
     stagesList.insertAdjacentHTML('beforeend', createStageCard(stage, index));
   });
 
-  // Inicializar Featherlight después de que el contenido se ha cargado
-  // Esto asegura que Featherlight encuentre los elementos con data-featherlight
+  // Featherlight is initialized automatically by data-attributes, no extra JS needed here.
+  // The fix is now in the toggleStage function.
 
 }).catch((error) => {
   console.error('Error al cargar etapas:', error);

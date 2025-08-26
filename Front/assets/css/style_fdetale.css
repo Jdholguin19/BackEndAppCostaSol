@@ -20,7 +20,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 0.5rem;
+        gap: 1rem; /* Add gap for spacing */
     }
 
     .stage-name {
@@ -39,6 +39,7 @@
         border-radius: 12px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        white-space: nowrap;
     }
 
     .status-Hecho {
@@ -107,7 +108,7 @@
 
     .fase-header {
         background: #ffffff;
-        padding: 1rem 1.5rem 0.5rem;
+        padding: 1rem 1.5rem;
         border-bottom: 1px solid #f0f0f0;
     }
 
@@ -123,7 +124,7 @@
     .fase-subtitle {
         font-size: 0.875rem;
         color: #6b7280;
-        margin: 0.5rem 0 0 0;
+        margin: 0.25rem 0 0 0;
         text-align: center;
     }
 
@@ -150,71 +151,106 @@
         padding: 1rem 1.5rem;
     }
 
-
     /* Estilos para personalizar Featherlight */
+    .featherlight {
+        background: rgba(45, 90, 61, 0.9);
+    }
 
-/* Fondo oscuro del visor */
-.featherlight {
-    background: rgba(45, 90, 61, 0.9); /* Color similar al verde de tu diseño con transparencia */
-}
+    .featherlight .featherlight-content {
+        padding: 0;
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+    }
 
-/* Contenido del visor (imagen) */
-.featherlight .featherlight-content {
-    /* Eliminar el padding por defecto si no es necesario */
-    padding: 0;
-    /* Añadir bordes redondeados si lo deseas */
-    border-radius: 12px;
-    overflow: hidden; /* Para asegurar que la imagen dentro también respete los bordes redondeados */
-    border: none; /* Eliminar el borde por defecto */
-}
-
-/* Estilos para la imagen dentro del visor */
-.featherlight .featherlight-image {
-    /* Asegurar que la imagen se ajuste bien en pantallas pequeñas */
-    display: block;
-    max-width: 100%;
-    max-height: 80vh; /* Limitar la altura para que no ocupe toda la pantalla verticalmente */
-    margin: 0 auto; /* Centrar la imagen */
-    border-radius: 12px; /* Bordes redondeados para la imagen */
-}
-
-/* Botón de cierre */
-.featherlight .featherlight-close {
-    top: 10px;
-    right: 10px;
-    color: #ffffff; /* Color blanco para mayor visibilidad sobre el fondo oscuro */
-    font-size: 1.5rem; /* Tamaño del icono de cierre */
-    line-height: 1;
-    width: auto; /* Ajustar el ancho */
-    height: auto; /* Ajustar la altura */
-    background: none; /* Eliminar fondo si lo tiene por defecto */
-    border: none; /* Eliminar borde si lo tiene por defecto */
-    text-align: center;
-    text-decoration: none;
-    /* Añadir una sombra suave para destacarlo */
-    text-shadow: 0 0 5px rgba(122, 59, 59, 0.827);
-}
-
-.featherlight .featherlight-close:hover {
-    color: #e0e0e0; /* Color ligeramente más claro al pasar el ratón */
-}
-
-/* Botones de navegación (anterior y siguiente) */
-.featherlight .featherlight-next,
-.featherlight .featherlight-previous {
-    color: #ffffff; /* Color blanco */
-    font-size: 2rem; /* Tamaño de los iconos */
-    /* Posicionamiento, Featherlight ya los posiciona, puedes ajustar si es necesario */
-}
-
-.featherlight .featherlight-next:hover,
-.featherlight .featherlight-previous:hover {
-    color: #e0e0e0; /* Color ligeramente más claro al pasar el ratón */
-}
-
-/* Ajustes para pantallas pequeñas si es necesario */
-@media all and (max-width: 768px) {
     .featherlight .featherlight-image {
-        max-height: 80vh; /* Ajustar la altura máxima en pantallas más pequeñas */
+        display: block;
+        max-width: 90vw; /* Use viewport width */
+        max-height: 80vh; /* Use viewport height */
+        margin: 0 auto;
+        border-radius: 12px;
+    }
+
+    .featherlight .featherlight-close {
+        top: 15px;
+        right: 15px;
+        color: #ffffff;
+        font-size: 1.5rem;
+        background: none;
+        text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+
+    .featherlight .featherlight-close:hover {
+        color: #e0e0e0;
+    }
+
+    .featherlight .featherlight-next,
+    .featherlight .featherlight-previous {
+        color: #ffffff;
+        font-size: 2rem;
+    }
+
+    .featherlight .featherlight-next:hover,
+    .featherlight .featherlight-previous:hover {
+        color: #e0e0e0;
+    }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .stages-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .fase-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .fase-title {
+        font-size: 1.1rem;
+    }
+
+    .fase-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .stage-card {
+        padding: 0.75rem 1rem;
+    }
+
+    .stage-name {
+        font-size: 0.95rem;
+    }
+
+    .stage-status {
+        font-size: 0.7rem;
+    }
+
+    .stage-photos {
+        gap: 0.5rem; /* Adjusted gap */
+    }
+
+    .stage-photos img {
+        /* Create a responsive grid, 4 items per row */
+        flex: 1 0 calc(25% - 0.5rem); /* 4 items */
+        width: auto; /* Override fixed width */
+        height: auto; /* Override fixed height */
+        aspect-ratio: 1 / 1; /* Maintain square shape */
+        max-width: 80px; /* Limit max size */
+    }
+}
+
+@media (max-width: 480px) {
+    .fase-header {
+        padding: 0.75rem 0.5rem;
+    }
+    .fase-title {
+        font-size: 1rem;
+    }
+    .back-button {
+        left: 0.5rem;
+    }
+    .stage-photos img {
+        /* 3 items per row on very small screens */
+        flex-basis: calc(33.333% - 0.5rem);
     }
 }

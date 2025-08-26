@@ -370,7 +370,6 @@
 
 <body>
 <!-- Header Section -->
-<hr style="color:rgba(69, 67, 67, 0.33); margin-top: 20px; ">
 <div class="header-section">
   <div class="welcome-card">
     <div class="welcome-info">

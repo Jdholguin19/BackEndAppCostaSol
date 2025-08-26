@@ -145,6 +145,11 @@ body {
     line-height: 1.4;
     margin: 0; /* Reset margin */
     flex: 1 1 70%;
+    /* Fix for overflowing text in flexbox */
+    min-width: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .notification-meta {

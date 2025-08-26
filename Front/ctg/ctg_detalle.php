@@ -215,31 +215,39 @@ if(!u.id) {
             }
             // --- FIN: Lógica para el adjunto ---
 
-            // Determinar si mostrar la hora basado en la diferencia de tiempo
-            let showTime = true;
-            let timeClass = '';
-            
-            if (index > 0) {
-              const currentTime = new Date(r.fecha_respuesta);
-              const previousTime = new Date(responses[index - 1].fecha_respuesta);
-              const timeDiff = Math.abs(currentTime - previousTime) / (1000 * 60); // Diferencia en minutos
-              
-              if (r.responsable_id === responses[index-1].responsable_id && r.usuario_id === responses[index-1].usuario_id && timeDiff < 5) {
-                showTime = false;
-                timeClass = 'time-hidden';
-              }
-            }
+                        // Ajuste para teclado móvil: Scroll al bottom cuando se enfoca el textarea
+            txtMensaje.addEventListener('focus', function() {
+                setTimeout(function() {
+                    // Scrollea el chat al final
+                    chat.scrollTop = chat.scrollHeight;
+                    
+                    // Scrollea la ventana completa al bottom para asegurar que el form sea visible
+                    window.scrollTo({
+                        top: document.body.scrollHeight,
+                        behavior: 'smooth'  // Suave para mejor UX
+                    });
+                }, 200);  // Delay de 200ms para esperar a que el teclado se abra completamente (ajusta si es necesario)
+            });
 
-            // Si hay mensaje de texto, se muestra. Si no, se oculta el div.
+            // Opcional: Detecta resize del viewport (cuando teclado abre/cierra)
+            window.addEventListener('resize', function() {
+                if (document.activeElement === txtMensaje) {  // Solo si el textarea está enfocado
+                    setTimeout(function() {
+                        chat.scrollTop = chat.scrollHeight;
+                        window.scrollTo(0, document.body.scrollHeight);
+                    }, 100);
+                }
+            });
             const mensajeHTML = mensaje ? `<div class="bubble-text">${mensaje}</div>` : '';
 
-            return `<li class="${dirClass} ${showTime ? 'show-time' : ''}">
-                      <div>
-                        <div class="bubble">
-                          ${adjuntoHTML}
-                          ${mensajeHTML}
+            // --- NUEVA ESTRUCTURA DE BURBUJA ---
+            return `<li class="${dirClass}">
+                      <div class="bubble">
+                        ${adjuntoHTML}
+                        ${mensajeHTML}
+                        <div class="bubble-meta">
+                            <span class="time">${fechaHora(r.fecha_respuesta)}</span>
                         </div>
-                        <div class="time ${timeClass}">${fechaHora(r.fecha_respuesta)}</div>
                       </div>
                     </li>`;
           }

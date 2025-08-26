@@ -895,6 +895,50 @@ body {
           min-width: 100%;
           border-radius: 20px;
       }
+
+      /* --- INICIO: Ajustes para Menú en Móviles Pequeños --- */
+      #menuSpinner.py-5 {
+          padding-top: 1.5rem !important;
+          padding-bottom: 1.5rem !important;
+      }
+
+      .menu-card {
+          padding: 1rem 0.75rem;
+          min-height: 100px;
+          gap: 0.5rem;
+      }
+
+      .menu-icon {
+          font-size: 1.75rem; /* Reducido de 2rem */
+          margin-bottom: 0.25rem;
+      }
+      
+      .menu-card img { /* Para iconos que son imágenes */
+          width: 32px; /* Reducido de 40px */
+      }
+
+      .menu-card h6 {
+          font-size: 0.8rem; /* Reducido de 0.875rem */
+      }
+
+      .construction-card {
+          padding: 1rem;
+          margin-bottom: 1rem;
+      }
+
+      .progress-ring {
+          width: 60px;
+          height: 60px;
+      }
+
+      .construction-info h4 {
+          font-size: 0.9rem;
+      }
+
+      .construction-stage, .construction-link {
+          font-size: 0.8rem;
+      }
+      /* --- FIN: Ajustes para Menú en Móviles Pequeños --- */
   }
 
   /* Estilos responsivos para orientación landscape en móviles */
