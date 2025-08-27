@@ -74,13 +74,18 @@ const API_GARANTIAS = '../api/garantias.php';
 
 // Función para crear tarjeta de garantía
 function createGarantiaCard(garantia) {
-    
+    const cardClass = garantia.activa ? '' : 'garantia-expirada';
+    const statusIcon = garantia.activa 
+        ? '<span class="status-badge status-active">Activa</span>' 
+        : '<span class="status-badge status-expired">Expirada</span>';
+
     return `
-        <div class="garantia-card">
+        <div class="garantia-card ${cardClass}">
             <div class="garantia-header">
                 <div class="garantia-info">
                     <h3 class="garantia-categoria">${garantia.categoria}</h3>
                 </div>
+                ${statusIcon}
             </div>
             <div class="garantia-details">
                 <div class="garantia-detail">
@@ -92,7 +97,7 @@ function createGarantiaCard(garantia) {
                 <div class="garantia-detail">
                     <i class="bi bi-calendar-check garantia-detail-icon"></i>
                     <p class="garantia-detail-text">
-                        Vigencia: <span class="garantia-detail-value">${garantia.vigencia}</span>
+                        Vigencia hasta: <span class="garantia-detail-value">${garantia.vigencia}</span>
                     </p>
                 </div>                                
             </div>

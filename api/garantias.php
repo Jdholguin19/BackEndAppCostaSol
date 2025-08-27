@@ -86,21 +86,35 @@ try {
             $duracion_texto = ($meses == 1) ? '1 mes' : $meses . ' meses';
         }
 
-        // Calcular vigencia
-        $vigencia_texto = 'No aplica'; // Valor por defecto
+        // Calcular vigencia y estado
+        $vigencia_texto = 'No aplica';
+        $activa = false; // Por defecto, no está activa si no hay fecha de entrega
+
         if ($fecha_entrega_str) {
             try {
-                $fecha_entrega = new DateTime($fecha_entrega_str);
-                if ($max == 1.0) {
-                    $fecha_entrega->add(new DateInterval('P1Y'));
-                } elseif ($max == 0.6) {
-                    $fecha_entrega->add(new DateInterval('P6M'));
-                } elseif ($max == 0.3) {
-                    $fecha_entrega->add(new DateInterval('P3M'));
+                $fecha_vencimiento = new DateTime($fecha_entrega_str);
+                
+                // Sumar el intervalo de la garantía. Nota: Se asumen valores fijos como 1.0 para 1 año, 0.5 para 6 meses, etc.
+                if ($max >= 1) {
+                    $years = floor($max);
+                    $months = round(($max - $years) * 12);
+                    if ($years > 0) $fecha_vencimiento->add(new DateInterval("P{$years}Y"));
+                    if ($months > 0) $fecha_vencimiento->add(new DateInterval("P{$months}M"));
+                } else {
+                    $months = round($max * 12);
+                    if ($months > 0) $fecha_vencimiento->add(new DateInterval("P{$months}M"));
                 }
-                $vigencia_texto = $fecha_entrega->format('d/m/Y');
+                
+                $vigencia_texto = $fecha_vencimiento->format('d/m/Y');
+                
+                // Comparar con la fecha actual para determinar si está activa
+                $hoy = new DateTime();
+                // Se considera activa si la fecha de vencimiento es hoy o en el futuro.
+                $activa = ($fecha_vencimiento >= $hoy->setTime(0, 0, 0));
+
             } catch (Exception $e) {
                 $vigencia_texto = 'Error';
+                $activa = false;
             }
         }
         
@@ -109,7 +123,8 @@ try {
             'categoria' => $garantia['nombre'],
             'elemento' => $garantia['nombre'],
             'duracion' => $duracion_texto,
-            'vigencia' => $vigencia_texto, // Nuevo campo con la fecha calculada
+            'vigencia' => $vigencia_texto,
+            'activa' => $activa, // Nuevo campo para indicar si la garantía está activa
             'responsable' => 'Thalia Victoria Constructora'
         ];
     }

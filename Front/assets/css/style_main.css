@@ -26,8 +26,13 @@ body {
 /* Header section */
 .header-section {
     background: #ffffff;
-    padding: 1rem 1.5rem 0.5rem;
+    padding: 1rem 1.5rem 0rem;
     border-bottom: 1px solid #f0f0f0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1010; /* Superior a bottom-nav */
 }
 
 .welcome-card {
@@ -98,6 +103,7 @@ body {
 .main-content {
     padding: 0.2rem 1.5rem;
     padding-bottom: 5rem; /* Space for bottom navigation */
+    padding-top: 9.5rem; /* Space for fixed header. Adjust if needed. */
 }
 
 
