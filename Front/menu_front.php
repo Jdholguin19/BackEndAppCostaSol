@@ -500,7 +500,7 @@ include '../api/bottom_nav.php';
   const API_FASE  = '../api/propiedad_fase.php?id_propiedad=';
 
   /* ---------- Welcome ---------- */
-  document.getElementById('welcomeName').textContent = `Hola, ${u.nombres || u.nombre}`;
+  document.getElementById('welcomeName').textContent = `Hola, ${u.nombres || u.nombre} ${u.apellidos || ''}`;
   document.getElementById('welcomeAvatar').src = u.url_foto_perfil || 'https://via.placeholder.com/48';
 
   /* ---------- Helpers ---------- */
@@ -732,7 +732,7 @@ include '../api/bottom_nav.php';
           menuItems.forEach(m=> {
               // Check if this is the Garantias module (menu.id === 6)
               // and if there are no active warranties
-              const isGarantiasModule = (m.id === 6);
+              const isGarantiasModule = (Number(m.id) === 6);
               const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
               const shouldDisable = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
 

@@ -213,7 +213,7 @@ include '../api/bottom_nav.php';
             return; // No renderizar este módulo
         }
 
-        const isGarantiasModule = (m.id === 6);
+        const isGarantiasModule = (Number(m.id) === 6);
         const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
         const shouldDisableGarantias = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
 

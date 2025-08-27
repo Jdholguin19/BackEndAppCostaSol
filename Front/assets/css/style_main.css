@@ -34,7 +34,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 0.3rem;
 }
 
 .welcome-info {
@@ -70,7 +70,7 @@ body {
 .property-tabs {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     overflow-x: auto;
     padding-bottom: 0.25rem;
 }
@@ -96,7 +96,7 @@ body {
 
 /* Main content area */
 .main-content {
-    padding: 1rem 1.5rem;
+    padding: 0.2rem 1.5rem;
     padding-bottom: 5rem; /* Space for bottom navigation */
 }
 
@@ -161,7 +161,7 @@ body {
 /* Show carousel with smaller images */
 .carousel {
     display: block;
-    margin-top: 1rem;
+    margin-top: 0.1rem;
 }
 
 .carousel-inner {

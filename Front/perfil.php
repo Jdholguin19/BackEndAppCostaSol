@@ -153,8 +153,9 @@
         <i class="bi bi-person"></i>
       </div>
       <div class="info-content">
-        <div class="info-label">Nombre</div>
-        <div class="info-value" id="userName">Cargando...</div>
+        <div class="info-label">Nombres </div>
+        <div class="info-value" id="userName">Cargando...</div><div class="info-value" id="userLastName">Cargando...</div>
+        
       </div>
     </div>
 
@@ -263,6 +264,7 @@ include '../api/bottom_nav.php';
         const profilePicture = document.getElementById('profilePicture');
         profilePicture.src = data.usuario.url_foto_perfil || 'https://via.placeholder.com/120x120?text=Usuario';
         document.getElementById('userName').textContent = data.usuario.nombres || data.usuario.nombre || 'No disponible';
+        document.getElementById('userLastName').textContent = data.usuario.apellidos || 'No disponible';
         document.getElementById('userCedula').textContent = data.usuario.cedula || 'No disponible';
         document.getElementById('userPhone').textContent = data.usuario.telefono || 'No disponible';
         document.getElementById('userEmail').textContent = data.usuario.email || 'No disponible';

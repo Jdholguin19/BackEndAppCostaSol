@@ -94,13 +94,7 @@ function createGarantiaCard(garantia) {
                     <p class="garantia-detail-text">
                         Vigencia: <span class="garantia-detail-value">${garantia.vigencia}</span>
                     </p>
-                </div>                 
-                <div class="garantia-detail">
-                    <i class="bi bi-person garantia-detail-icon"></i>
-                    <p class="garantia-detail-text">
-                        Responsable: <span class="garantia-detail-value">${garantia.responsable}</span>
-                    </p>
-                </div>               
+                </div>                                
             </div>
         </div>
     `;
