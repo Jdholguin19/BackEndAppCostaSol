@@ -32,7 +32,9 @@ $resp=$db->prepare("
                  AND IFNULL(d.fecha_vigencia_hasta,'2999-12-31')
        AND TIME(:h) BETWEEN d.hora_inicio AND d.hora_fin
  LEFT   JOIN agendamiento_visitas v ON v.responsable_id=r.id
-       AND v.fecha_reunion=:f AND v.hora_reunion = TIME(:h) AND v.estado<>'CANCELADO'\n GROUP  BY r.id
+       AND v.fecha_reunion=:f AND v.hora_reunion = TIME(:h) AND v.estado<>'CANCELADO'
+ WHERE r.id != 3
+ GROUP  BY r.id
  ORDER  BY n ASC, RAND() ASC
  LIMIT 1");
 $resp->execute([':f'=>$fecha,':h'=>$hora, ':dia_calculated'=>$dia]);

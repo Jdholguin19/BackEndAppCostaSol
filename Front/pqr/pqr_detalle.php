@@ -194,20 +194,43 @@ if(!u.id) {
             // --- INICIO: Lógica para el adjunto ---
             let adjuntoHTML = '';
             if (r.url_adjunto) {
-              // Verificar si es una imagen o un PDF por la extensión
-              if (/\.(jpeg|jpg|gif|png)$/i.test(r.url_adjunto)) {
+              const urlAdjunto = r.url_adjunto;
+              const nombreAdjunto = urlAdjunto.split('/').pop();
+              const extension = nombreAdjunto.split('.').pop().toLowerCase();
+
+              const video_extensions = ['mp4', 'webm', 'ogg'];
+              const audio_extensions = ['mp3', 'wav', 'ogg', 'm4a'];
+              const image_extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+
+              if (video_extensions.includes(extension)) {
                 adjuntoHTML = `
                   <div class="attachment-container">
-                    <a href="${r.url_adjunto}" data-featherlight="image">
-                      <img src="${r.url_adjunto}" alt="Archivo adjunto" class="chat-image">
+                    <video controls style='max-width: 100%; border-radius: 8px; max-height: 300px;'>
+                      <source src="${urlAdjunto}" type="video/${extension}">
+                      Tu navegador no soporta la etiqueta de video.
+                    </video>
+                  </div>`;
+              } else if (audio_extensions.includes(extension)) {
+                adjuntoHTML = `
+                  <div class="attachment-container">
+                    <audio controls style='max-width: 100%; border-radius: 8px; max-height: 60px;'>
+                      <source src="${urlAdjunto}" type="audio/${extension}">
+                      Tu navegador no soporta la etiqueta de audio.
+                    </audio>
+                  </div>`;
+              } else if (image_extensions.includes(extension)) {
+                adjuntoHTML = `
+                  <div class="attachment-container">
+                    <a href="${urlAdjunto}" data-featherlight="image">
+                      <img src="${urlAdjunto}" alt="Archivo adjunto" class="chat-image">
                     </a>
                   </div>`;
-              } else { // Asumir que es otro tipo de archivo, como PDF
+              } else {
                   adjuntoHTML = `
                   <div class="attachment-container">
-                      <a href="${r.url_adjunto}" target="_blank" rel="noopener noreferrer" class="file-link">
+                      <a href="${urlAdjunto}" target="_blank" rel="noopener noreferrer" class="file-link">
                           <i class="bi bi-file-earmark-text"></i>
-                          Ver Archivo Adjunto
+                          ${nombreAdjunto}
                       </a>
                   </div>`;
               }

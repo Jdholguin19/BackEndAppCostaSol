@@ -599,7 +599,7 @@ body {
     /* --- Main Container & Boxes --- */
     .pqr-detalle-container {
         padding: 0.5rem; /* Tighter padding */
-        padding-bottom: 120px; /* Ensure enough space for the fixed form */
+        padding-bottom: 15px; /* Ensure enough space for the fixed form */
     }
 
     .pqr-detalle-box {
@@ -609,7 +609,7 @@ body {
     
     /* --- Chat List --- */
     .chat-list {
-        padding: 0.5rem;
+        padding: 0.25rem;
         margin-bottom: 1rem;
     }
     

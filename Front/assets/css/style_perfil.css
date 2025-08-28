@@ -53,6 +53,7 @@ body {
 
 /* Main Content */
 .main-content {
+    padding-top: 1px;
     max-width: 600px;
     margin: 0 auto;
     background-color: #ffffff;

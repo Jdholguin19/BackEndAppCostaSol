@@ -62,6 +62,24 @@ function fechaLarga(sqlDate){
 /* plantilla */
 function card(c){
   const badge = `<span class="badge badge-estado ${c.estado}" data-cita-id="${c.id}" data-responsable-id="${c.responsable_id}">${c.estado}</span>`;
+
+  let horaMostrada = c.hora;
+  if (c.intervalo_minutos) {
+    try {
+      const [h, m] = c.hora.split(':').map(Number);
+      const fechaInicio = new Date();
+      fechaInicio.setHours(h, m, 0, 0);
+      
+      const fechaFin = new Date(fechaInicio.getTime() + c.intervalo_minutos * 60000);
+      
+      const horaFin = fechaFin.toTimeString().substring(0, 5);
+      horaMostrada = `${c.hora} a ${horaFin}`;
+    } catch (e) {
+      // Fallback en caso de error
+      horaMostrada = c.hora;
+    }
+  }
+
   return `
   <div class="card card-cita">
     <div class="d-flex justify-content-between align-items-start mb-3">
@@ -84,7 +102,7 @@ function card(c){
 
     <div class="card-meta-row">
       <p><i class="bi bi-calendar"></i>${fechaLarga(c.fecha)}</p>
-      <p><i class="bi bi-clock"></i>${c.hora}</p>
+      <p><i class="bi bi-clock"></i>${horaMostrada}</p>
     </div>
     <p><i class="bi bi-geo-alt"></i>${c.proyecto}</p>
     ${c.observaciones ? `<p><i class="bi bi-chat-right-text"></i>${c.observaciones}</p>` : ''}
