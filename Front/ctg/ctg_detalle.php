@@ -44,7 +44,7 @@ $id = (int)($_GET['id'] ?? 0);
   <!-- caja nueva respuesta -->
   <form id="frmRespuesta" enctype="multipart/form-data" class="response-form">
     <div class="input-area">
-      <input type="file" name="archivo" accept="image/*,application/pdf" class="file-input" id="fileInputHidden">
+      <input type="file" name="archivo" class="file-input" id="fileInputHidden">
       <button id="btnAttachFile" class="attach-file-button" type="button">
         <i class="bi bi-paperclip"></i>
       </button>

@@ -9,6 +9,14 @@
  *  Respuesta:
  *      { ok:true }
  */
+
+// Intentar aumentar los límites para subidas grandes.
+@ini_set('upload_max_filesize', '1024M');
+@ini_set('post_max_size', '1024M');
+@ini_set('memory_limit', '1280M');
+@ini_set('max_execution_time', '3600');
+@ini_set('max_input_time', '3600');
+
 require_once __DIR__.'/../../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
@@ -21,8 +29,7 @@ $authenticated_user = null;
 $is_responsable = false;
 
 if ($tokenType === 'Bearer' && $token) {
-    $db = DB::getDB(); // Usar la conexión para autenticar
-    // Buscar en tabla 'usuario'
+    $db = DB::getDB();
     $sql_user = 'SELECT id, nombres, rol_id FROM usuario WHERE token = :token LIMIT 1';
     $stmt_user = $db->prepare($sql_user);
     $stmt_user->execute([':token' => $token]);
@@ -31,7 +38,6 @@ if ($tokenType === 'Bearer' && $token) {
     if ($authenticated_user) {
         $is_responsable = false;
     } else {
-        // Buscar en tabla 'responsable'
         $sql_resp = 'SELECT id, nombre FROM responsable WHERE token = :token LIMIT 1';
         $stmt_resp = $db->prepare($sql_resp);
         $stmt_resp->execute([':token' => $token]);
@@ -43,13 +49,12 @@ if ($tokenType === 'Bearer' && $token) {
 }
 
 if (!$authenticated_user) {
-    http_response_code(401); // No autorizado
+    http_response_code(401);
     exit(json_encode(['ok' => false, 'mensaje' => 'No autenticado o token inválido']));
 }
 
 // --- Fin Lógica de Autenticación --- //
 
-// Reutilizar la conexión de la autenticación
 $db = DB::getDB(); 
 
 try{
@@ -57,7 +62,6 @@ try{
     $ctgId     = (int)($_POST['ctg_id']     ?? 0);
     $mensaje   = trim($_POST['mensaje']   ?? '');
 
-    // Validar que ctg_id y mensaje estén presentes
     if(!$ctgId || $mensaje === ''){
         http_response_code(400);
         exit(json_encode(['ok'=>false,'msg'=>'Datos incompletos (ctg_id o mensaje faltante)']));
@@ -65,23 +69,59 @@ try{
 
     /* ---------- 2. gestionar adjunto ---------- */
     $urlAdjunto = null;
-    if(!empty($_FILES['archivo']['tmp_name'])){
+    if (isset($_FILES['archivo']) && $_FILES['archivo']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = __DIR__.'/../../ImagenesCTG_respuestas/';
         if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true); // Crear directorio si no existe
+            mkdir($uploadDir, 0777, true);
         }
-         if (is_writable($uploadDir)) {
-            $name = uniqid().'-'.basename($_FILES['archivo']['name']);
-            $dest = $uploadDir.$name;
-            if(move_uploaded_file($_FILES['archivo']['tmp_name'],$dest)){
-                $urlAdjunto = "https://app.costasol.com.ec/ImagenesCTG_respuestas/$name";
-            } else {
-                 error_log('Error al mover archivo subido para CTG respuesta.');
+        if (is_writable($uploadDir)) {
+            // Lógica para usar nombre original y evitar colisiones
+            $fileInfo = pathinfo(basename($_FILES['archivo']['name']));
+            $extension = isset($fileInfo['extension']) ? '.' . strtolower($fileInfo['extension']) : '';
+            $filename = preg_replace("/[^a-zA-Z0-9_-]/", "", $fileInfo['filename']);
+            
+            $name = $filename . $extension;
+            $dest = $uploadDir . $name;
+            
+            // Evitar sobrescritura si el archivo ya existe
+            $counter = 1;
+            while (file_exists($dest)) {
+                $name = $filename . '(' . $counter . ')' . $extension;
+                $dest = $uploadDir . $name;
+                $counter++;
             }
-         } else {
-             error_log('Directorio de subida no es escribible: '.$uploadDir);
-         }
 
+            if (move_uploaded_file($_FILES['archivo']['tmp_name'], $dest)) {
+                $urlAdjunto = "https://app.costasol.com.ec/ImagenesCTG_respuestas/" . rawurlencode($name);
+            } else {
+                error_log('Error al mover archivo subido para CTG respuesta.');
+            }
+        } else {
+            error_log('Directorio de subida no es escribible: ' . $uploadDir);
+        }
+    } elseif (isset($_FILES['archivo']) && $_FILES['archivo']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $errorCode = $_FILES['archivo']['error'];
+        $errorMessage = 'Error desconocido al subir el archivo.';
+        switch ($errorCode) {
+            case UPLOAD_ERR_INI_SIZE:
+            case UPLOAD_ERR_FORM_SIZE:
+                $errorMessage = 'El archivo excede el tamaño máximo permitido por el servidor.';
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $errorMessage = 'El archivo se subió solo parcialmente.';
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $errorMessage = 'Falta la carpeta temporal del servidor.';
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $errorMessage = 'No se pudo escribir el archivo en el disco.';
+                break;
+            case UPLOAD_ERR_EXTENSION:
+                $errorMessage = 'Una extensión de PHP detuvo la subida del archivo.';
+                break;
+        }
+        http_response_code(400);
+        exit(json_encode(['ok' => false, 'msg' => $errorMessage]));
     }
 
     /* ---------- 3. Determinar ID del remitente y si es responsable ---------- */

@@ -631,3 +631,14 @@ Se han implementado las siguientes mejoras y correcciones en el proyecto:
 ---
 
 Este `README.md` proporciona una visión general completa del proyecto. Para detalles específicos de implementación o depuración, se recomienda revisar el código fuente de los archivos relevantes.
+*   **Mejora en Carga de Archivos para CTG y PQR:**
+    *   Se ha actualizado el sistema de subida de archivos en los módulos de CTG y PQR para mejorar la flexibilidad y robustez.
+    *   **Tipos de Archivo:** Se eliminó la restricción que limitaba las subidas a imágenes y PDF. Ahora el sistema **acepta cualquier tipo de archivo**.
+    *   **Tamaño de Archivo:** El límite de tamaño de archivo se ha incrementado a **1 GB**. 
+        *   **Nota Importante:** Este cambio requiere configuración a nivel de servidor. En proveedores como Bluehost, esto debe ajustarse en el **"MultiPHP INI Editor"** dentro de cPanel, modificando directivas como `upload_max_filesize` y `post_max_size`.
+    *   **Nomenclatura de Archivos:** Se ha modificado la forma en que se guardan los archivos para que conserven su **nombre original**. Para prevenir que un archivo sobrescriba a otro con el mismo nombre, el sistema ahora añade un contador numérico al final del nombre si detecta una colisión (ej: `documento(1).pdf`, `documento(2).pdf`).
+    *   **Archivos Modificados:**
+        *   `Front/ctg/ctg_detalle.php` (eliminada restricción `accept`)
+        *   `Front/pqr/pqr_detalle.php` (eliminada restricción `accept`)
+        *   `api/ctg/ctg_insert_form.php` (nueva lógica de guardado)
+        *   `api/pqr/pqr_insert_form.php` (nueva lógica de guardado)
