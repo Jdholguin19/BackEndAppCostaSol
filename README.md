@@ -698,3 +698,7 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
         *   ✅ **Verificación de colisiones**: Detecta correctamente solapamientos de tiempo
         *   ✅ **Integridad de horarios**: Mantiene la disponibilidad real de todos los responsables
         *   ✅ **Funcionalidad preservada**: Mantiene balanceo de carga y asignación inteligente de responsables
+
+
+        **Se implemento una nueva logica de seleccion de acabados**
+        Se

@@ -13,7 +13,7 @@ if (strpos($authHeader, 'Bearer ') === 0) {
     $token = substr($authHeader, 7);
     try {
         $conn_auth = DB::getDB();
-        // Solo los usuarios clientes/residentes pueden guardar acabados, no los responsables.
+        // Solo los usuarios clientes/residentes pueden guardar acabados.
         $stmt = $conn_auth->prepare('SELECT id FROM usuario WHERE token = :token AND rol_id IN (1, 2)');
         $stmt->execute([':token' => $token]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ if (strpos($authHeader, 'Bearer ') === 0) {
             $auth_user_id = (int)$user['id'];
         }
     } catch (Exception $e) {
-        // No hacer nada, el auth_id seguirá siendo null
+        // Silencio en caso de error
     }
 }
 
@@ -32,7 +32,6 @@ if ($auth_user_id === null) {
 }
 // --- Fin Autenticación ---
 
-// --- Lógica para Guardar Selección ---
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     exit(json_encode(['ok'=>false,'mensaje'=>'Método no permitido']));
@@ -41,19 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $input = json_decode(file_get_contents('php://input'), true);
 
 $propiedad_id = filter_var($input['propiedad_id'] ?? null, FILTER_VALIDATE_INT);
-$plano_id = filter_var($input['plano_id'] ?? null, FILTER_VALIDATE_INT);
-$acabado_color = filter_var($input['color'] ?? null, FILTER_SANITIZE_STRING);
+$kit_id = filter_var($input['kit_id'] ?? null, FILTER_VALIDATE_INT);
+$color = filter_var($input['color'] ?? null, FILTER_SANITIZE_STRING);
 
-if (!$propiedad_id || !$plano_id || !$acabado_color) {
+if (!$propiedad_id || !$kit_id || !$color) {
     http_response_code(400);
-    echo json_encode(['ok' => false, 'mensaje' => 'Datos incompletos. Se requiere propiedad, plano y color.']);
+    echo json_encode(['ok' => false, 'mensaje' => 'Datos incompletos. Se requiere propiedad, kit y color.']);
     exit;
 }
 
 try {
     $conn = DB::getDB();
 
-    // Verificación de propiedad: Asegurarse de que la propiedad pertenece al usuario autenticado.
+    // Verificación: Asegurarse de que la propiedad pertenece al usuario autenticado.
     $stmt_verify = $conn->prepare("SELECT id FROM propiedad WHERE id = :propiedad_id AND id_usuario = :user_id");
     $stmt_verify->execute([':propiedad_id' => $propiedad_id, ':user_id' => $auth_user_id]);
     if ($stmt_verify->fetch() === false) {
@@ -65,13 +64,13 @@ try {
     // Actualizar la propiedad con la selección
     $stmt_update = $conn->prepare(
         "UPDATE propiedad 
-         SET plano_seleccionado_id = :plano_id, acabado_seleccionado = :color 
+         SET acabado_kit_seleccionado_id = :kit_id, acabado_color_seleccionado = :color 
          WHERE id = :propiedad_id AND id_usuario = :user_id"
     );
 
     $stmt_update->execute([
-        ':plano_id' => $plano_id,
-        ':color' => $acabado_color,
+        ':kit_id' => $kit_id,
+        ':color' => $color,
         ':propiedad_id' => $propiedad_id,
         ':user_id' => $auth_user_id
     ]);
@@ -79,8 +78,7 @@ try {
     if ($stmt_update->rowCount() > 0) {
         echo json_encode(['ok' => true, 'mensaje' => 'Selección guardada correctamente.']);
     } else {
-        // Esto puede pasar si los datos enviados son los mismos que ya estaban guardados.
-        echo json_encode(['ok' => true, 'mensaje' => 'No se realizaron cambios, los datos ya estaban actualizados.']);
+        echo json_encode(['ok' => true, 'mensaje' => 'No se realizaron cambios, es posible que la selección ya estuviera guardada.']);
     }
 
 } catch (Throwable $e) {

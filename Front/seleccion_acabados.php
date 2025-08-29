@@ -25,33 +25,56 @@
 
 <!-- Main Content -->
 <div class="container mt-4 acabados-container">
-  
-  <div class="acabados-header-text">
-    <h2 id="casa-modelo-titulo" class="casa-modelo"></h2>
-    <p class="escoge-color">1. Escoge el modelo de tu cocina</p>
-  </div>
 
-  <div id="choice-container-modelo" class="choice-container"></div>
-
-  <div class="acabados-header-text mt-4">
-    <p class="escoge-color">2. Escoge el color de tus acabados</p>
-  </div>
-
-  <div id="choice-container-color" class="choice-container">
-    <button class="btn-acabado claro" data-color="Claro">Claro</button>
-    <button class="btn-acabado oscuro" data-color="Oscuro">Oscuro</button>
-  </div>
-
-  <div class="plan-container mt-5">
-    <h3 id="plan-title" class="plan-title"></h3>
-    <div class="plan-image-placeholder">
-        <img id="plan-image" src="" alt="Plano de la cocina">
+    <!-- Step 1: Kit Selection -->
+    <div id="step1">
+        <div class="acabados-header-text">
+            <h2 class="main-title">Configura Tu Cocina Ideal</h2>
+            <p class="subtitle">Elige el tipo de cocina que mejor se adapte a tus necesidades</p>
+        </div>
+        <div class="step-indicator">
+            <div class="step-number active">1</div>
+            <div class="step-line"></div>
+            <div class="step-number">2</div>
+        </div>
+        <div id="kits-container" class="kits-container">
+            <!-- Kit cards will be injected here -->
+        </div>
     </div>
-  </div>
 
-  <div class="mt-5">
-      <button id="btnGuardar" class="btn btn-primary btn-lg">Guardar Selección</button>
-  </div>
+    <!-- Step 2: Color Selection -->
+    <div id="step2" style="display: none;">
+        <div class="acabados-header-text">
+            <h2 class="main-title">Configura Tu Cocina Ideal</h2>
+            <p id="subtitle-step2" class="subtitle"></p>
+        </div>
+        <div class="step-indicator">
+            <div class="step-number">1</div>
+            <div class="step-line"></div>
+            <div class="step-number active">2</div>
+        </div>
+        <div id="colors-container" class="kits-container">
+            <!-- Color cards will be injected here -->
+        </div>
+        <div class="action-buttons-step">
+            <button id="btn-back-to-step1" class="btn-back"><i class="bi bi-arrow-left"></i> Volver</button>
+        </div>
+    </div>
+
+    <!-- Step 3: Component Gallery & Confirmation -->
+    <div id="step3" style="display: none;">
+        <div class="acabados-header-text">
+            <h2 id="title-step3" class="main-title"></h2>
+            <p class="subtitle">Estos son los acabados para tu selección</p>
+        </div>
+        <div id="gallery-container" class="gallery-container">
+            <!-- Component images will be injected here -->
+        </div>
+        <div class="action-buttons-step">
+            <button id="btn-back-to-step2" class="btn-back"><i class="bi bi-arrow-left"></i> Volver</button>
+            <button id="btn-confirm" class="btn-confirm">Confirmar Selección</button>
+        </div>
+    </div>
 
 </div>
 
@@ -65,143 +88,164 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- REFS --- //
     const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
     const token = localStorage.getItem('cs_token');
-    if (!u.id || !token) {
-        location.href = 'login_front.php';
+    const urlParams = new URLSearchParams(window.location.search);
+    const propiedadId = urlParams.get('propiedad_id');
+
+    if (!u.id || !token || !propiedadId) {
+        document.querySelector('.acabados-container').innerHTML = '<h2>Error: No se ha especificado una propiedad.</h2>';
         return;
     }
 
-    const modeloTitulo = document.getElementById('casa-modelo-titulo');
-    const planTitle = document.getElementById('plan-title');
-    const planImage = document.getElementById('plan-image');
-    const modeloContainer = document.getElementById('choice-container-modelo');
-    const colorContainer = document.getElementById('choice-container-color');
-    const btnGuardar = document.getElementById('btnGuardar');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
 
-    let planosData = [];
-    let seleccion = {
-        planoId: null,
-        color: null
+    const kitsContainer = document.getElementById('kits-container');
+    const colorsContainer = document.getElementById('colors-container');
+    const galleryContainer = document.getElementById('gallery-container');
+
+    const subtitleStep2 = document.getElementById('subtitle-step2');
+    const titleStep3 = document.getElementById('title-step3');
+
+    const btnBackToStep1 = document.getElementById('btn-back-to-step1');
+    const btnBackToStep2 = document.getElementById('btn-back-to-step2');
+    const btnConfirm = document.getElementById('btn-confirm');
+
+    let selection = {
+        kit: null, // {id, nombre, ...}
+        color: null // {color_nombre, ...}
     };
 
-    // --- LÓGICA DE SELECCIÓN --- //
-    function selectModelo(plano) {
-        if (!plano) return;
-        
-        seleccion.planoId = plano.id;
-        modeloTitulo.textContent = `Cocina Modelo ${plano.nombre}`;
-        planTitle.textContent = `Plano de Cocina ${plano.nombre}`;
-        planImage.src = plano.url_plano;
-
-        // Marcar como activo
-        document.querySelectorAll('#choice-container-modelo .btn-acabado').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.id == plano.id);
-        });
-        checkGuardar();
+    // --- NAVIGATION LOGIC --- //
+    function goToStep(stepNumber) {
+        step1.style.display = (stepNumber === 1) ? 'block' : 'none';
+        step2.style.display = (stepNumber === 2) ? 'block' : 'none';
+        step3.style.display = (stepNumber === 3) ? 'block' : 'none';
     }
 
-    function selectColor(color) {
-        seleccion.color = color;
-        document.querySelectorAll('#choice-container-color .btn-acabado').forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.color === color);
+    // --- DATA FETCHING & RENDERING --- //
+    function renderKits(kits) {
+        kitsContainer.innerHTML = '';
+        kits.forEach((kit, index) => {
+            const card = document.createElement('div');
+            card.className = 'selection-card';
+            card.dataset.kitId = kit.id;
+            card.innerHTML = `
+                <div class="card-image-wrapper">
+                    <img src="${kit.url_imagen_principal}" alt="${kit.nombre}">
+                    <div class="card-overlay">
+                        <h3 class="card-title">${kit.nombre}</h3>
+                    </div>
+                </div>
+                <p class="card-description">${kit.descripcion}</p>
+            `;
+            card.addEventListener('click', () => {
+                selection.kit = kit;
+                renderColorOptions(kit);
+                goToStep(2);
+            });
+            kitsContainer.appendChild(card);
+
+            if (index < kits.length - 1) {
+                const separator = document.createElement('div');
+                separator.className = 'card-separator';
+                separator.textContent = 'O';
+                kitsContainer.appendChild(separator);
+            }
         });
-        checkGuardar();
     }
 
-    function checkGuardar(){
-        btnGuardar.disabled = !(seleccion.planoId && seleccion.color);
+    function renderColorOptions(kit) {
+        subtitleStep2.textContent = `Selecciona el estilo para tu ${kit.nombre.toLowerCase()}`;
+        colorsContainer.innerHTML = `<div class="spinner-border"></div>`;
+        fetch(`../api/kit_opciones_color.php?kit_id=${kit.id}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(res => res.json()).then(data => {
+            colorsContainer.innerHTML = '';
+            if (!data.ok) return;
+            data.opciones.forEach(opcion => {
+                const card = document.createElement('div');
+                card.className = 'selection-card';
+                card.dataset.colorNombre = opcion.color_nombre;
+                card.innerHTML = `
+                    <img src="${opcion.url_imagen_opcion}" alt="${opcion.nombre_opcion}">
+                    <div class="card-overlay">
+                        <h3 class="card-title">${opcion.nombre_opcion}</h3>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    selection.color = opcion;
+                    renderGallery();
+                    goToStep(3);
+                });
+                colorsContainer.appendChild(card);
+            });
+        });
+    }
+
+    function renderGallery() {
+        titleStep3.textContent = `Tu Selección: ${selection.kit.nombre} ${selection.color.color_nombre}`;
+        galleryContainer.innerHTML = `<div class="spinner-border"></div>`;
+        fetch(`../api/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(res => res.json()).then(data => {
+            galleryContainer.innerHTML = '';
+            if (!data.ok || data.imagenes.length === 0) {
+                galleryContainer.innerHTML = '<p>No hay imágenes de detalle disponibles.</p>';
+                return;
+            }
+            data.imagenes.forEach(img => {
+                const galCard = document.createElement('div');
+                galCard.className = 'gallery-card';
+                galCard.innerHTML = `
+                    <img src="${img.url_imagen}" alt="${img.componente}">
+                    <div class="gallery-card-title">${img.componente}</div>
+                `;
+                galleryContainer.appendChild(galCard);
+            });
+        });
     }
 
     // --- EVENT LISTENERS --- //
-    modeloContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-acabado');
-        if (!btn) return;
-        const plano = planosData.find(p => p.id == btn.dataset.id);
-        selectModelo(plano);
-    });
-
-    colorContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-acabado');
-        if (!btn) return;
-        selectColor(btn.dataset.color);
-    });
-
-    btnGuardar.addEventListener('click', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const propiedadId = urlParams.get('propiedad_id');
-
-        if (!propiedadId) {
-            alert('Error: No se ha especificado una propiedad.');
+    btnBackToStep1.addEventListener('click', () => goToStep(1));
+    btnBackToStep2.addEventListener('click', () => goToStep(2));
+    btnConfirm.addEventListener('click', () => {
+        if (!selection.kit || !selection.color) {
+            alert('Por favor, complete su selección.');
             return;
         }
-
-        btnGuardar.disabled = true;
-        btnGuardar.textContent = 'Guardando…';
-
+        btnConfirm.disabled = true;
+        btnConfirm.textContent = 'Guardando…';
         fetch('../api/guardar_seleccion_acabados.php', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
             body: JSON.stringify({
                 propiedad_id: parseInt(propiedadId),
-                plano_id: seleccion.planoId,
-                color: seleccion.color
+                kit_id: selection.kit.id,
+                color: selection.color.color_nombre
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.ok) {
-                alert(data.mensaje || '¡Selección guardada con éxito!');
-                // Opcional: redirigir a otra página, por ejemplo, el menú.
-                // location.href = 'menu_front.php';
-            } else {
-                alert(`Error: ${data.mensaje || 'No se pudo guardar la selección.'}`);
-            }
+        .then(res => res.json()).then(data => {
+            alert(data.mensaje || 'Error');
+            if(data.ok) { goToStep(1); /* O redirigir */ }
         })
-        .catch(err => {
-            console.error(err);
-            alert('Error de conexión al guardar.');
-        })
+        .catch(err => alert('Error de conexión.'))
         .finally(() => {
-            btnGuardar.disabled = false;
-            btnGuardar.textContent = 'Guardar Selección';
+            btnConfirm.disabled = false;
+            btnConfirm.textContent = 'Confirmar Selección';
         });
     });
 
-    // --- CARGA INICIAL --- //
-    fetch('../api/planos_disponibles.php', {
-        headers: { 'Authorization': `Bearer ${token}` }
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (!data.ok) {
-            alert('No se pudieron cargar los modelos de cocina.');
+    // --- INITIAL LOAD --- //
+    kitsContainer.innerHTML = `<div class="spinner-border"></div>`;
+    fetch(`../api/acabados_kits_disponibles.php?propiedad_id=${propiedadId}`, { headers: { 'Authorization': `Bearer ${token}` } })
+    .then(res => res.json()).then(data => {
+        if (!data.ok || data.kits.length === 0) {
+            document.querySelector('.acabados-container').innerHTML = '<h2>No hay acabados disponibles para esta propiedad.</h2>';
             return;
         }
-        planosData = data.planos;
-
-        // Generar botones de modelo dinámicamente
-        planosData.forEach(plano => {
-            const button = document.createElement('button');
-            button.className = 'btn-acabado modelo';
-            button.textContent = plano.nombre;
-            button.dataset.id = plano.id;
-            modeloContainer.appendChild(button);
-        });
-
-        // Seleccionar "Standar" por defecto
-        const planoDefault = planosData.find(p => p.nombre.toLowerCase() === 'standar');
-        if (planoDefault) {
-            selectModelo(planoDefault);
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        alert('Error de conexión al cargar los modelos.');
+        renderKits(data.kits);
     });
 
-    checkGuardar();
+    goToStep(1);
 });
 </script>
 
