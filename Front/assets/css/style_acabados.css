@@ -1,0 +1,164 @@
+/* Estilos para la página de Selección de Acabados */
+
+body {
+    background-color: #ffffff;
+}
+
+.acabados-container {
+    text-align: center;
+    padding: 1px 15px 100px 15px;
+}
+
+/* --- TAMAÑOS DE TEXTO Y BOTONES AJUSTADOS PARA MÓVIL (BASE) --- */
+
+.acabados-header-text .casa-modelo {
+    font-size: 1.3rem; /* Reducido de 1.5rem */
+    font-weight: 500;
+    color: #343a40;
+}
+
+.acabados-header-text .escoge-color {
+    font-size: 1rem; /* Reducido de 1.1rem */
+    color: #6c757d;
+    margin-bottom: 25px;
+}
+
+.choice-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-acabado {
+    border: 2px solid transparent;
+    padding: 12px 35px; /* Reducido de 15px 40px */
+    border-radius: 20px;
+    font-size: 1rem; /* Reducido de 1.1rem */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+    flex-basis: 120px;
+    max-width: 200px;
+}
+
+.plan-container .plan-title {
+    font-size: 1.1rem; /* Reducido de 1.3rem */
+    font-weight: 500;
+    color: #343a40;
+    margin-bottom: 15px;
+}
+
+/* --- FIN DE AJUSTES --- */
+
+.btn-acabado.claro {
+    background-color: #FFF8E1;
+    color: #5D4037;
+}
+
+.btn-acabado.oscuro {
+    background-color: #6D4C41;
+    color: #FFFFFF;
+}
+
+.btn-acabado:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-acabado.active {
+    border-color: #2d5a3d;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(45, 90, 61, 0.3);
+}
+
+.plan-container {
+    margin-top: 50px;
+}
+
+.plan-image-placeholder {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.plan-image-placeholder img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.header-acabados {
+    background-color: #ffffff;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+.header-acabados .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d5a3d;
+}
+
+.header-acabados .back-button {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #2d5a3d;
+}
+
+/* --- ESTILOS RESPONSIVOS --- */
+
+/* Para tablets y pantallas más grandes */
+@media (min-width: 768px) {
+    .acabados-container {
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Re-escalar para pantallas grandes */
+    .acabados-header-text .casa-modelo {
+        font-size: 1.6rem;
+    }
+    .acabados-header-text .escoge-color {
+        font-size: 1.2rem;
+    }
+    .plan-container .plan-title {
+        font-size: 1.4rem;
+    }
+    .btn-acabado {
+        padding: 20px 50px;
+        font-size: 1.2rem;
+    }
+
+    .plan-image-placeholder {
+        max-width: 500px;
+    }
+}
+
+/* Para móviles muy pequeños */
+@media (max-width: 360px) {
+    .choice-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .btn-acabado {
+        width: 100%;
+        max-width: 250px;
+    }
+}

@@ -537,6 +537,15 @@ include '../api/bottom_nav.php';
 
   
 
+    if ( menu.id === 1 ||
+        (menu.nombre || '').toUpperCase().includes('ACABADOS') ){
+        if (!currentProp) {
+            alert('Por favor, seleccione una propiedad primero.');
+            return;
+        }
+        location.href = `seleccion_acabados.php?propiedad_id=${currentProp}`;
+        return;
+    }
     
     if ( menu.id === 3 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){

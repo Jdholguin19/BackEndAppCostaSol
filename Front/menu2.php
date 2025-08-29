@@ -125,6 +125,13 @@ include '../api/bottom_nav.php';
     } 
 
 
+
+    if ( menu.id === 2 ||
+        (menu.nombre || '').toUpperCase().includes('ACABADOS') ){
+        location.href = 'seleccion_acabados.php';          // <<<<<<
+        return;
+    }
+
     if ( menu.id === 3 ||
         (menu.nombre || '').toUpperCase().includes('VISITA') ){
         location.href = 'citas.php';          // <<<<<<
