@@ -8,6 +8,7 @@ $proposito = (int)($_POST['proposito_id']??0);
 $fecha = $_POST['fecha']??'';
 $hora  = $_POST['hora']??'';
 $observaciones = isset($_POST['observaciones']) ? trim($_POST['observaciones']) : null;
+$duracion_especial = (int)($_POST['duracion'] ?? 0); // Nueva duración opcional
 
 if(!$uid||!$propiedad||!$proposito||
    !preg_match('/^\d{4}-\d{2}-\d{2}$/',$fecha)||
@@ -22,6 +23,13 @@ if ($dia == 0) { // Sunday
     $dia = 7; // Map Sunday to 7, assuming no availability for Sunday in DB
 }
 
+// --- INICIO: Determinar duración ANTES de seleccionar responsable ---
+$duracion_a_guardar = $duracion_especial;
+if ($duracion_a_guardar <= 0) {
+    // Si no vino una duración especial, usar un valor por defecto para la verificación
+    $duracion_a_guardar = 60; // Valor por defecto para verificación de solapamiento
+}
+
 /* responsable disponible con menos carga ese día */
 $resp=$db->prepare("
  SELECT r.id,COUNT(v.id) n
@@ -32,24 +40,47 @@ $resp=$db->prepare("
                  AND IFNULL(d.fecha_vigencia_hasta,'2999-12-31')
        AND TIME(:h) BETWEEN d.hora_inicio AND d.hora_fin
  LEFT   JOIN agendamiento_visitas v ON v.responsable_id=r.id
-       AND v.fecha_reunion=:f AND v.hora_reunion = TIME(:h) AND v.estado<>'CANCELADO'
+       AND v.fecha_reunion=:f 
+       AND v.estado<>'CANCELADO'
+       AND (
+           -- Verificar si la nueva cita se solapa con citas existentes
+           (TIME(:h) >= v.hora_reunion AND TIME(:h) < ADDTIME(v.hora_reunion, SEC_TO_TIME(COALESCE(v.duracion_minutos, 60) * 60)))
+           OR
+           (v.hora_reunion >= TIME(:h) AND v.hora_reunion < ADDTIME(TIME(:h), SEC_TO_TIME(:duracion * 60)))
+       )
  WHERE r.id != 3
  GROUP  BY r.id
  ORDER  BY n ASC, RAND() ASC
  LIMIT 1");
-$resp->execute([':f'=>$fecha,':h'=>$hora, ':dia_calculated'=>$dia]);
+$resp->execute([':f'=>$fecha,':h'=>$hora, ':dia_calculated'=>$dia, ':duracion'=>$duracion_a_guardar]);
 $respId=$resp->fetchColumn();
 if(!$respId) throw new Exception('Sin responsable');
+
+// --- FINALIZAR: Determinar duración final para guardar ---
+if ($duracion_especial <= 0) {
+    // Si no vino una duración especial, buscar la por defecto del responsable seleccionado
+    $stmt_intervalo = $db->prepare("
+        SELECT intervalo_minutos FROM responsable_disponibilidad 
+        WHERE responsable_id = :resp_id AND dia_semana = :dia 
+        AND :f BETWEEN fecha_vigencia_desde AND IFNULL(fecha_vigencia_hasta, '2999-12-31')
+        LIMIT 1
+    ");
+    $stmt_intervalo->execute([':resp_id' => $respId, ':dia' => $dia, ':f' => $fecha]);
+    $duracion_a_guardar = $stmt_intervalo->fetchColumn();
+    if (!$duracion_a_guardar) {
+        $duracion_a_guardar = 30; // Fallback al default de la tabla si algo falla
+    }
+}
 
 /* inserta */
 $ins=$db->prepare("
  INSERT INTO agendamiento_visitas
    (id_usuario,responsable_id,proposito_id,id_propiedad,
-    fecha_reunion,hora_reunion,estado,observaciones)
- VALUES(:u,:r,:p,:prop,:f,:h,'PROGRAMADO',:obs)");
+    fecha_reunion,hora_reunion,estado,observaciones, duracion_minutos)
+ VALUES(:u,:r,:p,:prop,:f,:h,'PROGRAMADO',:obs, :duracion)");
 $ins->execute([
  ':u'=>$uid,':r'=>$respId,':p'=>$proposito,':prop'=>$propiedad,
- ':f'=>$fecha,':h'=>$hora,':obs'=>$observaciones]);
+ ':f'=>$fecha,':h'=>$hora,':obs'=>$observaciones, ':duracion'=>$duracion_a_guardar]);
 
 // --- INICIO: Lógica para enviar Notificación Push ---
 require_once __DIR__ . '/../helpers/notificaciones.php';

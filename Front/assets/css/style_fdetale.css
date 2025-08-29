@@ -1,4 +1,12 @@
 
+
+
+    /* Main Content */
+    .main-content {
+        padding-top: 1px;
+    }
+
+
     /* Specific styles for fase_detalle */
     .stage-card {
         background: #ffffff;

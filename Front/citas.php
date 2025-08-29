@@ -114,9 +114,9 @@ function card(c){
     </div>
 
     ${c.estado==='PROGRAMADO'
-      ? `<div class="alert alert-info">
+      ? `<div class="alert alert-info" style="text-align: justify;">
           <i class="bi bi-info-circle me-2"></i>
-          Su cita está registrada y será confirmada pronto.
+          Agradecemos su puntualidad y el compromiso demostrado, ya que ello nos permite garantizarle un servicio de calidad y respeto a su tiempo.
          </div>`
       : ''}
   </div>`;

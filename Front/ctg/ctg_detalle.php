@@ -199,7 +199,7 @@ if(!u.id) {
               const nombreAdjunto = urlAdjunto.split('/').pop();
               const extension = nombreAdjunto.split('.').pop().toLowerCase();
 
-              const video_extensions = ['mp4', 'webm', 'ogg'];
+              const video_extensions = ['mp4', 'webm'];
               const audio_extensions = ['mp3', 'wav', 'ogg', 'm4a'];
               const image_extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
 

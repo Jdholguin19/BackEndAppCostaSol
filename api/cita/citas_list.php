@@ -55,10 +55,11 @@ try {
             v.id,
             v.responsable_id,
             v.observaciones,
-            pa.proposito,                                 -- nombre del propósito (tabla nueva)
+            pa.proposito,
             v.fecha_reunion              AS fecha,
-            TIME_FORMAT(v.hora_reunion,'%H:%i') AS hora,
-            rd.intervalo_minutos,
+            TIME_FORMAT(v.hora_reunion, '%H:%i') AS hora,
+            -- Usar la duración específica si existe, si no, la del responsable, con un fallback de 30
+            COALESCE(v.duracion_minutos, rd.intervalo_minutos, 30) AS intervalo_minutos,
             v.estado,
             r.nombre                     AS responsable,
             r.url_foto_perfil            AS url_foto,
@@ -77,7 +78,8 @@ try {
             propiedad                       pr ON pr.id = v.id_propiedad
         JOIN
             urbanizacion                    u  ON u.id  = pr.id_urbanizacion
-        LEFT JOIN responsable_disponibilidad rd ON rd.responsable_id = v.responsable_id
+        LEFT JOIN 
+            responsable_disponibilidad rd ON rd.responsable_id = v.responsable_id
             AND (WEEKDAY(v.fecha_reunion) + 1) = rd.dia_semana
             AND v.fecha_reunion BETWEEN rd.fecha_vigencia_desde AND IFNULL(rd.fecha_vigencia_hasta, '2999-12-31')
 

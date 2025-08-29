@@ -642,3 +642,40 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
         *   `Front/pqr/pqr_detalle.php` (eliminada restricción `accept`)
         *   `api/ctg/ctg_insert_form.php` (nueva lógica de guardado)
         *   `api/pqr/pqr_insert_form.php` (nueva lógica de guardado)
+
+*   **Gestión de Citas con Duración Variable:**
+    *   Se implementó la capacidad de manejar citas con duraciones variables. Específicamente, la cita para "Elección de acabados" ahora reserva un bloque de 2 horas (120 minutos), mientras que las demás citas conservan la duración por defecto del responsable.
+    *   Para lograr esto, se realizaron los siguientes cambios técnicos:
+        *   **Base de Datos:** Se añadió la columna `duracion_minutos` a la tabla `agendamiento_visitas` para registrar la duración real de cada cita.
+        *   **Backend:** Se actualizaron las APIs (`cita_create.php`, `horas_disponibles.php`, `citas_list.php`) para guardar, verificar y leer esta duración específica, asegurando una correcta detección de colisiones para citas de diferente duración.
+        *   **Frontend:** El frontend (`cita_nueva.php`, `citas.php`) fue modificado para solicitar la duración especial y para mostrar correctamente el rango de tiempo completo (ej. 13:00 a 15:00).
+
+---
+
+### Mejoras y Correcciones (Agosto 2025 - Sistema de Citas)
+
+*   **Corrección Completa del Sistema de Verificación de Colisiones de Citas:**
+    *   Se identificó y corrigió un error crítico en el sistema de verificación de disponibilidad de horarios que permitía la doble reserva de responsables.
+    *   **Problema Identificado:** El sistema no verificaba correctamente los solapamientos de tiempo entre citas existentes y nuevos horarios solicitados, causando que un mismo responsable pudiera tener citas solapadas.
+    *   **Solución Implementada:** Se reescribió completamente la lógica de verificación de colisiones en `api/cita/horas_disponibles.php` para:
+        *   ✅ **Verificar solapamientos de tiempo**: Considerar la duración real de cada cita (1h, 2h, etc.)
+        *   ✅ **Prevenir doble reserva**: Un responsable no puede tener citas que se solapen
+        *   ✅ **Verificación global de disponibilidad**: Si todos los responsables están ocupados, el horario se bloquea completamente
+        *   ✅ **Compatibilidad con duración variable**: Funciona correctamente para citas de diferentes duraciones
+    *   **Lógica de Verificación Implementada:**
+        *   **Caso 1**: El nuevo slot empieza durante una cita existente
+        *   **Caso 2**: El nuevo slot termina durante una cita existente  
+        *   **Caso 3**: El nuevo slot contiene completamente una cita existente
+    *   **Correcciones Técnicas Implementadas:**
+        *   **Formato de DateTime**: Se corrigió el uso de `DateTime::createFromFormat()` para manejar correctamente fechas y horas
+        *   **Verificación de solapamiento**: Se implementó comparación de timestamps para máxima precisión
+        *   **Manejo de errores**: Se agregó validación robusta para evitar fallos en la creación de objetos DateTime
+        *   **Logging optimizado**: Se eliminaron logs de debug innecesarios, manteniendo solo errores críticos
+    *   **Archivos Modificados:**
+        *   `api/cita/horas_disponibles.php` - Lógica completa de verificación de colisiones reescrita
+        *   `api/cita/cita_create.php` - Verificación de solapamiento en la asignación de responsables
+    *   **Resultado Final:**
+        *   ✅ **Sistema completamente robusto**: Previene todos los escenarios de doble reserva
+        *   ✅ **Verificación de colisiones**: Detecta correctamente solapamientos de tiempo
+        *   ✅ **Integridad de horarios**: Mantiene la disponibilidad real de todos los responsables
+        *   ✅ **Funcionalidad preservada**: Mantiene balanceo de carga y asignación inteligente de responsables

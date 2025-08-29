@@ -112,7 +112,7 @@ const horaBox  = document.getElementById('horaList');
 const btnOk    = document.getElementById('btnOk');
 
 /* ---------- estado local ---------- */
-let propositoId = 0, fechaSel='', horaSel='';
+let propositoId = 0, fechaSel='', horaSel='', citaDuracion = 0;
 let fp; // flatpickr instance
 let hourObserver; // IntersectionObserver for hours
 
@@ -234,11 +234,17 @@ function setupHourObserver() {
 function loadHoras(selectedDate) {
     reset(2);
     horaBox.innerHTML = '<div class="loading-container"><div class="spinner-border"></div></div>';
-    fetch(`../api/cita/horas_disponibles.php?proposito_id=${propositoId}&fecha=${selectedDate}`)
+    
+    let apiUrl = `../api/cita/horas_disponibles.php?proposito_id=${propositoId}&fecha=${selectedDate}`;
+    if (citaDuracion > 0) {
+        apiUrl += `&duracion=${citaDuracion}`;
+    }
+
+    fetch(apiUrl)
         .then(r => r.json()).then(d => {
             horaBox.innerHTML = '';
             if (!d.ok || !d.items.length) {
-                horaBox.innerHTML = '<div class="empty-state">— Sin horarios —</div>';
+                horaBox.innerHTML = '<div class="empty-state">— Agendar con 24 horas de anticipación —</div>';
                 return;
             }
             d.items.forEach(h => {
@@ -257,6 +263,13 @@ propGrid.addEventListener('click', e => {
     propGrid.querySelectorAll('.purpose-button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     propositoId = btn.dataset.id;
+
+    // Si el propósito es "Elección de acabados" (ID 2), la duración es de 120 minutos.
+    if (propositoId == 2) {
+        citaDuracion = 120;
+    } else {
+        citaDuracion = 0; // Usará el intervalo por defecto de la base de datos.
+    }
     
     reset(1);
     calendarContainer.style.display = 'block';
@@ -274,6 +287,7 @@ btnOk.onclick = ()=>{
   fd.append('fecha'       , fechaSel);
   fd.append('hora'        , horaSel);
   fd.append('observaciones', document.getElementById('txtObservaciones').value);
+  fd.append('duracion', citaDuracion); // Enviar la duración
 
   fetch('../api/cita/cita_create.php',{method:'POST',body:fd})
    .then(r=>r.json()).then(d=>{

@@ -1,0 +1,1081 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Playfair Display', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+
+/* Mobile-first container */
+.container {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+/* Header section */
+.header-section {
+    background: #ffffff;
+    padding: 1rem 1.5rem 0rem;
+    border-bottom: 1px solid #f0f0f0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1010; /* Superior a bottom-nav */
+}
+
+.welcome-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+}
+
+.welcome-info {
+    flex: 1;
+}
+
+.welcome-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.welcome-prop {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+    margin-top: 0.25rem;
+    font-family: 'Playfair Display';
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+    background: #f3f4f6;
+}
+
+/* Property tabs */
+.property-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+}
+
+.property-tab {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.property-tab.active {
+    background: #2d5a3d;
+    color: #ffffff;
+    border-color: #2d5a3d;
+}
+
+/* Main content area */
+.main-content {
+    padding: 0.2rem 1.5rem;
+    padding-bottom: 5rem; /* Space for bottom navigation */
+    padding-top: 1rem; /* Space for fixed header. Adjust if needed. */
+}
+
+
+.Titulo {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d5a3d;
+    margin: 0;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: #2d5a3d;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: #f3f4f6;
+}
+
+.news-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.news-icon {
+    width: 32px;
+    height: 32px;
+    background: #2d5a3d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.news-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.news-title .text-primary {
+    color: #2d5a3d;
+}
+
+.news-title .text-gray {
+    color: #9ca3af;
+}
+
+/* Show carousel with smaller images */
+.carousel {
+    display: block;
+    margin-top: 0.1rem;
+}
+
+.carousel-inner {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.carousel-item {
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.news-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    min-height: 80px;
+}
+
+.news-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.news-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.news-text h5 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #040404;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.3;
+}
+
+.news-text p {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.news-text a {
+    font-size: 0.75rem;
+    color: #2d5a3d;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.carousel-indicators.outside {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    margin-top: 1rem;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+    border: none;
+    padding: 0;
+    margin: 0 5px -100px 5px;
+}
+
+.carousel-indicators .active {
+    background-color: #2d5a3d;
+}
+
+/* Construction progress card */
+.construction-card {
+    margin-top: 10px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+}
+
+.construction-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress-ring {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+}
+
+.progress-ring svg {
+    width: 100%;
+    height: 100%;
+}
+
+.progress-ring text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    fill: #454343;
+    text-anchor: middle;
+    dominant-baseline: central;
+}
+
+.progress-ring circle {
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.progress-ring circle:last-child {
+    stroke: #39a452;
+}
+
+.construction-info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem 0;
+}
+
+.construction-stage {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+}
+
+.construction-link {
+    font-size: 0.75rem;
+    color: #5DAF84;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Module grid */
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.menu-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 120px;
+}
+
+.menu-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menu-icon {
+    font-size: 2rem;
+    color: #2d5a3d;
+    margin-bottom: 0.5rem;
+}
+
+.menu-card h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    line-height: 1.3;
+}
+
+
+
+.menu-card p {
+    font-size: 0.80rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* Location card */
+.location-card {
+    background: #ffffff; /* Apply background */
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.204);
+    border: 1px solid #f0f0f0;
+    max-width: 480px; /* Limit max width */
+    margin: 1rem auto; /* Center the card */
+}
+
+
+/* Bottom navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    padding: 0.75rem 0;
+    z-index: 1000;
+}
+
+.bottom-nav-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 400px; /* Increased max-width for better spacing on larger screens */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 0.75rem; /* Slightly larger font size for better readability */
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.nav-item.active {
+    color: #2d5a3d;
+}
+
+.nav-item i {
+    font-size: 1.25lrem; /* Larger icons */
+    margin-bottom: 0.25rem;
+}
+
+.nav-item.active i {
+    transform: scale(1.1);
+}
+
+/* Responsive adjustments for bottom navigation */
+@media (min-width: 576px) {
+    .bottom-nav-content {
+        padding: 0 2rem; /* More padding on larger small screens */
+    }
+}
+
+@media (min-width: 768px) {
+    .bottom-nav {
+        padding: 1rem 0; /* More vertical padding on tablets */
+    }
+    .nav-item {
+        font-size: 0.95rem; /* Even larger font size */
+    }
+    .nav-item i {
+        font-size: 1.8rem; /* Even larger icons */
+    }
+}
+
+@media (min-width: 992px) {
+    .bottom-nav-content {
+        max-width: 800px; /* Even wider on desktops */
+    }
+}
+
+/* Utility classes */
+.text-center {
+    text-align: center;
+}
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-5 { margin-bottom: 1.25rem; }
+
+/* Hide elements that don't fit mobile design */
+@media (max-width: 767px) {
+    .welcome-card .btn {
+        display: none; /* Hide logout button on mobile */
+    }
+
+    .back-button {
+        padding: 0.4rem;
+    }
+}
+
+
+/* Map responsive wrapper */
+.map-wrapper {
+    position: relative;
+    width: 100%; /* Asegura que use el ancho completo del contenedor padre */
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 para un mapa más panorámico */
+    height: 0; /* Evita altura fija para permitir responsividad */
+    overflow: hidden; /* Evita desbordes */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-bottom: 1rem; /* Espacio debajo del mapa */
+}
+
+.map-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0; /* Sin bordes */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 767px) {
+    .location-card {
+        padding: 1rem;
+        max-width: 100%; /* Usa todo el ancho disponible */
+        margin: 0.5rem auto;
+    }
+
+    .menu-card {
+        padding: 0.75rem;
+    }
+
+    .map-wrapper {
+        padding-bottom: 75%; /* Aspect ratio más cuadrado (4:3) para móviles */
+        min-height: 200px; /* Altura mínima para evitar colapso */
+    }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 479px) {
+    .map-wrapper {
+        padding-bottom: 75%; /* Mantener 4:3 para consistencia */
+        min-height: 150px; /* Reducir altura mínima en dispositivos compactos */
+    }
+}
+
+/* Loading states */
+.spinner-border {
+    color: #2d5a3d;
+}
+
+/* Property content styling */
+#propContent .border {
+    border-radius: 12px !important;
+    border: 1px solid #f0f0f0 !important;
+    background: #ffffff;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+#propContent p {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+#propContent p:last-child {
+    margin-bottom: 0;
+}
+
+/* Carousel controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background: rgba(45, 90, 61, 0.8);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+
+.avatar-container {
+    position: relative;
+    display: inline-block;
+}
+/* CSS para el botón de cerrar sesión */
+.logout-button {
+    position: absolute;
+    /* Posicionamiento por defecto para pantallas más grandes */
+    right: calc(100% + 10px); /* A la izquierda del avatar con 10px de espacio */
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 5px 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* Transición para una aparición/desaparición más suave */
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    opacity: 0; /* Inicialmente invisible */
+    visibility: hidden; /* Inicialmente oculto */
+}
+
+.logout-button:hover {
+    background-color: #f5bebf;
+}
+
+/* Estilo para mostrar el botón cuando está visible */
+.avatar-container .logout-button[style*="display: block"] {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* Media query para pantallas pequeñas (hasta 767px) */
+@media (max-width: 767px) {
+    .logout-button {
+        /* Ajustar el posicionamiento para pantallas pequeñas */
+        right: calc(100% + 5px); /* Menos espacio a la izquierda en móviles */
+        font-size: 0.7rem; /* Fuente un poco más pequeña */
+        padding: 3px 8px; /* Menos padding */
+        /* Puedes añadir más ajustes si es necesario, por ejemplo, cambiar 'right' por 'left' si prefieres que aparezca a la derecha en móviles, aunque la solicitud original era a la izquierda. */
+    }
+}
+
+/* Styles for "Ver más" and "Ver menos" buttons */
+.ver-mas-btn,
+.ver-menos-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    width: calc(100% - 2rem); /* Adjust width for padding */
+    max-width: 300px; /* Limit max width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.ver-mas-btn {
+    background-color: #2d5a3d; /* Original green */
+}
+
+.ver-menos-btn {
+    background-color: #6c757d; /* Original gray */
+}
+
+@media (max-width: 575px) {
+    .ver-mas-btn,
+    .ver-menos-btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        width: calc(100% - 2rem); /* Full width minus padding */
+    }
+}
+
+@media (min-width: 576px) {
+    .ver-mas-btn,
+    .ver-menos-btn {
+        width: 250px; /* Fixed width for larger screens */
+    }
+}
+
+/* Notification icon next to avatar */
+.notification-icon-link {
+    position: absolute;
+    left: -10px; /* Adjust as needed */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #2d5a3d !important; /* Green color */
+    font-size: 1.15rem; /* Icon size */
+    z-index: 1;
+}
+
+.notification-icon-link i {
+    
+}
+
+/* Adjust avatar container to make space for the icon */
+.avatar-container {
+    position: relative; /* Ensure positioning context for absolute icon */
+    padding-left: 30px; /* Make space for the icon on the left */
+}
+
+/* Styles for disabled menu cards */
+.menu-card.disabled-card {
+    opacity: 0.5; /* Reduce opacity to make it look disabled */
+    pointer-events: none; /* Disable click events */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
+    background-color: #f0f0f0; /* Lighter background */
+    border-color: #e0e0e0; /* Lighter border */
+    box-shadow: none; /* Remove shadow */
+    transform: none; /* Remove hover transform */
+}
+
+.menu-card.disabled-card:hover {
+    transform: none; /* Ensure no transform on hover */
+    box-shadow: none; /* Ensure no shadow on hover */
+}
+
+.menu-card.disabled-card .menu-icon,
+.menu-card.disabled-card h6,
+.menu-card.disabled-card p {
+    color: #9e9e9e; /* Gray out text and icons */
+}
+
+
+  .notification-icon-link {
+      position: relative;
+      display: inline-block;
+      margin-right: 15px; /* Espacio para que no se pegue al avatar */
+  }
+  .notification-badge {
+      position: absolute;
+      top: -2px;
+      right: -8px;
+      padding: 2px 6px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      font-size: 7px;
+      font-weight: bold;
+      display: none; /* Oculto por defecto */
+      border: 2px solid white; /* Borde para resaltar */
+  }
+  
+  /* Estilos para el avatar clickeable */
+  .avatar {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .avatar:active {
+      transform: scale(0.95);
+  }
+
+  /* Estilos para la ventana emergente de suscripción */
+  .subscription-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+  }
+
+  .subscription-modal.show {
+      display: flex;
+  }
+
+  .subscription-content {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin: 20px;
+  }
+
+  .subscription-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #2d5a3d;
+      margin-bottom: 20px;
+  }
+
+  .subscription-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+      flex-wrap: wrap;
+  }
+
+  .btn-subscribe {
+      background-color: #2d5a3d;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      min-width: 120px;
+  }
+
+  .btn-subscribe:hover {
+      background-color: #1e3d2a;
+  }
+
+  .btn-decline {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      min-width: 120px;
+  }
+
+  .btn-decline:hover {
+      background-color: #5a6268;
+  }
+
+  /* Estilos responsivos para pantallas grandes (desktop) */
+  @media (min-width: 1200px) {
+      .subscription-content {
+          max-width: 500px;
+          padding: 40px;
+      }
+      
+      .subscription-title {
+          font-size: 1.8rem;
+      }
+      
+      .subscription-buttons {
+          gap: 20px;
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          padding: 15px 30px;
+          font-size: 1.1rem;
+          min-width: 140px;
+      }
+  }
+
+  /* Estilos responsivos para pantallas medianas (tablets) */
+  @media (min-width: 768px) and (max-width: 1199px) {
+      .subscription-content {
+          max-width: 450px;
+          padding: 35px;
+      }
+      
+      .subscription-title {
+          font-size: 1.6rem;
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          padding: 14px 28px;
+          font-size: 1rem;
+          min-width: 130px;
+      }
+  }
+
+  /* Estilos responsivos para pantallas pequeñas (móviles grandes) */
+  @media (min-width: 480px) and (max-width: 767px) {
+      .subscription-content {
+          max-width: 380px;
+          padding: 25px;
+          margin: 15px;
+      }
+      
+      .subscription-title {
+          font-size: 1.4rem;
+          margin-bottom: 15px;
+      }
+      
+      .subscription-buttons {
+          gap: 12px;
+          margin-top: 20px;
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          padding: 12px 20px;
+          font-size: 0.95rem;
+          min-width: 110px;
+      }
+  }
+
+  /* Estilos responsivos para pantallas muy pequeñas (móviles pequeños) */
+  @media (max-width: 479px) {
+      .subscription-content {
+          max-width: 320px;
+          padding: 20px;
+          margin: 10px;
+          border-radius: 12px;
+      }
+      
+      .subscription-title {
+          font-size: 1.2rem;
+          margin-bottom: 15px;
+      }
+      
+      .subscription-buttons {
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 20px;
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          padding: 12px 20px;
+          font-size: 0.9rem;
+          min-width: 100%;
+          border-radius: 20px;
+      }
+
+      /* --- INICIO: Ajustes para Menú en Móviles Pequeños --- */
+      #menuSpinner.py-5 {
+          padding-top: 1.5rem !important;
+          padding-bottom: 1.5rem !important;
+      }
+
+      .menu-card {
+          padding: 1rem 0.75rem;
+          min-height: 100px;
+          gap: 0.5rem;
+      }
+
+      .menu-icon {
+          font-size: 1.75rem; /* Reducido de 2rem */
+          margin-bottom: 0.25rem;
+      }
+      
+      .menu-card img { /* Para iconos que son imágenes */
+          width: 32px; /* Reducido de 40px */
+      }
+
+      .menu-card h6 {
+          font-size: 0.8rem; /* Reducido de 0.875rem */
+      }
+
+      .construction-card {
+          padding: 1rem;
+          margin-bottom: 1rem;
+      }
+
+      .progress-ring {
+          width: 60px;
+          height: 60px;
+      }
+
+      .construction-info h4 {
+          font-size: 0.9rem;
+      }
+
+      .construction-stage, .construction-link {
+          font-size: 0.8rem;
+      }
+      /* --- FIN: Ajustes para Menú en Móviles Pequeños --- */
+  }
+
+  /* Estilos responsivos para orientación landscape en móviles */
+  @media (max-width: 767px) and (orientation: landscape) {
+      .subscription-content {
+          max-width: 500px;
+          padding: 20px 30px;
+      }
+      
+      .subscription-title {
+          font-size: 1.3rem;
+          margin-bottom: 15px;
+      }
+      
+      .subscription-buttons {
+          flex-direction: row;
+          gap: 15px;
+          margin-top: 15px;
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+          min-width: 120px;
+      }
+  }
+
+  /* Estilos responsivos para pantallas ultra grandes (4K, etc.) */
+  @media (min-width: 1920px) {
+      .subscription-content {
+          max-width: 600px;
+          padding: 50px;
+      }
+      
+      .subscription-title {
+          font-size: 2rem;
+          margin-bottom: 30px;
+      }
+      
+      .subscription-buttons {
+          gap: 25px;
+          margin-top: 30px;
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          padding: 18px 35px;
+          font-size: 1.2rem;
+          min-width: 160px;
+      }
+  }
+
+  /* Estilos responsivos para pantallas de alta densidad (retina) */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .subscription-content {
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      }
+      
+      .btn-subscribe,
+      .btn-decline {
+          border: 1px solid transparent;
+      }
+  }
+
+  /* Estilos responsivos para dispositivos táctiles */
+  @media (hover: none) and (pointer: coarse) {
+      .btn-subscribe,
+      .btn-decline {
+          min-height: 44px; /* Tamaño mínimo recomendado para touch */
+          padding: 14px 25px;
+      }
+      
+      .subscription-content {
+          border-radius: 20px; /* Bordes más redondeados para touch */
+      }
+  }
+
+  /* Estilos responsivos para modo oscuro del sistema */
+  @media (prefers-color-scheme: dark) {
+      .subscription-content {
+          background: #2d3748;
+          color: #e2e8f0;
+      }
+      
+      .subscription-title {
+          color: #68d391;
+      }
+      
+      .btn-subscribe {
+          background-color: #68d391;
+          color: #2d3748;
+      }
+      
+      .btn-subscribe:hover {
+          background-color: #9ae6b4;
+      }
+      
+      .btn-decline {
+          background-color: #a0aec0;
+          color: #2d3748;
+      }
+      
+      .btn-decline:hover {
+          background-color: #cbd5e0;
+      }
+  }
+
+
+
+  /* Ocultar el icono de notificación de OneSignal por defecto */
+  .onesignal-bell-launcher {
+      display: none !important;
+  }
+  
+  /* Ocultar SOLO el icono de notificación de OneSignal */
+  .onesignal-bell-launcher,
+  .onesignal-bell-launcher *,
+  .onesignal-bell-launcher-button,
+  .onesignal-bell-launcher-icon,
+  .onesignal-bell-launcher-container {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+  }
+  
+  /* Clase para ocultar solo el icono */
+  .onesignal-bell-hidden .onesignal-bell-launcher,
+  .onesignal-bell-hidden .onesignal-bell-launcher-button,
+  .onesignal-bell-hidden .onesignal-bell-launcher-icon,
+  .onesignal-bell-hidden .onesignal-bell-launcher-container {
+      display: none !important;
+  }
