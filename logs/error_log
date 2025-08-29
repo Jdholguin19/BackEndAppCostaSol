@@ -1,0 +1,652 @@
+[19-Aug-2025 14:54:20 America/Boise] Login error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)
+[19-Aug-2025 15:57:52 America/Boise] Login error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)
+[19-Aug-2025 16:24:47 America/Boise] Login error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)
+[20-Aug-2025 07:21:58 America/Boise] Login error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)
+[20-Aug-2025 07:23:23 America/Boise] Login error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)
+[20-Aug-2025 07:24:33 America/Boise] Login error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: NO)
+[20-Aug-2025 09:58:01 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 10:04:53 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 10:11:58 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 10:24:17 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 10:31:46 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 11:19:31 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 11:19:34 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 11:19:39 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 11:29:35 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 11:29:40 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 11:36:03 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 14:39:54 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:02:30 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:02:43 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:09:16 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:09:42 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:11:53 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:26:18 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:27:54 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:36:01 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:38:14 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:41:13 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:41:23 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:41:31 America/Boise] Player ID actualizado exitosamente para usuario 8: local-24852838-25d6-4f68-a97e-742cab347768
+[20-Aug-2025 15:41:49 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:41:49 America/Boise] Player ID actualizado exitosamente para usuario 8: 13fd59d9-4d20-419c-9835-1d5553e407a7
+[20-Aug-2025 15:41:53 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:41:56 America/Boise] Player ID actualizado exitosamente para usuario 8: 13fd59d9-4d20-419c-9835-1d5553e407a7
+[20-Aug-2025 15:42:05 America/Boise] Player ID actualizado exitosamente para usuario 8: 13fd59d9-4d20-419c-9835-1d5553e407a7
+[20-Aug-2025 15:42:14 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:42:35 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:42:50 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:44:53 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:45:18 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 15:46:04 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 15:46:19 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 15:46:35 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:47:09 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:47:16 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:47:35 America/Boise] Player ID actualizado exitosamente para usuario 3: cce7df9e-3e7b-4684-8571-633897e0ed1f
+[20-Aug-2025 15:47:42 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:48:14 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 15:49:55 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 15:50:21 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 15:50:34 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 15:51:50 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:15:04 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:15:08 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:19:48 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:20:38 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:21:20 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:23:40 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:24:26 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:30:26 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:30:38 America/Boise] Player ID actualizado exitosamente para usuario 3: 9936f498-73c2-4da4-9fa3-62d0103943e4
+[20-Aug-2025 16:33:14 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[20-Aug-2025 16:33:44 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:34:28 America/Boise] Player ID actualizado exitosamente para usuario 8: 13fd59d9-4d20-419c-9835-1d5553e407a7
+[20-Aug-2025 16:35:38 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:35:49 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:35:57 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 16:36:24 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 16:36:45 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 16:37:08 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 16:40:35 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:40:45 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:41:44 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 16:43:54 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 16:44:02 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 16:44:07 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 16:46:33 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:48:00 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Aug-2025 16:48:19 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 16:48:23 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 17:08:56 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[20-Aug-2025 17:09:16 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[20-Aug-2025 17:19:07 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[21-Aug-2025 07:02:31 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 07:02:40 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:07:33 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:12:54 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[21-Aug-2025 07:13:00 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[21-Aug-2025 07:13:41 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:13:48 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:15:55 America/Boise] Player ID actualizado exitosamente para usuario 2: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[21-Aug-2025 07:16:12 America/Boise] Player ID actualizado exitosamente para usuario 2: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[21-Aug-2025 07:17:21 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[21-Aug-2025 07:19:56 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:26:07 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[21-Aug-2025 07:27:56 America/Boise] Player ID actualizado exitosamente para usuario 8: b1ac90ae-d8ce-49ed-84e7-bfcd1b2419ef
+[21-Aug-2025 07:39:47 America/Boise] Player ID actualizado exitosamente para usuario 8: local-48c1c9cd-2b7f-48e9-90e4-30d331c4c25d
+[21-Aug-2025 07:40:04 America/Boise] Player ID actualizado exitosamente para usuario 8: 35fe4b25-1335-4d89-9bad-b2fa3b8e97a7
+[21-Aug-2025 07:40:41 America/Boise] Player ID actualizado exitosamente para usuario 8: local-7a4271c5-933d-4ff6-9b23-e3092a3490ca
+[21-Aug-2025 07:41:42 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 07:44:12 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 07:51:38 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:51:53 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:52:29 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 07:52:40 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 08:00:18 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 08:12:57 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 08:52:09 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 10:51:28 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 10:52:55 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 10:53:30 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 10:53:34 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 11:33:04 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:33:08 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 11:35:59 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:36:15 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:38:00 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:38:22 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:38:34 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:39:40 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:39:51 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 11:40:36 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 11:40:46 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 11:40:51 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 11:42:25 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 11:42:54 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 11:45:02 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 12:02:58 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 12:06:51 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 12:18:20 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 12:25:22 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 12:25:29 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 12:25:37 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 12:29:35 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[21-Aug-2025 12:29:35 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:29:49 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:30:27 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:30:50 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:30:59 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:46:10 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:49:07 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:51:32 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 12:51:40 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 14:26:48 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 14:41:27 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 14:41:31 America/Boise] PHP Warning:  require_once(../config/helpers.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 8
+[21-Aug-2025 14:41:31 America/Boise] PHP Fatal error:  require_once(): Failed opening required '../config/helpers.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 8
+[21-Aug-2025 14:42:03 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 14:42:10 America/Boise] PHP Warning:  require_once(../config/helpers.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 8
+[21-Aug-2025 14:42:10 America/Boise] PHP Fatal error:  require_once(): Failed opening required '../config/helpers.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 8
+[21-Aug-2025 14:42:23 America/Boise] PHP Warning:  require_once(../config/helpers.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 8
+[21-Aug-2025 14:42:23 America/Boise] PHP Fatal error:  require_once(): Failed opening required '../config/helpers.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 8
+[21-Aug-2025 14:45:33 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:37 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:39 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:39 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:45:39 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:46:08 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:47:57 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:47:58 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:08 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:10 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:10 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:24 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 14:50:26 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:31 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:32 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:50:55 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:34
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 34
+[21-Aug-2025 14:52:06 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:41
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 41
+[21-Aug-2025 14:53:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:41
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 41
+[21-Aug-2025 14:55:08 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:41
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 41
+[21-Aug-2025 14:56:02 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 14:56:02 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:41
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 41
+[21-Aug-2025 14:56:51 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:41
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 41
+[21-Aug-2025 14:58:06 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:35
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 35
+[21-Aug-2025 14:58:07 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:35
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 35
+[21-Aug-2025 14:58:13 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:35
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 35
+[21-Aug-2025 14:58:18 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:35
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 35
+[21-Aug-2025 14:58:19 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:35
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 35
+[21-Aug-2025 14:59:27 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:38
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 38
+[21-Aug-2025 14:59:28 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:38
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 38
+[21-Aug-2025 14:59:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:38
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 38
+[21-Aug-2025 14:59:45 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:38
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 38
+[21-Aug-2025 14:59:46 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function getDB() in /home1/portalao/public_html/website_cc359709/api/perfil.php:38
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/perfil.php on line 38
+[21-Aug-2025 15:01:16 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 15:05:34 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:07:45 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:09:40 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:20:53 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:20:55 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:21:05 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:21:09 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 15:21:13 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:21:15 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:21:17 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:21:30 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:21:35 America/Boise] Perfil API - Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'email' in 'field list'
+[21-Aug-2025 15:28:33 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:28:41 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:29:39 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:40:42 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 15:45:26 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 15:46:06 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[21-Aug-2025 15:50:15 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 15:50:35 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 15:50:37 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 15:50:57 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Aug-2025 15:51:07 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 15:57:15 America/Boise] Player ID actualizado exitosamente para usuario 9: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 15:58:23 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[21-Aug-2025 15:58:23 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 16:00:18 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 16:02:07 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 16:02:14 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 16:04:05 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 16:07:25 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[21-Aug-2025 16:14:53 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[21-Aug-2025 16:15:12 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 07:08:00 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 07:12:35 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 07:13:22 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 07:13:49 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 07:15:49 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 07:32:49 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 07:34:02 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 07:56:14 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 08:22:25 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:24:07 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:24:41 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:25:06 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 08:25:20 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:30:18 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 08:30:45 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:30:58 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 08:36:13 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 08:36:27 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 08:36:42 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 08:36:56 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:38:03 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:40:38 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 08:40:55 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 08:43:46 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 08:43:53 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 08:43:59 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 08:45:59 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 08:56:49 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 08:57:29 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 08:58:15 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 08:58:25 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 08:59:13 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 09:04:08 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 09:05:11 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 09:15:41 America/Boise] Player ID actualizado exitosamente para usuario 11: a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac
+[22-Aug-2025 09:23:59 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 09:24:19 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 09:24:41 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 09:31:51 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 09:32:21 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 09:32:41 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 10:19:15 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 10:22:39 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 10:51:24 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:04:10 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:28:05 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:28:55 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:30:20 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:30:31 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:32:21 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:33:18 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:35:32 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:37:59 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:39:06 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:40:45 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 11:41:06 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 11:41:18 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 11:41:34 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 11:43:03 America/Boise] Player ID actualizado exitosamente para usuario 8: a9058337-402e-45a7-bb7c-352e83142774
+[22-Aug-2025 11:43:34 America/Boise] Player ID actualizado exitosamente para usuario 8: local-481e9730-dda7-4575-ae02-79542f32831b
+[22-Aug-2025 11:44:05 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 11:44:15 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 11:51:02 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 12:29:19 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 12:29:37 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 12:32:50 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 12:33:09 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 12:43:25 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 12:44:59 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 14:23:06 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 14:23:47 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 14:29:43 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 14:30:44 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[22-Aug-2025 14:30:44 America/Boise] Player ID actualizado exitosamente para usuario 7: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 14:31:59 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 14:33:02 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 14:34:38 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 14:41:02 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 14:50:12 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 14:50:15 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 15:31:04 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Aug-2025 15:36:32 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[22-Aug-2025 15:36:44 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:37:12 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:38:56 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:39:40 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:40:05 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:45:14 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:45:28 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 15:45:34 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 15:46:38 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 15:46:56 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[22-Aug-2025 15:50:21 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 15:50:38 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[22-Aug-2025 16:04:06 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[25-Aug-2025 05:13:12 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[25-Aug-2025 07:12:01 America/Boise] Player ID actualizado exitosamente para usuario 8: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 07:12:47 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 07:13:18 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 07:17:56 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[25-Aug-2025 07:17:56 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:21:03 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:22:05 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:23:11 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:24:16 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:24:25 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:30:34 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:31:15 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 07:35:20 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 09:26:43 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 09:26:48 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 09:30:51 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 09:32:42 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 09:37:32 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 09:41:19 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 09:43:10 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[25-Aug-2025 10:05:04 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 10:08:42 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 10:28:01 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:00:36 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:01:16 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:01:38 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:01:51 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:13:30 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:14:47 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:15:41 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[25-Aug-2025 11:17:53 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[25-Aug-2025 11:18:32 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 11:19:22 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 11:20:00 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 11:20:23 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 11:21:00 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 11:21:35 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 12:43:49 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 12:43:55 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 14:21:39 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:21:40 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:21:44 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:22:42 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:23:03 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:23:54 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:24:08 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 14:24:08 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:24:11 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:24:35 America/Boise] PHP Notice:  Undefined offset: 1 in /home1/portalao/public_html/website_cc359709/api/notificaciones.php on line 30
+[25-Aug-2025 14:27:13 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:27:16 America/Boise] PHP Notice:  Undefined offset: 1 in /home1/portalao/public_html/website_cc359709/api/notificaciones.php on line 30
+[25-Aug-2025 14:27:21 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 14:27:36 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 14:27:45 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:27:48 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[25-Aug-2025 14:27:52 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:27:58 America/Boise] notificaciones.php: SQLSTATE[HY000]: General error: 1271 Illegal mix of collations for operation 'UNION'
+[25-Aug-2025 14:50:50 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 14:54:48 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 14:58:17 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 15:00:11 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[25-Aug-2025 15:00:32 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[25-Aug-2025 15:32:47 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 15:36:47 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[25-Aug-2025 15:48:20 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 15:48:38 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 15:49:20 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 15:51:24 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[25-Aug-2025 15:52:27 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[25-Aug-2025 15:56:32 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 07:10:51 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 07:10:58 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 07:11:27 America/Boise] Player ID actualizado exitosamente para usuario 3: 7d49b608-347b-4308-954e-1edc4e1b6dee
+[26-Aug-2025 07:15:06 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 07:16:29 America/Boise] Player ID actualizado exitosamente para usuario 2: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:17:35 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:17:40 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:18:20 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:18:30 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:18:36 America/Boise] Player ID actualizado exitosamente para usuario 8: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:19:36 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 07:21:38 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 07:26:31 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 07:27:38 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[26-Aug-2025 07:27:38 America/Boise] Player ID actualizado exitosamente para usuario 16: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 07:30:54 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[26-Aug-2025 07:30:54 America/Boise] Player ID actualizado exitosamente para usuario 8: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:32:05 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:32:15 America/Boise] Player ID actualizado exitosamente para usuario 8: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:32:25 America/Boise] Player ID actualizado exitosamente para usuario 8: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:32:30 America/Boise] Player ID actualizado exitosamente para usuario 8: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:33:08 America/Boise] Player ID actualizado exitosamente para usuario 8: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:35:10 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:40:51 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:41:05 America/Boise] Player ID actualizado exitosamente para usuario 8: local-21a3ce45-a986-4cce-83d3-3fa8075b7a0e
+[26-Aug-2025 07:42:24 America/Boise] Player ID actualizado exitosamente para usuario 8: eeaabb01-9612-4142-bf32-decd58a9794d
+[26-Aug-2025 07:43:32 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:46:50 America/Boise] Player ID actualizado exitosamente para usuario 8: 7971cc3d-45c4-4e50-b68f-7a0ccb922f32
+[26-Aug-2025 07:48:06 America/Boise] Player ID actualizado exitosamente para usuario 8: 7971cc3d-45c4-4e50-b68f-7a0ccb922f32
+[26-Aug-2025 07:48:14 America/Boise] Player ID actualizado exitosamente para usuario 8: 7971cc3d-45c4-4e50-b68f-7a0ccb922f32
+[26-Aug-2025 07:49:19 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:49:24 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 07:50:38 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[26-Aug-2025 07:50:38 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 08:32:25 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 08:32:39 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 08:37:00 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 08:37:06 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 08:37:13 America/Boise] Player ID actualizado exitosamente para usuario 2: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 08:43:15 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 08:49:05 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 08:49:19 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 08:51:53 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 08:52:00 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 08:52:09 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 08:58:33 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:03:00 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:36:15 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:44:59 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:45:58 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:46:24 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:47:41 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:48:38 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 09:53:01 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 10:11:12 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 10:25:24 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 10:25:31 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 10:25:52 America/Boise] Player ID actualizado exitosamente para usuario 1: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 10:33:39 America/Boise] Player ID actualizado exitosamente para usuario 9: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 11:16:22 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 11:36:27 America/Boise] Player ID actualizado exitosamente para usuario 9: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 11:44:55 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 11:55:42 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 11:57:42 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 12:33:14 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:00:48 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:13:10 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:15:20 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 13:22:09 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 13:24:32 America/Boise] Player ID actualizado exitosamente para usuario 9: 10500dd3-68aa-47a6-ae8c-bd9e6484465e
+[26-Aug-2025 13:25:07 America/Boise] Player ID actualizado exitosamente para usuario 8: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[26-Aug-2025 13:26:16 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[26-Aug-2025 13:26:16 America/Boise] Player ID actualizado exitosamente para usuario 9: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[26-Aug-2025 13:27:52 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:30:09 America/Boise] Player ID actualizado exitosamente para usuario 9: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[26-Aug-2025 13:30:14 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:30:24 America/Boise] Player ID actualizado exitosamente para usuario 9: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[26-Aug-2025 13:30:28 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:30:38 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:36:07 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 13:55:59 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 14:04:55 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 14:09:58 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[26-Aug-2025 14:10:55 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[26-Aug-2025 14:12:44 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 07:11:20 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 07:59:48 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:15:56 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:16:06 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:18:51 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:20:05 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:21:02 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:22:03 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 08:22:20 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:43:18 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 08:50:44 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:01:44 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:01:56 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:13:05 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:13:27 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:23:40 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:25:52 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:26:11 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:37:19 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[27-Aug-2025 09:37:19 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:39:39 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:39:47 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:48:03 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:48:29 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:50:25 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 09:50:52 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 09:51:47 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 09:53:22 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 09:53:30 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 09:56:12 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:56:16 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 09:56:26 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 10:02:04 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 11:11:37 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:18:08 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:18:12 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:18:34 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 11:20:42 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:21:49 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:25:26 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:26:41 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:27:24 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[27-Aug-2025 11:28:59 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:31:35 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[27-Aug-2025 11:31:41 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[28-Aug-2025 07:00:08 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[28-Aug-2025 08:27:29 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[28-Aug-2025 08:48:31 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[28-Aug-2025 09:03:22 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[28-Aug-2025 12:50:38 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[29-Aug-2025 07:03:42 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[29-Aug-2025 07:30:49 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[29-Aug-2025 08:28:53 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[29-Aug-2025 08:29:32 America/Boise] Player ID actualizado exitosamente para usuario 9: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[29-Aug-2025 08:29:49 America/Boise] Player ID actualizado exitosamente para usuario 9: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[29-Aug-2025 08:29:53 America/Boise] Player ID actualizado exitosamente para usuario 9: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
+[29-Aug-2025 08:31:24 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[29-Aug-2025 08:32:03 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[29-Aug-2025 08:34:14 America/Boise] Player ID actualizado exitosamente para usuario 8: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
+[29-Aug-2025 09:34:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to private DB::__construct() from invalid context in /home1/portalao/public_html/website_cc359709/api/user_list.php:19
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/user_list.php on line 19
+[29-Aug-2025 09:37:59 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[29-Aug-2025 09:38:07 America/Boise] PHP Fatal error:  Uncaught Error: Call to private DB::__construct() from invalid context in /home1/portalao/public_html/website_cc359709/api/user_list.php:19
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/user_list.php on line 19
+[29-Aug-2025 09:38:21 America/Boise] PHP Fatal error:  Uncaught Error: Call to private DB::__construct() from invalid context in /home1/portalao/public_html/website_cc359709/api/user_list.php:19
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/user_list.php on line 19
+[29-Aug-2025 09:40:11 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined method PDO::getConnection() in /home1/portalao/public_html/website_cc359709/api/user_list.php:20
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/user_list.php on line 20
+[29-Aug-2025 09:40:23 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[29-Aug-2025 09:40:43 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined method PDO::getConnection() in /home1/portalao/public_html/website_cc359709/api/user_list.php:20
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/user_list.php on line 20

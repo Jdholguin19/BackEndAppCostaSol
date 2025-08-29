@@ -91,12 +91,17 @@
              LEFT JOIN etapa_construccion ec ON ec.id = p.etapa_id';
  
      $params = [];
- 
-     if (!$is_responsable) {
-         // Si no es responsable, filtrar por el ID del usuario autenticado
+
+     if (isset($_GET['id_usuario'])) {
+         // Si se especifica un id_usuario en la URL, se da prioridad a ese filtro.
+         $sql .= ' WHERE p.id_usuario = :uid';
+         $params[':uid'] = (int)$_GET['id_usuario'];
+     } else if (!$is_responsable) {
+         // Si no se especifica id_usuario y no es responsable, filtrar por el ID del usuario autenticado.
          $sql .= ' WHERE p.id_usuario = :uid';
          $params[':uid'] = $auth_id;
      }
+     // Si es responsable y no se especifica id_usuario, no se aplica filtro WHERE (ve todo).
  
      $sql .= ' ORDER BY p.fecha_compra DESC';
  

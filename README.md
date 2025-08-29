@@ -39,6 +39,7 @@ C:.
 │   ├── update_player_id.php
 │   ├── update_profile_picture.php
 │   ├── user_crud.php
+│   ├── user_list.php
 │   ├── validate_responsable.php
 │   ├── cita
 │   │   ├── citas_list.php
@@ -91,6 +92,7 @@ C:.
 ├── Front
 │   ├── citas.php
 │   ├── cita_nueva.php
+│   ├── cita_responsable.php
 │   ├── fase_detalle.php
 │   ├── garantias.php
 │   ├── login_front.php
@@ -176,7 +178,8 @@ El proyecto ofrece las siguientes funcionalidades principales:
         *   **`rol_menu`**: Asigna ítems de menú específicos a cada rol, controlando qué funcionalidades son visibles en el frontend (`Front/menu_front.php`, `Front/menu2.php`).
         *   **Validación en Backend:** Los endpoints de la API (`api/menu.php`, `api/user_crud.php`, etc.) realizan validaciones en el lado del servidor basadas en el `rol_id` del usuario autenticado (obtenido del token) para asegurar que solo los usuarios con los permisos adecuados puedan ejecutar ciertas acciones o acceder a datos sensibles.
 *   **Gestión de Citas:**
-    *   Creación de nuevas citas (`cita_nueva.php`, `api/cita/cita_create.php`).
+    *   Creación de nuevas citas por parte del cliente (`cita_nueva.php`, `api/cita/cita_create.php`).
+    *   **Creación de citas por parte de un responsable para un cliente** (`cita_responsable.php`).
     *   Listado de citas (filtrado por usuario, responsable o todas para el admin) (`citas.php`, `api/cita/citas_list.php`).
     *   Cancelación de citas (`api/cita/cita_cancelar.php`).
     *   Eliminación de citas canceladas (`api/cita/cita_eliminar.php`).
@@ -229,18 +232,19 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 ### Autenticación y Gestión de Usuarios
 
 *   **`api/login.php`**: Maneja el inicio de sesión de usuarios y responsables, devolviendo un token de autenticación.
-*   **Mecanismo de Autenticación:** El sistema utiliza un mecanismo de autenticación basado en tokens. Tras un inicio de sesión exitoso en `api/login.php`, el servidor genera un token JWT (JSON Web Token) o un token de sesión seguro y lo devuelve al cliente.
+*   **Mecanismo de Autenticación:** El sistema utiliza un mecanismo de autenticación basado en tokens. Tras un inicio de sesión exitoso en `api/login.php`, el servidor genera un token seguro y lo guarda en la base de datos para el usuario o responsable.
 *   **Manejo de Tokens en el Cliente:** El token recibido se almacena en el `localStorage` del navegador (clave `cs_token`). Para todas las solicitudes subsiguientes a endpoints protegidos de la API, este token debe incluirse en el encabezado `Authorization` como un `Bearer Token` (ej: `Authorization: Bearer <tu_token>`).
-*   **Validación de Sesión:** El backend valida la autenticidad y vigencia de este token en cada solicitud protegida para asegurar que el usuario tiene permiso para acceder al recurso.
+*   **Validación de Sesión:** El backend valida la autenticidad de este token en cada solicitud protegida, buscándolo en la base de datos para asegurar que el usuario tiene permiso para acceder al recurso.
 *   **`api/logout.php`**: Invalida la sesión del usuario.
 *   **`api/user_crud.php`**: Proporciona operaciones CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de usuarios.
+*   **`api/user_list.php`**: **(Nuevo)** Devuelve una lista de todos los usuarios (clientes/residentes) para ser usada en interfaces de administración. Requiere autenticación de responsable.
 *   **`api/validate_responsable.php`**: Valida tokens específicos para responsables.
 *   **`api/update_player_id.php`**: Actualiza el ID de OneSignal Player para notificaciones push.
 *   **`api/update_profile_picture.php`**: Actualiza la foto de perfil del usuario autenticado.
 
 ### Gestión de Citas
 
-*   **`api/cita/cita_create.php`**: Crea una nueva cita.
+*   **`api/cita/cita_create.php`**: Crea una nueva cita. **Modificado:** Ahora detecta si la petición viene de un responsable para permitirle crear una cita para otro usuario, o si es un usuario normal, en cuyo caso solo puede crear citas para sí mismo.
 *   **`api/cita/citas_list.php`**: Lista citas, con opciones de filtrado por usuario o responsable.
 *   **`api/cita/cita_cancelar.php`**: Cancela una cita existente.
 *   **`api/cita/cita_eliminar.php`**: Elimina una cita (usualmente citas canceladas).
@@ -281,7 +285,7 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 
 ### Propiedades y Construcción
 
-*   **`api/obtener_propiedades.php`**: Obtiene propiedades, filtradas por usuario o todas para responsables.
+*   **`api/obtener_propiedades.php`**: Obtiene propiedades. **Modificado:** Ahora acepta un parámetro opcional `id_usuario` en la URL. Si se provee, filtra las propiedades para ese usuario específico. Si no, mantiene el comportamiento original (un responsable ve todo, un usuario ve solo lo suyo).
 *   **`api/propiedad_fase.php`**: Obtiene la fase de construcción de una propiedad.
 *   **`api/etapas_manzana_villa.php`**: Obtiene etapas de construcción por manzana/villa.
 
@@ -324,8 +328,9 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 
 ### Gestión de Citas
 
-*   **`citas.php`**: Muestra una lista de citas agendadas por el usuario o asignadas al responsable. Permite cancelar citas (`api/cita/cita_cancelar.php`) y, para administradores/responsables, actualizar el estado de las citas (`api/cita/cita_update_estado.php`).
-*   **`cita_nueva.php`**: Formulario para agendar una nueva cita. Permite seleccionar la propiedad, el propósito de la visita, la fecha (con un calendario interactivo `flatpickr.js`) y la hora (con un selector de rueda vertical). Interactúa con `api/obtener_propiedades.php`, `api/propositos.php`, `api/cita/dias_disponibles.php`, `api/cita/horas_disponibles.php` y `api/cita/cita_create.php`.
+*   **`citas.php`**: Muestra una lista de citas agendadas por el usuario o asignadas al responsable. Permite cancelar citas (`api/cita/cita_cancelar.php`) y, para administradores/responsables, actualizar el estado de las citas (`api/cita/cita_update_estado.php`). **Modificado:** El botón "Agendar" ahora es dinámico, llevando a `cita_nueva.php` para clientes y a `cita_responsable.php` para responsables.
+*   **`cita_nueva.php`**: Formulario para que un cliente agende una nueva cita. Permite seleccionar la propiedad, el propósito de la visita, la fecha (con un calendario interactivo `flatpickr.js`) y la hora (con un selector de rueda vertical). Interactúa con `api/obtener_propiedades.php`, `api/propositos.php`, `api/cita/dias_disponibles.php`, `api/cita/horas_disponibles.php` y `api/cita/cita_create.php`.
+*   **`cita_responsable.php`**: **(Nuevo)** Formulario para que un responsable agende una nueva cita para un cliente. El responsable primero selecciona al cliente de una lista, lo que carga dinámicamente las propiedades de ese cliente. Luego, el flujo es similar al de `cita_nueva.php`.
 
 ### Gestión de CTG (Contingencias)
 
@@ -347,7 +352,7 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 ### Otras Funcionalidades del Frontend
 
 *   **`garantias.php`**: Muestra información sobre las garantías del usuario, incluyendo su duración y vigencia. Incluye un procedimiento de reclamación. Interactúa con `api/garantias.php`.
-*   **`panel_calendario.php`**: Muestra un calendario de citas para los responsables. Los administradores pueden ver el calendario de todos los responsables. Utiliza FullCalendar.js. Interactúa con `api/responsables_list.php` y `api/calendario_responsable.php`.
+*   **`panel_calendario.php`**: Muestra un calendario de citas para los responsables. Los administradores pueden ver el calendario de todos los responsables. Utiliza FullCalendar.js. Interactúa con `api/responsables_list.php` y `api/calendario_responsable.php`. **Modificado:** Ahora incluye un botón para que los responsables agenden citas para los clientes.
 *   **`noticia.php`**: (Panel de administración) Permite a los administradores crear, listar y eliminar noticias. Interactúa con `api/noticias.php`.
 *   **`perfil.php`**: Página completa del perfil de usuario que permite ver información personal y cambiar la foto de perfil. Incluye funcionalidad de subida de archivos y navegación integrada. **Nuevas funcionalidades incluyen:**
     *   Gestión avanzada de notificaciones con opción de desuscripción.
@@ -482,6 +487,20 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 ## Observaciones Adicionales
 
 *   La carpeta `SharePoint/` contiene scripts que sugieren una integración con SharePoint para la gestión de archivos, aunque su implementación completa no fue detallada en esta revisión.
+
+---
+
+### Mejoras y Correcciones (Agosto 2025 - Sistema de Citas para Responsables)
+
+*   **Agendamiento de Citas por Parte de Responsables:**
+    *   Se implementó una nueva funcionalidad que permite a los usuarios con rol de "responsable" agendar citas en nombre de los clientes.
+    *   **Nueva Interfaz (`Front/cita_responsable.php`):** Se creó una página dedicada donde el responsable primero selecciona a un cliente de una lista desplegable. Una vez seleccionado, se cargan las propiedades de ese cliente para continuar con el proceso de agendamiento de forma similar al flujo del cliente.
+    *   **Nuevo Endpoint (`api/user_list.php`):** Se añadió un endpoint para poblar la lista de clientes, accesible únicamente por responsables.
+    *   **API Modificada (`api/obtener_propiedades.php`):** Se actualizó para que, si recibe un `id_usuario` como parámetro, devuelva las propiedades de ese usuario específico. Esto permite cargar dinámicamente las propiedades del cliente seleccionado en la nueva interfaz.
+    *   **API Modificada (`api/cita/cita_create.php`):** Se reforzó la seguridad para distinguir entre una petición de un responsable (que puede especificar para qué cliente es la cita) y la de un cliente (que solo puede agendar para sí mismo).
+    *   **Mejoras de Usabilidad:**
+        *   Se añadió un botón "Agendar para Cliente" en la vista del calendario (`Front/panel_calendario.php`) para dar un acceso directo a la nueva funcionalidad.
+        *   El botón "Agendar" en la página de listado de citas (`Front/citas.php`) ahora es dinámico: lleva a la interfaz de agendamiento normal para clientes y a la nueva interfaz para responsables.
 
 ### Actualizaciones Recientes
 

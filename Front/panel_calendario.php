@@ -25,6 +25,7 @@
 
   <div class="d-flex align-items-center gap-3 mb-3">
     <select id="selResp" class="form-select w-auto"></select>
+    <a href="cita_responsable.php" id="btnAgendarCliente" class="btn btn-primary">Agendar para Cliente</a>
   </div>
 
   <div id="calendar"></div>

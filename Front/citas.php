@@ -50,6 +50,14 @@ include '../api/bottom_nav.php';
 const u = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
 if(!u.id) location.href='login.php';
 
+// Lógica para el botón dinámico de Agendar
+document.addEventListener('DOMContentLoaded', () => {
+    const agendarButton = document.querySelector('.agendar-button');
+    if (agendarButton && u.is_responsable) {
+        agendarButton.href = 'cita_responsable.php';
+    }
+});
+
 function fechaLarga(sqlDate){
   const [y,m,d] = sqlDate.split('-').map(Number);      // y=2025, m=06, d=30
   return new Date(y, m - 1, d)                         // local => sin corrimiento

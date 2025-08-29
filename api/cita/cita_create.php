@@ -1,14 +1,62 @@
 <?php
+declare(strict_types=1);
+
 require_once __DIR__.'/../../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
 
-$uid = (int)($_POST['id_usuario']??0);
+// --- Validación de Token y Rol ---
+$uid = 0;
+$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? null;
+
+if (!$authHeader) {
+    http_response_code(401);
+    echo json_encode(["ok" => false, "mensaje" => "Token no proporcionado"]);
+    exit;
+}
+
+list(, $token) = explode(' ', $authHeader);
+
+try {
+    $conn = DB::getDB();
+
+    // Intentar encontrar el token en la tabla de responsables primero
+    $stmt_resp = $conn->prepare("SELECT id FROM responsable WHERE token = :token LIMIT 1");
+    $stmt_resp->execute([':token' => $token]);
+    $responsable = $stmt_resp->fetch(PDO::FETCH_ASSOC);
+
+    if ($responsable) {
+        // Si es un responsable, se confía en el id_usuario que viene del POST
+        $uid = (int)($_POST['id_usuario'] ?? 0);
+    } else {
+        // Si no es un responsable, buscar en la tabla de usuarios
+        $stmt_user = $conn->prepare("SELECT id FROM usuario WHERE token = :token LIMIT 1");
+        $stmt_user->execute([':token' => $token]);
+        $user = $stmt_user->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            // Si es un usuario normal, se usa su propio ID para seguridad
+            $uid = (int)$user['id'];
+        } else {
+            // Si el token no pertenece a nadie, no está autorizado
+            http_response_code(401);
+            echo json_encode(["ok" => false, "mensaje" => "Token inválido"]);
+            exit;
+        }
+    }
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(["ok" => false, "mensaje" => "Error de autenticación: " . $e->getMessage()]);
+    exit;
+}
+// --- Fin Validación ---
+
 $propiedad = (int)($_POST['id_propiedad']??0);
 $proposito = (int)($_POST['proposito_id']??0);
 $fecha = $_POST['fecha']??'';
 $hora  = $_POST['hora']??'';
 $observaciones = isset($_POST['observaciones']) ? trim($_POST['observaciones']) : null;
 $duracion_especial = (int)($_POST['duracion'] ?? 0); // Nueva duración opcional
+
 
 if(!$uid||!$propiedad||!$proposito||
    !preg_match('/^\d{4}-\d{2}-\d{2}$/',$fecha)||
