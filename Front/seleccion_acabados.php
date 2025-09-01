@@ -630,6 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         Promise.all([kitsPromise, packagesPromise])
         .then(([kitsData, packagesData]) => {
+            kitsContainer.innerHTML = ''; // Clear loading spinner
             if (!kitsData.ok || kitsData.kits.length === 0) {
                 document.querySelector('.acabados-container').innerHTML = '<h2>No hay acabados disponibles para esta propiedad.</h2>';
                 return;
