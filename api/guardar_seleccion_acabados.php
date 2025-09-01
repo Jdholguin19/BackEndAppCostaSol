@@ -13,7 +13,6 @@ if (strpos($authHeader, 'Bearer ') === 0) {
     $token = substr($authHeader, 7);
     try {
         $conn_auth = DB::getDB();
-        // Solo los usuarios clientes/residentes pueden guardar acabados.
         $stmt = $conn_auth->prepare('SELECT id FROM usuario WHERE token = :token AND rol_id IN (1, 2)');
         $stmt->execute([':token' => $token]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -42,6 +41,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 $propiedad_id = filter_var($input['propiedad_id'] ?? null, FILTER_VALIDATE_INT);
 $kit_id = filter_var($input['kit_id'] ?? null, FILTER_VALIDATE_INT);
 $color = filter_var($input['color'] ?? null, FILTER_SANITIZE_STRING);
+$paquetes_adicionales = $input['paquetes_adicionales'] ?? [];
 
 if (!$propiedad_id || !$kit_id || !$color) {
     http_response_code(400);
@@ -49,9 +49,15 @@ if (!$propiedad_id || !$kit_id || !$color) {
     exit;
 }
 
-try {
-    $conn = DB::getDB();
+if (!is_array($paquetes_adicionales)) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'mensaje' => 'El formato de los paquetes adicionales es incorrecto.']);
+    exit;
+}
 
+$conn = DB::getDB();
+
+try {
     // Verificación: Asegurarse de que la propiedad pertenece al usuario autenticado.
     $stmt_verify = $conn->prepare("SELECT id FROM propiedad WHERE id = :propiedad_id AND id_usuario = :user_id");
     $stmt_verify->execute([':propiedad_id' => $propiedad_id, ':user_id' => $auth_user_id]);
@@ -61,13 +67,15 @@ try {
         exit;
     }
 
-    // Actualizar la propiedad con la selección
+    // Iniciar transacción
+    $conn->beginTransaction();
+
+    // 1. Actualizar la propiedad con la selección principal
     $stmt_update = $conn->prepare(
         "UPDATE propiedad 
          SET acabado_kit_seleccionado_id = :kit_id, acabado_color_seleccionado = :color 
          WHERE id = :propiedad_id AND id_usuario = :user_id"
     );
-
     $stmt_update->execute([
         ':kit_id' => $kit_id,
         ':color' => $color,
@@ -75,13 +83,36 @@ try {
         ':user_id' => $auth_user_id
     ]);
 
-    if ($stmt_update->rowCount() > 0) {
-        echo json_encode(['ok' => true, 'mensaje' => 'Selección guardada correctamente.']);
-    } else {
-        echo json_encode(['ok' => true, 'mensaje' => 'No se realizaron cambios, es posible que la selección ya estuviera guardada.']);
+    // 2. Borrar los paquetes adicionales anteriores para esta propiedad
+    $stmt_delete_paquetes = $conn->prepare("DELETE FROM propiedad_paquetes_adicionales WHERE propiedad_id = :propiedad_id");
+    $stmt_delete_paquetes->execute([':propiedad_id' => $propiedad_id]);
+
+    // 3. Insertar los nuevos paquetes adicionales
+    if (!empty($paquetes_adicionales)) {
+        $stmt_insert_paquete = $conn->prepare(
+            "INSERT INTO propiedad_paquetes_adicionales (propiedad_id, paquete_id) VALUES (:propiedad_id, :paquete_id)"
+        );
+        foreach ($paquetes_adicionales as $paquete_id) {
+            $paquete_id_sanitized = filter_var($paquete_id, FILTER_VALIDATE_INT);
+            if ($paquete_id_sanitized) {
+                $stmt_insert_paquete->execute([
+                    ':propiedad_id' => $propiedad_id,
+                    ':paquete_id' => $paquete_id_sanitized
+                ]);
+            }
+        }
     }
 
+    // Commit de la transacción
+    $conn->commit();
+
+    echo json_encode(['ok' => true, 'mensaje' => 'Selección guardada correctamente.']);
+
 } catch (Throwable $e) {
+    // Rollback en caso de error
+    if ($conn->inTransaction()) {
+        $conn->rollBack();
+    }
     error_log('guardar_seleccion_acabados: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode(['ok' => false, 'mensaje' => 'Error interno del servidor al guardar la selección.']);

@@ -9,7 +9,138 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_acabados.css" rel="stylesheet">
+<style>
+    /* Nuevos estilos para la Etapa 4 y el Modal */
+    #step4 .summary-table {
+        text-align: left;
+        max-width: 400px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    #step4 .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    #step4 .summary-row:last-child {
+        border-bottom: none;
+    }
+    #step4 .summary-label {
+        color: #6c757d;
+    }
+    #step4 .summary-value {
+        font-weight: 600;
+        color: #343a40;
+    }
+    #step4 .summary-total {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2d5a3d;
+    }
+    .packages-section {
+        margin-top: 40px;
+    }
+    .packages-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    .packages-scroll-container {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        gap: 15px;
+    }
+    .package-card {
+        flex: 0 0 150px;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .package-card:hover {
+        border-color: #2d5a3d;
+        transform: translateY(-3px);
+    }
+    .package-card.added {
+        border-color: #2d5a3d;
+        background-color: #eaf3ed;
+    }
+    .package-card img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+    .package-name {
+        font-weight: 600;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+    .package-action {
+        font-size: 0.8rem;
+        color: #2d5a3d;
+        font-weight: 600;
+    }
 
+    /* Modal Styles */
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050;
+    }
+    .modal-content {
+        background-color: white;
+        padding: 25px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    .modal-price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #2d5a3d;
+    }
+    .modal-body .carousel-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+    }
+</style>
 </head>
 <body>
 
@@ -26,16 +157,22 @@
 <!-- Main Content -->
 <div class="container mt-4 acabados-container">
 
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+        <div id="indicator-1" class="step-number">1</div>
+        <div class="step-line"></div>
+        <div id="indicator-2" class="step-number">2</div>
+        <div class="step-line"></div>
+        <div id="indicator-3" class="step-number">3</div>
+        <div class="step-line"></div>
+        <div id="indicator-4" class="step-number">4</div>
+    </div>
+
     <!-- Step 1: Kit Selection -->
     <div id="step1">
         <div class="acabados-header-text">
             <h2 class="main-title">Configura Tu Cocina Ideal</h2>
             <p class="subtitle">Elige el tipo de cocina que mejor se adapte a tus necesidades</p>
-        </div>
-        <div class="step-indicator">
-            <div class="step-number active">1</div>
-            <div class="step-line"></div>
-            <div class="step-number">2</div>
         </div>
         <div id="kits-container" class="kits-container">
             <!-- Kit cards will be injected here -->
@@ -48,11 +185,6 @@
             <h2 class="main-title">Configura Tu Cocina Ideal</h2>
             <p id="subtitle-step2" class="subtitle"></p>
         </div>
-        <div class="step-indicator">
-            <div class="step-number">1</div>
-            <div class="step-line"></div>
-            <div class="step-number active">2</div>
-        </div>
         <div id="colors-container" class="kits-container">
             <!-- Color cards will be injected here -->
         </div>
@@ -61,7 +193,7 @@
         </div>
     </div>
 
-    <!-- Step 3: Component Gallery & Confirmation -->
+    <!-- Step 3: Component Gallery -->
     <div id="step3" style="display: none;">
         <div class="acabados-header-text">
             <h2 id="title-step3" class="main-title"></h2>
@@ -72,17 +204,74 @@
         </div>
         <div class="action-buttons-step">
             <button id="btn-back-to-step2" class="btn-back"><i class="bi bi-arrow-left"></i> Volver</button>
-            <button id="btn-confirm" class="btn-confirm">Confirmar Selección</button>
+            <button id="btn-go-to-step4" class="btn-confirm">Siguiente <i class="bi bi-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Step 4: Pre-Order Summary -->
+    <div id="step4" style="display: none;">
+        <div class="acabados-header-text">
+            <h2 class="main-title">Confirma tu Selección</h2>
+        </div>
+        <div id="summary-container" class="summary-table">
+            <!-- Summary will be injected here -->
+        </div>
+        
+        <div class="packages-section">
+            <h3 class="packages-title">Paquetes Adicionales</h3>
+            <div id="packages-container" class="packages-scroll-container">
+                <!-- Additional packages will be injected here -->
+            </div>
+        </div>
+
+        <div class="action-buttons-step">
+            <button id="btn-back-to-step3" class="btn-back"><i class="bi bi-arrow-left"></i> Volver</button>
+            <button id="btn-pre-order" class="btn-confirm">Pre-Ordenar</button>
         </div>
     </div>
 
 </div>
+
+<!-- Package Detail Modal -->
+<div id="package-modal" class="modal-backdrop">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div>
+                <h3 id="modal-title" class="modal-title"></h3>
+                <p id="modal-price" class="modal-price"></p>
+            </div>
+            <button type="button" class="btn-close" id="modal-close-btn"></button>
+        </div>
+        <div class="modal-body">
+            <div id="modal-carousel" class="carousel slide">
+              <div id="modal-carousel-inner" class="carousel-inner">
+                <!-- Carousel items will be injected here -->
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#modal-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#modal-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            <p id="modal-description" class="mt-3"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="modal-close-footer-btn">Cerrar</button>
+            <button type="button" class="btn btn-primary" id="modal-add-btn">Añadir</button>
+        </div>
+    </div>
+</div>
+
 
 <?php 
 $active_page = 'inicio';
 include '../api/bottom_nav.php'; 
 ?>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFS --- //
@@ -96,62 +285,95 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    const step1 = document.getElementById('step1');
-    const step2 = document.getElementById('step2');
-    const step3 = document.getElementById('step3');
+    // --- Step Refs ---
+    const steps = [
+        document.getElementById('step1'),
+        document.getElementById('step2'),
+        document.getElementById('step3'),
+        document.getElementById('step4')
+    ];
+    const indicators = [
+        document.getElementById('indicator-1'),
+        document.getElementById('indicator-2'),
+        document.getElementById('indicator-3'),
+        document.getElementById('indicator-4')
+    ];
 
+    // --- Element Refs ---
     const kitsContainer = document.getElementById('kits-container');
     const colorsContainer = document.getElementById('colors-container');
     const galleryContainer = document.getElementById('gallery-container');
-
+    const summaryContainer = document.getElementById('summary-container');
+    const packagesContainer = document.getElementById('packages-container');
+    
     const subtitleStep2 = document.getElementById('subtitle-step2');
     const titleStep3 = document.getElementById('title-step3');
 
+    // --- Button Refs ---
     const btnBackToStep1 = document.getElementById('btn-back-to-step1');
     const btnBackToStep2 = document.getElementById('btn-back-to-step2');
-    const btnConfirm = document.getElementById('btn-confirm');
+    const btnGoToStep4 = document.getElementById('btn-go-to-step4');
+    const btnBackToStep3 = document.getElementById('btn-back-to-step3');
+    const btnPreOrder = document.getElementById('btn-pre-order');
 
+    // --- Modal Refs ---
+    const modal = document.getElementById('package-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalPrice = document.getElementById('modal-price');
+    const modalCarouselInner = document.getElementById('modal-carousel-inner');
+    const modalDescription = document.getElementById('modal-description');
+    const modalAddBtn = document.getElementById('modal-add-btn');
+    
+    // --- State Management ---
+    let allKits = [];
+    let allPackages = [];
     let selection = {
-        kit: null, // {id, nombre, ...}
-        color: null // {color_nombre, ...}
+        kit: null,
+        color: null,
+        addedPackages: new Map() // Using a Map to store added packages by ID
     };
 
     // --- NAVIGATION LOGIC --- //
     function goToStep(stepNumber) {
-        step1.style.display = (stepNumber === 1) ? 'block' : 'none';
-        step2.style.display = (stepNumber === 2) ? 'block' : 'none';
-        step3.style.display = (stepNumber === 3) ? 'block' : 'none';
+        steps.forEach((step, index) => {
+            step.style.display = (index + 1 === stepNumber) ? 'block' : 'none';
+        });
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index + 1 === stepNumber);
+        });
+        if (stepNumber === 4) {
+            renderStep4();
+        }
     }
 
     // --- DATA FETCHING & RENDERING --- //
     function renderKits(kits) {
         kitsContainer.innerHTML = '';
-        const standardKit = kits.find(kit => kit.id == 1); // Find kit with ID 1
-
+        // In Step 1, we only show the "Standar" kit.
+        const standardKit = kits.find(kit => kit.id == 1);
         if (standardKit) {
-            const kit = standardKit;
-            const card = document.createElement('div');
-            card.className = 'selection-card';
-            card.dataset.kitId = kit.id;
-            card.innerHTML = `
-                <div class="card-image-wrapper">
-                    <img src="${kit.url_imagen_principal}" alt="${kit.nombre}">
-                    <div class="card-overlay">
-                        <h3 class="card-title">${kit.nombre}</h3>
-                    </div>
-                </div>
-                <p class="card-description">${kit.descripcion}</p>
-            `;
-            card.addEventListener('click', () => {
-                selection.kit = kit;
-                renderColorOptions(kit);
-                goToStep(2);
-            });
-            kitsContainer.appendChild(card);
+            createKitCard(standardKit);
         } else {
-            // Optional: handle case where kit 1 is not found
             kitsContainer.innerHTML = '<p>El kit estándar no está disponible.</p>';
         }
+    }
+    
+    function createKitCard(kit) {
+        const card = document.createElement('div');
+        card.className = 'selection-card';
+        card.innerHTML = `
+            <div class="card-image-wrapper">
+                <img src="${kit.url_imagen_principal}" alt="${kit.nombre}">
+                <div class="card-overlay"><h3 class="card-title">${kit.nombre}</h3></div>
+            </div>
+            <p class="card-description">${kit.descripcion}</p>
+        `;
+        card.addEventListener('click', () => {
+            selection.kit = kit;
+            renderColorOptions(kit);
+            goToStep(2);
+        });
+        kitsContainer.appendChild(card);
     }
 
     function renderColorOptions(kit) {
@@ -164,12 +386,9 @@ document.addEventListener('DOMContentLoaded', () => {
             data.opciones.forEach(opcion => {
                 const card = document.createElement('div');
                 card.className = 'selection-card';
-                card.dataset.colorNombre = opcion.color_nombre;
                 card.innerHTML = `
                     <img src="${opcion.url_imagen_opcion}" alt="${opcion.nombre_opcion}">
-                    <div class="card-overlay">
-                        <h3 class="card-title">${opcion.nombre_opcion}</h3>
-                    </div>
+                    <div class="card-overlay"><h3 class="card-title">${opcion.nombre_opcion}</h3></div>
                 `;
                 card.addEventListener('click', () => {
                     selection.color = opcion;
@@ -182,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderGallery() {
-        titleStep3.textContent = `Tu Selección: ${selection.kit.nombre} ${selection.color.color_nombre}`;
+        titleStep3.textContent = `Tu Selección: ${selection.kit.nombre} ${selection.color.nombre_opcion}`;
         galleryContainer.innerHTML = `<div class="spinner-border"></div>`;
         fetch(`../api/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => res.json()).then(data => {
@@ -203,48 +422,211 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    async function renderStep4() {
+        // Render summary
+        const kitCost = parseFloat(selection.kit.costo) || 0;
+        let total = kitCost;
+        
+        let summaryHTML = `
+            <div class="summary-row">
+                <span class="summary-label">Tienes el modelo</span>
+                <span class="summary-value">${selection.kit.nombre}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Color</span>
+                <span class="summary-value">${selection.color.nombre_opcion}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Costo</span>
+                <span class="summary-value">${kitCost > 0 ? '$ ' + kitCost.toFixed(2) : 'Incluido'}</span>
+            </div>
+        `;
+        
+        selection.addedPackages.forEach(pkg => {
+            const pkgPrice = parseFloat(pkg.precio) || 0;
+            total += pkgPrice;
+            summaryHTML += `
+                <div class="summary-row">
+                    <span class="summary-label">${pkg.nombre}</span>
+                    <span class="summary-value">$ ${pkgPrice.toFixed(2)}</span>
+                </div>
+            `;
+        });
+
+        summaryHTML += `
+            <div class="summary-row">
+                <span class="summary-label summary-total">Total:</span>
+                <span class="summary-value summary-total">$ ${total.toFixed(2)}</span>
+            </div>
+        `;
+        summaryContainer.innerHTML = summaryHTML;
+
+        // Render packages
+        packagesContainer.innerHTML = '';
+        const isFullKitSelected = selection.kit.id == 2;
+        
+        // Logic to show "Standar" or "Full" as a switchable package
+        const switchableKit = isFullKitSelected ? allKits.find(k => k.id == 1) : allKits.find(k => k.id == 2);
+        if(switchableKit) {
+            const card = document.createElement('div');
+            card.className = 'package-card';
+            card.innerHTML = `
+                <img src="${switchableKit.url_imagen_principal}" alt="${switchableKit.nombre}">
+                <p class="package-name">${switchableKit.nombre}</p>
+                <span class="package-action">Ver más</span>
+            `;
+            card.addEventListener('click', () => {
+                selection.kit = switchableKit;
+                // Go back to step 2 to select color for the new kit
+                goToStep(2);
+            });
+            packagesContainer.appendChild(card);
+        }
+
+        allPackages.forEach(pkg => {
+            const card = document.createElement('div');
+            card.className = 'package-card';
+            if(selection.addedPackages.has(pkg.id)) {
+                card.classList.add('added');
+            }
+            card.innerHTML = `
+                <img src="${(pkg.fotos && pkg.fotos.length > 0) ? pkg.fotos[0] : 'https://placehold.co/300x200'}" alt="${pkg.nombre}">
+                <p class="package-name">${pkg.nombre}</p>
+                <span class="package-action">Ver más</span>
+            `;
+            card.addEventListener('click', () => renderPackageModal(pkg));
+            packagesContainer.appendChild(card);
+        });
+    }
+
+    function renderPackageModal(pkg) {
+        modalTitle.textContent = pkg.nombre;
+        modalPrice.textContent = `$ ${parseFloat(pkg.precio).toFixed(2)}`;
+        modalDescription.textContent = pkg.descripcion;
+
+        modalCarouselInner.innerHTML = '';
+        (pkg.fotos && pkg.fotos.length > 0 ? pkg.fotos : ['https://placehold.co/600x400']).forEach((foto, index) => {
+            const item = document.createElement('div');
+            item.className = `carousel-item ${index === 0 ? 'active' : ''}`;
+            item.innerHTML = `<img src="${foto}" class="d-block w-100" alt="Foto de ${pkg.nombre}">`;
+            modalCarouselInner.appendChild(item);
+        });
+
+        // Update button state
+        if (selection.addedPackages.has(pkg.id)) {
+            modalAddBtn.textContent = 'Quitar';
+            modalAddBtn.classList.remove('btn-primary');
+            modalAddBtn.classList.add('btn-danger');
+        } else {
+            modalAddBtn.textContent = 'Añadir';
+            modalAddBtn.classList.remove('btn-danger');
+            modalAddBtn.classList.add('btn-primary');
+        }
+        
+        modalAddBtn.onclick = () => {
+            if (selection.addedPackages.has(pkg.id)) {
+                selection.addedPackages.delete(pkg.id);
+            } else {
+                selection.addedPackages.set(pkg.id, pkg);
+            }
+            closeModal();
+            renderStep4(); // Re-render summary and packages
+        };
+
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+    
     // --- EVENT LISTENERS --- //
     btnBackToStep1.addEventListener('click', () => goToStep(1));
     btnBackToStep2.addEventListener('click', () => goToStep(2));
-    btnConfirm.addEventListener('click', () => {
+    btnGoToStep4.addEventListener('click', () => goToStep(4));
+    btnBackToStep3.addEventListener('click', () => goToStep(3));
+    
+    [document.getElementById('modal-close-btn'), document.getElementById('modal-close-footer-btn')].forEach(btn => {
+        btn.addEventListener('click', closeModal);
+    });
+
+    btnPreOrder.addEventListener('click', () => {
         if (!selection.kit || !selection.color) {
-            alert('Por favor, complete su selección.');
+            alert('Error: No se ha completado la selección principal.');
             return;
         }
-        btnConfirm.disabled = true;
-        btnConfirm.textContent = 'Guardando…';
+
+        const finalSelection = {
+            propiedad_id: parseInt(propiedadId),
+            kit_id: selection.kit.id,
+            color: selection.color.color_nombre,
+            paquetes_adicionales: Array.from(selection.addedPackages.keys())
+        };
+
+        btnPreOrder.disabled = true;
+        btnPreOrder.textContent = 'Guardando…';
+
         fetch('../api/guardar_seleccion_acabados.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({
-                propiedad_id: parseInt(propiedadId),
-                kit_id: selection.kit.id,
-                color: selection.color.color_nombre
-            })
+            body: JSON.stringify(finalSelection)
         })
-        .then(res => res.json()).then(data => {
-            alert(data.mensaje || 'Error');
-            if(data.ok) { goToStep(1); /* O redirigir */ }
+        .then(res => res.json())
+        .then(data => {
+            if (data.ok) {
+                alert('¡Tu selección ha sido guardada con éxito!');
+                // Optionally, redirect or reset the view
+                goToStep(1); 
+            } else {
+                alert(`Error al guardar: ${data.mensaje || 'Error desconocido.'}`);
+            }
         })
-        .catch(err => alert('Error de conexión.'))
+        .catch(err => {
+            console.error('Error al guardar la selección:', err);
+            alert('Hubo un error de conexión al intentar guardar tu selección.');
+        })
         .finally(() => {
-            btnConfirm.disabled = false;
-            btnConfirm.textContent = 'Confirmar Selección';
+            btnPreOrder.disabled = false;
+            btnPreOrder.textContent = 'Pre-Ordenar';
         });
     });
 
     // --- INITIAL LOAD --- //
-    kitsContainer.innerHTML = `<div class="spinner-border"></div>`;
-    fetch(`../api/acabados_kits_disponibles.php?propiedad_id=${propiedadId}`, { headers: { 'Authorization': `Bearer ${token}` } })
-    .then(res => res.json()).then(data => {
-        if (!data.ok || data.kits.length === 0) {
-            document.querySelector('.acabados-container').innerHTML = '<h2>No hay acabados disponibles para esta propiedad.</h2>';
-            return;
-        }
-        renderKits(data.kits);
-    });
+    function initialLoad() {
+        kitsContainer.innerHTML = `<div class="spinner-border"></div>`;
+        const kitsPromise = fetch(`../api/acabados_kits_disponibles.php?propiedad_id=${propiedadId}`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.json());
+        const packagesPromise = fetch(`../api/paquetes_adicionales.php`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.json());
 
-    goToStep(1);
+        Promise.all([kitsPromise, packagesPromise])
+        .then(([kitsData, packagesData]) => {
+            if (!kitsData.ok || kitsData.kits.length === 0) {
+                document.querySelector('.acabados-container').innerHTML = '<h2>No hay acabados disponibles para esta propiedad.</h2>';
+                return;
+            }
+            allKits = kitsData.kits;
+            
+            if(packagesData.ok) {
+                allPackages = packagesData.paquetes;
+            }
+
+            // In Step 1, we only show the "Standar" kit.
+            const standardKit = allKits.find(kit => kit.id == 1);
+            if (standardKit) {
+                selection.kit = standardKit; // Pre-select standard kit
+                createKitCard(standardKit);
+            } else {
+                 kitsContainer.innerHTML = '<p>El kit estándar no está disponible.</p>';
+            }
+            
+            goToStep(1);
+        })
+        .catch(err => {
+            console.error("Error on initial load:", err);
+            document.querySelector('.acabados-container').innerHTML = '<h2>Error al cargar los datos.</h2>';
+        });
+    }
+
+    initialLoad();
 });
 </script>
 
