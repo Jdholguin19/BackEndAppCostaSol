@@ -812,8 +812,16 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
        * El contenido es el resumen detallado de todo lo que el cliente seleccionó, incluyendo el costo total, para que el personal pueda estar al tanto de inmediato y sin necesidad de consultar la aplicación.
 
 
+  7. Se modifico menu_front y menu2 para que guarde la propiedad
+  
+    1. En el Menú Principal (`menu_front.php`): Modifiqué el código para que, en el instante en que haces clic en la pestaña de una propiedad, su ID se guarde inmediatamente en localStorage.
 
+    2. En el Menú "Ver más" (`menu2.php`): Modifiqué los enlaces de este menú. Ahora, antes de redirigirte a "Selección de Acabados", el sistema primero lee la ID de la propiedad que se guardó en el paso anterior y la añade a la URL
+      (...php?propiedad_id=X).
 
+  El Resultado:
+
+  Gracias a este cambio, la comunicación entre las dos pantallas de menú ya no se pierde. El sistema siempre sabe cuál es tu propiedad activa, asegurando que el enlace a "Selección de Acabados" funcione correctamente y sin errores.
 
 
        

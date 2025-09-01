@@ -118,17 +118,13 @@ include '../api/bottom_nav.php';
         return;
     }*/
 
-    if ( menu.id === 1 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-        location.href = 'seleccion_acabados.php';          // <<<<<<
-        return;
-    } 
-
-
-
-    if ( menu.id === 2 ||
-        (menu.nombre || '').toUpperCase().includes('ACABADOS') ){
-        location.href = 'seleccion_acabados.php';          // <<<<<<
+    if ((menu.nombre || '').toUpperCase().includes('ACABADOS')) {
+        const propiedadId = localStorage.getItem('cs_propiedad_id');
+        if (!propiedadId) {
+            alert('Por favor, regrese al menú principal y seleccione una propiedad primero.');
+            return;
+        }
+        location.href = `seleccion_acabados.php?propiedad_id=${propiedadId}`;
         return;
     }
 

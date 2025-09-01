@@ -709,6 +709,7 @@ include '../api/bottom_nav.php';
         
         // Update current property and load fase
         currentProp = p.id;
+        localStorage.setItem('cs_propiedad_id', currentProp); // Save to localStorage
         currentManzana = p.manzana;
         currentSolar = p.solar;
         loadFase(p.id);
@@ -717,6 +718,7 @@ include '../api/bottom_nav.php';
       
       if(i===0){
         currentProp=p.id;  
+        localStorage.setItem('cs_propiedad_id', currentProp); // Save initial property to localStorage
         currentManzana=p.manzana;
         currentSolar=p.solar; 
         loadFase(p.id);
