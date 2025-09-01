@@ -18,6 +18,63 @@ USE `portalao_appCostaSol`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `acabado_detalle`
+--
+
+DROP TABLE IF EXISTS `acabado_detalle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `acabado_detalle` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `acabado_kit_id` int(10) unsigned NOT NULL,
+  `componente_id` int(10) unsigned NOT NULL,
+  `color` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Ej: Claro, Oscuro',
+  `url_imagen` varchar(2000) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_detalle_kit` (`acabado_kit_id`),
+  KEY `fk_detalle_componente` (`componente_id`),
+  CONSTRAINT `fk_detalle_componente` FOREIGN KEY (`componente_id`) REFERENCES `componente` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_detalle_kit` FOREIGN KEY (`acabado_kit_id`) REFERENCES `acabado_kit` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `acabado_detalle`
+--
+
+LOCK TABLES `acabado_detalle` WRITE;
+/*!40000 ALTER TABLE `acabado_detalle` DISABLE KEYS */;
+INSERT INTO `acabado_detalle` VALUES (1,2,1,'Claro','https://placehold.co/600x400/E1F5FE/37474F?text=Meson+Full+Claro'),(2,2,2,'Claro','https://placehold.co/600x400/E1F5FE/37474F?text=Anaquel+Sup.+Full+Claro'),(3,2,3,'Claro','https://placehold.co/600x400/E1F5FE/37474F?text=Anaquel+Inf.+Full+Claro'),(4,2,1,'Oscuro','https://placehold.co/600x400/37474F/E1F5FE?text=Meson+Full+Oscuro'),(5,2,2,'Oscuro','https://placehold.co/600x400/37474F/E1F5FE?text=Anaquel+Sup.+Full+Oscuro'),(6,2,3,'Oscuro','https://placehold.co/600x400/37474F/E1F5FE?text=Anaquel+Inf.+Full+Oscuro');
+/*!40000 ALTER TABLE `acabado_detalle` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `acabado_kit`
+--
+
+DROP TABLE IF EXISTS `acabado_kit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `acabado_kit` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Ej: Cocina Standar, Baño Principal',
+  `descripcion` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url_imagen_principal` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'URL de la imagen para el Paso 1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `acabado_kit`
+--
+
+LOCK TABLES `acabado_kit` WRITE;
+/*!40000 ALTER TABLE `acabado_kit` DISABLE KEYS */;
+INSERT INTO `acabado_kit` VALUES (1,'Cocina Standar','Acabados estándar para el modelo de cocina principal.','https://cedreo.com/wp-content/uploads/cloudinary/US_Kitchen_09_2D_554px_mg3dmt.jpg'),(2,'Cocina Full','Acabados de lujo para el modelo de cocina full equipada.','https://content.elmueble.com/medio/2022/02/11/00541744-o_520915c4_2000x1327.jpg');
+/*!40000 ALTER TABLE `acabado_kit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `agendamiento_visitas`
 --
 
@@ -37,6 +94,7 @@ CREATE TABLE `agendamiento_visitas` (
   `fecha_actualizacion` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `id_propiedad` bigint(20) unsigned DEFAULT NULL,
   `observaciones` text COLLATE utf8_unicode_ci COMMENT 'Objetivo o descripcion breve de la visita proporcionada por el usario',
+  `duracion_minutos` smallint(6) DEFAULT NULL COMMENT 'Duración específica de la cita en minutos',
   `leido` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_responsable_hora` (`responsable_id`,`fecha_reunion`,`hora_reunion`),
@@ -47,7 +105,7 @@ CREATE TABLE `agendamiento_visitas` (
   CONSTRAINT `agendamiento_visitas_ibfk_2` FOREIGN KEY (`responsable_id`) REFERENCES `responsable` (`id`),
   CONSTRAINT `fk_agendamiento_propiedad` FOREIGN KEY (`id_propiedad`) REFERENCES `propiedad` (`id`),
   CONSTRAINT `fk_visita_proposito` FOREIGN KEY (`proposito_id`) REFERENCES `proposito_agendamiento` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,8 +114,32 @@ CREATE TABLE `agendamiento_visitas` (
 
 LOCK TABLES `agendamiento_visitas` WRITE;
 /*!40000 ALTER TABLE `agendamiento_visitas` DISABLE KEYS */;
-INSERT INTO `agendamiento_visitas` VALUES (39,8,1,2,'2025-08-13 11:16:35','2025-08-15','10:00:00','PROGRAMADO',NULL,NULL,5,NULL,0),(41,8,2,4,'2025-08-13 11:58:47','2025-08-19','12:00:00','PROGRAMADO',NULL,NULL,5,NULL,0),(42,8,1,1,'2025-08-13 12:15:23','2025-08-27','15:00:00','PROGRAMADO',NULL,NULL,5,NULL,0),(43,8,2,1,'2025-08-14 11:50:40','2025-08-20','13:00:00','PROGRAMADO',NULL,NULL,5,NULL,0),(44,8,2,1,'2025-08-18 12:45:04','2025-08-19','15:00:00','PROGRAMADO',NULL,NULL,5,'Revisar la pared',0),(45,8,2,1,'2025-08-18 12:45:31','2025-08-26','12:00:00','PROGRAMADO',NULL,NULL,5,'',0),(46,8,2,1,'2025-08-18 12:45:59','2025-08-19','13:00:00','PROGRAMADO',NULL,NULL,5,'',0),(47,8,1,2,'2025-08-18 12:47:40','2025-08-21','14:00:00','PROGRAMADO',NULL,NULL,5,'',0),(48,8,1,3,'2025-08-18 12:48:10','2025-08-22','10:00:00','PROGRAMADO',NULL,NULL,5,'',0),(49,8,2,1,'2025-08-18 12:48:17','2025-08-21','14:00:00','PROGRAMADO',NULL,NULL,5,'',0),(50,8,1,4,'2025-08-18 12:48:28','2025-08-20','15:00:00','PROGRAMADO',NULL,NULL,5,'',0),(55,8,1,1,'2025-08-22 15:22:50','2025-08-28','15:00:00','PROGRAMADO',NULL,NULL,5,'Recorrer mi terrenito',0),(56,8,2,2,'2025-08-22 15:24:31','2025-08-25','12:00:00','PROGRAMADO',NULL,NULL,5,'Hola',0),(57,8,2,2,'2025-08-22 15:30:15','2025-08-26','13:00:00','PROGRAMADO',NULL,NULL,5,'',0),(58,9,2,2,'2025-08-25 12:43:38','2025-08-27','13:00:00','PROGRAMADO',NULL,NULL,14,'',0);
+INSERT INTO `agendamiento_visitas` VALUES (39,8,1,2,'2025-08-13 11:16:35','2025-08-15','10:00:00','PROGRAMADO',NULL,NULL,5,NULL,NULL,0),(41,8,2,4,'2025-08-13 11:58:47','2025-08-19','12:00:00','PROGRAMADO',NULL,NULL,5,NULL,NULL,0),(42,8,1,1,'2025-08-13 12:15:23','2025-08-27','15:00:00','PROGRAMADO',NULL,NULL,5,NULL,NULL,0),(43,8,2,1,'2025-08-14 11:50:40','2025-08-20','13:00:00','PROGRAMADO',NULL,NULL,5,NULL,NULL,0),(44,8,2,1,'2025-08-18 12:45:04','2025-08-19','15:00:00','PROGRAMADO',NULL,NULL,5,'Revisar la pared',NULL,0),(45,8,2,1,'2025-08-18 12:45:31','2025-08-26','12:00:00','PROGRAMADO',NULL,NULL,5,'',NULL,0),(46,8,2,1,'2025-08-18 12:45:59','2025-08-19','13:00:00','PROGRAMADO',NULL,NULL,5,'',NULL,0),(48,8,1,3,'2025-08-18 12:48:10','2025-08-22','10:00:00','PROGRAMADO',NULL,NULL,5,'',NULL,0),(49,8,2,1,'2025-08-18 12:48:17','2025-08-21','14:00:00','PROGRAMADO',NULL,NULL,5,'',NULL,0),(50,8,1,4,'2025-08-18 12:48:28','2025-08-20','15:00:00','PROGRAMADO',NULL,NULL,5,'',NULL,0),(55,8,1,1,'2025-08-22 15:22:50','2025-08-28','15:00:00','PROGRAMADO',NULL,NULL,5,'Recorrer mi terrenito',NULL,0),(58,9,2,2,'2025-08-25 12:43:38','2025-08-27','13:00:00','PROGRAMADO',NULL,NULL,14,'',NULL,0),(107,8,1,2,'2025-08-28 14:20:37','2025-09-10','09:00:00','PROGRAMADO',NULL,NULL,5,'',120,0),(108,8,2,2,'2025-08-28 14:20:46','2025-09-10','09:00:00','PROGRAMADO',NULL,NULL,5,'',120,0),(116,8,2,2,'2025-08-29 09:58:30','2025-09-15','13:00:00','PROGRAMADO',NULL,NULL,5,'',120,0);
 /*!40000 ALTER TABLE `agendamiento_visitas` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `componente`
+--
+
+DROP TABLE IF EXISTS `componente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `componente` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Ej: Mesón, Piso, Anaquel Superior',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `componente`
+--
+
+LOCK TABLES `componente` WRITE;
+/*!40000 ALTER TABLE `componente` DISABLE KEYS */;
+INSERT INTO `componente` VALUES (1,'Mesón'),(2,'Anaquel Superior'),(3,'Anaquel Inferior'),(4,'Piso'),(5,'Salpicadero');
+/*!40000 ALTER TABLE `componente` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -217,8 +299,37 @@ CREATE TABLE `etapa_construccion` (
 
 LOCK TABLES `etapa_construccion` WRITE;
 /*!40000 ALTER TABLE `etapa_construccion` DISABLE KEYS */;
-INSERT INTO `etapa_construccion` VALUES (1,'Cimentación',10,'La cimentación es la base de la casa. Aquí se prepara el suelo y se echa el cemento que sostiene toda la estructura.',1,'2025-06-12 10:39:44'),(2,'Losa',20,'La etapa de losa es cuando se arma y se vacía el piso de concreto que va encima de las paredes. Es como poner el “techo”',1,'2025-06-12 10:39:44'),(3,'Cubierta terminada',45,'La etapa de cubierta terminada es cuando ya se coloca el techo final de la casa. Puede ser de losa, teja, zinc, etc.',1,'2025-06-12 10:45:32'),(4,'Habitabilidad',95,'La etapa de habitabilidad es cuando la casa ya está lista para vivir. Ya tiene puertas, ventanas, servicios básicos, etc',1,'2025-06-12 10:45:32'),(5,'Entrega',100,'La etapa de entrega es cuando te entregan oficialmente la casa. Ya está terminada, revisada y lista para habitarla.',1,'2025-06-12 10:47:04');
+INSERT INTO `etapa_construccion` VALUES (1,'Cimentación',10,'Es la base de la vivienda. En esta etapa se prepara el terreno y se construyen los cimientos de concreto que darán estab',1,'2025-06-12 10:39:44'),(2,'Losa',20,'Consiste en la construcción de la plancha de concreto que se coloca sobre las paredes. Esta losa funciona como piso resi',1,'2025-06-12 10:39:44'),(3,'Cubierta terminada',45,'Corresponde a la instalación del techo definitivo de la vivienda, ya sea de losa, teja, zinc u otro material, lo que gar',1,'2025-06-12 10:45:32'),(4,'Habitabilidad',95,'En esta etapa la vivienda ya cuenta con puertas, ventanas, instalaciones eléctricas, agua y demás servicios básicos, que',1,'2025-06-12 10:45:32'),(5,'Entrega',100,'Es la fase final, en la cual la vivienda ha sido terminada, revisada y se entrega oficialmente al propietario lista para',1,'2025-06-12 10:47:04');
 /*!40000 ALTER TABLE `etapa_construccion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `kit_color_opcion`
+--
+
+DROP TABLE IF EXISTS `kit_color_opcion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `kit_color_opcion` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `acabado_kit_id` int(10) unsigned NOT NULL,
+  `nombre_opcion` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Ej: Cocina Estándar Clara',
+  `color_nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Ej: Claro, Oscuro',
+  `url_imagen_opcion` varchar(2000) COLLATE utf8_unicode_ci NOT NULL COMMENT 'URL de la imagen para el Paso 2',
+  PRIMARY KEY (`id`),
+  KEY `fk_opcion_kit_color` (`acabado_kit_id`),
+  CONSTRAINT `fk_opcion_kit_color` FOREIGN KEY (`acabado_kit_id`) REFERENCES `acabado_kit` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `kit_color_opcion`
+--
+
+LOCK TABLES `kit_color_opcion` WRITE;
+/*!40000 ALTER TABLE `kit_color_opcion` DISABLE KEYS */;
+INSERT INTO `kit_color_opcion` VALUES (1,1,'Cocina Estándar Clara','Claro','https://placehold.co/600x400/F5F5DC/333333?text=Estandar+Clara'),(2,1,'Cocina Estándar Oscura','Oscuro','https://placehold.co/600x400/333333/F5F5DC?text=Estandar+Oscura'),(3,2,'Cocina Full Clara','Claro','https://placehold.co/600x400/E0F2F7/004D40?text=Full+Clara'),(4,2,'Cocina Full Oscura','Oscuro','https://placehold.co/600x400/004D40/E0F2F7?text=Full+Oscura');
+/*!40000 ALTER TABLE `kit_color_opcion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -346,45 +457,6 @@ INSERT INTO `pqr` VALUES (2,'SAC00002',8,5,3,NULL,1,'Cambien el piso',NULL,NULL,
 UNLOCK TABLES;
 
 --
--- Table structure for table `progreso_construccion`
---
-
-DROP TABLE IF EXISTS `progreso_construccion`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `progreso_construccion` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `id_propiedad` bigint(20) unsigned DEFAULT NULL,
-  `id_etapa` smallint(5) unsigned NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `porcentaje` tinyint(4) DEFAULT NULL,
-  `ruta_descarga_sharepoint` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `ruta_visualizacion_sharepoint` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `drive_item_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_creado_sharepoint` datetime DEFAULT NULL,
-  `usuario_creador` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_modificado_sharepoint` datetime DEFAULT NULL,
-  `mz` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `villa` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `usuario_modificado_sharepoint` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `estado` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = activo, 0 = inactivo',
-  `url_imagen` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_registro` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `id_propiedad` (`id_propiedad`),
-  KEY `id_etapa` (`id_etapa`),
-  KEY `idx_estado` (`estado`),
-  KEY `idx_fecha_sharepoint` (`fecha_creado_sharepoint`),
-  CONSTRAINT `progreso_construccion_ibfk_1` FOREIGN KEY (`id_propiedad`) REFERENCES `propiedad` (`id`),
-  CONSTRAINT `progreso_construccion_ibfk_2` FOREIGN KEY (`id_etapa`) REFERENCES `etapa_construccion` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1933 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `progreso_construccion`
---
-
-
 -- Table structure for table `propiedad`
 --
 
@@ -405,12 +477,16 @@ CREATE TABLE `propiedad` (
   `manzana` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `solar` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `villa` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `acabado_kit_seleccionado_id` int(10) unsigned DEFAULT NULL,
+  `acabado_color_seleccionado` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_usuario` (`id_usuario`),
   KEY `tipo_id` (`tipo_id`),
   KEY `etapa_id` (`etapa_id`),
   KEY `estado_id` (`estado_id`),
   KEY `fk_propiedad_urbanizacion` (`id_urbanizacion`),
+  KEY `fk_propiedad_kit_seleccionado` (`acabado_kit_seleccionado_id`),
+  CONSTRAINT `fk_propiedad_kit_seleccionado` FOREIGN KEY (`acabado_kit_seleccionado_id`) REFERENCES `acabado_kit` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_propiedad_urbanizacion` FOREIGN KEY (`id_urbanizacion`) REFERENCES `urbanizacion` (`id`),
   CONSTRAINT `propiedad_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`),
   CONSTRAINT `propiedad_ibfk_2` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_propiedad` (`id`),
@@ -425,7 +501,7 @@ CREATE TABLE `propiedad` (
 
 LOCK TABLES `propiedad` WRITE;
 /*!40000 ALTER TABLE `propiedad` DISABLE KEYS */;
-INSERT INTO `propiedad` VALUES (1,2,2,4,4,'2025-01-01','2030-06-01','2031-06-02','2025-06-17 08:24:56',3,'7119','03','03'),(2,2,2,3,4,'2025-02-01','2026-01-01','2026-06-13','2025-06-17 09:54:30',3,'7117','33','33'),(3,7,2,4,4,'2025-07-01','2030-07-10','2031-07-08','2025-07-23 08:57:32',3,'7119','03','03'),(4,7,2,3,4,'2025-07-01','2030-07-01','2031-07-01','2025-07-23 09:08:06',3,'7117','33','33'),(5,8,2,4,4,'2025-07-01','2030-07-10','2031-07-01','2025-07-24 08:57:32',3,'9999','99','99'),(12,11,2,3,4,'2025-07-01','2030-07-01','2031-07-01','2025-08-01 09:08:06',3,'7117','33','33'),(14,9,2,4,4,'2025-07-01','2030-07-10','2031-07-01','2025-07-24 08:57:32',3,'9999','99','99'),(15,9,2,3,4,'2025-07-01','2030-07-01','2031-07-01','2025-08-01 09:08:06',3,'7117','33','33');
+INSERT INTO `propiedad` VALUES (1,2,2,4,4,'2025-01-01','2030-06-01','2031-06-02','2025-06-17 08:24:56',3,'7119','03','03',NULL,NULL),(2,2,2,3,4,'2025-02-01','2026-01-01','2026-06-13','2025-06-17 09:54:30',3,'7117','33','33',NULL,NULL),(3,7,2,4,4,'2025-07-01','2030-07-10','2031-07-08','2025-07-23 08:57:32',3,'7119','03','03',NULL,NULL),(4,7,2,3,4,'2025-07-01','2030-07-01','2031-07-01','2025-07-23 09:08:06',3,'7117','33','33',NULL,NULL),(5,8,2,4,4,'2025-07-01','2030-07-10','2031-07-01','2025-07-24 08:57:32',3,'9999','99','99',1,'Claro'),(12,11,2,3,4,'2025-07-01','2030-07-01','2031-07-01','2025-08-01 09:08:06',3,'7117','33','33',NULL,NULL),(14,9,2,4,4,'2025-07-01','2030-07-10','2031-07-01','2025-07-24 08:57:32',3,'9999','99','99',NULL,NULL),(15,9,2,3,4,'2025-07-01','2030-07-01','2031-07-01','2025-08-01 09:08:06',3,'7117','33','33',NULL,NULL);
 /*!40000 ALTER TABLE `propiedad` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -454,61 +530,6 @@ LOCK TABLES `proposito_agendamiento` WRITE;
 /*!40000 ALTER TABLE `proposito_agendamiento` DISABLE KEYS */;
 INSERT INTO `proposito_agendamiento` VALUES (1,'Recorrido de Obra','https://app.costasol.com.ec/iconos/LogoCostaSolVerde.svg',1,'2025-06-27 10:26:18'),(2,'Elección de acabados','https://app.costasol.com.ec/iconos/SeleccionAcabados.svg',1,'2025-06-27 10:26:18'),(3,'Consultas con servicio al cliente ','https://app.costasol.com.ec/iconos/Agendamientos.svg',1,'2025-06-27 10:26:43'),(4,'Consultas con crédito y cobranzas','https://app.costasol.com.ec/iconos/CreditoHipotecario.svg',1,'2025-06-27 10:26:43');
 /*!40000 ALTER TABLE `proposito_agendamiento` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `registro_login`
---
-
-DROP TABLE IF EXISTS `registro_login`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `registro_login` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `id_usuario` bigint(20) unsigned DEFAULT NULL,
-  `id_responsable` bigint(20) unsigned DEFAULT NULL,
-  `estado_login` enum('EXITO','FALLIDO') COLLATE utf8_unicode_ci NOT NULL,
-  `ip` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `user_agent` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fecha_ingreso` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `id_usuario` (`id_usuario`),
-  KEY `id_responsable` (`id_responsable`),
-  CONSTRAINT `registro_login_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=783 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `registro_login`
---
-
---
--- Table structure for table `registro_recuperacion_contrasena`
---
-
-DROP TABLE IF EXISTS `registro_recuperacion_contrasena`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `registro_recuperacion_contrasena` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `id_usuario` bigint(20) unsigned NOT NULL,
-  `codigo` char(6) COLLATE utf8_unicode_ci NOT NULL,
-  `estado_solicitud` enum('PENDIENTE','USADO','VENCIDO') COLLATE utf8_unicode_ci DEFAULT 'PENDIENTE',
-  `fecha_solicitud` datetime DEFAULT CURRENT_TIMESTAMP,
-  `fecha_expira` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_usuario` (`id_usuario`),
-  CONSTRAINT `registro_recuperacion_contrasena_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `registro_recuperacion_contrasena`
---
-
-LOCK TABLES `registro_recuperacion_contrasena` WRITE;
-/*!40000 ALTER TABLE `registro_recuperacion_contrasena` DISABLE KEYS */;
-/*!40000 ALTER TABLE `registro_recuperacion_contrasena` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -543,7 +564,7 @@ CREATE TABLE `responsable` (
 
 LOCK TABLES `responsable` WRITE;
 /*!40000 ALTER TABLE `responsable` DISABLE KEYS */;
-INSERT INTO `responsable` VALUES (1,'Ana María Felix','mixcrafttopyt@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg','SAC',1,'2025-06-24 11:03:35','2025-08-26 10:25:52','uRJmvE0XG/oriZt4NrY8rRua19Aq+l7E','10500dd3-68aa-47a6-ae8c-bd9e6484465e','2025-08-26 16:25:52'),(2,'Carla Oquendo','jdholguin@tes.edu.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png','SAC',1,'2025-06-24 11:07:21','2025-08-28 07:00:08','MyBHpfltlkXoSRqDQqIbXzAixAmjsgOX','c3925247-841e-41d7-be9a-30560a3b7a01','2025-08-28 13:00:08'),(3,'Admin','admin@thaliavictoria.com.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPerfil/68a79276ed803-profile-3.png','SAC',1,'2025-08-13 09:25:21','2025-08-26 07:11:27','CCAm6iWGVgItYukte6T52lBcLGzL1975','7d49b608-347b-4308-954e-1edc4e1b6dee','2025-08-26 13:11:27');
+INSERT INTO `responsable` VALUES (1,'Ana María Felix','mixcrafttopyt@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg','SAC',1,'2025-06-24 11:03:35','2025-08-26 10:25:52','uRJmvE0XG/oriZt4NrY8rRua19Aq+l7E','10500dd3-68aa-47a6-ae8c-bd9e6484465e','2025-08-26 16:25:52'),(2,'Carla Oquendo','jdholguin@tes.edu.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png','SAC',1,'2025-06-24 11:07:21','2025-09-01 07:53:30','o8iajKsqLQBwJiajGRTK74gnlEbTfw3v','c3925247-841e-41d7-be9a-30560a3b7a01','2025-09-01 13:53:30'),(3,'Admin','admin@thaliavictoria.com.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPerfil/68a79276ed803-profile-3.png','SAC',1,'2025-08-13 09:25:21','2025-08-26 07:11:27','CCAm6iWGVgItYukte6T52lBcLGzL1975','7d49b608-347b-4308-954e-1edc4e1b6dee','2025-08-26 13:11:27');
 /*!40000 ALTER TABLE `responsable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -604,12 +625,18 @@ CREATE TABLE `respuesta_ctg` (
   CONSTRAINT `fk_resp_resp` FOREIGN KEY (`responsable_id`) REFERENCES `responsable` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_resp_responsable` FOREIGN KEY (`responsable_id`) REFERENCES `responsable` (`id`),
   CONSTRAINT `fk_resp_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `respuesta_ctg`
 --
+
+LOCK TABLES `respuesta_ctg` WRITE;
+/*!40000 ALTER TABLE `respuesta_ctg` DISABLE KEYS */;
+INSERT INTO `respuesta_ctg` VALUES (11,7,7,2,'hola',NULL,'2025-07-23 11:49:54',0),(12,7,7,2,'En que lo puedo ayudar',NULL,'2025-07-23 11:53:21',0),(13,7,7,2,'hola',NULL,'2025-07-23 12:10:41',0),(14,7,7,2,'si',NULL,'2025-07-23 14:28:21',0),(15,7,7,2,'Hola',NULL,'2025-07-23 14:38:19',0),(16,7,7,2,'Que tal',NULL,'2025-07-23 14:44:58',0),(17,7,7,2,'Si',NULL,'2025-07-23 15:41:59',0),(18,7,7,2,'m',NULL,'2025-07-23 15:55:54',0),(19,7,7,2,'si',NULL,'2025-07-23 16:20:01',0),(21,7,7,2,'HOLA',NULL,'2025-07-24 10:49:24',0),(22,17,7,1,'hola',NULL,'2025-07-24 14:49:16',1),(23,17,NULL,1,'hola',NULL,'2025-07-24 15:10:23',0),(24,17,7,NULL,'necesito ayuda',NULL,'2025-07-24 15:13:43',1),(25,17,NULL,1,'claro dime',NULL,'2025-07-24 15:14:45',0),(26,7,NULL,2,'hola',NULL,'2025-07-24 15:47:48',0),(27,18,8,NULL,'Hola',NULL,'2025-07-24 16:09:43',1),(30,17,NULL,1,'holA',NULL,'2025-07-28 08:29:29',0),(31,7,NULL,2,'digame',NULL,'2025-07-28 08:33:29',0),(32,18,8,NULL,'Hol',NULL,'2025-07-28 08:39:16',1),(64,21,NULL,2,'Buenas',NULL,'2025-07-30 12:26:54',1),(78,21,8,NULL,'hola',NULL,'2025-08-07 08:25:59',1),(79,21,NULL,2,'como le va',NULL,'2025-08-07 08:26:21',1),(80,21,8,NULL,'digame',NULL,'2025-08-07 08:26:36',1),(81,21,NULL,2,'hola',NULL,'2025-08-07 15:33:14',1),(82,21,NULL,2,'vale respecto a su opinion no opino que sea oportuno la respuesta anonadada',NULL,'2025-08-07 16:04:58',1),(83,21,NULL,2,'hola',NULL,'2025-08-07 16:48:25',1),(84,21,NULL,2,'si',NULL,'2025-08-07 16:50:48',1),(85,21,8,NULL,'no',NULL,'2025-08-07 16:57:39',1),(86,21,NULL,2,'buenas',NULL,'2025-08-08 08:45:27',1),(87,21,8,NULL,'digame',NULL,'2025-08-08 08:46:05',1),(88,21,NULL,2,'el que',NULL,'2025-08-08 08:47:02',1),(89,21,8,NULL,'que cosa de que',NULL,'2025-08-08 08:48:46',1),(90,21,NULL,2,'no se dime tu',NULL,'2025-08-08 08:48:59',1),(91,21,8,NULL,'hola',NULL,'2025-08-08 10:49:27',1),(92,21,8,NULL,'hola',NULL,'2025-08-12 09:11:37',1),(93,21,NULL,2,'si','https://app.costasol.com.ec/ImagenesPQR_respuestas/689b4bb2c72a9-email-signature.png','2025-08-12 09:12:02',1),(94,21,8,NULL,'hola',NULL,'2025-08-12 09:14:08',1),(95,21,NULL,2,'diga',NULL,'2025-08-12 09:14:24',1),(96,21,8,NULL,'holaaaa',NULL,'2025-08-12 11:14:14',1),(97,21,NULL,2,'Diga',NULL,'2025-08-12 11:14:37',1),(98,21,8,NULL,'hola\r\n}',NULL,'2025-08-13 16:52:30',1),(99,21,NULL,2,'hola',NULL,'2025-08-13 16:52:47',1),(100,21,NULL,2,'hola',NULL,'2025-08-13 16:53:12',1),(101,21,NULL,2,'ohola',NULL,'2025-08-13 16:53:31',1),(102,21,8,NULL,'hola',NULL,'2025-08-15 08:54:37',1),(103,21,NULL,2,'hola',NULL,'2025-08-15 08:54:48',1),(104,21,8,NULL,'Diga',NULL,'2025-08-15 13:47:43',1),(105,21,8,NULL,'No estoy',NULL,'2025-08-15 13:47:50',1),(106,21,8,NULL,'Hola, dígame estoy muy cansado',NULL,'2025-08-15 14:00:42',1),(107,21,8,NULL,'Hola',NULL,'2025-08-15 15:04:05',1),(108,21,8,NULL,'Hola',NULL,'2025-08-15 15:04:30',1),(109,21,8,NULL,'Hola',NULL,'2025-08-15 15:04:39',1),(110,21,NULL,2,'hola',NULL,'2025-08-15 15:05:25',1),(111,21,NULL,2,'hola',NULL,'2025-08-15 15:05:33',1),(112,21,NULL,2,'hola',NULL,'2025-08-15 15:06:13',1),(113,21,NULL,2,'hola',NULL,'2025-08-15 15:07:09',1),(114,21,NULL,2,'hola',NULL,'2025-08-15 15:08:58',1),(115,21,8,NULL,'No gracias',NULL,'2025-08-15 15:19:22',1),(116,21,NULL,2,'de o que',NULL,'2025-08-15 15:19:49',1),(117,21,NULL,2,'sw',NULL,'2025-08-15 15:19:59',1),(118,21,8,NULL,'Hola',NULL,'2025-08-15 16:50:24',1),(119,21,8,NULL,'Hila',NULL,'2025-08-15 17:02:56',1),(120,21,8,NULL,'Dígame ayúdeme pues',NULL,'2025-08-15 17:03:38',1),(121,21,8,NULL,'Hola',NULL,'2025-08-15 17:03:46',1),(122,21,8,NULL,'Hablé pues',NULL,'2025-08-18 08:16:47',1),(123,21,NULL,2,'el que o que',NULL,'2025-08-18 08:17:15',1),(124,21,NULL,2,'diga',NULL,'2025-08-18 08:18:11',1),(125,21,8,NULL,'no digo',NULL,'2025-08-18 08:19:53',1),(126,21,NULL,2,'si diga',NULL,'2025-08-18 08:45:04',1),(127,21,NULL,2,'el que',NULL,'2025-08-18 08:46:37',1),(128,18,NULL,1,'hola',NULL,'2025-08-20 17:09:35',0),(129,18,NULL,1,'hola',NULL,'2025-08-20 17:09:47',0),(130,18,NULL,1,'la',NULL,'2025-08-20 17:09:47',0),(131,18,NULL,1,'hola',NULL,'2025-08-20 17:18:51',0),(132,18,NULL,1,'aaaaaa',NULL,'2025-08-20 17:19:11',0),(133,26,9,NULL,'Si','https://app.costasol.com.ec/ImagenesPQR_respuestas/68ac81dc5d75b-BigmodelPoster.png','2025-08-25 09:31:40',1),(134,26,NULL,2,'hols','https://app.costasol.com.ec/ImagenesPQR_respuestas/68ac8294e5335-BigmodelPoster.png','2025-08-25 09:34:44',1),(135,26,NULL,2,'no sale','https://app.costasol.com.ec/ImagenesPQR_respuestas/68ac82bf6a686-BigmodelPoster.png','2025-08-25 09:35:27',1),(136,28,9,NULL,'si','https://app.costasol.com.ec/ImagenesCTG_respuestas/68ac8657d6faa-BigmodelPoster.png','2025-08-25 09:50:47',0),(137,29,9,NULL,'WWW','https://app.costasol.com.ec/ImagenesCTG_respuestas/68ac87cb077c3-BigmodelPoster.png','2025-08-25 09:56:59',0),(138,30,9,NULL,'<<<<<<<<<<','https://app.costasol.com.ec/ImagenesCTG_respuestas/68ac88c5f3994-BigmodelPoster.png','2025-08-25 10:01:09',1),(139,30,9,NULL,'<<<<<<<<<<','https://app.costasol.com.ec/ImagenesCTG_respuestas/68ac88c6409a5-BigmodelPoster.png','2025-08-25 10:01:10',1),(140,30,9,NULL,'apoco si',NULL,'2025-08-25 10:08:01',1),(141,26,9,NULL,'diga',NULL,'2025-08-25 10:09:21',1),(142,26,NULL,2,'mire','https://app.costasol.com.ec/ImagenesCTG_respuestas/68ac8abfbab71-BigmodelPoster.png','2025-08-25 10:09:35',1),(143,21,8,NULL,'Si o no','https://app.costasol.com.ec/ImagenesCTG_respuestas/68acceb979a8d-IMG-20250825-WA0002.jpg','2025-08-25 14:59:37',1),(144,26,9,NULL,'hola',NULL,'2025-08-26 07:39:02',1),(145,26,9,NULL,'hola',NULL,'2025-08-26 07:39:18',1),(146,26,9,NULL,'hla',NULL,'2025-08-26 07:39:34',1),(147,26,9,NULL,'hola',NULL,'2025-08-26 07:39:42',1),(148,21,NULL,2,'Hola',NULL,'2025-08-26 07:40:23',1),(149,21,NULL,2,'Hola',NULL,'2025-08-26 07:41:15',1),(150,21,NULL,2,'Hola',NULL,'2025-08-26 07:42:02',1),(151,21,NULL,2,'Hola',NULL,'2025-08-26 07:43:17',1),(152,21,NULL,2,'Hola',NULL,'2025-08-26 07:47:40',1),(153,26,NULL,2,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 08:43:53',1),(154,26,9,NULL,'eeeeeeeeeeee',NULL,'2025-08-26 08:45:10',1),(155,26,9,NULL,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 08:45:18',1),(156,26,9,NULL,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 09:53:17',1),(157,26,NULL,2,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 09:59:08',1),(158,26,9,NULL,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 10:12:00',1),(159,26,NULL,2,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 10:27:25',1),(160,26,9,NULL,'Aaa',NULL,'2025-08-26 10:37:56',1),(161,26,9,NULL,'Hola',NULL,'2025-08-26 11:02:39',1),(162,26,NULL,2,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 11:02:57',1),(163,26,NULL,2,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa','https://app.costasol.com.ec/ImagenesCTG_respuestas/68adf533e1add-BigmodelPoster.png','2025-08-26 11:56:03',1),(164,21,8,NULL,'si','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af41d14d7b3-PROYECTO ADMINISTRACIÓN CAPITULO 1.pdf','2025-08-27 11:35:13',0),(165,21,8,NULL,'audiio','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af44aa4e794-','2025-08-27 11:47:22',0),(166,21,8,NULL,'sql+','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af44dc6ffe3-','2025-08-27 11:48:12',0),(167,21,8,NULL,'aaaa','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af455d8e732-','2025-08-27 11:50:21',0),(168,21,8,NULL,'si','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af457a52197-','2025-08-27 11:50:50',0),(169,21,8,NULL,'eee','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af469cac603-','2025-08-27 11:55:40',0),(170,21,8,NULL,'sql+','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af46b07d35f-','2025-08-27 11:56:00',0),(171,21,8,NULL,'sql+','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af46b114015-','2025-08-27 11:56:01',0),(172,21,8,NULL,'sql','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af46f53d50f-','2025-08-27 11:57:09',0),(173,21,8,NULL,'hola','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af48021a506-PROYECTOADMINISTRACINCAPITULO1.pdf','2025-08-27 12:01:38',0),(174,21,8,NULL,'si','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af480d660b1-FORMATO_PROYECTOCONTABILIDADGENERAL.docx','2025-08-27 12:01:49',0),(175,21,8,NULL,'sqlk','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af482d344c1-portalao_appcostasol.sql','2025-08-27 12:02:21',0),(176,21,8,NULL,'img','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af484c66349-BigmodelPoster.png','2025-08-27 12:02:52',0),(177,21,8,NULL,'e','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af48598ca11-WhatsAppAudio2025-08-27at85151AM1.ogg','2025-08-27 12:03:05',0),(178,21,8,NULL,'hola','https://app.costasol.com.ec/ImagenesCTG_respuestas/68af48bb17044-65562-515098354_small.mp4','2025-08-27 12:04:43',0),(179,21,8,NULL,'eee','https://app.costasol.com.ec/ImagenesCTG_respuestas/BigmodelPoster.png','2025-08-27 12:11:34',0),(180,21,8,NULL,'ee','https://app.costasol.com.ec/ImagenesCTG_respuestas/BigmodelPoster%281%29.png','2025-08-28 07:22:02',0),(181,21,8,NULL,'sql','https://app.costasol.com.ec/ImagenesCTG_respuestas/portalao_appcostasol.sql','2025-08-28 07:22:23',0),(182,21,8,NULL,'eeee','https://app.costasol.com.ec/ImagenesCTG_respuestas/65562-515098354_small.mp4','2025-08-28 07:24:00',0),(183,21,8,NULL,'lll','https://app.costasol.com.ec/ImagenesCTG_respuestas/WhatsAppAudio2025-08-27at85151AM1.ogg','2025-08-28 07:25:14',0),(184,21,8,NULL,'excel','https://app.costasol.com.ec/ImagenesCTG_respuestas/REP-SAC-03ReportedeAtencinaContingenciasajunio2025__.xlsx','2025-08-28 08:03:38',0),(185,21,8,NULL,'svg','https://app.costasol.com.ec/ImagenesCTG_respuestas/user-tie.svg','2025-08-28 08:04:20',0),(186,21,8,NULL,'php','https://app.costasol.com.ec/ImagenesCTG_respuestas/login_front.php','2025-08-28 08:04:56',0),(187,21,8,NULL,'exe','https://app.costasol.com.ec/ImagenesCTG_respuestas/VSCodeUserSetup-x64-11021.exe','2025-08-28 08:07:36',0),(188,21,8,NULL,'wasa','https://app.costasol.com.ec/ImagenesCTG_respuestas/WhatsAppAudio2025-08-27at85151AM.mp4','2025-08-28 08:20:38',0),(189,21,8,NULL,'mp3','https://app.costasol.com.ec/ImagenesCTG_respuestas/WhatsAppAudio2025-08-27at85151AM1.mp3','2025-08-28 08:23:14',0),(190,21,8,NULL,'ssss','https://app.costasol.com.ec/ImagenesCTG_respuestas/WhatsAppAudio2025-08-27at85151AM1%281%29.mp3','2025-08-28 10:29:49',0),(191,21,8,NULL,'ogg','https://app.costasol.com.ec/ImagenesCTG_respuestas/WhatsAppAudio2025-08-27at85151AM1%281%29.ogg','2025-08-28 10:30:00',0);
+/*!40000 ALTER TABLE `respuesta_ctg` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `respuesta_pqr`
@@ -640,6 +667,12 @@ CREATE TABLE `respuesta_pqr` (
 --
 -- Dumping data for table `respuesta_pqr`
 --
+
+LOCK TABLES `respuesta_pqr` WRITE;
+/*!40000 ALTER TABLE `respuesta_pqr` DISABLE KEYS */;
+INSERT INTO `respuesta_pqr` VALUES (7,3,NULL,2,'no',NULL,'2025-08-07 09:14:59',1),(8,3,NULL,2,'si o no',NULL,'2025-08-07 15:33:46',1),(9,3,NULL,2,'hol',NULL,'2025-08-07 15:34:12',1),(10,3,8,NULL,'HOLA',NULL,'2025-08-07 15:35:02',1),(11,3,NULL,2,'digame',NULL,'2025-08-07 15:57:10',1),(12,3,8,NULL,'el que',NULL,'2025-08-07 15:57:23',1),(13,3,NULL,2,'no se',NULL,'2025-08-07 16:01:49',1),(14,3,8,NULL,'diga',NULL,'2025-08-08 11:17:39',1),(15,3,NULL,2,'que te digo',NULL,'2025-08-08 11:17:52',1),(16,3,NULL,2,'que te digo',NULL,'2025-08-08 11:18:27',1),(17,3,8,NULL,'diga pues',NULL,'2025-08-08 11:18:43',1),(18,3,NULL,2,'el que pues',NULL,'2025-08-08 11:18:50',1),(19,2,NULL,1,'hable pues',NULL,'2025-08-13 15:13:29',1),(20,2,8,NULL,'que quiere',NULL,'2025-08-13 15:14:49',1),(21,4,8,NULL,'que no deja',NULL,'2025-08-15 09:01:25',1),(22,4,NULL,2,'que cosa',NULL,'2025-08-15 09:01:41',1),(23,4,8,NULL,'elp que de que',NULL,'2025-08-15 09:30:46',1),(24,4,NULL,2,'que no deja',NULL,'2025-08-15 09:36:38',1),(25,4,8,NULL,'responda pues',NULL,'2025-08-15 09:37:34',1),(26,2,8,NULL,'cambien el piso no lee',NULL,'2025-08-15 09:38:57',1),(27,2,NULL,1,'no sea sapo',NULL,'2025-08-15 09:40:00',1),(28,2,NULL,1,'hable',NULL,'2025-08-15 09:46:06',1),(29,2,8,NULL,'Que deseas',NULL,'2025-08-15 09:47:33',1),(30,2,NULL,1,'hable',NULL,'2025-08-15 09:52:01',1),(31,2,NULL,1,'hable',NULL,'2025-08-15 09:52:03',1),(32,2,NULL,1,'responda',NULL,'2025-08-15 11:25:59',1),(33,3,NULL,2,'hola',NULL,'2025-08-15 13:14:28',1),(34,3,NULL,2,'hola',NULL,'2025-08-18 10:26:49',1),(35,3,8,NULL,'Hola',NULL,'2025-08-20 16:35:24',1),(36,3,NULL,2,'hola',NULL,'2025-08-20 16:36:24',1),(37,3,NULL,2,'responda',NULL,'2025-08-20 16:37:24',1),(38,3,NULL,2,'hableee',NULL,'2025-08-20 16:37:40',1),(39,3,NULL,2,'hola',NULL,'2025-08-20 16:40:06',1),(40,2,NULL,1,'hable',NULL,'2025-08-20 16:41:32',1),(41,3,NULL,2,'que pues',NULL,'2025-08-20 16:46:51',1),(42,3,8,NULL,'Diga',NULL,'2025-08-20 16:47:19',1),(43,3,8,NULL,'Hola',NULL,'2025-08-20 16:47:49',1),(44,3,NULL,2,'diga',NULL,'2025-08-20 16:48:12',0),(45,3,NULL,2,'hola',NULL,'2025-08-20 16:48:25',0),(46,3,NULL,2,'hol',NULL,'2025-08-21 07:05:53',0),(47,2,NULL,1,'hola',NULL,'2025-08-21 07:38:06',1),(48,2,NULL,1,'hablehable',NULL,'2025-08-21 07:42:42',1),(49,2,NULL,1,'digaaaa',NULL,'2025-08-21 16:08:23',1),(50,2,NULL,1,'hola',NULL,'2025-08-21 16:08:37',1),(51,7,9,NULL,'hi',NULL,'2025-08-25 10:25:27',1),(52,7,9,NULL,'jelou','https://app.costasol.com.ec/ImagenesPQR_respuestas/68ac8e83a6d94-BigmodelPoster.png','2025-08-25 10:25:39',1),(53,7,9,NULL,'ddd','https://app.costasol.com.ec/ImagenesPQR_respuestas/68ac95eb6c360-BigmodelPoster.png','2025-08-25 10:57:15',1),(54,7,NULL,2,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',NULL,'2025-08-26 11:44:32',1),(55,2,8,NULL,'si','https://app.costasol.com.ec/ImagenesPQR_respuestas/WhatsAppAudio2025-08-27at85151AM1.mp3','2025-08-28 08:29:48',0),(56,2,8,NULL,'eexce','https://app.costasol.com.ec/ImagenesPQR_respuestas/REP-SAC-03ReportedeAtencinaContingenciasajunio2025__.xlsx','2025-08-28 08:30:06',0),(57,2,8,NULL,'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz',NULL,'2025-08-28 08:37:49',0),(58,2,8,NULL,'wwdwdwad',NULL,'2025-08-28 08:41:26',0);
+/*!40000 ALTER TABLE `respuesta_pqr` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `rol`
@@ -890,7 +923,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (2,1,'Guillermo','Coello','0922797790','593982033045','gcoello@costasol.com.ec','$2y$10$RGAlN206FkvrivRqB86qE.pahU4Q7ThD3dWKgndwpJFbb75WN2t/.',1,'https://app.costasol.com.ec/FotoPerfil/FotoUsuarioGC.jpg','2025-06-10 10:42:58','BYFPee8yS1zM59X/7YPMSa1ifwJj3qA0',NULL,'2025-08-26 13:16:29'),(3,2,'Guillermo2','Coello2',NULL,NULL,'dr.gecb21@hotmail.com','$2y$10$MdNXTfLD2h3lbelU4QdN4eVssugUOrpDOrq5Yxx9U48ok8Finrh/u',0,NULL,'2025-06-10 11:05:44',NULL,NULL,NULL),(4,1,'Carlos','Pablo',NULL,NULL,'carlospablo@thaliavictoria.com.ec','$2y$10$S.HaX.E8Y0kc2hiGc1NJLus7h760yWOvh6ZqNcUSCx7T73iGRvVHi',0,NULL,'2025-07-03 13:41:37','HfiJ4S293HOsH/0XDUdnv6mq0c/0YtA3',NULL,NULL),(5,1,'Rafael','Romero',NULL,NULL,'rromero@thaliavictoria.com.ec','$2y$10$uqExlkQ7Xw6xfgzbQyqefOJmFOGrL4Qt.iMnUliWzb5iH9xVBZIou',0,NULL,'2025-07-14 16:11:24',NULL,NULL,NULL),(6,1,'Jonathan','Quijano',NULL,NULL,'jquijano@thaliavictoria.com.ec','$2y$10$AEHyeOLBMhOPt0PhJdpy8e8WWyMM7jEbKg6MQiwfYjCH7ZHnp/at2',0,NULL,'2025-07-14 16:12:49',NULL,NULL,NULL),(7,1,'Joffre','Holguin',NULL,NULL,'joffreholguin19@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa',1,'https://cdn-icons-png.flaticon.com/512/9187/9187532.png','2025-07-22 10:50:30','g9lrsOmr2BybWgrqIdB6k3dCmYOukdfX',NULL,'2025-08-22 20:30:44'),(8,1,'Daniel','Alarcon',NULL,NULL,'danielalarcon@gmail.com','$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC',1,'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png','2025-07-24 16:06:19','yepaW+B/Um3AcOJGLFSyuBxYPT9hi2pY','494528dd-7ee5-4f51-a7af-c4a4f01cb231','2025-08-28 15:03:22'),(9,2,'Felipe','Pilligua',NULL,NULL,'fepilligua@gmail.com','$2y$10$reWiHb52f7EPZNo98Q3kz.H0Df6eFFB6FJrgll3nGywKhCmgl/hvC',1,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-07-28 08:42:37','dZ02t67hHtax0J3kUkTxJSQHPj7uEyOn','c3925247-841e-41d7-be9a-30560a3b7a01','2025-08-27 15:53:30'),(10,1,'Jose','Tenesaca',NULL,NULL,'josesaca@gmail.com','$2y$10$8LEm..7rJ3ii/7QWAivJOuHJMjh3lQ4n/qEaqTI66Wu3YPKLcpble',0,NULL,'2025-08-05 13:25:22','iCHj2yX2GP5NG9lt7+NCkN/wPFr7tH2D',NULL,'2025-08-05 18:32:06'),(11,1,'Martin','Mera',NULL,NULL,'martin@gmial.com','$2y$10$UtKsBWDz.Hdf5DPHSlmV5etztt5mez967KwQccui431EB5woBL4au',0,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-08-06 08:16:43','/e58bq4hBsC07DEzSBncp12aLtrl1i44','a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac','2025-08-22 15:15:41'),(12,1,'prueba','1',NULL,NULL,'prueba@prueba.com','$2y$10$447WYbjzXhELxQuweQbcEuNgS4HiO.PxkyqBbm7zQ4XC.evK9FpoS',0,NULL,'2025-08-13 12:37:40','mc5PPSjS365g9XGa8+xrmQWPqdUg8t8s',NULL,'2025-08-13 17:37:52'),(13,1,'prueba','2',NULL,NULL,'prueba2@prueba.com','$2y$10$K2tKUN8/SS/o8Nhr7wnG3uTkzy5FdI3H8.kze3wAxd5w7a6tA0OZO',0,NULL,'2025-08-13 12:39:18',NULL,NULL,NULL),(14,1,'Geovanny','Herrera',NULL,NULL,'gherrera@costasol.com','$2y$10$J0CPBMknCZLdKYzSnjzPSe.lxh9ipybg8K1VWgliZxSj//u4tL8OK',0,NULL,'2025-07-23 07:56:38',NULL,NULL,NULL),(15,1,'Irma','Perez',NULL,NULL,'iperez@thaliavictoria.com.ec','$2y$10$MOGLPMPM2/JrPZt/KFh/oeoqV8Xg.U2S6RkLqPcya30gHGy43lXui',0,NULL,'2025-08-18 08:25:10',NULL,NULL,NULL),(16,2,'Guillermo','Coello',NULL,NULL,'gcoello@thaliavictoria.com.ec','$2y$10$BJWf37cacEKopZ2gAwO9.e55tu7Azw19MN7KzHSDJpHVHypylqLZm',0,NULL,'2025-08-26 07:25:17','ipAleDAF8NzM5N1lz3rZNDp4fLrK//kS',NULL,'2025-08-26 13:27:38');
+INSERT INTO `usuario` VALUES (2,1,'Guillermo','Coello','0922797790','593982033045','gcoello@costasol.com.ec','$2y$10$RGAlN206FkvrivRqB86qE.pahU4Q7ThD3dWKgndwpJFbb75WN2t/.',1,'https://app.costasol.com.ec/FotoPerfil/FotoUsuarioGC.jpg','2025-06-10 10:42:58','BYFPee8yS1zM59X/7YPMSa1ifwJj3qA0',NULL,'2025-08-26 13:16:29'),(3,2,'Guillermo2','Coello2',NULL,NULL,'dr.gecb21@hotmail.com','$2y$10$MdNXTfLD2h3lbelU4QdN4eVssugUOrpDOrq5Yxx9U48ok8Finrh/u',0,NULL,'2025-06-10 11:05:44',NULL,NULL,NULL),(4,1,'Carlos','Pablo',NULL,NULL,'carlospablo@thaliavictoria.com.ec','$2y$10$S.HaX.E8Y0kc2hiGc1NJLus7h760yWOvh6ZqNcUSCx7T73iGRvVHi',0,NULL,'2025-07-03 13:41:37','HfiJ4S293HOsH/0XDUdnv6mq0c/0YtA3',NULL,NULL),(5,1,'Rafael','Romero',NULL,NULL,'rromero@thaliavictoria.com.ec','$2y$10$uqExlkQ7Xw6xfgzbQyqefOJmFOGrL4Qt.iMnUliWzb5iH9xVBZIou',0,NULL,'2025-07-14 16:11:24',NULL,NULL,NULL),(6,1,'Jonathan','Quijano',NULL,NULL,'jquijano@thaliavictoria.com.ec','$2y$10$AEHyeOLBMhOPt0PhJdpy8e8WWyMM7jEbKg6MQiwfYjCH7ZHnp/at2',0,NULL,'2025-07-14 16:12:49',NULL,NULL,NULL),(7,1,'Joffre','Holguin',NULL,NULL,'joffreholguin19@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa',1,'https://cdn-icons-png.flaticon.com/512/9187/9187532.png','2025-07-22 10:50:30','g9lrsOmr2BybWgrqIdB6k3dCmYOukdfX',NULL,'2025-08-22 20:30:44'),(8,1,'Daniel','Alarcon',NULL,NULL,'danielalarcon@gmail.com','$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC',1,'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png','2025-07-24 16:06:19','naWz4bB6wr9RL1sLp3NAmx7VD233AosY','494528dd-7ee5-4f51-a7af-c4a4f01cb231','2025-09-01 13:56:49'),(9,2,'Felipe','Pilligua',NULL,NULL,'fepilligua@gmail.com','$2y$10$reWiHb52f7EPZNo98Q3kz.H0Df6eFFB6FJrgll3nGywKhCmgl/hvC',1,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-07-28 08:42:37','OwJHp+DGAnlKGUhrqZGsc7Fvcqv1ewVF','e3c1007c-5a95-422a-adc4-9f7f05a0ccbc','2025-08-29 22:46:28'),(10,1,'Jose','Tenesaca',NULL,NULL,'josesaca@gmail.com','$2y$10$8LEm..7rJ3ii/7QWAivJOuHJMjh3lQ4n/qEaqTI66Wu3YPKLcpble',0,NULL,'2025-08-05 13:25:22','iCHj2yX2GP5NG9lt7+NCkN/wPFr7tH2D',NULL,'2025-08-05 18:32:06'),(11,1,'Martin','Mera',NULL,NULL,'martin@gmial.com','$2y$10$UtKsBWDz.Hdf5DPHSlmV5etztt5mez967KwQccui431EB5woBL4au',0,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-08-06 08:16:43','/e58bq4hBsC07DEzSBncp12aLtrl1i44','a4a3aa15-bb5b-40c5-9fdf-0d8ecca668ac','2025-08-22 15:15:41'),(12,1,'prueba','1',NULL,NULL,'prueba@prueba.com','$2y$10$447WYbjzXhELxQuweQbcEuNgS4HiO.PxkyqBbm7zQ4XC.evK9FpoS',0,NULL,'2025-08-13 12:37:40','mc5PPSjS365g9XGa8+xrmQWPqdUg8t8s',NULL,'2025-08-13 17:37:52'),(13,1,'prueba','2',NULL,NULL,'prueba2@prueba.com','$2y$10$K2tKUN8/SS/o8Nhr7wnG3uTkzy5FdI3H8.kze3wAxd5w7a6tA0OZO',0,NULL,'2025-08-13 12:39:18',NULL,NULL,NULL),(14,1,'Geovanny','Herrera',NULL,NULL,'gherrera@costasol.com','$2y$10$J0CPBMknCZLdKYzSnjzPSe.lxh9ipybg8K1VWgliZxSj//u4tL8OK',0,NULL,'2025-07-23 07:56:38',NULL,NULL,NULL),(15,1,'Irma','Perez',NULL,NULL,'iperez@thaliavictoria.com.ec','$2y$10$MOGLPMPM2/JrPZt/KFh/oeoqV8Xg.U2S6RkLqPcya30gHGy43lXui',0,NULL,'2025-08-18 08:25:10',NULL,NULL,NULL),(16,2,'Guillermo','Coello',NULL,NULL,'gcoello@thaliavictoria.com.ec','$2y$10$BJWf37cacEKopZ2gAwO9.e55tu7Azw19MN7KzHSDJpHVHypylqLZm',0,NULL,'2025-08-26 07:25:17','ipAleDAF8NzM5N1lz3rZNDp4fLrK//kS',NULL,'2025-08-26 13:27:38');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -911,4 +944,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-28 10:50:22
+-- Dump completed on 2025-09-01 10:48:02

@@ -126,7 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- DATA FETCHING & RENDERING --- //
     function renderKits(kits) {
         kitsContainer.innerHTML = '';
-        kits.forEach((kit, index) => {
+        const standardKit = kits.find(kit => kit.id == 1); // Find kit with ID 1
+
+        if (standardKit) {
+            const kit = standardKit;
             const card = document.createElement('div');
             card.className = 'selection-card';
             card.dataset.kitId = kit.id;
@@ -145,14 +148,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 goToStep(2);
             });
             kitsContainer.appendChild(card);
-
-            if (index < kits.length - 1) {
-                const separator = document.createElement('div');
-                separator.className = 'card-separator';
-                separator.textContent = 'O';
-                kitsContainer.appendChild(separator);
-            }
-        });
+        } else {
+            // Optional: handle case where kit 1 is not found
+            kitsContainer.innerHTML = '<p>El kit estándar no está disponible.</p>';
+        }
     }
 
     function renderColorOptions(kit) {
