@@ -279,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('cs_token');
     const urlParams = new URLSearchParams(window.location.search);
     const propiedadId = urlParams.get('propiedad_id');
+    const storageKey = `acabados_draft_${propiedadId}`;
 
     if (!u.id || !token || !propiedadId) {
         document.querySelector('.acabados-container').innerHTML = '<h2>Error: No se ha especificado una propiedad.</h2>';
@@ -325,16 +326,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalAddBtn = document.getElementById('modal-add-btn');
     
     // --- State Management ---
+    let currentStep = 1;
     let allKits = [];
     let allPackages = [];
     let selection = {
         kit: null,
         color: null,
-        addedPackages: new Map() // Using a Map to store added packages by ID
+        addedPackages: new Map()
     };
+
+    // --- State Persistence --- //
+    function saveState() {
+        const state = {
+            currentStep: currentStep,
+            selection: {
+                ...selection,
+                addedPackages: Array.from(selection.addedPackages.entries()) // Convert Map to Array for JSON
+            }
+        };
+        localStorage.setItem(storageKey, JSON.stringify(state));
+    }
+
+    function loadState() {
+        const savedState = localStorage.getItem(storageKey);
+        if (savedState) {
+            const parsedState = JSON.parse(savedState);
+            currentStep = parsedState.currentStep || 1;
+            selection = {
+                ...parsedState.selection,
+                addedPackages: new Map(parsedState.selection.addedPackages || []) // Convert Array back to Map
+            };
+            return true;
+        }
+        return false;
+    }
+
+    function clearState() {
+        localStorage.removeItem(storageKey);
+    }
 
     // --- NAVIGATION LOGIC --- //
     function goToStep(stepNumber) {
+        currentStep = stepNumber;
         steps.forEach((step, index) => {
             step.style.display = (index + 1 === stepNumber) ? 'block' : 'none';
         });
@@ -344,12 +377,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (stepNumber === 4) {
             renderStep4();
         }
+        saveState();
     }
 
     // --- DATA FETCHING & RENDERING --- //
     function renderKits(kits) {
         kitsContainer.innerHTML = '';
-        // In Step 1, we only show the "Standar" kit.
         const standardKit = kits.find(kit => kit.id == 1);
         if (standardKit) {
             createKitCard(standardKit);
@@ -422,8 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function renderStep4() {
-        // Render summary
+    function renderStep4() {
         const kitCost = parseFloat(selection.kit.costo) || 0;
         let total = kitCost;
         
@@ -437,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="summary-value">${selection.color.nombre_opcion}</span>
             </div>
             <div class="summary-row">
-                <span class="summary-label">Costo</span>
+                <span class="summary-label">Costo Kit</span>
                 <span class="summary-value">${kitCost > 0 ? '$ ' + kitCost.toFixed(2) : 'Incluido'}</span>
             </div>
         `;
@@ -461,11 +493,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         summaryContainer.innerHTML = summaryHTML;
 
-        // Render packages
         packagesContainer.innerHTML = '';
         const isFullKitSelected = selection.kit.id == 2;
         
-        // Logic to show "Standar" or "Full" as a switchable package
         const switchableKit = isFullKitSelected ? allKits.find(k => k.id == 1) : allKits.find(k => k.id == 2);
         if(switchableKit) {
             const card = document.createElement('div');
@@ -473,11 +503,11 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <img src="${switchableKit.url_imagen_principal}" alt="${switchableKit.nombre}">
                 <p class="package-name">${switchableKit.nombre}</p>
-                <span class="package-action">Ver más</span>
+                <span class="package-action">Cambiar a este kit</span>
             `;
             card.addEventListener('click', () => {
                 selection.kit = switchableKit;
-                // Go back to step 2 to select color for the new kit
+                selection.addedPackages.clear(); // Clear packages when switching main kit
                 renderColorOptions(selection.kit);
                 goToStep(2);
             });
@@ -498,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', () => renderPackageModal(pkg));
             packagesContainer.appendChild(card);
         });
+        saveState();
     }
 
     function renderPackageModal(pkg) {
@@ -513,7 +544,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modalCarouselInner.appendChild(item);
         });
 
-        // Update button state
         if (selection.addedPackages.has(pkg.id)) {
             modalAddBtn.textContent = 'Quitar';
             modalAddBtn.classList.remove('btn-primary');
@@ -531,7 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 selection.addedPackages.set(pkg.id, pkg);
             }
             closeModal();
-            renderStep4(); // Re-render summary and packages
+            renderStep4();
         };
 
         modal.style.display = 'flex';
@@ -576,8 +606,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.ok) {
                 alert('¡Tu selección ha sido guardada con éxito!');
-                // Optionally, redirect or reset the view
-                goToStep(1); 
+                clearState(); // Clear draft on success
+                window.location.reload(); // Reload to start fresh
             } else {
                 alert(`Error al guardar: ${data.mensaje || 'Error desconocido.'}`);
             }
@@ -610,16 +640,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 allPackages = packagesData.paquetes;
             }
 
-            // In Step 1, we only show the "Standar" kit.
-            const standardKit = allKits.find(kit => kit.id == 1);
-            if (standardKit) {
-                selection.kit = standardKit; // Pre-select standard kit
-                createKitCard(standardKit);
+            const hasSavedState = loadState();
+
+            if (hasSavedState) {
+                // Restore the view to the saved state
+                renderKits(allKits);
+                renderColorOptions(selection.kit);
+                renderGallery();
+                goToStep(currentStep);
             } else {
-                 kitsContainer.innerHTML = '<p>El kit estándar no está disponible.</p>';
+                // Start fresh
+                const standardKit = allKits.find(kit => kit.id == 1);
+                if (standardKit) {
+                    selection.kit = standardKit;
+                    createKitCard(standardKit);
+                } else {
+                     kitsContainer.innerHTML = '<p>El kit estándar no está disponible.</p>';
+                }
+                goToStep(1);
             }
-            
-            goToStep(1);
         })
         .catch(err => {
             console.error("Error on initial load:", err);

@@ -22,6 +22,7 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 ├───.well-known\
 │   └───assetlinks.json
 ├───api\
+│   ├───acabado_costo.php
 │   ├───acabados_imagenes.php
 │   ├───acabados_kits_disponibles.php
 │   ├───bottom_nav.php
@@ -39,6 +40,7 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │   ├───notificaciones_mark_read.php
 │   ├───notificaciones.php
 │   ├───obtener_propiedades.php
+│   ├───paquetes_adicionales.php
 │   ├───paletavegetal.php
 │   ├───perfil.php
 │   ├───planos_disponibles.php
@@ -204,7 +206,14 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   Funcionalidades para añadir respuestas, actualizar el estado y gestionar observaciones.
 *   **Gestión de PQR (Peticiones, Quejas y Recomendaciones):**
     *   Funcionalidad similar a la gestión de CTG, para manejar peticiones, quejas y recomendaciones de los usuarios.
-*   **Gestión de Propiedades:**
+*   **Selección de Acabados Avanzada (Nuevo):**
+    *   **Flujo Guiado de 4 Etapas:** El sistema guía al usuario a través de un proceso de 4 pasos para una personalización completa, comenzando con la selección de un kit base, eligiendo colores, viendo una galería de componentes y finalizando en una pantalla de resumen.
+    *   **Costos Dinámicos:** El sistema calcula y muestra los costos asociados. El kit "Standar" es gratuito ("Incluido"), mientras que el kit "Full" tiene un costo adicional de $3,450 que se refleja en el total.
+    *   **Paquetes Adicionales:** En la etapa final, el usuario puede añadir paquetes extra (ej. "Encimera de Granito"). Cada paquete tiene su propio precio, descripción y fotos, visibles en una ventana flotante.
+    *   **Gestión de Paquetes:** El usuario puede añadir o quitar paquetes, y el costo total se actualiza en tiempo real en la pantalla de resumen.
+    *   **Cambio de Kit:** El usuario puede cambiar entre el kit "Standar" y "Full" directamente desde la pantalla de resumen, lo que reinicia la selección de color para el nuevo kit elegido.
+    *   **Guardado Final:** Al presionar "Pre-Ordenar", toda la selección (kit principal, color y paquetes adicionales) se guarda en la base de datos.
+    *   **Gestión de Propiedades:**
     *   Visualización de propiedades asignadas a los usuarios.
     *   Seguimiento del progreso de construcción de las propiedades (`fase_detalle.php`).
 *   **Gestión de Noticias:**
@@ -321,7 +330,17 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 *   **`api/propositos.php`**: Obtiene propósitos de agendamiento.
 *   **`api/responsables_list.php`**: Lista responsables.
 
-## Resumen de Funcionalidades del Frontend (para Migración a Laravel)
+
+### Selección de Acabados (Nuevo y Modificado)
+*   **`api/acabados_kits_disponibles.php`**: Devuelve los kits de acabados disponibles. **Modificado:** Ahora también devuelve el `costo` de cada kit.
+*   **`api/kit_opciones_color.php`**: Devuelve las opciones de color para un kit específico.
+*   **`api/acabados_imagenes.php`**: Devuelve las imágenes de los componentes para un kit y color determinados.
+*   **`api/acabado_costo.php` (Nuevo)**: Devuelve el costo de un kit de acabado específico.
+*   **`api/paquetes_adicionales.php` (Nuevo)**: Devuelve una lista de paquetes adicionales que se pueden añadir a la selección.
+*   **`api/guardar_seleccion_acabados.php`**: Guarda la selección final del usuario. **Modificado:** Ahora acepta un array de `paquetes_adicionales` y los guarda en la base de datos dentro de una transacción segura.
+
+
+
 
 Esta sección describe las funcionalidades implementadas en el frontend de la aplicación, que interactúan con la API y proporcionan la experiencia de usuario.
 
@@ -340,6 +359,12 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 
 *   **`menu_front.php`**: Permite al usuario seleccionar entre sus propiedades asignadas (si tiene varias) a través de pestañas dinámicas.
 *   **`fase_detalle.php`**: Muestra el detalle de las etapas de construcción de una propiedad específica (manzana y villa), incluyendo el porcentaje de avance y fotos asociadas. Interactúa con `api/etapas_manzana_villa.php` y `api/propiedad_fase.php`.
+
+... 
+*   **`seleccion_acabados.php`**: Implementa el flujo de selección de acabados. **Modificado:** Ha sido rediseñado para soportar un flujo de 4 etapas. Inicia con la selección del kit "Standar", permite la elección de colores y la visualización en galería. La nueva Etapa 4 ofrece un resumen detallado de la selección y costos, y permite la adición de paquetes extra a través de una interfaz de scroll horizontal y ventanas modales. La lógica de JavaScript maneja el estado temporal de la selección y los cálculos de costos en tiempo real antes del guardado final.
+...
+
+
 
 ### Gestión de Citas
 
@@ -453,6 +478,12 @@ El esquema de la base de datos se define en `portalao_appcostasol.sql` y está d
 *   `ctg`, `pqr`: Tablas principales para las solicitudes de servicio al cliente.
 *   `respuesta_ctg`, `respuesta_pqr`: Almacenan las respuestas a las solicitudes de CTG y PQR.
 *   `noticia`: Contiene los artículos de noticias y comunicados.
+
+*   **Tablas Modificadas:**
+    *   `acabado_kit`: Se añadió la columna `costo` (DECIMAL) para almacenar el precio de cada kit.
+*   **Nuevas Tablas:**
+    *   `paquetes_adicionales`: Almacena los paquetes extra que se pueden añadir, con su nombre, descripción, precio y fotos.
+    *   `propiedad_paquetes_adicionales`: Tabla intermedia que vincula una `propiedad` con los `paquetes_adicionales` que el usuario ha seleccionado.
 
 ## Tecnologías Utilizadas
 
@@ -756,3 +787,9 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
        2. Que la propiedad que estás modificando realmente te pertenece. Esto evita que un usuario pueda cambiar los acabados de la casa de otro.
    * Acción Final: Si todo es correcto, la API ejecuta una consulta UPDATE en la base de datos, guardando el ID de tu kit y el nombre del color en la fila correspondiente a tu propiedad. Finalmente,
      te muestra un mensaje de "Selección guardada correctamente".
+
+  5. Guardar seleccion en localStorage
+
+   * Guarda tu progreso automáticamente: Mientras avanzas en los 4 pasos de la selección, el sistema guarda en segundo plano cada elección que haces (el kit, el color, los paquetes que añades, etc.).
+   * Restaura tu sesión: Si por cualquier motivo refrescas la página, cierras la pestaña o sales de la aplicación y vuelves más tarde, el sistema cargará automáticamente tu última selección y te llevará exactamente al paso donde te quedaste.
+   * Se limpia al terminar: Una vez que completas el proceso y haces clic en "Pre-Ordenar", este progreso guardado se elimina para que, en una futura visita, puedas empezar una nueva selección desde cero.
