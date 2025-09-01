@@ -381,17 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- DATA FETCHING & RENDERING --- //
-    function renderKits(kits) {
-        kitsContainer.innerHTML = '';
-        const standardKit = kits.find(kit => kit.id == 1);
-        if (standardKit) {
-            createKitCard(standardKit);
-        } else {
-            kitsContainer.innerHTML = '<p>El kit estándar no está disponible.</p>';
-        }
-    }
-    
     function createKitCard(kit) {
+        kitsContainer.innerHTML = ''; // Clear the container first
         const card = document.createElement('div');
         card.className = 'selection-card';
         card.innerHTML = `
@@ -434,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderGallery() {
+        if (!selection.kit || !selection.color) return; // Safety check
         titleStep3.textContent = `Tu Selección: ${selection.kit.nombre} ${selection.color.nombre_opcion}`;
         galleryContainer.innerHTML = `<div class="spinner-border"></div>`;
         fetch(`../api/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
@@ -643,14 +635,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const hasSavedState = loadState();
 
-            if (hasSavedState) {
-                // Restore the view to the saved state
-                renderKits(allKits);
-                renderColorOptions(selection.kit);
-                renderGallery();
+            if (hasSavedState && selection.kit) {
+                // A valid state was loaded, re-render everything needed
+                createKitCard(selection.kit); 
+                if (selection.color) {
+                    renderColorOptions(selection.kit);
+                    renderGallery();
+                }
                 goToStep(currentStep);
             } else {
                 // Start fresh
+                clearState(); // Clear any potentially corrupt state
                 const standardKit = allKits.find(kit => kit.id == 1);
                 if (standardKit) {
                     selection.kit = standardKit;
