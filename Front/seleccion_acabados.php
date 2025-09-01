@@ -478,6 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', () => {
                 selection.kit = switchableKit;
                 // Go back to step 2 to select color for the new kit
+                renderColorOptions(selection.kit);
                 goToStep(2);
             });
             packagesContainer.appendChild(card);

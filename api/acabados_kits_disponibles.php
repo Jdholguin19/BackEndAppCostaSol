@@ -36,7 +36,7 @@ if (!$propiedad_id) {
 try {
     $conn = DB::getDB();
     // En el futuro, aquí se podría añadir lógica para filtrar kits por propiedad_id
-    $stmt = $conn->prepare("SELECT id, nombre, descripcion, url_imagen_principal FROM acabado_kit ORDER BY id ASC");
+    $stmt = $conn->prepare("SELECT id, nombre, descripcion, url_imagen_principal, costo FROM acabado_kit ORDER BY id ASC");
     $stmt->execute();
 
     $kits = $stmt->fetchAll(PDO::FETCH_ASSOC);
