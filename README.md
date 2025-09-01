@@ -6,150 +6,165 @@ Este proyecto es una aplicación web integral diseñada para la gestión de prop
 
 A continuación, se detalla la organización de los archivos y directorios principales del proyecto:
 
-C:.
-├── antiguo.php
-├── index.php
-├── manifest.json
-├── Manual_de_uso.pdf
-├── OneSignalSDKWorker.js
-├── paleta_vegetal.pdf
-├── portalao_appcostasol.sql
-├── README.md
-├── .well-known
-│   └── assetlinks.json
-├── api
-│   ├── bottom_nav.php
-│   ├── calendario_responsable.php
-│   ├── etapas_manzana_villa.php
-│   ├── garantias.php
-│   ├── login.php
-│   ├── logout.php
-│   ├── mcm.php
-│   ├── menu.php
-│   ├── noticias.php
-│   ├── notificaciones.php
-│   ├── notificaciones_count.php
-│   ├── notificaciones_mark_read.php
-│   ├── obtener_propiedades.php
-│   ├── paletavegetal.php
-│   ├── perfil.php
-│   ├── propiedad_fase.php
-│   ├── propositos.php
-│   ├── responsables_list.php
-│   ├── update_player_id.php
-│   ├── update_profile_picture.php
-│   ├── user_crud.php
-│   ├── user_list.php
-│   ├── validate_responsable.php
-│   ├── cita
-│   │   ├── citas_list.php
-│   │   ├── cita_cancelar.php
-│   │   ├── cita_create.php
-│   │   ├── cita_eliminar.php
-│   │   ├── cita_update_estado.php
-│   │   ├── dias_disponibles.php
-│   │   └── horas_disponibles.php
-│   ├── ctg
-│   │   ├── ctg_create.php
-│   │   ├── ctg_estados.php
-│   │   ├── ctg_insert_form.php
-│   │   ├── ctg_list.php
-│   │   ├── ctg_observaciones.php
-│   │   ├── ctg_respuestas.php
-│   │   ├── ctg_update_estado.php
-│   │   ├── ctg_update_observaciones.php
-│   │   ├── subtipo_ctg.php
-│   │   └── tipo_ctg.php
-│   ├── helpers
-│   │   └── notificaciones.php
-│   └── pqr
-│       ├── pqr_create.php
-│       ├── pqr_estados.php
-│       ├── pqr_insert_form.php
-│       ├── pqr_list.php
-│       ├── pqr_observaciones.php
-│       ├── pqr_respuestas.php
-│       ├── pqr_update_estado.php
-│       ├── pqr_update_observaciones.php
-│       ├── subtipo_pqr.php
-│       └── tipo_pqr.php
-├── appcostasol
-│   ├── api
-│   │   └── login.php
-│   ├── config
-│   │   └── db.php
-│   └── Front
-│       ├── users.php
-│       └── user_crud.php
-├── config
-│   └── db.php
-├── correos
-│   ├── EnviarCorreoNotificacionResponsable.php
-│   ├── EnviarCorreoNumeros.php
-│   ├── EnviarCorreoPlantilla.php
-│   ├── EnviarCorreoReciboPago.php
-│   └── EnviarCorreos.php
-├── Front
-│   ├── citas.php
-│   ├── cita_nueva.php
-│   ├── cita_responsable.php
-│   ├── fase_detalle.php
-│   ├── garantias.php
-│   ├── login_front.php
-│   ├── menu2.php
-│   ├── menu_front.php
-│   ├── noticia.php
-│   ├── notificaciones.php
-│   ├── panel_calendario.php
-│   ├── perfil.php
-│   ├── register_front.php
-│   ├── selec_acabado.php
-│   ├── users.php
-│   ├── assets
-│   │   └── css
-│   │       ├── style_citas.css
-│   │       ├── style_cita_nueva.css
-│   │       ├── style_ctg.css
-│   │       ├── style_ctg_detalle.css
-│   │       ├── style_ctg_nuevo.css
-│   │       ├── style_fdetale.css
-│   │       ├── style_garantia.css
-│   │       ├── style_login.css
-│   │       ├── style_main.css
-│   │       ├── style_noticia.css
-│   │       ├── style_notifications.css
-│   │       ├── style_panel_calendario.css
-│   │       ├── style_perfil.css
-│   │       ├── style_pqr.css
-│   │       ├── style_pqr_detalle.css
-│   │       ├── style_pqr_nuevo.css
-│   │       └── style_users.css
-│   ├── ctg
-│   │   ├── ctg.php
-│   │   ├── ctg_detalle.php
-│   │   └── ctg_nuevo.phpe
-│   └── pqr
-│       ├── pqr.php
-│       ├── pqr_detalle.php
-│       └── pqr_nuevo.php
-├── imagenes
-│   └── icons
-│       ├── icon-192x192.png
-│       ├── icon-256x256.png
-│       ├── icon-384x384.png
-│       └── icon-512x512.png
-├── ImagenesCTG_problema
-├── ImagenesCTG_respuestas
-├── ImagenesNoticias
-├── ImagenesPerfil
-├── ImagenesPQR_problema
-├── ImagenesPQR_respuestas
-├── ImagenesPQR_solucion
-├── SharePoint
-│   ├── ExtraerURL.php
-│   ├── MostrarImagenes.php
-│   └── mostrar_imagen.php
-└── uploads
+C:\xampp\htdocs\BackEndAppCostaSol\
+├───acabado.png
+├───antiguo.php
+├───color.png
+├───index.php
+├───manifest.json
+├───Manual_de_uso.pdf
+├───OneSignalSDKWorker.js
+├───paleta_vegetal.pdf
+├───portalao_appcostasol.sql
+├───README.md
+├───sql.sql
+├───.git\...
+├───.well-known\
+│   └───assetlinks.json
+├───api\
+│   ├───acabados_imagenes.php
+│   ├───acabados_kits_disponibles.php
+│   ├───bottom_nav.php
+│   ├───calendario_responsable.php
+│   ├───etapas_manzana_villa.php
+│   ├───garantias.php
+│   ├───guardar_seleccion_acabados.php
+│   ├───kit_opciones_color.php
+│   ├───login.php
+│   ├───logout.php
+│   ├───mcm.php
+│   ├───menu.php
+│   ├───noticias.php
+│   ├───notificaciones_count.php
+│   ├───notificaciones_mark_read.php
+│   ├───notificaciones.php
+│   ├───obtener_propiedades.php
+│   ├───paletavegetal.php
+│   ├───perfil.php
+│   ├───planos_disponibles.php
+│   ├───propiedad_fase.php
+│   ├───propositos.php
+│   ├───responsables_list.php
+│   ├───update_player_id.php
+│   ├───update_profile_picture.php
+│   ├───user_crud.php
+│   ├───user_list.php
+│   ├───validate_responsable.php
+│   ├───cita\
+│   │   ├───cita_cancelar.php
+│   │   ├───cita_create.php
+│   │   ├───cita_eliminar.php
+│   │   ├───cita_update_estado.php
+│   │   ├───citas_list.php
+│   │   ├───dias_disponibles.php
+│   │   └───horas_disponibles.php
+│   ├───ctg\
+│   │   ├───ctg_create.php
+│   │   ├───ctg_estados.php
+│   │   ├───ctg_insert_form.php
+│   │   ├───ctg_list.php
+│   │   ├───ctg_observaciones.php
+│   │   ├───ctg_respuestas.php
+│   │   ├───ctg_update_estado.php
+│   │   ├───ctg_update_observaciones.php
+│   │   ├───subtipo_ctg.php
+│   │   └───tipo_ctg.php
+│   ├───helpers\
+│   │   └───notificaciones.php
+│   └───pqr\
+│       ├───pqr_create.php
+│       ├───pqr_estados.php
+│       ├───pqr_insert_form.php
+│       ├───pqr_list.php
+│       ├───pqr_observaciones.php
+│       ├───pqr_respuestas.php
+│       ├───pqr_update_estado.php
+│       ├───pqr_update_observaciones.php
+│       ├───subtipo_pqr.php
+│       └───tipo_pqr.php
+├───appcostasol\
+│   ├───api\
+│   │   └───login.php
+│   ├───config\
+│   │   └───db.php
+│   └───Front\
+│       ├───user_crud.php
+│       └───users.php
+├───config\
+│   ├───db.php
+│   └───error_log
+├───correos\
+│   ├───EnviarCorreoNotificacionResponsable.php
+│   ├───EnviarCorreoNumeros.php
+│   ├───EnviarCorreoPlantilla.php
+│   ├───EnviarCorreoReciboPago.php
+│   └───EnviarCorreos.php
+├───Front\
+│   ├───cita_nueva.php
+│   ├───cita_responsable.php
+│   ├───citas.php
+│   ├───fase_detalle.php
+│   ├───garantias.php
+│   ├───login_front.php
+│   ├───menu_front.php
+│   ├───menu2.php
+│   ├───noticia.php
+│   ├───notificaciones.php
+│   ├───panel_calendario.php
+│   ├───perfil.php
+│   ├───register_front.php
+│   ├───seleccion_acabados.php
+│   ├───users.php
+│   ├───assets\
+│   │   └───css\
+│   │       ├───style_acabados.css
+│   │       ├───style_cita_nueva.css
+│   │       ├───style_citas.css
+│   │       ├───style_ctg_detalle.css
+│   │       ├───style_ctg_nuevo.css
+│   │       ├───style_ctg.css
+│   │       ├───style_fdetale.css
+│   │       ├───style_garantia.css
+│   │       ├───style_login.css
+│   │       ├───style_main.css
+│   │       ├───style_main2.css
+│   │       ├───style_noticia.css
+│   │       ├───style_notifications.css
+│   │       ├───style_panel_calendario.css
+│   │       ├───style_perfil.css
+│   │       ├───style_pqr_detalle.css
+│   │       ├───style_pqr_nuevo.css
+│   │       ├───style_pqr.css
+│   │       └───style_users.css
+│   ├───ctg\
+│   │   ├───ctg_detalle.php
+│   │   ├───ctg_nuevo.php
+│   │   └───ctg.php
+│   └───pqr\
+│       ├───pqr_detalle.php
+│       ├───pqr_nuevo.php
+│       └───pqr.php
+├───imagenes\
+│   └───icons\
+│       ├───icon-192x192.png
+│       ├───icon-256x256.png
+│       ├───icon-384x384.png
+│       └───icon-512x512.png
+├───ImagenesCTG_problema\
+├───ImagenesCTG_respuesta\
+├───ImagenesNoticias\
+├───ImagenesPerfil\
+├───ImagenesPQR_problema\
+├───ImagenesPQR_respuestas\
+├───ImagenesPQR_solucion\
+├───logs\
+│   └───error_log
+├───SharePoint\
+│   ├───ExtraerURL.php
+│   ├───mostrar_imagen.php
+│   └───MostrarImagenes.php
+└───uploads\
+
 ```
 
 ## Archivos Clave para el Funcionamiento y Entendimiento
@@ -701,4 +716,43 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
 
 
         **Se implemento una nueva logica de seleccion de acabados**
-        Se
+         Flujo de Funcionamiento Detallado
+
+  Este sistema funciona como un asistente interactivo que guía al usuario en tres etapas para personalizar los acabados de su cocina.
+
+  ---
+
+  1. Inicio y Carga de Kits (Paso 1)
+
+   * ¿Qué ocurre? Cuando entras a la página, el sistema primero verifica que hayas iniciado sesión y que hayas seleccionado una propiedad. Si todo está en orden, se comunica con la API
+     (api/acabados_kits_disponibles.php) para preguntar: "¿Qué tipos de cocina (kits) están disponibles para esta propiedad?".
+   * Visualización: La API le responde con una lista, por ejemplo: "Kit Esencial" y "Kit Premium". La página toma esta lista y te la muestra como tarjetas grandes con una imagen principal y una
+     descripción para que elijas una.
+
+  ---
+
+  2. Selección de Color/Estilo (Paso 2)
+
+   * ¿Qué ocurre? Haces clic en un kit, por ejemplo, "Kit Premium". En ese momento, la página oculta la selección de kits y muestra el segundo paso. Vuelve a llamar a otra API
+     (api/kit_opciones_color.php) y le pregunta: "Para el Kit Premium, ¿qué opciones de color o estilo hay?".
+   * Visualización: La API podría responder: "Blanco Polar" y "Gris Urbano". La página te muestra estas nuevas opciones como tarjetas, cada una con una imagen representativa del estilo.
+
+  ---
+
+  3. Galería y Confirmación Final (Paso 3)
+
+   * ¿Qué ocurre? Seleccionas un color, digamos "Blanco Polar". La página avanza al último paso. Por tercera vez, llama a una API (api/acabados_imagenes.php) y le pide: "Muéstrame todas las imágenes 
+     de los componentes del Kit Premium en color Blanco Polar".
+   * Visualización: La API devuelve una lista de imágenes detalladas: una foto de cómo se ven los gabinetes, otra de la encimera, otra de los tiradores, etc. La página te muestra todas estas imágenes
+     en una galería para que tengas una vista completa de tu elección. Abajo, aparecen dos botones: "Volver" y "Confirmar Selección".
+
+  ---
+
+  4. Guardado en la Base de Datos
+
+   * ¿Qué ocurre? Cuando estás seguro y haces clic en "Confirmar Selección", la página envía tu elección final a la API de guardado (api/guardar_seleccion_acabados.php).
+   * Seguridad: Esta API es la más importante. Antes de guardar, verifica dos cosas:
+       1. Que sigues autenticado.
+       2. Que la propiedad que estás modificando realmente te pertenece. Esto evita que un usuario pueda cambiar los acabados de la casa de otro.
+   * Acción Final: Si todo es correcto, la API ejecuta una consulta UPDATE en la base de datos, guardando el ID de tu kit y el nombre del color en la fila correspondiente a tu propiedad. Finalmente,
+     te muestra un mensaje de "Selección guardada correctamente".
