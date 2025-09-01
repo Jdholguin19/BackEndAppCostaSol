@@ -793,3 +793,27 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
    * Guarda tu progreso automáticamente: Mientras avanzas en los 4 pasos de la selección, el sistema guarda en segundo plano cada elección que haces (el kit, el color, los paquetes que añades, etc.).
    * Restaura tu sesión: Si por cualquier motivo refrescas la página, cierras la pestaña o sales de la aplicación y vuelves más tarde, el sistema cargará automáticamente tu última selección y te llevará exactamente al paso donde te quedaste.
    * Se limpia al terminar: Una vez que completas el proceso y haces clic en "Pre-Ordenar", este progreso guardado se elimina para que, en una futura visita, puedas empezar una nueva selección desde cero.
+
+
+  6. Nueva funcionalidad que he implementado es un Sistema de Notificación por Correo Automático para la selección de acabados.
+
+  ¿Qué hace?
+
+   1. Acción Desencadenante: Se activa justo cuando un cliente finaliza su selección y presiona el botón "Pre-Ordenar" en la Etapa 4.
+
+   2. Proceso en Backend: Inmediatamente después de que el sistema guarda exitosamente la selección del cliente en la base de datos, se inicia un segundo proceso automático que:
+       * Recopila todos los detalles de la selección: nombre del cliente, su propiedad, el kit elegido (Standar o Full), el color, y una lista de todos los paquetes adicionales con sus respectivos costos.
+       * Formatea esta información en una tabla de resumen clara y profesional.
+       * Envía un correo electrónico.
+
+   3. Destinatario y Contenido:
+       * El correo se envía automáticamente al responsable con ID 1.
+       * El asunto del correo es "Confirmación de Selección de Acabados para [Nombre del Cliente]".
+       * El contenido es el resumen detallado de todo lo que el cliente seleccionó, incluyendo el costo total, para que el personal pueda estar al tanto de inmediato y sin necesidad de consultar la aplicación.
+
+
+
+
+
+
+       
