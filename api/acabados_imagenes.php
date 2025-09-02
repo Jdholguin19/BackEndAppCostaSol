@@ -45,7 +45,8 @@ try {
     $stmt = $conn->prepare(
         "SELECT 
             c.nombre AS componente, 
-            ad.url_imagen
+            ad.url_imagen,
+            ad.descripcion
          FROM 
             acabado_detalle ad
          JOIN 

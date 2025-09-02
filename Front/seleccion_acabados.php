@@ -469,6 +469,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${img.url_imagen}" alt="${img.componente}">
                     <div class="gallery-card-title">${img.componente}</div>
                 `;
+                galCard.addEventListener('click', () => {
+                    console.log('Card clicked:', img); // DEBUG LINE
+                    showComponentModal(img);
+                });
                 galleryContainer.appendChild(galCard);
             });
         });
@@ -607,6 +611,10 @@ document.addEventListener('DOMContentLoaded', () => {
         modalPrice.textContent = `$ ${parseFloat(pkg.precio).toFixed(2)}`;
         modalDescription.textContent = pkg.descripcion;
 
+        // Re-enable price and add button in case they were hidden by component modal
+        modalPrice.style.display = 'block';
+        modalAddBtn.style.display = 'block';
+
         modalCarouselInner.innerHTML = '';
         (pkg.fotos && pkg.fotos.length > 0 ? pkg.fotos : ['https://placehold.co/600x400']).forEach((foto, index) => {
             const item = document.createElement('div');
@@ -638,8 +646,48 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'flex';
     }
 
+    function showComponentModal(component) {
+        // Reuse the existing package-modal
+        modalTitle.textContent = component.componente;
+        modalDescription.textContent = component.descripcion || 'No hay descripción disponible.';
+        
+        // Configure the modal for component view
+        modalPrice.style.display = 'none';
+        modalAddBtn.style.display = 'none';
+        
+        // Set the image in the carousel
+        modalCarouselInner.innerHTML = '';
+        const item = document.createElement('div');
+        item.className = 'carousel-item active';
+        item.innerHTML = `<img src="${component.url_imagen}" class="d-block w-100" alt="Foto de ${component.componente}">`;
+        modalCarouselInner.appendChild(item);
+
+        // Show the modal
+        modal.style.display = 'flex';
+    }
+
     function closeModal() {
         modal.style.display = 'none';
+    }
+
+    function showComponentModal(component) {
+        // Reuse the existing package-modal
+        modalTitle.textContent = component.componente;
+        modalDescription.textContent = component.descripcion || 'No hay descripción disponible.';
+        
+        // Configure the modal for component view
+        modalPrice.style.display = 'none';
+        modalAddBtn.style.display = 'none';
+        
+        // Set the image in the carousel
+        modalCarouselInner.innerHTML = '';
+        const item = document.createElement('div');
+        item.className = 'carousel-item active';
+        item.innerHTML = `<img src="${component.url_imagen}" class="d-block w-100" alt="Foto de ${component.componente}">`;
+        modalCarouselInner.appendChild(item);
+
+        // Show the modal
+        modal.style.display = 'flex';
     }
     
     // --- EVENT LISTENERS --- //
