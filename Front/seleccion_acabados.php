@@ -574,6 +574,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${selection.color.url_imagen_opcion}" class="summary-main-image" alt="${selection.color.nombre_opcion}" onerror="this.style.display='none'">
                 </a>
             </div>
+            <!-- NEW: Kit image -->
+            <div class="summary-visual-row">
+                <p class="summary-label">Plano de la cocina</p>
+                <a href="${selection.kit.url_imagen_principal}" data-featherlight="image">
+                    <img src="${selection.kit.url_imagen_principal}" class="summary-main-image" alt="${selection.kit.nombre}" onerror="this.style.display='none'">
+                </a>
+            </div>
         `;
 
         selection.addedPackages.forEach(pkg => {
