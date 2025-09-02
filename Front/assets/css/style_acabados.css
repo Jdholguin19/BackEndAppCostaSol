@@ -345,6 +345,17 @@ body {
         padding: 10px 20px;
         font-size: 0.9rem;
     }
+
+    .step-number {
+        width: 24px; /* Smaller width */
+        height: 24px; /* Smaller height */
+        font-size: 0.9rem; /* Smaller font size */
+    }
+
+    .step-line {
+        width: 30px; /* Shorter line */
+        margin: 0 5px; /* Smaller margin */
+    }
 }
 
 /* --- Step 5: Final Summary Styles --- */
