@@ -660,6 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btnPreOrderFinal.disabled = true;
         btnPreOrderFinal.textContent = 'Guardando…';
+        btnBackToStep4.disabled = true;
 
         fetch('../api/guardar_seleccion_acabados.php', {
             method: 'POST',
@@ -669,25 +670,68 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(data => {
             if (data.ok) {
-                alert('¡Tu selección ha sido guardada con éxito!');
                 clearState(); // Clear draft on success
-                window.location.reload(); // Reload to start fresh
+
+                // Hide the button container
+                btnPreOrderFinal.parentElement.style.display = 'none';
+
+                // Display a success message on the page
+                const successMessage = document.createElement('div');
+                successMessage.className = 'alert alert-success text-center mt-4';
+                successMessage.innerHTML = '<strong>¡Éxito!</strong> Tu selección ha sido guardada.';
+                finalSummaryContainer.insertAdjacentElement('afterend', successMessage);
             } else {
                 alert(`Error al guardar: ${data.mensaje || 'Error desconocido.'}`);
+                btnPreOrderFinal.disabled = false;
+                btnPreOrderFinal.textContent = 'Pre-Ordenar';
+                btnBackToStep4.disabled = false;
             }
         })
         .catch(err => {
             console.error('Error al guardar la selección:', err);
             alert('Hubo un error de conexión al intentar guardar tu selección.');
-        })
-        .finally(() => {
             btnPreOrderFinal.disabled = false;
             btnPreOrderFinal.textContent = 'Pre-Ordenar';
+            btnBackToStep4.disabled = false;
         });
     });
 
     // --- INITIAL LOAD --- //
     function initialLoad() {
+        // Primero, verificar si ya existe una selección guardada en el servidor
+        fetch(`../api/acabado_seleccion_guardada.php?propiedad_id=${propiedadId}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        .then(res => res.json())
+        .then(serverData => {
+            if (serverData.ok && serverData.seleccionGuardada) {
+                // Si hay una selección guardada, mostrar el resumen final y bloquear
+                selection.kit = serverData.data.kit;
+                selection.color = serverData.data.color;
+                selection.addedPackages = new Map(serverData.data.packages.map(p => [p.id, p]));
+
+                renderStep5();
+                goToStep(5);
+
+                // Ocultar botones y mostrar mensaje de estado final
+                const actionButtons = document.querySelector('#step5 .action-buttons-step');
+                if(actionButtons) actionButtons.style.display = 'none';
+                
+                const finalMessage = document.createElement('div');
+                finalMessage.className = 'alert alert-info text-center mt-4';
+                finalMessage.textContent = 'Dentro de poco te contactaremos para confirmar tu selección y continuar con el proceso. Si tienes alguna pregunta, no dudes en contactarnos. ¡Gracias!';
+                finalSummaryContainer.insertAdjacentElement('afterend', finalMessage);
+
+            } else {
+                // Si no hay selección guardada, proceder con el flujo normal
+                startSelectionFlow();
+            }
+        })
+        .catch(err => {
+            console.error("Error checking saved selection:", err);
+            document.querySelector('.acabados-container').innerHTML = '<h2>Error al verificar el estado de su selección.</h2>';
+        });
+    }
+
+    function startSelectionFlow() {
         kitsContainer.innerHTML = `<div class="spinner-border"></div>`;
         const kitsPromise = fetch(`../api/acabados_kits_disponibles.php?propiedad_id=${propiedadId}`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.json());
         const packagesPromise = fetch(`../api/paquetes_adicionales.php`, { headers: { 'Authorization': `Bearer ${token}` } }).then(res => res.json());

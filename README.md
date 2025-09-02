@@ -824,4 +824,4 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
   Gracias a este cambio, la comunicación entre las dos pantallas de menú ya no se pierde. El sistema siempre sabe cuál es tu propiedad activa, asegurando que el enlace a "Selección de Acabados" funcione correctamente y sin errores.
 
 
-       
+ 8. Etapa 5 implementada
