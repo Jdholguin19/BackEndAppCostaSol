@@ -7,9 +7,7 @@ Este proyecto es una aplicación web integral diseñada para la gestión de prop
 A continuación, se detalla la organización de los archivos y directorios principales del proyecto:
 
 C:\xampp\htdocs\BackEndAppCostaSol\
-├───acabado.png
 ├───antiguo.php
-├───color.png
 ├───index.php
 ├───manifest.json
 ├───Manual_de_uso.pdf
@@ -17,14 +15,15 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 ├───paleta_vegetal.pdf
 ├───portalao_appcostasol.sql
 ├───README.md
-├───sql.sql
 ├───.git\...
 ├───.well-known\
 │   └───assetlinks.json
 ├───api\
 │   ├───acabado_costo.php
+│   ├───acabado_seleccion_guardada.php
 │   ├───acabados_imagenes.php
 │   ├───acabados_kits_disponibles.php
+
 │   ├───bottom_nav.php
 │   ├───calendario_responsable.php
 │   ├───etapas_manzana_villa.php
@@ -207,12 +206,14 @@ El proyecto ofrece las siguientes funcionalidades principales:
 *   **Gestión de PQR (Peticiones, Quejas y Recomendaciones):**
     *   Funcionalidad similar a la gestión de CTG, para manejar peticiones, quejas y recomendaciones de los usuarios.
 *   **Selección de Acabados Avanzada (Nuevo):**
-    *   **Flujo Guiado de 4 Etapas:** El sistema guía al usuario a través de un proceso de 4 pasos para una personalización completa, comenzando con la selección de un kit base, eligiendo colores, viendo una galería de componentes y finalizando en una pantalla de resumen.
-    *   **Costos Dinámicos:** El sistema calcula y muestra los costos asociados. El kit "Standar" es gratuito ("Incluido"), mientras que el kit "Full" tiene un costo adicional de $3,450 que se refleja en el total.
-    *   **Paquetes Adicionales:** En la etapa final, el usuario puede añadir paquetes extra (ej. "Encimera de Granito"). Cada paquete tiene su propio precio, descripción y fotos, visibles en una ventana flotante.
-    *   **Gestión de Paquetes:** El usuario puede añadir o quitar paquetes, y el costo total se actualiza en tiempo real en la pantalla de resumen.
-    *   **Cambio de Kit:** El usuario puede cambiar entre el kit "Standar" y "Full" directamente desde la pantalla de resumen, lo que reinicia la selección de color para el nuevo kit elegido.
-    *   **Guardado Final:** Al presionar "Pre-Ordenar", toda la selección (kit principal, color y paquetes adicionales) se guarda en la base de datos.
+    *   **Flujo Guiado:** El sistema guía al usuario a través de un proceso intuitivo de varios pasos para una personalización completa, comenzando con la selección de un kit base, eligiendo colores, viendo una galería de componentes y finalizando en una pantalla de resumen.
+    *   **Costos Dinámicos:** El sistema calcula y muestra los costos asociados. El kit "Standar" es gratuito ("Incluido"), mientras que el kit "Full" tiene un costo adicional que se refleja en el total.
+    *   **Paquetes Adicionales:** En la etapa de resumen, el usuario puede añadir paquetes extra (ej. "Encimera de Granito"). Cada paquete tiene su propio precio, descripción y una galería de fotos ampliable.
+    *   **Experiencia de Usuario Mejorada:**
+        *   **Guardado Inteligente:** Al presionar "Pre-Ordenar", la selección se guarda y la interfaz muestra un mensaje de éxito sin recargar la página, evitando envíos duplicados.
+        *   **Visualización de Selección Guardada:** Si un usuario ya ha guardado su selección, al volver a la página verá directamente el resumen final en modo de solo lectura, asegurando consistencia.
+        *   **Galería de Imágenes Ampliable:** Todas las imágenes en el resumen final, tanto del kit como de los paquetes, se pueden ampliar con un clic para una mejor visualización, utilizando la librería Featherlight.
+    *   **Notificación por Correo:** Una vez guardada la selección, se envía automáticamente un correo de notificación a un responsable con el resumen detallado de la elección del cliente.
     *   **Gestión de Propiedades:**
     *   Visualización de propiedades asignadas a los usuarios.
     *   Seguimiento del progreso de construcción de las propiedades (`fase_detalle.php`).
@@ -332,12 +333,13 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 
 
 ### Selección de Acabados (Nuevo y Modificado)
-*   **`api/acabados_kits_disponibles.php`**: Devuelve los kits de acabados disponibles. **Modificado:** Ahora también devuelve el `costo` de cada kit.
+*   **`api/acabados_kits_disponibles.php`**: Devuelve los kits de acabados disponibles con su costo.
 *   **`api/kit_opciones_color.php`**: Devuelve las opciones de color para un kit específico.
 *   **`api/acabados_imagenes.php`**: Devuelve las imágenes de los componentes para un kit y color determinados.
 *   **`api/acabado_costo.php` (Nuevo)**: Devuelve el costo de un kit de acabado específico.
 *   **`api/paquetes_adicionales.php` (Nuevo)**: Devuelve una lista de paquetes adicionales que se pueden añadir a la selección.
-*   **`api/guardar_seleccion_acabados.php`**: Guarda la selección final del usuario. **Modificado:** Ahora acepta un array de `paquetes_adicionales` y los guarda en la base de datos dentro de una transacción segura.
+*   **`api/guardar_seleccion_acabados.php`**: Guarda la selección final del usuario, incluyendo los paquetes adicionales, y dispara una notificación por correo.
+*   **`api/acabado_seleccion_guardada.php` (Nuevo)**: Verifica si una propiedad ya tiene una selección de acabados guardada y devuelve los detalles. Se usa para mostrar el resumen final a los usuarios que ya completaron el proceso.
 
 
 
@@ -361,7 +363,7 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 *   **`fase_detalle.php`**: Muestra el detalle de las etapas de construcción de una propiedad específica (manzana y villa), incluyendo el porcentaje de avance y fotos asociadas. Interactúa con `api/etapas_manzana_villa.php` y `api/propiedad_fase.php`.
 
 ... 
-*   **`seleccion_acabados.php`**: Implementa el flujo de selección de acabados. **Modificado:** Ha sido rediseñado para soportar un flujo de 4 etapas. Inicia con la selección del kit "Standar", permite la elección de colores y la visualización en galería. La nueva Etapa 4 ofrece un resumen detallado de la selección y costos, y permite la adición de paquetes extra a través de una interfaz de scroll horizontal y ventanas modales. La lógica de JavaScript maneja el estado temporal de la selección y los cálculos de costos en tiempo real antes del guardado final.
+*   **`seleccion_acabados.php`**: Implementa el flujo de selección de acabados. **Modificado:** Ha sido rediseñado para soportar un flujo de múltiples etapas. La lógica de JavaScript maneja el estado temporal de la selección (guardado en `localStorage`) y los cálculos de costos en tiempo real. **Mejoras de UX:** Tras guardar la selección, la interfaz se actualiza para mostrar una confirmación sin recargar la página. Si detecta una selección previamente guardada en el servidor (vía `api/acabado_seleccion_guardada.php`), la página carga directamente el resumen final en modo de solo lectura. Las imágenes del resumen ahora se pueden ampliar utilizando la librería Featherlight.
 ...
 
 

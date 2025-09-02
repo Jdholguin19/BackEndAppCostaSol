@@ -9,6 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_acabados.css" rel="stylesheet">
+<link href="//cdn.jsdelivr.net/npm/featherlight@1.7.14/release/featherlight.min.css" type="text/css" rel="stylesheet" />
 <style>
     /* Nuevos estilos para la Etapa 4 y el Modal */
     #step4 .summary-table {
@@ -288,6 +289,8 @@ include '../api/bottom_nav.php';
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="//code.jquery.com/jquery-latest.js"></script>
+<script src="//cdn.jsdelivr.net/npm/featherlight@1.7.14/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     // --- REFS --- //
@@ -427,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderColorOptions(kit) {
         subtitleStep2.textContent = `Selecciona el estilo para tu ${kit.nombre.toLowerCase()}`;
         colorsContainer.innerHTML = `<div class="spinner-border"></div>`;
-        fetch(`../api/kit_opciones_color.php?kit_id=${kit.id}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`../api/acabados/kit_opciones_color.php?kit_id=${kit.id}`, { headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => res.json()).then(data => {
             colorsContainer.innerHTML = '';
             if (!data.ok) return;
@@ -452,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!selection.kit || !selection.color) return; // Safety check
         titleStep3.textContent = `Tu Selección: ${selection.kit.nombre} ${selection.color.nombre_opcion}`;
         galleryContainer.innerHTML = `<div class="spinner-border"></div>`;
-        fetch(`../api/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`../api/acabados/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => res.json()).then(data => {
             galleryContainer.innerHTML = '';
             if (!data.ok || data.imagenes.length === 0) {
@@ -561,7 +564,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="summary-value">${selection.color.nombre_opcion}</span>
             </div>
             <div class="summary-visual-row">
-                <img src="${selection.color.url_imagen_opcion}" class="summary-main-image" alt="${selection.color.nombre_opcion}" onerror="this.style.display='none'">
+                <a href="${selection.color.url_imagen_opcion}" data-featherlight="image">
+                    <img src="${selection.color.url_imagen_opcion}" class="summary-main-image" alt="${selection.color.nombre_opcion}" onerror="this.style.display='none'">
+                </a>
             </div>
         `;
 
@@ -578,7 +583,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 summaryHTML += `<div class="summary-visual-row">`;
                 summaryHTML += `<div class="summary-package-gallery">`;
                 pkg.fotos.forEach(foto => {
-                    summaryHTML += `<img src="${foto}" class="summary-gallery-image" alt="Foto de ${pkg.nombre}" onerror="this.style.display='none'">`;
+                    summaryHTML += `
+                        <a href="${foto}" data-featherlight="image">
+                            <img src="${foto}" class="summary-gallery-image" alt="Foto de ${pkg.nombre}" onerror="this.style.display='none'">
+                        </a>
+                    `;
                 });
                 summaryHTML += `</div></div>`;
             }
