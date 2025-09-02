@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderColorOptions(kit) {
         subtitleStep2.textContent = `Selecciona el estilo para tu ${kit.nombre.toLowerCase()}`;
         colorsContainer.innerHTML = `<div class="spinner-border"></div>`;
-        fetch(`../api/acabados/kit_opciones_color.php?kit_id=${kit.id}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`../api/kit_opciones_color.php?kit_id=${kit.id}`, { headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => res.json()).then(data => {
             colorsContainer.innerHTML = '';
             if (!data.ok) return;
@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!selection.kit || !selection.color) return; // Safety check
         titleStep3.textContent = `Tu Selección: ${selection.kit.nombre} ${selection.color.nombre_opcion}`;
         galleryContainer.innerHTML = `<div class="spinner-border"></div>`;
-        fetch(`../api/acabados/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
+        fetch(`../api/acabados_imagenes.php?acabado_kit_id=${selection.kit.id}&color=${selection.color.color_nombre}`, { headers: { 'Authorization': `Bearer ${token}` } })
         .then(res => res.json()).then(data => {
             galleryContainer.innerHTML = '';
             if (!data.ok || data.imagenes.length === 0) {

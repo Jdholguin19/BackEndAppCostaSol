@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 header('Content-Type: application/json; charset=UTF-8');
-require_once __DIR__ . '/../../config/db.php';
-require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../correos/EnviarCorreoNotificacionResponsable.php';
 
 // --- Lógica de Autenticación por Token ---
 $auth_user_id = null;
