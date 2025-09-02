@@ -353,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = 1;
     let allKits = [];
     let allPackages = [];
+    let allComponentImages = []; // New global variable to store component images
     let selection = {
         kit: null,
         color: null,
@@ -462,6 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 galleryContainer.innerHTML = '<p>No hay imágenes de detalle disponibles.</p>';
                 return;
             }
+            allComponentImages = data.imagenes; // Store all images
             data.imagenes.forEach(img => {
                 const galCard = document.createElement('div');
                 galCard.className = 'gallery-card';
@@ -646,21 +648,27 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'flex';
     }
 
-    function showComponentModal(component) {
-        // Reuse the existing package-modal
-        modalTitle.textContent = component.componente;
-        modalDescription.textContent = component.descripcion || 'No hay descripción disponible.';
+    function showComponentModal(clickedComponent) {
+        modalTitle.textContent = clickedComponent.componente;
+        modalDescription.textContent = clickedComponent.descripcion || 'No hay descripción disponible.';
         
-        // Configure the modal for component view
         modalPrice.style.display = 'none';
         modalAddBtn.style.display = 'none';
         
-        // Set the image in the carousel
         modalCarouselInner.innerHTML = '';
-        const item = document.createElement('div');
-        item.className = 'carousel-item active';
-        item.innerHTML = `<img src="${component.url_imagen}" class="d-block w-100" alt="Foto de ${component.componente}">`;
-        modalCarouselInner.appendChild(item);
+        
+        // Populate carousel with all component images for Featherlight gallery
+        allComponentImages.forEach((img, index) => {
+            const item = document.createElement('div');
+            item.className = `carousel-item ${img.url_imagen === clickedComponent.url_imagen ? 'active' : ''}`;
+            // Wrap image in <a> for Featherlight
+            item.innerHTML = `
+                <a href="${img.url_imagen}" data-featherlight="image" data-featherlight-gallery="component-gallery" data-title="${img.componente}">
+                    <img src="${img.url_imagen}" class="d-block w-100" alt="${img.componente}">
+                </a>
+            `;
+            modalCarouselInner.appendChild(item);
+        });
 
         // Show the modal
         modal.style.display = 'flex';
@@ -668,26 +676,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeModal() {
         modal.style.display = 'none';
-    }
-
-    function showComponentModal(component) {
-        // Reuse the existing package-modal
-        modalTitle.textContent = component.componente;
-        modalDescription.textContent = component.descripcion || 'No hay descripción disponible.';
-        
-        // Configure the modal for component view
-        modalPrice.style.display = 'none';
-        modalAddBtn.style.display = 'none';
-        
-        // Set the image in the carousel
-        modalCarouselInner.innerHTML = '';
-        const item = document.createElement('div');
-        item.className = 'carousel-item active';
-        item.innerHTML = `<img src="${component.url_imagen}" class="d-block w-100" alt="Foto de ${component.componente}">`;
-        modalCarouselInner.appendChild(item);
-
-        // Show the modal
-        modal.style.display = 'flex';
     }
     
     // --- EVENT LISTENERS --- //
