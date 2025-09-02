@@ -166,6 +166,8 @@
         <div id="indicator-3" class="step-number">3</div>
         <div class="step-line"></div>
         <div id="indicator-4" class="step-number">4</div>
+        <div class="step-line"></div>
+        <div id="indicator-5" class="step-number">5</div>
     </div>
 
     <!-- Step 1: Kit Selection -->
@@ -226,7 +228,21 @@
 
         <div class="action-buttons-step">
             <button id="btn-back-to-step3" class="btn-back"><i class="bi bi-arrow-left"></i> Volver</button>
-            <button id="btn-pre-order" class="btn-confirm">Pre-Ordenar</button>
+            <button id="btn-go-to-step5" class="btn-confirm">Siguiente <i class="bi bi-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- Step 5: Final Summary -->
+    <div id="step5" style="display: none;">
+        <div class="acabados-header-text">
+            <h2 class="main-title">Resumen de tu Selección</h2>
+        </div>
+        <div id="final-summary-container" class="summary-table">
+            <!-- Final summary will be injected here -->
+        </div>
+        <div class="action-buttons-step">
+            <button id="btn-back-to-step4" class="btn-back"><i class="bi bi-arrow-left"></i> Volver</button>
+            <button id="btn-pre-order-final" class="btn-confirm">Pre-Ordenar</button>
         </div>
     </div>
 
@@ -291,13 +307,15 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('step1'),
         document.getElementById('step2'),
         document.getElementById('step3'),
-        document.getElementById('step4')
+        document.getElementById('step4'),
+        document.getElementById('step5')
     ];
     const indicators = [
         document.getElementById('indicator-1'),
         document.getElementById('indicator-2'),
         document.getElementById('indicator-3'),
-        document.getElementById('indicator-4')
+        document.getElementById('indicator-4'),
+        document.getElementById('indicator-5')
     ];
 
     // --- Element Refs ---
@@ -306,6 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryContainer = document.getElementById('gallery-container');
     const summaryContainer = document.getElementById('summary-container');
     const packagesContainer = document.getElementById('packages-container');
+    const finalSummaryContainer = document.getElementById('final-summary-container');
     
     const subtitleStep2 = document.getElementById('subtitle-step2');
     const titleStep3 = document.getElementById('title-step3');
@@ -315,7 +334,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBackToStep2 = document.getElementById('btn-back-to-step2');
     const btnGoToStep4 = document.getElementById('btn-go-to-step4');
     const btnBackToStep3 = document.getElementById('btn-back-to-step3');
-    const btnPreOrder = document.getElementById('btn-pre-order');
+    const btnGoToStep5 = document.getElementById('btn-go-to-step5');
+    const btnBackToStep4 = document.getElementById('btn-back-to-step4');
+    const btnPreOrderFinal = document.getElementById('btn-pre-order-final');
 
     // --- Modal Refs ---
     const modal = document.getElementById('package-modal');
@@ -376,6 +397,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (stepNumber === 4) {
             renderStep4();
+        }
+        if (stepNumber === 5) {
+            renderStep5();
         }
         saveState();
     }
@@ -523,6 +547,52 @@ document.addEventListener('DOMContentLoaded', () => {
         saveState();
     }
 
+    function renderStep5() {
+        const kitCost = parseFloat(selection.kit.costo) || 0;
+        let total = kitCost;
+
+        let summaryHTML = `
+            <div class="summary-row">
+                <span class="summary-label">Tienes el modelo</span>
+                <span class="summary-value">${selection.kit.nombre}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Color</span>
+                <span class="summary-value">${selection.color.nombre_opcion}</span>
+            </div>
+            <div class="summary-visual-row">
+                <img src="${selection.color.url_imagen_opcion}" class="summary-main-image" alt="${selection.color.nombre_opcion}" onerror="this.style.display='none'">
+            </div>
+        `;
+
+        selection.addedPackages.forEach(pkg => {
+            const pkgPrice = parseFloat(pkg.precio) || 0;
+            total += pkgPrice;
+            summaryHTML += `
+                <div class="summary-row">
+                    <span class="summary-label">${pkg.nombre}</span>
+                    <span class="summary-value">$ ${pkgPrice.toFixed(2)}</span>
+                </div>
+            `;
+            if (pkg.fotos && pkg.fotos.length > 0) {
+                summaryHTML += `<div class="summary-visual-row">`;
+                summaryHTML += `<div class="summary-package-gallery">`;
+                pkg.fotos.forEach(foto => {
+                    summaryHTML += `<img src="${foto}" class="summary-gallery-image" alt="Foto de ${pkg.nombre}" onerror="this.style.display='none'">`;
+                });
+                summaryHTML += `</div></div>`;
+            }
+        });
+
+        summaryHTML += `
+            <div class="summary-row summary-total-row">
+                <span class="summary-label summary-total">Total:</span>
+                <span class="summary-value summary-total">$ ${total.toFixed(2)}</span>
+            </div>
+        `;
+        finalSummaryContainer.innerHTML = summaryHTML;
+    }
+
     function renderPackageModal(pkg) {
         modalTitle.textContent = pkg.nombre;
         modalPrice.textContent = `$ ${parseFloat(pkg.precio).toFixed(2)}`;
@@ -568,12 +638,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnBackToStep2.addEventListener('click', () => goToStep(2));
     btnGoToStep4.addEventListener('click', () => goToStep(4));
     btnBackToStep3.addEventListener('click', () => goToStep(3));
+    btnGoToStep5.addEventListener('click', () => goToStep(5));
+    btnBackToStep4.addEventListener('click', () => goToStep(4));
     
     [document.getElementById('modal-close-btn'), document.getElementById('modal-close-footer-btn')].forEach(btn => {
         btn.addEventListener('click', closeModal);
     });
 
-    btnPreOrder.addEventListener('click', () => {
+    btnPreOrderFinal.addEventListener('click', () => {
         if (!selection.kit || !selection.color) {
             alert('Error: No se ha completado la selección principal.');
             return;
@@ -586,8 +658,8 @@ document.addEventListener('DOMContentLoaded', () => {
             paquetes_adicionales: Array.from(selection.addedPackages.keys())
         };
 
-        btnPreOrder.disabled = true;
-        btnPreOrder.textContent = 'Guardando…';
+        btnPreOrderFinal.disabled = true;
+        btnPreOrderFinal.textContent = 'Guardando…';
 
         fetch('../api/guardar_seleccion_acabados.php', {
             method: 'POST',
@@ -609,8 +681,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Hubo un error de conexión al intentar guardar tu selección.');
         })
         .finally(() => {
-            btnPreOrder.disabled = false;
-            btnPreOrder.textContent = 'Pre-Ordenar';
+            btnPreOrderFinal.disabled = false;
+            btnPreOrderFinal.textContent = 'Pre-Ordenar';
         });
     });
 

@@ -346,3 +346,109 @@ body {
         font-size: 0.9rem;
     }
 }
+
+/* --- Step 5: Final Summary Styles --- */
+#step5 .summary-table {
+    text-align: left;
+    max-width: 500px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+#step5 .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#step5 .summary-row:last-child {
+    border-bottom: none;
+}
+
+#step5 .summary-label {
+    color: #6c757d;
+    font-size: 1rem;
+}
+
+#step5 .summary-value {
+    font-weight: 600;
+    color: #343a40;
+    font-size: 1rem;
+}
+
+#step5 .summary-total-row {
+     border-top: 2px solid #dee2e6;
+     margin-top: 10px;
+     padding-top: 15px;
+}
+
+#step5 .summary-total {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d5a3d;
+}
+
+.summary-visual-row {
+    padding: 15px 0;
+    text-align: center;
+}
+
+.summary-main-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 250px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin: 0 auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.summary-package-gallery {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 10px 0;
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #ccc #f1f1f1; /* Firefox */
+}
+
+/* Webkit scrollbar styles */
+.summary-package-gallery::-webkit-scrollbar {
+  height: 8px;
+}
+
+.summary-package-gallery::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.summary-package-gallery::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.summary-package-gallery::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+
+.summary-gallery-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0; /* Prevent images from shrinking */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+@media (min-width: 768px) {
+    .summary-gallery-image {
+        width: 120px;
+        height: 120px;
+    }
+}
