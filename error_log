@@ -1,84 +1,11 @@
-[02-Sep-2025 09:51:08 America/Boise] PHP Warning:  require_once(/../../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabados/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 09:51:08 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabados/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 09:51:59 America/Boise] PHP Warning:  require_once(/../../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabados/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 09:51:59 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabados/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 09:57:26 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:00:58 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:01:17 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:06:31 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:31 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:33 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:33 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:38 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:38 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:40 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:06:40 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:37 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:37 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:45 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:45 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:49 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:49 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:50 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:50 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:51 America/Boise] PHP Warning:  require_once(/../config/db.php): failed to open stream: No such file or directory in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:07:51 America/Boise] PHP Fatal error:  require_once(): Failed opening required '/../config/db.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/portalao/public_html/website_cc359709/api/acabado_seleccion_guardada.php on line 7
-[02-Sep-2025 10:08:32 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:22:19 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 10:23:23 America/Boise] Correo de notificación de acabados enviado correctamente a mixcrafttopyt@gmail.com
-[02-Sep-2025 10:23:26 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 10:23:28 America/Boise] Player ID actualizado exitosamente para usuario 11: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:23:29 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 10:24:17 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 10:24:23 America/Boise] Correo de notificación de acabados enviado correctamente a mixcrafttopyt@gmail.com
-[02-Sep-2025 10:24:29 America/Boise] Player ID actualizado exitosamente para usuario 11: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:25:49 America/Boise] Player ID actualizado exitosamente para usuario 11: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 10:26:09 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 11:09:21 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 11:12:44 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 11:13:55 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 11:13:59 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 11:14:02 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 11:44:06 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 13:03:43 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 13:04:01 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 14:15:24 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 14:15:25 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 14:16:49 America/Boise] Player ID actualizado exitosamente para usuario 8: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
-[02-Sep-2025 14:18:13 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[02-Sep-2025 14:20:12 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 14:25:57 America/Boise] Player ID actualizado exitosamente para usuario 8: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
-[02-Sep-2025 14:35:42 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 14:36:31 America/Boise] Player ID actualizado exitosamente para usuario 8: e3c1007c-5a95-422a-adc4-9f7f05a0ccbc
-[02-Sep-2025 14:43:19 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 15:04:25 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 15:25:52 America/Boise] Player ID actualizado exitosamente para usuario 9: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 15:41:00 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 15:48:08 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 15:49:41 America/Boise] Database error in acabado_seleccion_guardada: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.paquete_fotos' doesn't exist
-[02-Sep-2025 15:49:50 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[02-Sep-2025 15:50:16 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 07:20:48 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 07:43:33 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
-[03-Sep-2025 07:43:33 America/Boise] Player ID actualizado exitosamente para usuario 9: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 07:43:52 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 07:44:05 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 08:53:04 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 08:54:45 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 09:21:58 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 09:23:45 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 09:25:08 America/Boise] Player ID actualizado exitosamente para usuario 16: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 09:26:28 America/Boise] Player ID actualizado exitosamente para usuario 16: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 09:27:34 America/Boise] Player ID actualizado exitosamente para usuario 16: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 09:29:14 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 09:33:46 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 09:47:52 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 09:47:59 America/Boise] Player ID actualizado exitosamente para usuario 1: 494528dd-7ee5-4f51-a7af-c4a4f01cb231
-[03-Sep-2025 10:00:20 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:00:44 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:07:29 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:11:52 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:12:12 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:16:49 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:17:18 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
-[03-Sep-2025 10:17:34 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[03-Sep-2025 15:01:37 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:01:41 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:01:44 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:02:01 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:02:04 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:05:41 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:05:42 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:05:42 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:05:43 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:14:11 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
+[03-Sep-2025 15:14:15 America/Boise] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.1.0". You are running 7.4.33. in /home1/portalao/public_html/website_cc359709/vendor/composer/platform_check.php on line 24
