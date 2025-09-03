@@ -1,0 +1,6 @@
+initiate_outlook_auth.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state set: 2_9c9e135aa2d57043b6d69b9ce0bd2b72
+oauth_callback.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state read: 2_9c9e135aa2d57043b6d69b9ce0bd2b72
+--- New Attempt ---
+GET State: 2_9c9e135aa2d57043b6d69b9ce0bd2b72
+Session State: 2_9c9e135aa2d57043b6d69b9ce0bd2b72
+Comparison Result: MATCH

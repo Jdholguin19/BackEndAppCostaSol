@@ -1,0 +1,17 @@
+initiate_outlook_auth.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state set: 2_6903cc99b643a124ceff7bebf7aa90f9
+oauth_callback.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state read: 2_6903cc99b643a124ceff7bebf7aa90f9
+--- New Attempt ---
+GET State: 2_6903cc99b643a124ceff7bebf7aa90f9
+Session State: 2_6903cc99b643a124ceff7bebf7aa90f9
+Comparison Result: MATCH
+initiate_outlook_auth.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state set: 2_c71adb9caa5962a0c5e3dbb86eeb9ce9
+oauth_callback.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state read: 2_c71adb9caa5962a0c5e3dbb86eeb9ce9
+oauth_callback.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state read: 2_c71adb9caa5962a0c5e3dbb86eeb9ce9
+initiate_outlook_auth.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state set: 2_4c999e3d831826d84d6e22054decf72b
+oauth_callback.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state read: 2_4c999e3d831826d84d6e22054decf72b
+initiate_outlook_auth.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state set: 2_66a69ca7868715b22857f77a0c5c9c54
+oauth_callback.php: Session ID: 5627d9b572ea9f2496ee9ec0b124adb2, oauth_state read: 2_66a69ca7868715b22857f77a0c5c9c54
+--- New Attempt ---
+GET State: 2_66a69ca7868715b22857f77a0c5c9c54
+Session State: 2_66a69ca7868715b22857f77a0c5c9c54
+Comparison Result: MATCH

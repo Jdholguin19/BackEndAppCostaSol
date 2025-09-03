@@ -1,4 +1,29 @@
 <?php /* Front/perfil.php */ ?>
+<?php
+// Iniciar sesión para la protección CSRF
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Incluir el archivo de configuración de Outlook
+require_once __DIR__ . '/../config/config_outlook.php';
+
+// --- Lógica para obtener el ID del responsable actual de forma segura ---
+$currentResponsableId = 0;
+$isResponsable = false;
+
+// Asumiendo que la información del usuario logueado está en la sesión
+// (Esto es una práctica común después de validar el token en el login)
+if (isset($_SESSION['cs_usuario'])) {
+    $loggedInUser = json_decode($_SESSION['cs_usuario'], true);
+    if (isset($loggedInUser['id']) && isset($loggedInUser['is_responsable']) && $loggedInUser['is_responsable']) {
+        $currentResponsableId = (int)$loggedInUser['id'];
+        $isResponsable = true;
+    }
+}
+// --- FIN Lógica para obtener el ID del responsable actual ---
+
+?>
 <!doctype html>
 <html lang="es">
 <head>
@@ -208,7 +233,25 @@
       </div>
     </div>
 
+  </div> <!-- End of profile-info -->
+
+  <!-- Sincronización de Calendario -->
+  <?php if ($isResponsable): ?>
+  <div class="form-section">
+      <label class="section-title">
+          <i class="bi bi-calendar-check"></i>
+          Sincronización de Calendario Outlook
+      </label>
+      <form action="initiate_outlook_auth.php" method="POST">
+          <button type="submit" class="btn btn-primary">
+              <i class="bi bi-microsoft-teams me-2"></i> Conectar Calendario Outlook
+          </button>
+      </form>
+      <p class="form-text text-muted mt-2">
+          Conecta tu calendario de Outlook para sincronizar tus citas.
+      </p>
   </div>
+  <?php endif; ?>
 
   <!-- Logout Button -->
   <div class="logout-section">

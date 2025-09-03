@@ -1,4 +1,9 @@
 <?php
+
+session_start();
+
+ini_set('error_log', __DIR__ . '/../config/error_log'); // Added this line
+
 /**
  *  api/login.php
  *  POST  { "correo": "...", "contrasena": "..." }
@@ -54,7 +59,7 @@ try {
         $update_stmt->execute([':token' => $token, ':id' => $user['id']]);
 
         /* ---------- 4. Respuesta para usuario ---------- */
-        unset($authenticated_user_info['contrasena_hash']);
+        $_SESSION['cs_usuario'] = json_encode($authenticated_user_info);
         echo json_encode(['ok'=>true,'token'=>$token,'user'=>$authenticated_user_info]);
 
     } else {
@@ -81,7 +86,7 @@ try {
             $update_stmt->execute([':token' => $token, ':id' => $responsable['id']]);
 
             /* ---------- 7. Respuesta para responsable ---------- */
-            unset($authenticated_user_info['contrasena_hash']);
+            $_SESSION['cs_usuario'] = json_encode($authenticated_user_info);
             echo json_encode(['ok'=>true,'token'=>$token,'user'=>$authenticated_user_info]);
 
         } else {
