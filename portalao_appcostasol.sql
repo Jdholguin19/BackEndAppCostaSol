@@ -593,6 +593,35 @@ INSERT INTO `proposito_agendamiento` VALUES (1,'Recorrido de Obra','https://app.
 UNLOCK TABLES;
 
 --
+-- Table structure for table `registro_recuperacion_contrasena`
+--
+
+DROP TABLE IF EXISTS `registro_recuperacion_contrasena`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `registro_recuperacion_contrasena` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id_usuario` bigint(20) unsigned NOT NULL,
+  `codigo` char(6) COLLATE utf8_unicode_ci NOT NULL,
+  `estado_solicitud` enum('PENDIENTE','USADO','VENCIDO') COLLATE utf8_unicode_ci DEFAULT 'PENDIENTE',
+  `fecha_solicitud` datetime DEFAULT CURRENT_TIMESTAMP,
+  `fecha_expira` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_usuario` (`id_usuario`),
+  CONSTRAINT `registro_recuperacion_contrasena_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `registro_recuperacion_contrasena`
+--
+
+LOCK TABLES `registro_recuperacion_contrasena` WRITE;
+/*!40000 ALTER TABLE `registro_recuperacion_contrasena` DISABLE KEYS */;
+/*!40000 ALTER TABLE `registro_recuperacion_contrasena` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `responsable`
 --
 
@@ -610,6 +639,12 @@ CREATE TABLE `responsable` (
   `fecha_ingreso` datetime DEFAULT CURRENT_TIMESTAMP,
   `fecha_actualizacion` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `outlook_access_token` text COLLATE utf8_unicode_ci,
+  `outlook_refresh_token` text COLLATE utf8_unicode_ci,
+  `outlook_token_expires_at` datetime DEFAULT NULL,
+  `outlook_subscription_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `outlook_client_state` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `outlook_calendar_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `onesignal_player_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fecha_actualizacion_player_id` timestamp NULL DEFAULT NULL COMMENT 'Fecha de última actualización del OneSignal Player ID',
   PRIMARY KEY (`id`),
@@ -624,7 +659,7 @@ CREATE TABLE `responsable` (
 
 LOCK TABLES `responsable` WRITE;
 /*!40000 ALTER TABLE `responsable` DISABLE KEYS */;
-INSERT INTO `responsable` VALUES (1,'Ana María Felix','mixcrafttopyt@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg','SAC',1,'2025-06-24 11:03:35','2025-09-03 07:43:52','e6MEdWRizfQOjGAsXOUpc4+8oL2UWZds','494528dd-7ee5-4f51-a7af-c4a4f01cb231','2025-09-03 13:43:52'),(2,'Carla Oquendo','jdholguin@tes.edu.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png','SAC',1,'2025-06-24 11:07:21','2025-09-03 07:44:05','1fd8+oRsLCXpyKAf04cSu17+5yzZ6vJ4','c3925247-841e-41d7-be9a-30560a3b7a01','2025-09-03 13:44:05'),(3,'Admin','admin@thaliavictoria.com.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPerfil/68a79276ed803-profile-3.png','SAC',1,'2025-08-13 09:25:21','2025-08-26 07:11:27','CCAm6iWGVgItYukte6T52lBcLGzL1975','7d49b608-347b-4308-954e-1edc4e1b6dee','2025-08-26 13:11:27');
+INSERT INTO `responsable` VALUES (1,'Ana María Felix','sistemas@thaliavictoria.com.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPQR_problema/logCostaSol.jpg','SAC',1,'2025-06-24 11:03:35','2025-09-03 09:47:59','rywvUxByacG8JhUdmK+FqkvHxafFsfQ9',NULL,NULL,NULL,NULL,NULL,NULL,'494528dd-7ee5-4f51-a7af-c4a4f01cb231','2025-09-03 15:47:59'),(2,'Carla Oquendo','gcoello@thaliavictoria.com.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://static.wixstatic.com/media/b80279_33a586f04740464cae96a3a6205d2c19~mv2.png','SAC',1,'2025-06-24 11:07:21','2025-09-03 12:58:26','DeYh6jt6Qj0JbDfY7nlOh8Re1MlsxxiL','eyJ0eXAiOiJKV1QiLCJub25jZSI6IjdiVGl3QzBIWnpjYUtzbF9LMTR6NWtHdjBISkJ2US11RWRqYzltZ3pQSWsiLCJhbGciOiJSUzI1NiIsIng1dCI6IkpZaEFjVFBNWl9MWDZEQmxPV1E3SG4wTmVYRSIsImtpZCI6IkpZaEFjVFBNWl9MWDZEQmxPV1E3SG4wTmVYRSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9iOTYxOGFjNi0yNjQ4LTQxZWQtYmI0Zi0wM2JjZDk0YTc0OTMvIiwiaWF0IjoxNzU2OTI1NjAzLCJuYmYiOjE3NTY5MjU2MDMsImV4cCI6MTc1NjkzMDIzNiwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsicDEiXSwiYWlvIjoiQVpRQWEvOFpBQUFBTkREZU04RktQRnlMdTB5dzhMblc5NlhqK0IrekI0Qko3NG5OOVJWck96TmpDOXllTitrd3BhK0ZzSHhTa1hRWHlKSUFDM0Jjc3FSNUVRVm9IZEo5SEZQVUhlV2VrcWdPalBmbyswOVVRcno1RUQ4T3pJV20wWHVnaG5ETHpBMGRYNi9CaGNWVDFRMWVLS0dlVGVyK00xWXoydXNYekNDWkNSM0hHUENJeDcyaDYydmNiTFFnSVZnUmpFQ0ZKRHR2IiwiYW1yIjpbInB3ZCIsIm1mYSJdLCJhcHBfZGlzcGxheW5hbWUiOiJBcHBDb3N0YVNvbC1PdXRsb29rLVN5bmMiLCJhcHBpZCI6IjFjMzYyYWQ1LWZjMDMtNGE0MS1iMjg1LWNhNjI1ZGNmY2E4MSIsImFwcGlkYWNyIjoiMSIsImZhbWlseV9uYW1lIjoiQ29lbGxvIEJlbHRyw6FuIiwiZ2l2ZW5fbmFtZSI6Ikd1aWxsZXJtbyIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjE1Ny4xMDAuMTA4LjExIiwibmFtZSI6Ikd1aWxsZXJtbyBFLiBDb2VsbG8iLCJvaWQiOiI3NzFiY2ZmNi02ZjdkLTQ3NmItYTNhNS0yZjcwZjg4OGExYjUiLCJwbGF0ZiI6IjMiLCJwdWlkIjoiMTAwMzIwMDM3RDdGOEZBMiIsInJoIjoiMS5BVkFBeG9waHVVZ203VUc3VHdPODJVcDBrd01BQUFBQUFBQUF3QUFBQUFBQUFBQlFBQVJRQUEuIiwic2NwIjoiQ2FsZW5kYXJzLlJlYWRXcml0ZSBvcGVuaWQgcHJvZmlsZSBVc2VyLlJlYWQgZW1haWwiLCJzaWQiOiIwMDg5ZDE1OS0yOGVmLWYxZTAtNzk5OS0wNzhiNTUzZGZlMjYiLCJzaWduaW5fc3RhdGUiOlsia21zaSJdLCJzdWIiOiJydkhiNU5BRVJ5ZmxMSlFHQ3BIbDZSOURDTlJsZFRERXdQXzlPZjBqbHRnIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6IlNBIiwidGlkIjoiYjk2MThhYzYtMjY0OC00MWVkLWJiNGYtMDNiY2Q5NGE3NDkzIiwidW5pcXVlX25hbWUiOiJnY29lbGxvQHRoYWxpYXZpY3RvcmlhLmNvbS5lYyIsInVwbiI6Imdjb2VsbG9AdGhhbGlhdmljdG9yaWEuY29tLmVjIiwidXRpIjoiY01Ma3pyem1XMEctSHFpLUVLWjVBUSIsInZlciI6IjEuMCIsIndpZHMiOlsiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19mdGQiOiJXQTdmWVFETE9wZ2VkMnlRaEJqM3FDOG4xMXpycXlFR3NzZy04Z3V4am5JQmRYTmxZWE4wTFdSemJYTSIsInhtc19pZHJlbCI6IjEgMiIsInhtc19zdCI6eyJzdWIiOiJGMGQ0S0RBdHhyTkJ5Z1pmaDhDaVRWU3E3U2FpR01yQXJ0VldSSjF3VWxFIn0sInhtc190Y2R0IjoxNjI3NjgyMzEzfQ.AFdvNDsDDRuHz8CLM5loIN39Fp97NB1Hspvo1pA1rDRk-GAKhQb9ju-mnMsfpfmSgTNwF3axGzt33yVW6qAnDzCoH42yxGZc0BH19nSiegQ1VIQvlNYSIsfOQFXx_Pprs94HK65BTaoP45NpTSMx1MlVUfeXpBsGrvLhs79bN1j7Rbzpqc3Z7NdM7E4Zd1W5WrJbDbdATyBqWA13Os5uT-9WUHRGsXNEGqXYJURTrxXFwH2lK40FDYNqk18amDakgRuFTlb3hGATg2w7VG-GBcM59N8EClG78nvSVqtsed7bB6kBwcbP322NI6Oy0LrpmalTGEz5XqUV29WEhvkksw','1.AVAAxophuUgm7UG7TwO82Up0k9UqNhwD_EFKsoXKYl3PyoFQAARQAA.AgABAwEAAABVrSpeuWamRam2jAF1XRQEAwDs_wUA9P8h-H6BxPvQ9fAb41rrqfWFebXn17TGDq2uBRpCTJKOobHndHQaX8SO2gd9AY6zjbqGse4pnoXC2I71j49iO4--QDjl4Nt8ZEsraMPnoBzYqb4gzUpLhiEY6c7bu2qtIPnqQUh6gaIxCSVDXUMI0n5jpUTz3CKav8kRkU8IHD0kbKz3JW8RdsCRehExOsKdunRxKdmEHiwqwoiLHxMMFRgOJ6BiSeeUyQNb5zfUBKgYkyP5Y1zmtsuIgEi8vaXyQeb1faWrz0eqF6CJlfmyg15DJEI364a46THtkKXGX5X0mai8jXDIdCYuD0uiiDRhih4cMNFpLtIWbGlqxJZV-YMJICAS82quy_rc5-c0s9GD6ySAUaX4bgfhUjXTVgPUZqbvH4KfubMk2KQiEf8ZqSNkW0LLOngx5ixVoMjni8e85w7oxQY0S6LKA_lXK8T2JBKOkDPCSVfCel-XLuxlEUd16a-C6ay0sXNjNK_JSnCT-0BZ8taw5LLs2bqLOSm-TbLwoGSGF0hBJgMhMUYCUyMczIKjRT9cnS632ZCaCrmYHFcE6NyK25r7oLdwadnIWkaxQTKJx7EncAJtFnAxO7yemkGRtn5iAtCK_Qq_17emfZaDHYaZbFDsaGPGGJwWrPbQ7VIViFz3NU9CT5FYsuZN4adLiQCtrj6HJFl8PobtSsUiIBM0wy7BfklQvprkYPGsHzaKABY4oKBM1-32RfHN1BXtcAmxStHZVvWcnca2FHmLHnandQ6ukisVpCvGzKnSt_fW3iMmnjgdG43OvgES28JGM8fQvF4uSlSqUmXCNeEOh1NT464Z71aRUiubLnGrd3fOENaOJv4k0AzseObH4JHJ_-SXVPAvyzunK5BVY7zD71ra54sU_zuA7Qn0msOg8-payXJWIw2gKvSktEdfmvk','2025-09-03 14:10:35','f9cd513c-bc1c-48d4-9782-b4d1108d5ed0','39b79856fd6f0269a71c3ac87a8bb4fa',NULL,'c3925247-841e-41d7-be9a-30560a3b7a01','2025-09-03 18:51:17'),(3,'Admin','admin@thaliavictoria.com.ec','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa','https://app.costasol.com.ec/ImagenesPerfil/68a79276ed803-profile-3.png','SAC',1,'2025-08-13 09:25:21','2025-08-26 07:11:27','CCAm6iWGVgItYukte6T52lBcLGzL1975',NULL,NULL,NULL,NULL,NULL,NULL,'7d49b608-347b-4308-954e-1edc4e1b6dee','2025-08-26 13:11:27');
 /*!40000 ALTER TABLE `responsable` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -983,17 +1018,9 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (2,1,'Guillermo','Coello','0922797790','593982033045','gcoello@costasol.com.ec','$2y$10$RGAlN206FkvrivRqB86qE.pahU4Q7ThD3dWKgndwpJFbb75WN2t/.',1,'https://app.costasol.com.ec/FotoPerfil/FotoUsuarioGC.jpg','2025-06-10 10:42:58','BYFPee8yS1zM59X/7YPMSa1ifwJj3qA0',NULL,'2025-08-26 13:16:29'),(3,2,'Guillermo2','Coello2',NULL,NULL,'dr.gecb21@hotmail.com','$2y$10$MdNXTfLD2h3lbelU4QdN4eVssugUOrpDOrq5Yxx9U48ok8Finrh/u',0,NULL,'2025-06-10 11:05:44',NULL,NULL,NULL),(4,1,'Carlos','Pablo',NULL,NULL,'carlospablo@thaliavictoria.com.ec','$2y$10$S.HaX.E8Y0kc2hiGc1NJLus7h760yWOvh6ZqNcUSCx7T73iGRvVHi',0,NULL,'2025-07-03 13:41:37','HfiJ4S293HOsH/0XDUdnv6mq0c/0YtA3',NULL,NULL),(5,1,'Rafael','Romero',NULL,NULL,'rromero@thaliavictoria.com.ec','$2y$10$uqExlkQ7Xw6xfgzbQyqefOJmFOGrL4Qt.iMnUliWzb5iH9xVBZIou',0,NULL,'2025-07-14 16:11:24',NULL,NULL,NULL),(6,1,'Jonathan','Quijano',NULL,NULL,'jquijano@thaliavictoria.com.ec','$2y$10$AEHyeOLBMhOPt0PhJdpy8e8WWyMM7jEbKg6MQiwfYjCH7ZHnp/at2',0,NULL,'2025-07-14 16:12:49',NULL,NULL,NULL),(7,1,'Joffre','Holguin',NULL,NULL,'joffreholguin19@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa',1,'https://cdn-icons-png.flaticon.com/512/9187/9187532.png','2025-07-22 10:50:30','g9lrsOmr2BybWgrqIdB6k3dCmYOukdfX',NULL,'2025-08-22 20:30:44'),(8,1,'Daniel','Alarcon',NULL,NULL,'danielalarcon@gmail.com','$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC',1,'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png','2025-07-24 16:06:19','QZUftekO8Ol1AAx1ICCbyYLN9mpV2Ywb','e3c1007c-5a95-422a-adc4-9f7f05a0ccbc','2025-09-02 20:36:31'),(9,2,'Felipe','Pilligua',NULL,NULL,'fepilligua@gmail.com','$2y$10$reWiHb52f7EPZNo98Q3kz.H0Df6eFFB6FJrgll3nGywKhCmgl/hvC',1,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-07-28 08:42:37','MsV2uRPm4DLZII2j0wXHc671RCrwZ5O4','494528dd-7ee5-4f51-a7af-c4a4f01cb231','2025-09-03 13:43:33'),(10,1,'Jose','Tenesaca',NULL,NULL,'josesaca@gmail.com','$2y$10$8LEm..7rJ3ii/7QWAivJOuHJMjh3lQ4n/qEaqTI66Wu3YPKLcpble',0,NULL,'2025-08-05 13:25:22','iCHj2yX2GP5NG9lt7+NCkN/wPFr7tH2D',NULL,'2025-08-05 18:32:06'),(11,1,'Martin','Mera',NULL,NULL,'martin@gmial.com','$2y$10$UtKsBWDz.Hdf5DPHSlmV5etztt5mez967KwQccui431EB5woBL4au',0,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-08-06 08:16:43','BrqmYT8yOa/1kGwyhEiSHb74+1d+X8nQ',NULL,'2025-09-02 16:25:49'),(12,1,'prueba','1',NULL,NULL,'prueba@prueba.com','$2y$10$447WYbjzXhELxQuweQbcEuNgS4HiO.PxkyqBbm7zQ4XC.evK9FpoS',0,NULL,'2025-08-13 12:37:40','mc5PPSjS365g9XGa8+xrmQWPqdUg8t8s',NULL,'2025-08-13 17:37:52'),(13,1,'prueba','2',NULL,NULL,'prueba2@prueba.com','$2y$10$K2tKUN8/SS/o8Nhr7wnG3uTkzy5FdI3H8.kze3wAxd5w7a6tA0OZO',0,NULL,'2025-08-13 12:39:18',NULL,NULL,NULL),(14,1,'Geovanny','Herrera',NULL,NULL,'gherrera@costasol.com','$2y$10$J0CPBMknCZLdKYzSnjzPSe.lxh9ipybg8K1VWgliZxSj//u4tL8OK',0,NULL,'2025-07-23 07:56:38',NULL,NULL,NULL),(15,1,'Irma','Perez',NULL,NULL,'iperez@thaliavictoria.com.ec','$2y$10$MOGLPMPM2/JrPZt/KFh/oeoqV8Xg.U2S6RkLqPcya30gHGy43lXui',0,NULL,'2025-08-18 08:25:10',NULL,NULL,NULL),(16,2,'Guillermo','Coello',NULL,NULL,'gcoello@thaliavictoria.com.ec','$2y$10$BJWf37cacEKopZ2gAwO9.e55tu7Azw19MN7KzHSDJpHVHypylqLZm',0,NULL,'2025-08-26 07:25:17','ipAleDAF8NzM5N1lz3rZNDp4fLrK//kS',NULL,'2025-08-26 13:27:38');
+INSERT INTO `usuario` VALUES (2,1,'Guillermo','Coello','0922797790','593982033045','gcoellooo@costasol.com.ec','$2y$10$RGAlN206FkvrivRqB86qE.pahU4Q7ThD3dWKgndwpJFbb75WN2t/.',1,'https://app.costasol.com.ec/FotoPerfil/FotoUsuarioGC.jpg','2025-06-10 10:42:58','BYFPee8yS1zM59X/7YPMSa1ifwJj3qA0',NULL,'2025-08-26 13:16:29'),(3,2,'Guillermo2','Coello2',NULL,NULL,'dr.gecb21@hotmail.com','$2y$10$MdNXTfLD2h3lbelU4QdN4eVssugUOrpDOrq5Yxx9U48ok8Finrh/u',0,NULL,'2025-06-10 11:05:44',NULL,NULL,NULL),(4,1,'Carlos','Pablo',NULL,NULL,'carlospablo@thaliavictoria.com.ec','$2y$10$S.HaX.E8Y0kc2hiGc1NJLus7h760yWOvh6ZqNcUSCx7T73iGRvVHi',0,NULL,'2025-07-03 13:41:37','HfiJ4S293HOsH/0XDUdnv6mq0c/0YtA3',NULL,NULL),(5,1,'Rafael','Romero',NULL,NULL,'rromero@thaliavictoria.com.ec','$2y$10$uqExlkQ7Xw6xfgzbQyqefOJmFOGrL4Qt.iMnUliWzb5iH9xVBZIou',0,NULL,'2025-07-14 16:11:24',NULL,NULL,NULL),(6,1,'Jonathan','Quijano',NULL,NULL,'jquijano@thaliavictoria.com.ec','$2y$10$AEHyeOLBMhOPt0PhJdpy8e8WWyMM7jEbKg6MQiwfYjCH7ZHnp/at2',0,NULL,'2025-07-14 16:12:49',NULL,NULL,NULL),(7,1,'Joffre','Holguin',NULL,NULL,'joffreholguin19@gmail.com','$2y$10$buAboItJmIjG1j8Zn5y/Ou4LDVy5xrVYm4P1.6KebUpCsXCteoJXa',1,'https://cdn-icons-png.flaticon.com/512/9187/9187532.png','2025-07-22 10:50:30','g9lrsOmr2BybWgrqIdB6k3dCmYOukdfX',NULL,'2025-08-22 20:30:44'),(8,1,'Daniel','Alarcon',NULL,NULL,'danielalarcon@gmail.com','$2y$10$KxKCaEiyWPjABgwuzODM.eWQlVCmLGgqISjp.5dkCDt5UYowRSGHC',1,'https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png','2025-07-24 16:06:19','QZUftekO8Ol1AAx1ICCbyYLN9mpV2Ywb','e3c1007c-5a95-422a-adc4-9f7f05a0ccbc','2025-09-02 20:36:31'),(9,2,'Felipe','Pilligua',NULL,NULL,'fepilligua@gmail.com','$2y$10$reWiHb52f7EPZNo98Q3kz.H0Df6eFFB6FJrgll3nGywKhCmgl/hvC',1,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-07-28 08:42:37','D6FV5U5MHSOK35nOgMMLVHbYKouyGmo5','494528dd-7ee5-4f51-a7af-c4a4f01cb231','2025-09-03 13:43:33'),(10,1,'Jose','Tenesaca',NULL,NULL,'josesaca@gmail.com','$2y$10$8LEm..7rJ3ii/7QWAivJOuHJMjh3lQ4n/qEaqTI66Wu3YPKLcpble',0,NULL,'2025-08-05 13:25:22','iCHj2yX2GP5NG9lt7+NCkN/wPFr7tH2D',NULL,'2025-08-05 18:32:06'),(11,1,'Martin','Mera',NULL,NULL,'martin@gmial.com','$2y$10$UtKsBWDz.Hdf5DPHSlmV5etztt5mez967KwQccui431EB5woBL4au',0,'https://cdn-icons-png.flaticon.com/512/219/219983.png','2025-08-06 08:16:43','BrqmYT8yOa/1kGwyhEiSHb74+1d+X8nQ',NULL,'2025-09-02 16:25:49'),(12,1,'prueba','1',NULL,NULL,'prueba@prueba.com','$2y$10$447WYbjzXhELxQuweQbcEuNgS4HiO.PxkyqBbm7zQ4XC.evK9FpoS',0,NULL,'2025-08-13 12:37:40','mc5PPSjS365g9XGa8+xrmQWPqdUg8t8s',NULL,'2025-08-13 17:37:52'),(13,1,'prueba','2',NULL,NULL,'prueba2@prueba.com','$2y$10$K2tKUN8/SS/o8Nhr7wnG3uTkzy5FdI3H8.kze3wAxd5w7a6tA0OZO',0,NULL,'2025-08-13 12:39:18',NULL,NULL,NULL),(14,1,'Geovanny','Herrera',NULL,NULL,'gherrera@costasol.com','$2y$10$J0CPBMknCZLdKYzSnjzPSe.lxh9ipybg8K1VWgliZxSj//u4tL8OK',0,NULL,'2025-07-23 07:56:38',NULL,NULL,NULL),(15,1,'Irma','Perez',NULL,NULL,'iperez@thaliavictoria.com.ec','$2y$10$MOGLPMPM2/JrPZt/KFh/oeoqV8Xg.U2S6RkLqPcya30gHGy43lXui',0,NULL,'2025-08-18 08:25:10',NULL,NULL,NULL),(16,2,'Guillermo','Coello',NULL,NULL,'gcoello1@thaliavictoria.com.ec','$2y$10$BJWf37cacEKopZ2gAwO9.e55tu7Azw19MN7KzHSDJpHVHypylqLZm',0,NULL,'2025-08-26 07:25:17','Q29fti9M9+ZdNlJhwrTOvN+BBv/6KkQf','c3925247-841e-41d7-be9a-30560a3b7a01','2025-09-03 15:27:34');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'portalao_appCostaSol'
---
-
---
--- Dumping routines for database 'portalao_appCostaSol'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1004,4 +1031,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-03  9:11:56
+-- Dump completed on 2025-09-03 14:04:18

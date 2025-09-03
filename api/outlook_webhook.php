@@ -8,10 +8,10 @@
 header('Content-Type: text/plain'); // Microsoft Graph espera una respuesta de texto plano para la validación
 
 // Manejar la solicitud de validación de suscripción
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['validationToken'])) {
+if (isset($_GET['validationToken'])) {
     // Microsoft Graph envía un validationToken en la URL para verificar el endpoint.
     // Debes devolver este token como respuesta de texto plano.
-    echo htmlspecialchars($_GET['validationToken']);
+    echo $_GET['validationToken'];
     http_response_code(200); // Código de estado HTTP 200 OK
     exit();
 }

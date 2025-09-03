@@ -91,14 +91,16 @@ function createOutlookWebhookSubscription(int $responsableId, string $accessToke
     // para verificar la autenticidad de las notificaciones.
     $clientState = bin2hex(random_bytes(16)); // Genera un string aleatorio de 32 caracteres
 
-    // Calculate expirationDateTime outside the array definition
-    $formattedExpirationDateTime = gmdate('Y-m-d\TH:i:sZ', strtotime('+1 hour')); // Using gmdate and no milliseconds
+    // Set the expiration to the maximum allowed time (4230 minutes) to be efficient.
+    $expirationDateTime = new DateTime('now', new DateTimeZone('UTC'));
+    $expirationDateTime->add(new DateInterval('PT4230M'));
 
     $subscriptionData = [
         "changeType" => "created,updated,deleted",
-        "notificationUrl" => "https://webhook.site/6111fe3c-045d-44e5-8b30-c93522521667", // This is now webhook.site
-        "resource" => "me/calendar/events",
-        "expirationDateTime" => $formattedExpirationDateTime, // Use the pre-calculated string here
+        "notificationUrl" => $webhookUrl, // Use the URL passed to the function
+        "resource" => "me/events",
+        // Format the date according to ISO 8601 with microseconds, as required by the API.
+        "expirationDateTime" => $expirationDateTime->format('Y-m-d\TH:i:s.u\Z'),
         "clientState" => $clientState
     ];
 
