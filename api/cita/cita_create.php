@@ -80,24 +80,31 @@ if ($duracion_a_guardar <= 0) {
 
 /* responsable disponible con menos carga ese día */
 $resp=$db->prepare("
- SELECT r.id,COUNT(v.id) n
+ SELECT r.id, COUNT(v_all.id) AS n -- Count ALL non-cancelled appointments for the day
  FROM   responsable r
  JOIN   responsable_disponibilidad d ON d.responsable_id=r.id
        AND d.activo=1 AND d.dia_semana= :dia_calculated
        AND :f BETWEEN d.fecha_vigencia_desde
                  AND IFNULL(d.fecha_vigencia_hasta,'2999-12-31')
        AND TIME(:h) BETWEEN d.hora_inicio AND d.hora_fin
- LEFT   JOIN agendamiento_visitas v ON v.responsable_id=r.id
-       AND v.fecha_reunion=:f 
-       AND v.estado<>'CANCELADO'
-       AND (
-           -- Verificar si la nueva cita se solapa con citas existentes
-           (TIME(:h) >= v.hora_reunion AND TIME(:h) < ADDTIME(v.hora_reunion, SEC_TO_TIME(COALESCE(v.duracion_minutos, 60) * 60)))
-           OR
-           (v.hora_reunion >= TIME(:h) AND v.hora_reunion < ADDTIME(TIME(:h), SEC_TO_TIME(:duracion * 60)))
-       )
+ LEFT   JOIN agendamiento_visitas v_all ON v_all.responsable_id=r.id
+       AND v_all.fecha_reunion=:f
+       AND v_all.estado<>'CANCELADO'
  WHERE r.id != 3
  GROUP  BY r.id
+ HAVING NOT EXISTS (
+    SELECT 1
+    FROM agendamiento_visitas v_overlap
+    WHERE v_overlap.responsable_id = r.id
+      AND v_overlap.fecha_reunion = :f
+      AND v_overlap.estado <> 'CANCELADO'
+      AND (
+          -- Check if the new appointment overlaps with existing appointments
+          (TIME(:h) >= v_overlap.hora_reunion AND TIME(:h) < ADDTIME(v_overlap.hora_reunion, SEC_TO_TIME(COALESCE(v_overlap.duracion_minutos, 60) * 60)))
+          OR
+          (v_overlap.hora_reunion >= TIME(:h) AND v_overlap.hora_reunion < ADDTIME(TIME(:h), SEC_TO_TIME(:duracion * 60)))
+      )
+ )
  ORDER  BY n ASC, RAND() ASC
  LIMIT 1");
 $resp->execute([':f'=>$fecha,':h'=>$hora, ':dia_calculated'=>$dia, ':duracion'=>$duracion_a_guardar]);
