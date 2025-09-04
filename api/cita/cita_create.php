@@ -199,6 +199,30 @@ if ($correoResponsable) {
 }
 // --- FIN: Lógica de envío de correo a responsable para citas ---
 
+
+// --- INICIO: Sincronización con Outlook Calendar ---
+// Se requiere el helper que maneja la lógica de Outlook.
+require_once __DIR__ . '/../helpers/outlook_sync_helper.php';
+
+// Después de que la cita se ha creado localmente, intentamos crearla en Outlook.
+if ($lastInsertId) {
+    $outlookEventId = crearEventoEnOutlook((int)$lastInsertId);
+    if ($outlookEventId) {
+        // Si la creación en Outlook fue exitosa, guardamos el ID del evento de Outlook
+        // en nuestra cita local para poder actualizarla o eliminarla en el futuro.
+        $stmtUpdateOutlookId = $db->prepare(
+            "UPDATE agendamiento_visitas SET outlook_event_id = :outlook_id WHERE id = :cita_id"
+        );
+        $stmtUpdateOutlookId->execute([
+            ':outlook_id' => $outlookEventId,
+            ':cita_id' => $lastInsertId
+        ]);
+    }
+    // Nota: Si la sincronización falla, la cita local YA está creada.
+    // El fallo quedará registrado en la tabla de logs para revisión manual o reintentos.
+}
+// --- FIN: Sincronización con Outlook Calendar ---
+
 $db->commit();
 echo json_encode(['ok'=>true]);
 }catch(PDOException $e){

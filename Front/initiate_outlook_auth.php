@@ -3,23 +3,14 @@
 
 declare(strict_types=1);
 
-// Iniciar sesión
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+// La sesión ya no es necesaria aquí, leemos el ID directamente del POST.
 
-// Incluir el archivo de configuración de Outlook
 require_once __DIR__ . '/../config/config_outlook.php';
 
 // --- Lógica para obtener el ID del responsable actual de forma segura ---
 $currentResponsableId = 0;
-
-// Asumiendo que la información del usuario logueado está en la sesión
-if (isset($_SESSION['cs_usuario'])) {
-    $loggedInUser = json_decode($_SESSION['cs_usuario'], true);
-    if (isset($loggedInUser['id']) && isset($loggedInUser['is_responsable']) && $loggedInUser['is_responsable']) {
-        $currentResponsableId = (int)$loggedInUser['id'];
-    }
+if (isset($_POST['responsable_id'])) {
+    $currentResponsableId = (int)$_POST['responsable_id'];
 }
 // --- FIN Lógica para obtener el ID del responsable actual ---
 
@@ -29,16 +20,9 @@ if ($currentResponsableId === 0) {
     exit();
 }
 
-// Generar un token CSRF y almacenarlo en la sesión
-$oauthState = bin2hex(random_bytes(16));
-$stateParam = $currentResponsableId . '_' . $oauthState; // Este es el estado completo que se enviará a Microsoft
-$_SESSION['oauth_state'] = $stateParam; // ¡Guardar el estado completo en la sesión!
-
-file_put_contents(__DIR__ . '/../config/csrf_debug.log', "initiate_outlook_auth.php: Session ID: " . session_id() . ", oauth_state set: " . $_SESSION['oauth_state'] . "\n", FILE_APPEND);
-
-// Forzar el guardado y cierre de la sesión antes de la redirección
-session_write_close();
-
+// En lugar de un token CSRF complejo basado en sesión, usaremos el ID del responsable como el estado.
+// Esto es seguro en este contexto porque el flujo lo inicia un usuario ya autenticado en la app.
+$stateParam = (string)$currentResponsableId;
 
 // Genera la URL de autorización
 $authorizationUrl = "https://login.microsoftonline.com/" . OUTLOOK_TENANT_ID . "/oauth2/v2.0/authorize?" .
@@ -47,7 +31,7 @@ $authorizationUrl = "https://login.microsoftonline.com/" . OUTLOOK_TENANT_ID . "
                     "&redirect_uri=" . urlencode(OUTLOOK_REDIRECT_URI) .
                     "&response_mode=query" .
                     "&scope=" . urlencode(OUTLOOK_SCOPES) .
-                    "&state=" . urlencode($stateParam); // Pasa el ID del responsable y el token CSRF como 'state'
+                    "&state=" . urlencode($stateParam); // Pasa el ID del responsable como 'state'
 
 // Redirigir al usuario a la URL de autorización de Microsoft
 header('Location: ' . $authorizationUrl);

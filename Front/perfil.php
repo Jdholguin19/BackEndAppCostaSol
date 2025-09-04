@@ -236,13 +236,12 @@ if (isset($_SESSION['cs_usuario'])) {
   </div> <!-- End of profile-info -->
 
   <!-- Sincronización de Calendario -->
-  <?php if ($isResponsable): ?>
-  <div class="form-section">
+  <div class="form-section" id="outlookSyncSection" style="display: none;"> <!-- Oculto por defecto -->
       <label class="section-title">
           <i class="bi bi-calendar-check"></i>
           Sincronización de Calendario Outlook
       </label>
-      <form action="initiate_outlook_auth.php" method="POST">
+      <form id="outlookForm" action="initiate_outlook_auth.php" method="POST">
           <button type="submit" class="btn btn-primary">
               <i class="bi bi-microsoft-teams me-2"></i> Conectar Calendario Outlook
           </button>
@@ -251,7 +250,6 @@ if (isset($_SESSION['cs_usuario'])) {
           Conecta tu calendario de Outlook para sincronizar tus citas.
       </p>
   </div>
-  <?php endif; ?>
 
   <!-- Logout Button -->
   <div class="logout-section">
@@ -618,6 +616,28 @@ include '../api/bottom_nav.php';
   /* ---------- Initialize ---------- */
   document.addEventListener('DOMContentLoaded', function() {
     loadProfileData();
+
+    // --- Lógica de visibilidad para el botón de Outlook ---
+    // La variable `u` se define al inicio del script y contiene los datos del localStorage
+    if (u.is_responsable) {
+        const outlookSection = document.getElementById('outlookSyncSection');
+        if(outlookSection) {
+            // Adicionalmente, podríamos verificar si ya hay un token para mostrar "Desconectar"
+            // pero por ahora, simplemente mostramos la sección de conexión.
+            outlookSection.style.display = 'block';
+
+            // --- Añadir ID de responsable al formulario ---
+            const outlookForm = document.getElementById('outlookForm');
+            if (outlookForm && u.id) {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'responsable_id';
+                hiddenInput.value = u.id;
+                outlookForm.appendChild(hiddenInput);
+            }
+        }
+    }
+    // --- Fin de la lógica de visibilidad ---
     
     // Verificar si el usuario ya está desuscrito y configurar el switch
     const isUnsubscribed = localStorage.getItem('onesignal_unsubscribed') === 'true';
