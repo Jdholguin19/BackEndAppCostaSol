@@ -252,6 +252,7 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
             $fechaReunion = $startDateTime->format('Y-m-d');
             $horaReunion = $startDateTime->format('H:i:s');
             $duracionMinutos = ($endDateTime->getTimestamp() - $startDateTime->getTimestamp()) / 60;
+            if ($duracionMinutos < 1) $duracionMinutos = 30; // Mínimo 30 minutos
 
             // Extraer propósito y propiedad de la descripción o asunto si es posible
             $propositoId = 5; // Default to 'Evento de Calendario'
@@ -271,7 +272,7 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
 
             // Intenta parsear la propiedad del location o asunto si sigue el patrón "Propiedad M[manzana] V[villa]"
             $locationName = $event['location']['displayName'] ?? '';
-            if (preg_match('/Propiedad M(\\w+) V(\\w+)/', $locationName, $matches)) {
+            if (preg_match('/Propiedad M(\w+) V(\w+)/', $locationName, $matches)) {
                 $manzana = $matches[1];
                 $villa = $matches[2];
                 $stmtPropiedad = $db->prepare("SELECT id FROM propiedad WHERE manzana = :manzana AND villa = :villa");
@@ -309,3 +310,180 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
     }
 }
 
+
+/**
+ * Procesa una notificación de webhook de Outlook.
+ *
+ * @param array $notification La notificación recibida del webhook.
+ * @return void
+ */
+function procesarNotificacionWebhook(array $notification): void
+{
+    $db = DB::getDB();
+
+    // Validar clientState (seguridad)
+    $clientState = $notification['clientState'] ?? null;
+    if (!$clientState) {
+        log_sync(null, null, 'Outlook -> App', 'WEBHOOK', 'Error', 'Notificación sin clientState.');
+        return;
+    }
+
+    // Buscar responsable por clientState
+    $stmtResp = $db->prepare("SELECT id, outlook_access_token, outlook_refresh_token, outlook_token_expires_at, outlook_calendar_id FROM responsable WHERE outlook_client_state = :client_state");
+    $stmtResp->execute([':client_state' => $clientState]);
+    $responsable = $stmtResp->fetch(PDO::FETCH_ASSOC);
+
+    if (!$responsable) {
+        log_sync(null, null, 'Outlook -> App', 'WEBHOOK', 'Error', 'Responsable no encontrado para el clientState: ' . $clientState);
+        return;
+    }
+
+    $responsableId = (int)$responsable['id'];
+    $accessToken = getOutlookAccessToken($responsableId); // Asegura un token válido
+    if (!$accessToken) {
+        log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'No se pudo obtener token de acceso para procesar webhook.');
+        return;
+    }
+
+    $changeType = $notification['changeType'] ?? null;
+    $outlookEventId = $notification['resourceData']['id'] ?? null; // ID del evento en Outlook
+
+    if (!$changeType || !$outlookEventId) {
+        log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Notificación incompleta (changeType o outlookEventId faltante).', $notification);
+        return;
+    }
+
+    log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Info', "Procesando: $changeType para evento $outlookEventId");
+
+    switch ($changeType) {
+        case 'Created':
+        case 'Updated':
+            // Obtener detalles completos del evento desde Graph API
+            $graphUrl = "https://graph.microsoft.com/v1.0/me/events/{$outlookEventId}";
+            $ch = curl_init($graphUrl);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $accessToken,
+                'Content-Type: application/json'
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            $eventData = json_decode($response, true);
+
+            if ($httpCode === 200) {
+                // Convertir fechas y horas a formato local (America/Guayaquil)
+                $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
+
+                $startDateTime = new DateTime($eventData['start']['dateTime'], new DateTimeZone($eventData['start']['timeZone']));
+                $startDateTime->setTimezone($zonaHorariaLocal);
+
+                $endDateTime = new DateTime($eventData['end']['dateTime'], new DateTimeZone($eventData['end']['timeZone']));
+                $endDateTime->setTimezone($zonaHorariaLocal);
+
+                $fechaReunion = $startDateTime->format('Y-m-d');
+                $horaReunion = $startDateTime->format('H:i:s');
+                $duracionMinutos = ($endDateTime->getTimestamp() - $startDateTime->getTimestamp()) / 60;
+                if ($duracionMinutos < 1) $duracionMinutos = 30; // Mínimo 30 minutos
+
+                $observaciones = $eventData['body']['content'] ?? $eventData['subject'];
+                $propositoId = 5; // Default to 'Evento de Calendario' (ID 5)
+                $idPropiedad = null;
+
+                // Intenta parsear el propósito del asunto si sigue el patrón "Cita: [Proposito] - [Cliente]"
+                if (preg_match('/^Cita: (.+?) - /', $eventData['subject'], $matches)) {
+                    $propositoNombre = trim($matches[1]);
+                    $stmtProposito = $db->prepare("SELECT id FROM proposito_agendamiento WHERE proposito = :proposito");
+                    $stmtProposito->execute([':proposito' => $propositoNombre]);
+                    $foundProposito = $stmtProposito->fetch(PDO::FETCH_ASSOC);
+                    if ($foundProposito) {
+                        $propositoId = (int)$foundProposito['id'];
+                    }
+                }
+
+                // Intenta parsear la propiedad del location o asunto si sigue el patrón "Propiedad M[manzana] V[villa]"
+                $locationName = $eventData['location']['displayName'] ?? '';
+                if (preg_match('/Propiedad M(\w+) V(\w+)/', $locationName, $matches)) {
+                    $manzana = $matches[1];
+                    $villa = $matches[2];
+                    $stmtPropiedad = $db->prepare("SELECT id FROM propiedad WHERE manzana = :manzana AND villa = :villa");
+                    $stmtPropiedad->execute([':manzana' => $manzana, ':villa' => $villa]);
+                    $foundPropiedad = $stmtPropiedad->fetch(PDO::FETCH_ASSOC);
+                    if ($foundPropiedad) {
+                        $idPropiedad = (int)$foundPropiedad['id'];
+                    }
+                }
+
+                // Verificar si ya existe en la DB local
+                $stmtCheck = $db->prepare("SELECT id FROM agendamiento_visitas WHERE outlook_event_id = :outlook_event_id");
+                $stmtCheck->execute([':outlook_event_id' => $outlookEventId]);
+                $localCita = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+                if ($localCita) {
+                    // Actualizar cita existente
+                    $stmtUpdate = $db->prepare(" 
+                        UPDATE agendamiento_visitas SET
+                            responsable_id = :responsable_id,
+                            proposito_id = :proposito_id,
+                            fecha_reunion = :fecha_reunion,
+                            hora_reunion = :hora_reunion,
+                            observaciones = :observaciones,
+                            duracion_minutos = :duracion_minutos,
+                            id_propiedad = :id_propiedad
+                        WHERE id = :id
+                    ");
+                    $stmtUpdate->execute([
+                        ':responsable_id' => $responsableId,
+                        ':proposito_id' => $propositoId,
+                        ':fecha_reunion' => $fechaReunion,
+                        ':hora_reunion' => $horaReunion,
+                        ':observaciones' => $observaciones,
+                        ':duracion_minutos' => $duracionMinutos,
+                        ':id_propiedad' => $idPropiedad,
+                        ':id' => $localCita['id']
+                    ]);
+                    log_sync((int)$localCita['id'], $responsableId, 'Outlook -> App', 'ACTUALIZAR', 'Exito', 'Cita actualizada desde Outlook.');
+                } else {
+                    // Insertar nueva cita
+                    $stmtInsert = $db->prepare(" 
+                        INSERT INTO agendamiento_visitas (
+                            responsable_id, proposito_id, fecha_reunion, hora_reunion,
+                            estado, observaciones, duracion_minutos, outlook_event_id, id_propiedad
+                        ) VALUES (
+                            :responsable_id, :proposito_id, :fecha_reunion, :hora_reunion,
+                            'PROGRAMADO', :observaciones, :duracion_minutos, :outlook_event_id, :id_propiedad
+                        )
+                    ");
+                    $stmtInsert->execute([
+                        ':responsable_id' => $responsableId,
+                        ':proposito_id' => $propositoId,
+                        ':fecha_reunion' => $fechaReunion,
+                        ':hora_reunion' => $horaReunion,
+                        ':observaciones' => $observaciones,
+                        ':duracion_minutos' => $duracionMinutos,
+                        ':outlook_event_id' => $outlookEventId,
+                        ':id_propiedad' => $idPropiedad
+                    ]);
+                    log_sync((int)$db->lastInsertId(), $responsableId, 'Outlook -> App', 'CREAR', 'Exito', 'Cita creada desde Outlook.');
+                }
+            } else {
+                log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Error al obtener detalles del evento: HTTP ' . $httpCode . ' - ' . json_encode($eventData));
+            }
+            break;
+
+        case 'Deleted':
+            // Marcar cita local como CANCELADO o eliminarla
+            $stmtDelete = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_event_id");
+            $stmtDelete->execute([':outlook_event_id' => $outlookEventId]);
+            if ($stmtDelete->rowCount() > 0) {
+                log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Exito', 'Cita cancelada/eliminada localmente desde Outlook.');
+            } else {
+                log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Error', 'Cita no encontrada localmente para eliminar desde Outlook.');
+            }
+            break;
+
+        default:
+            log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Advertencia', 'Tipo de cambio de webhook no soportado: ' . $changeType);
+            break;
+    }
+}
