@@ -26,6 +26,7 @@
   <div class="d-flex align-items-center gap-3 mb-3">
     <select id="selResp" class="form-select w-auto"></select>
     <a href="cita_responsable.php" id="btnAgendarCliente" class="btn btn-primary">Agendar para Cliente</a>
+    <button id="btnRefreshCalendar" class="btn btn-outline-primary"><i class="bi bi-arrow-clockwise"></i> Refrescar</button>
   </div>
 
   <div id="calendar"></div>
@@ -64,8 +65,10 @@ if (!is_admin_responsible) {
 }
 
 /* ---------- calendario ---------- */
+let calendar; // Declare calendar in a higher scope
+
 function initCalendar(){
-  const calendar=new FullCalendar.Calendar(
+  calendar=new FullCalendar.Calendar(
     document.getElementById('calendar'),
     {
       locale:'es',
@@ -113,6 +116,13 @@ function initCalendar(){
 
 /* ---------- navegación ---------- */
 document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
+
+/* ---------- Refrescar Calendario ---------- */
+document.getElementById('btnRefreshCalendar').onclick = () => {
+  if (calendar) {
+    calendar.refetchEvents();
+  }
+};
 
 
 </script>

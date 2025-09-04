@@ -236,3 +236,76 @@
 [04-Sep-2025 11:21:38 America/Boise] PHP Fatal error:  Cannot redeclare refreshOutlookAccessToken() (previously declared in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php:19) in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 80
 [04-Sep-2025 11:24:37 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'id_usuario' cannot be null
 [04-Sep-2025 11:27:46 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '2-2025-02-13-11:00:00' for key 'uq_responsable_hora'
+[04-Sep-2025 11:53:11 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T17:53:11",
+            "request-id": "8b78870a-5a92-4e0c-9530-5d8bb2e3a587",
+            "client-request-id": "8b78870a-5a92-4e0c-9530-5d8bb2e3a587"
+        }
+    }
+}
+[04-Sep-2025 11:53:11 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 11:55:51 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T17:55:51",
+            "request-id": "b89b1f9d-aec1-447d-827d-d83d4d279df9",
+            "client-request-id": "b89b1f9d-aec1-447d-827d-d83d4d279df9"
+        }
+    }
+}
+[04-Sep-2025 11:55:51 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 11:58:36 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T17:58:36",
+            "request-id": "c191073e-bd6d-4a6d-af68-98f20d0c331f",
+            "client-request-id": "c191073e-bd6d-4a6d-af68-98f20d0c331f"
+        }
+    }
+}
+[04-Sep-2025 11:58:36 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 12:17:12 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T18:17:12",
+            "request-id": "9afb3dd5-70ef-436c-80ee-87c03c364d4d",
+            "client-request-id": "9afb3dd5-70ef-436c-80ee-87c03c364d4d"
+        }
+    }
+}
+[04-Sep-2025 12:17:12 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 12:20:40 America/Boise] PHP Fatal error:  Cannot redeclare refreshOutlookAccessToken() (previously declared in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php:19) in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 80
+[04-Sep-2025 12:28:39 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function importarEventosDeOutlook() in /home1/portalao/public_html/website_cc359709/oauth_callback.php:193
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 193
+[04-Sep-2025 12:30:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function importarEventosDeOutlook() in /home1/portalao/public_html/website_cc359709/oauth_callback.php:193
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 193
+[04-Sep-2025 12:42:25 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function importarEventosDeOutlook() in /home1/portalao/public_html/website_cc359709/oauth_callback.php:193
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 193
+[04-Sep-2025 12:48:46 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T18:48:46",
+            "request-id": "514ada02-2f3c-431f-a44e-9f0600139ed9",
+            "client-request-id": "514ada02-2f3c-431f-a44e-9f0600139ed9"
+        }
+    }
+}
+[04-Sep-2025 12:48:46 America/Boise] Error: Suscripción a webhook fallida para responsable 2.

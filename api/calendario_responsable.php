@@ -16,18 +16,18 @@ try {
     $db  = DB::getDB();
     $sql = "
       SELECT v.id,
-             CONCAT(pa.proposito,' — ',u.nombres,' ',u.apellidos) AS title,
-             -- FullCalendar acepta 'YYYY-MM-DDTHH:MM:SS'
+             CONCAT(pa.proposito,' — ', COALESCE(u.nombres, 'Evento Externo'),' ', COALESCE(u.apellidos, '')) AS title,
              CONCAT(v.fecha_reunion,'T',v.hora_reunion)           AS start,
              ADDTIME(CONCAT(v.fecha_reunion,' ',v.hora_reunion),
-                     '00:45:00')                                  AS end,
+                     SEC_TO_TIME(COALESCE(v.duracion_minutos, 45) * 60)) AS end,
              CASE v.estado
                   WHEN 'PROGRAMADO' THEN '#ffc107'
                   WHEN 'REALIZADO'  THEN '#198754'
-                  ELSE '#dc3545' END                             AS color
+                  WHEN 'CANCELADO'  THEN '#dc3545'
+                  ELSE '#6c757d' END                             AS color
       FROM  agendamiento_visitas      v
       JOIN  proposito_agendamiento    pa ON pa.id = v.proposito_id
-      JOIN  usuario                   u  ON u.id  = v.id_usuario
+      LEFT JOIN  usuario              u  ON u.id  = v.id_usuario -- Cambiado a LEFT JOIN
       WHERE v.responsable_id = :id
         AND v.fecha_reunion BETWEEN :f0 AND :f1
       ORDER BY start";

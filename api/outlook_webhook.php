@@ -1,7 +1,7 @@
 <?php
 // api/outlook_webhook.php
 
-require_once __DIR__ . '/../helpers/outlook_sync_helper.php';
+require_once __DIR__ . '/helpers/outlook_sync_helper.php';
 
 // 1. Microsoft Graph envía un validationToken para verificar el endpoint la primera vez.
 if (isset($_GET['validationToken'])) {
