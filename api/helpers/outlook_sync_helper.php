@@ -204,4 +204,41 @@ function crearEventoEnOutlook(int $citaId): ?string {
     }
 }
 
+/**
+ * Elimina un evento en el calendario de Outlook.
+ *
+ * @param string $outlookEventId El ID del evento a eliminar.
+ * @param int $responsableId El ID del responsable dueño del calendario.
+ * @param int $citaId El ID de la cita local para los logs.
+ * @return bool True si se eliminó con éxito, false en caso contrario.
+ */
+function eliminarEventoEnOutlook(string $outlookEventId, int $responsableId, int $citaId): bool {
+    $accessToken = getOutlookAccessToken($responsableId);
+    if (!$accessToken) {
+        log_sync($citaId, $responsableId, 'App -> Outlook', 'ELIMINAR', 'Error', 'No se pudo obtener un token de acceso de Outlook válido.');
+        return false;
+    }
+
+    $graphUrl = "https://graph.microsoft.com/v1.0/me/events/{$outlookEventId}";
+
+    $ch = curl_init($graphUrl);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $accessToken
+    ]);
+
+    curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode === 204) { // 204 No Content es la respuesta exitosa para DELETE
+        log_sync($citaId, $responsableId, 'App -> Outlook', 'ELIMINAR', 'Exito', 'Evento eliminado en Outlook.');
+        return true;
+    } else {
+        log_sync($citaId, $responsableId, 'App -> Outlook', 'ELIMINAR', 'Error', "HTTP $httpCode");
+        return false;
+    }
+}
+
 ?>

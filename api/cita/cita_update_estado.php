@@ -49,8 +49,8 @@ if (!$cita_id || !in_array($new_status, $allowed_statuses)) {
 try {
     $db = DB::getDB();
 
-    // Verificar que el responsable esté asignado a esta cita
-    $stmt_verify = $db->prepare('SELECT responsable_id FROM agendamiento_visitas WHERE id = :cita_id');
+    // 1. Verificar que el responsable esté asignado a esta cita y obtener el ID de evento de Outlook
+    $stmt_verify = $db->prepare('SELECT responsable_id, outlook_event_id FROM agendamiento_visitas WHERE id = :cita_id');
     $stmt_verify->execute([':cita_id' => $cita_id]);
     $cita = $stmt_verify->fetch(PDO::FETCH_ASSOC);
 
@@ -66,11 +66,17 @@ try {
         exit();
     }
 
-    // Actualizar el estado
+    // 2. Actualizar el estado en la base de datos local
     $stmt_update = $db->prepare('UPDATE agendamiento_visitas SET estado = :estado WHERE id = :cita_id');
     $stmt_update->execute([':estado' => $new_status, ':cita_id' => $cita_id]);
 
     if ($stmt_update->rowCount() > 0) {
+        // 3. Si el nuevo estado es CANCELADO y hay un evento de Outlook, eliminarlo
+        if ($new_status === 'CANCELADO' && !empty($cita['outlook_event_id'])) {
+            require_once __DIR__ . '/../helpers/outlook_sync_helper.php';
+            eliminarEventoEnOutlook($cita['outlook_event_id'], (int)$cita['responsable_id'], $cita_id);
+        }
+
         echo json_encode(['ok' => true, 'mensaje' => 'Estado de la cita actualizado.']);
     } else {
         echo json_encode(['ok' => true, 'mensaje' => 'El estado de la cita no ha cambiado.']);
