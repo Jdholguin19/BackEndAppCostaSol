@@ -233,3 +233,6 @@
 [04-Sep-2025 09:30:42 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
 [04-Sep-2025 09:31:27 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
 [04-Sep-2025 09:34:05 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
+[04-Sep-2025 11:21:38 America/Boise] PHP Fatal error:  Cannot redeclare refreshOutlookAccessToken() (previously declared in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php:19) in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 80
+[04-Sep-2025 11:24:37 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'id_usuario' cannot be null
+[04-Sep-2025 11:27:46 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '2-2025-02-13-11:00:00' for key 'uq_responsable_hora'

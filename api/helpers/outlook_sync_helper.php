@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-// api/helpers/outlook_sync_helper.php (Versión 2 - con cURL)
+// api/helpers/outlook_sync_helper.php (Versión 3 - Verificación de duplicados mejorada)
 
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/config_outlook.php';
+require_once __DIR__ . '/outlook_auth_helper.php';
 
 /**
  * Escribe un registro en la tabla de log de sincronización.
@@ -26,58 +27,6 @@ function log_sync(?int $id_cita, ?int $id_responsable, string $direccion, string
         ]);
     } catch (Throwable $e) {
         error_log("Error al escribir en log_sincronizacion_outlook: " . $e->getMessage());
-    }
-}
-
-/**
- * Refresca un access_token de Outlook usando un refresh_token.
- */
-function refreshOutlookAccessToken(int $responsableId, string $refreshToken): ?string {
-    // ... (La función de refresco sigue siendo la misma, con cURL)
-    $tokenUrl = "https://login.microsoftonline.com/" . OUTLOOK_TENANT_ID . "/oauth2/v2.0/token";
-    $postData = [
-        'client_id'     => OUTLOOK_CLIENT_ID,
-        'scope'         => OUTLOOK_SCOPES,
-        'refresh_token' => $refreshToken,
-        'redirect_uri'  => OUTLOOK_REDIRECT_URI,
-        'grant_type'    => 'refresh_token',
-        'client_secret' => OUTLOOK_CLIENT_SECRET,
-    ];
-
-    $ch = curl_init($tokenUrl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($httpCode !== 200) {
-        log_sync(null, $responsableId, 'App -> Outlook', 'REFRESH_TOKEN', 'Error', "HTTP $httpCode: " . $response);
-        return null;
-    }
-
-    $tokenData = json_decode($response, true);
-    if (!isset($tokenData['access_token'])) {
-        return null;
-    }
-
-    try {
-        $db = DB::getDB();
-        $expiresAt = date('Y-m-d H:i:s', time() + ($tokenData['expires_in'] ?? 3600));
-        $stmt = $db->prepare(
-            "UPDATE responsable SET outlook_access_token = :access_token, outlook_refresh_token = :refresh_token, outlook_token_expires_at = :expires_at WHERE id = :id"
-        );
-        $stmt->execute([
-            ':access_token' => $tokenData['access_token'],
-            ':refresh_token' => $tokenData['refresh_token'] ?? $refreshToken,
-            ':expires_at' => $expiresAt,
-            ':id' => $responsableId
-        ]);
-        return $tokenData['access_token'];
-    } catch (Throwable $e) {
-        log_sync(null, $responsableId, 'App -> Outlook', 'REFRESH_TOKEN', 'Error', "Error DB: " . $e->getMessage());
-        return null;
     }
 }
 
@@ -150,7 +99,6 @@ function crearEventoEnOutlook(int $citaId): ?string {
         return null;
     }
 
-    // --- Conversión de Zona Horaria (CRÍTICO) ---
     $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
     $inicioLocal = new DateTime($cita['fecha_reunion'] . ' ' . $cita['hora_reunion'], $zonaHorariaLocal);
     $duracion = $cita['duracion_minutos'] ?? 60;
@@ -206,11 +154,6 @@ function crearEventoEnOutlook(int $citaId): ?string {
 
 /**
  * Elimina un evento en el calendario de Outlook.
- *
- * @param string $outlookEventId El ID del evento a eliminar.
- * @param int $responsableId El ID del responsable dueño del calendario.
- * @param int $citaId El ID de la cita local para los logs.
- * @return bool True si se eliminó con éxito, false en caso contrario.
  */
 function eliminarEventoEnOutlook(string $outlookEventId, int $responsableId, int $citaId): bool {
     $accessToken = getOutlookAccessToken($responsableId);
@@ -238,6 +181,191 @@ function eliminarEventoEnOutlook(string $outlookEventId, int $responsableId, int
     } else {
         log_sync($citaId, $responsableId, 'App -> Outlook', 'ELIMINAR', 'Error', "HTTP $httpCode");
         return false;
+    }
+}
+
+/**
+ * Importa todos los eventos de un calendario de Outlook a la base de datos local.
+ * Se asegura de no crear duplicados si un evento ya fue importado o si el horario ya está ocupado.
+ */
+function importarEventosDeOutlook(int $responsableId, string $accessToken): void {
+    $db = DB::getDB();
+    // Traemos más campos para tener la información completa
+    $graphUrl = "https://graph.microsoft.com/v1.0/me/events?%24select=id,subject,body,start,end,location&%24top=100";
+
+    $importedCount = 0;
+    $skippedCount = 0;
+
+    while ($graphUrl) {
+        $ch = curl_init($graphUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken]);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode !== 200) {
+            log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Error', "No se pudieron obtener eventos de Outlook. HTTP: $httpCode");
+            return;
+        }
+
+        $data = json_decode($response, true);
+        $events = $data['value'] ?? [];
+
+        foreach ($events as $event) {
+            $outlookEventId = $event['id'];
+
+            // --- Verificación de Duplicados Robusta ---
+            // 1. Chequear por ID de Outlook (si este evento específico ya fue importado)
+            $stmtCheckId = $db->prepare("SELECT id FROM agendamiento_visitas WHERE outlook_event_id = :outlook_id");
+            $stmtCheckId->execute([ ':outlook_id' => $outlookEventId ]);
+            if ($stmtCheckId->fetch()) {
+                $skippedCount++;
+                continue;
+            }
+
+            // Convertir fechas para la segunda verificación
+            $zonaHorariaUTC = new DateTimeZone('UTC');
+            $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
+            $startUTC = new DateTime($event['start']['dateTime'], $zonaHorariaUTC);
+            $startLocal = (clone $startUTC)->setTimezone($zonaHorariaLocal);
+            $fechaLocal = $startLocal->format('Y-m-d');
+            $horaLocal = $startLocal->format('H:i:s');
+
+            // 2. Chequear por la restricción de unicidad (responsable, fecha, hora) para evitar el error 1062
+            $stmtCheckUnique = $db->prepare("SELECT id FROM agendamiento_visitas WHERE responsable_id = :resp_id AND fecha_reunion = :fecha AND hora_reunion = :hora");
+            $stmtCheckUnique->execute([
+                ':resp_id' => $responsableId,
+                ':fecha'   => $fechaLocal,
+                ':hora'    => $horaLocal
+            ]);
+            if ($stmtCheckUnique->fetch()) {
+                $skippedCount++;
+                continue;
+            }
+            // --- Fin Verificación de Duplicados ---
+
+            // Preparar datos para la inserción
+            $endUTC = new DateTime($event['end']['dateTime'], $zonaHorariaUTC);
+            $duracion = ($endUTC->getTimestamp() - $startUTC->getTimestamp()) / 60;
+            $observaciones = $event['subject'] ?? 'Evento de Outlook';
+
+            $stmtInsert = $db->prepare("
+                INSERT INTO agendamiento_visitas
+                (id_usuario, id_propiedad, responsable_id, proposito_id, fecha_reunion, hora_reunion, estado, observaciones, duracion_minutos, outlook_event_id)
+                VALUES (NULL, NULL, :responsable_id, 5, :fecha, :hora, 'PROGRAMADO', :obs, :duracion, :outlook_id)
+            ");
+            
+            $stmtInsert->execute([
+                ':responsable_id' => $responsableId,
+                ':fecha' => $fechaLocal,
+                ':hora' => $horaLocal,
+                ':obs' => $observaciones,
+                ':duracion' => $duracion,
+                ':outlook_id' => $outlookEventId
+            ]);
+            $importedCount++;
+        }
+
+        // Manejar paginación
+        $graphUrl = $data['@odata.nextLink'] ?? null;
+    }
+
+    log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Exito', "Importación completada. Importados: $importedCount, Omitidos: $skippedCount.");
+}
+
+/**
+ * Procesa una notificación de webhook individual recibida de Microsoft Graph.
+ */
+function procesarNotificacionWebhook(array $notification): void {
+    $db = DB::getDB();
+
+    // 1. Encontrar al responsable basado en el ID de la suscripción
+    $subscriptionId = $notification['subscriptionId'] ?? null;
+    if (!$subscriptionId) return;
+
+    $stmtResp = $db->prepare("SELECT id, outlook_client_state FROM responsable WHERE outlook_subscription_id = :sub_id");
+    $stmtResp->execute([':sub_id' => $subscriptionId]);
+    $responsable = $stmtResp->fetch(PDO::FETCH_ASSOC);
+
+    if (!$responsable) return; // No se encontró responsable para esta suscripción
+
+    $responsableId = (int)$responsable['id'];
+
+    // 2. Validar el clientState para seguridad
+    $clientState = $notification['clientState'] ?? null;
+    if ($clientState !== $responsable['outlook_client_state']) {
+        log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'ClientState no coincide. Posible intento de suplantación.');
+        return;
+    }
+
+    $changeType = $notification['changeType'] ?? '';
+    $resourceUrl = $notification['resource'] ?? '';
+    preg_match('/events\(\'(.*?)\'\)/i', $resourceUrl, $matches);
+    $outlookEventId = $matches[1] ?? null;
+
+    if (!$outlookEventId) return;
+
+    // 3. Manejar evento eliminado
+    if ($changeType === 'deleted') {
+        $stmt = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_id");
+        $stmt->execute([':outlook_id' => $outlookEventId]);
+        log_sync($stmt->rowCount() ? null : null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Exito', "Evento eliminado en Outlook fue marcado como CANCELADO en la app.");
+        return;
+    }
+
+    // 4. Para eventos creados o actualizados, obtener los detalles del evento de Graph
+    $accessToken = getOutlookAccessToken($responsableId);
+    if (!$accessToken) return;
+
+    $graphUrl = "https://graph.microsoft.com/v1.0/{$resourceUrl}";
+    $ch = curl_init($graphUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken]);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    $eventData = json_decode($response, true);
+
+    if (empty($eventData) || isset($eventData['error'])) return;
+
+    // 5. Buscar si la cita ya existe en la DB local
+    $stmtFind = $db->prepare("SELECT id FROM agendamiento_visitas WHERE outlook_event_id = :outlook_id");
+    $stmtFind->execute([':outlook_id' => $outlookEventId]);
+    $citaLocal = $stmtFind->fetch();
+
+    // Preparar datos comunes
+    $zonaHorariaUTC = new DateTimeZone('UTC');
+    $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
+    $startUTC = new DateTime($eventData['start']['dateTime'], $zonaHorariaUTC);
+    $endUTC = new DateTime($eventData['end']['dateTime'], $zonaHorariaUTC);
+    $startLocal = (clone $startUTC)->setTimezone($zonaHorariaLocal);
+    $duracion = ($endUTC->getTimestamp() - $startUTC->getTimestamp()) / 60;
+    $observaciones = $eventData['subject'] ?? 'Evento de Outlook';
+
+    if ($citaLocal) {
+        // --- Lógica de ACTUALIZACIÓN ---
+        $citaId = $citaLocal['id'];
+        $stmtUpdate = $db->prepare("UPDATE agendamiento_visitas SET fecha_reunion = :fecha, hora_reunion = :hora, observaciones = :obs, duracion_minutos = :duracion WHERE id = :id");
+        $stmtUpdate->execute([
+            ':fecha' => $startLocal->format('Y-m-d'),
+            ':hora' => $startLocal->format('H:i:s'),
+            ':obs' => $observaciones,
+            ':duracion' => $duracion,
+            ':id' => $citaId
+        ]);
+        log_sync($citaId, $responsableId, 'Outlook -> App', 'ACTUALIZAR', 'Exito', 'Cita local actualizada desde Outlook.');
+    } else {
+        // --- Lógica de CREACIÓN ---
+        $stmtInsert = $db->prepare("INSERT INTO agendamiento_visitas (id_usuario, id_propiedad, responsable_id, proposito_id, fecha_reunion, hora_reunion, estado, observaciones, duracion_minutos, outlook_event_id) VALUES (NULL, NULL, :responsable_id, 5, :fecha, :hora, 'PROGRAMADO', :obs, :duracion, :outlook_id)");
+        $stmtInsert->execute([
+            ':responsable_id' => $responsableId,
+            ':fecha' => $startLocal->format('Y-m-d'),
+            ':hora' => $startLocal->format('H:i:s'),
+            ':obs' => $observaciones,
+            ':duracion' => $duracion,
+            ':outlook_id' => $outlookEventId
+        ]);
+        log_sync($db->lastInsertId(), $responsableId, 'Outlook -> App', 'CREAR', 'Exito', 'Nueva cita creada desde Outlook.');
     }
 }
 

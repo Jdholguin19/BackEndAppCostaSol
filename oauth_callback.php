@@ -188,6 +188,11 @@ try {
         }
         // --- FIN: Obtener y guardar el ID del calendario principal ---
 
+        // --- INICIO: Importación masiva de eventos existentes ---
+        require_once __DIR__ . '/api/helpers/outlook_sync_helper.php';
+        importarEventosDeOutlook($responsableId, $accessToken);
+        // --- FIN: Importación masiva ---
+
         // Tokens guardados exitosamente, ahora crear la suscripción al webhook
         $webhookUrl = "https://app.costasol.com.ec/api/outlook_webhook.php"; // URL CORRECTA de tu webhook
         $subscription = createOutlookWebhookSubscription($responsableId, $accessToken, $webhookUrl);
