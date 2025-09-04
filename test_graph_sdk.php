@@ -1,29 +1,50 @@
+<?php
+// test_graph_sdk.php - VERSIÓN FINAL CORREGIDA
 
-1 <?php
-     // test_graph_sdk.php - VERSIÓN DE DEPURACIÓN
-     
-     // Forzar la visualización de errores
-     ini_set('display_errors', 1);
-     ini_set('display_startup_errors', 1);
-     error_reporting(E_ALL);
-     
-     // 1. Verificar si el autoload de Composer existe
-    $autoload_path = __DIR__ . '/vendor/autoload.php';
-    if (!file_exists($autoload_path)) {
-        echo "Error: No se encuentra el archivo 'vendor/autoload.php'. Asegúrate de haber ejecutado 'composer require microsoft/microsoft-graph' en la raíz del proyecto en tu servidor.";
-        exit;
-    }
-    
-    // 2. Incluir el autoloader
-    require_once $autoload_path;
-    
-    // 3. Intentar usar una clase del SDK
-    try {
-        $graph = new \Microsoft\Graph\Graph();
-        echo "¡Éxito! La librería Microsoft Graph SDK se ha cargado correctamente.";
-        // La clase se instanció sin errores, lo que significa que el SDK está disponible.
-    } catch (Throwable $e) {
-        echo "Ocurrió un error al intentar usar el SDK: " . $e->getMessage();
-   }
-   
-    ?>
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Importar las clases necesarias
+use Microsoft\Kiota\Authentication\Oauth\AuthorizationCodeContext;
+use Microsoft\Graph\GraphServiceClient;
+
+try {
+    // Para este test, solo necesitamos demostrar que podemos crear los objetos
+    // sin que falle, usando las clases y constructores correctos.
+    // Usamos valores ficticios.
+    $tenantId = 'tu_tenant_id';
+    $clientId = 'tu_client_id';
+    $clientSecret = 'tu_client_secret';
+    $authorizationCode = 'dummy_auth_code';
+    $redirectUri = 'https://localhost/callback';
+
+    // 1. Creamos el contexto de autenticación (los datos para el login)
+    $tokenRequestContext = new AuthorizationCodeContext(
+        $tenantId,
+        $clientId,
+        $clientSecret,
+        $authorizationCode,
+        $redirectUri
+    );
+
+    // 2. Pasamos el CONTEXTO directamente al cliente principal, como indica el error.
+    // La librería se encarga de crear el adaptador y el proveedor por debajo.
+    $graphServiceClient = new GraphServiceClient($tokenRequestContext);
+
+    echo "<h1>¡Éxito Definitivo!</h1>";
+    echo "<p>La librería <strong>Microsoft Graph SDK v2</strong> y sus componentes de autenticación se han cargado correctamente.</p>";
+    echo "<p>Se ha instanciado <code>GraphServiceClient</code> pasándole el contexto de autenticación, tal como requiere esta versión del SDK.</p>";
+    echo "<p><b>El entorno está listo.</b> Ya podemos proceder con el plan de acción para sincronizar las citas.</p>";
+
+} catch (Throwable $e) {
+    echo "<h1>Ocurrió un error al intentar usar el SDK v2</h1>";
+    echo "<p>Este error es inesperado. Por favor, revisa los detalles:</p>";
+    echo "<b>Mensaje:</b> " . $e->getMessage() . "<br>";
+    echo "<b>Archivo:</b> " . $e->getFile() . "<br>";
+    echo "<b>Línea:</b> " . $e->getLine() . "<br>";
+    echo "<pre>Trace: " . $e->getTraceAsString() . "</pre>";
+}
+?>
