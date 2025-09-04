@@ -7,12 +7,17 @@ Este proyecto es una aplicación web integral diseñada para la gestión de prop
 A continuación, se detalla la organización de los archivos y directorios principales del proyecto:
 
 C:\xampp\htdocs\BackEndAppCostaSol\
+├───actualizacion_db_acabados.sql
 ├───antiguo.php
+├───error_log
 ├───index.php
 ├───manifest.json
 ├───Manual_de_uso.pdf
+├───oauth_callback.php
 ├───OneSignalSDKWorker.js
+├───outlook_webhook.php
 ├───paleta_vegetal.pdf
+├───phpinfo.php
 ├───portalao_appcostasol.sql
 ├───README.md
 ├───.git\...
@@ -23,9 +28,9 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │   ├───acabado_seleccion_guardada.php
 │   ├───acabados_imagenes.php
 │   ├───acabados_kits_disponibles.php
-
 │   ├───bottom_nav.php
 │   ├───calendario_responsable.php
+│   ├───create_outlook_subscription.php
 │   ├───etapas_manzana_villa.php
 │   ├───garantias.php
 │   ├───guardar_seleccion_acabados.php
@@ -39,6 +44,7 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │   ├───notificaciones_mark_read.php
 │   ├───notificaciones.php
 │   ├───obtener_propiedades.php
+│   ├───outlook_webhook.php
 │   ├───paquetes_adicionales.php
 │   ├───paletavegetal.php
 │   ├───perfil.php
@@ -71,7 +77,9 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │   │   ├───subtipo_ctg.php
 │   │   └───tipo_ctg.php
 │   ├───helpers\
-│   │   └───notificaciones.php
+│   │   ├───notificaciones.php
+│   │   ├───outlook_auth_helper.php
+│   │   └───outlook_sync_helper.php
 │   └───pqr\
 │       ├───pqr_create.php
 │       ├───pqr_estados.php
@@ -92,6 +100,7 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │       ├───user_crud.php
 │       └───users.php
 ├───config\
+│   ├───config_outlook.php
 │   ├───db.php
 │   └───error_log
 ├───correos\
@@ -106,6 +115,7 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │   ├───citas.php
 │   ├───fase_detalle.php
 │   ├───garantias.php
+│   ├───initiate_outlook_auth.php
 │   ├───login_front.php
 │   ├───menu_front.php
 │   ├───menu2.php
@@ -166,8 +176,6 @@ C:\xampp\htdocs\BackEndAppCostaSol\
 │   └───MostrarImagenes.php
 └───uploads\
 
-```
-
 ## Archivos Clave para el Funcionamiento y Entendimiento
 
 Aunque la estructura de carpetas detalla todos los archivos, los siguientes son considerados esenciales para comprender el funcionamiento central de la aplicación:
@@ -200,6 +208,8 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   Cancelación de citas (`api/cita/cita_cancelar.php`).
     *   Eliminación de citas canceladas (`api/cita/cita_eliminar.php`).
     *   Gestión de la disponibilidad de los responsables (`api/cita/dias_disponibles.php`, `api/cita/horas_disponibles.php`).
+    *   **Duración Variable:** Las citas pueden tener duraciones específicas (ej. 120 minutos para "Elección de acabados"), almacenadas en `agendamiento_visitas.duracion_minutos`.
+    *   **Asignación Inteligente de Responsables:** El sistema asigna citas al responsable disponible con la menor carga de trabajo para el día y hora solicitados, evitando solapamientos y excluyendo al responsable con ID 3.
 *   **Gestión de CTG (Contingencias):**
     *   Creación, listado y visualización de detalles de solicitudes de contingencia.
     *   Funcionalidades para añadir respuestas, actualizar el estado y gestionar observaciones.
@@ -247,7 +257,7 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   **Gestión Avanzada de Notificaciones desde el Perfil:**
         *   Nueva sección de notificaciones con opción de desuscripción.
         *   Ventana emergente de confirmación con diseño de psicología inversa.
-        *   Funcionalidad de resuscripción para volver a activar notificaciones.
+        *   Funcionalidad de resuscripción para reactivar notificaciones.
         *   Sincronización automática del estado con el menú principal.
 
 ## Resumen de Funcionalidades de la API.
@@ -269,12 +279,32 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 
 ### Gestión de Citas
 
-*   **`api/cita/cita_create.php`**: Crea una nueva cita. **Modificado:** Ahora detecta si la petición viene de un responsable para permitirle crear una cita para otro usuario, o si es un usuario normal, en cuyo caso solo puede crear citas para sí mismo.
+*   **`api/cita/cita_create.php`**: Crea una nueva cita. **Modificado:** Ahora detecta si la petición viene de un responsable para permitirle crear una cita para otro usuario, o si es un usuario normal, en cuyo caso solo puede crear citas para sí mismo. También se ha mejorado la lógica de asignación de responsables para considerar la carga de trabajo y evitar solapamientos.
 *   **`api/cita/citas_list.php`**: Lista citas, con opciones de filtrado por usuario o responsable.
-*   **`api/cita/cita_cancelar.php`**: Cancela una cita existente.
+*   **`api/cita/cita_cancelar.php`**: Cancela una cita existente. También elimina el evento correspondiente en Outlook si está sincronizado.
 *   **`api/cita/cita_eliminar.php`**: Elimina una cita (usualmente citas canceladas).
+*   **`api/cita/cita_update_estado.php`**: Actualiza el estado de una cita. Si el estado cambia a 'CANCELADO', también elimina el evento correspondiente en Outlook si está sincronizado.
 *   **`api/cita/dias_disponibles.php`**: Obtiene los días disponibles para agendar citas por responsable.
-*   **`api/cita/horas_disponibles.php`**: Obtiene las horas disponibles para agendar citas en un día específico.
+*   **`api/cita/horas_disponibles.php`**: Obtiene las horas disponibles para agendar citas en un día específico, considerando la duración de la cita y los solapamientos.
+
+### Integración con Microsoft Outlook
+
+El sistema ofrece una sincronización bidireccional robusta con los calendarios de Outlook de los responsables, permitiendo una gestión centralizada de las citas.
+
+*   **Sincronización de la App a Outlook (Unidireccional):**
+    *   **Creación de Citas:** Al crear una cita en la aplicación (`api/cita/cita_create.php`), se genera automáticamente un evento en el calendario de Outlook del responsable asignado. El ID del evento de Outlook (`outlook_event_id`) se almacena en la tabla `agendamiento_visitas`.
+    *   **Cancelación/Actualización de Citas:** Si una cita se cancela (`api/cita/cita_cancelar.php`) o su estado se actualiza a 'CANCELADO' (`api/cita/cita_update_estado.php`) en la aplicación, el evento correspondiente en Outlook se elimina.
+
+*   **Sincronización de Outlook a la App (Unidireccional vía Webhooks):**
+    *   **Webhooks:** El sistema establece suscripciones de webhook con Microsoft Graph (`oauth_callback.php`, `api/helpers/outlook_auth_helper.php`). Outlook notifica a la aplicación (`api/outlook_webhook.php`) sobre cambios (creación, actualización, eliminación) en los eventos del calendario del responsable.
+    *   **Procesamiento de Notificaciones:** La función `procesarNotificacionWebhook` en `api/helpers/outlook_sync_helper.php` procesa estas notificaciones. Identifica el tipo de cambio y actualiza la base de datos local (`agendamiento_visitas`) en consecuencia (creando, actualizando o marcando como cancelada la cita).
+    *   **Validación de `clientState`:** Cada notificación de webhook incluye un `clientState` único, que se utiliza para verificar la autenticidad de la notificación y asociarla al responsable correcto.
+
+*   **Gestión de Suscripciones y Limpieza:**
+    *   **`oauth_callback.php`:** Maneja el flujo de autenticación OAuth 2.0 con Microsoft. Tras obtener los tokens, intenta eliminar cualquier suscripción de webhook existente para el responsable antes de crear una nueva. Esto asegura que solo una suscripción activa y válida esté en uso.
+    *   **`api/helpers/outlook_auth_helper.php`:** Contiene funciones para refrescar tokens (`refreshOutlookAccessToken`), crear suscripciones (`createOutlookWebhookSubscription`), y eliminar suscripciones (`deleteOutlookWebhookSubscription`).
+    *   **`api/outlook_webhook.php`:** El endpoint que recibe las notificaciones de webhook de Outlook. Responde con el código HTTP 202 Accepted para confirmar la recepción y luego procesa la notificación.
+    *   **`log_sincronizacion_outlook` (Tabla de Base de Datos):** Registra todas las operaciones de sincronización entre la aplicación y Outlook, incluyendo errores y éxitos, lo que facilita la depuración y el monitoreo.
 
 ### Gestión de CTG (Contingencias)
 
@@ -343,7 +373,6 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 
 
 
-
 Esta sección describe las funcionalidades implementadas en el frontend de la aplicación, que interactúan con la API y proporcionan la experiencia de usuario.
 
 ### Autenticación y Gestión de Sesión
@@ -363,7 +392,7 @@ Esta sección describe las funcionalidades implementadas en el frontend de la ap
 *   **`fase_detalle.php`**: Muestra el detalle de las etapas de construcción de una propiedad específica (manzana y villa), incluyendo el porcentaje de avance y fotos asociadas. Interactúa con `api/etapas_manzana_villa.php` y `api/propiedad_fase.php`.
 
 ... 
-*   **`seleccion_acabados.php`**: Implementa el flujo de selección de acabados. **Modificado:** Ha sido rediseñado para soportar un flujo de múltiples etapas. La lógica de JavaScript maneja el estado temporal de la selección (guardado en `localStorage`) y los cálculos de costos en tiempo real. **Mejoras de UX:** Tras guardar la selección, la interfaz se actualiza para mostrar una confirmación sin recargar la página. Si detecta una selección previamente guardada en el servidor (vía `api/acabado_seleccion_guardada.php`), la página carga directamente el resumen final en modo de solo lectura. Las imágenes del resumen ahora se pueden ampliar utilizando la librería Featherlight.
+*   **`seleccion_acabados.php`**: Implementa el flujo de selección de acabados. **Modificado:** Ha sido rediseñado para soportar un flujo de múltiples etapas. La lógica de JavaScript maneja el estado temporal de la selección (guardado en `localStorage`) y los cálculos de costos en tiempo real. **Mejoras de UX:** Tras guardar la selección, la interfaz se actualiza para mostrar una confirmación sin recargar la página. Si detecta una selección previamente guardada en el servidor (vía `api/acabado_seleccion_guardada.php`), la página carga directamente el resumen final en modo de solo lectura, asegurando consistencia. Las imágenes del resumen ahora se pueden ampliar utilizando la librería Featherlight.
 ...
 
 
@@ -422,7 +451,7 @@ Se han implementado mejoras para asegurar la correcta visualización de propieda
 
 *   **Corrección de Error de Autenticación y Carga de Propiedades (`401 Unauthorized`):**
     *   Se identificó un error donde las solicitudes a `api/obtener_propiedades.php` (tanto para usuarios regulares como para responsables) fallaban con un estado `401 Unauthorized`.
-    *   **Causa:** La llamada `fetch` en `Front/menu_front.php` para obtener propiedades no estaba incluyendo el encabezado `Authorization` con el token de sesión, a pesar de que la API lo requería.
+    *   **Causa:** La llamada `fetch` en `Front/menu_front.php` para obtener propiedades no incluía el encabezado `Authorization` con el token de sesión, a pesar de que la API lo requería.
     *   **Solución:** Se añadió el encabezado `Authorization: Bearer <token>` a la solicitud `fetch` para `api/obtener_propiedades.php` en `Front/menu_front.php`.
 
 *   **Corrección de `Uncaught ReferenceError: Cannot access 'token' before initialization`:**
@@ -486,6 +515,7 @@ El esquema de la base de datos se define en `portalao_appcostasol.sql` y está d
 *   **Nuevas Tablas:**
     *   `paquetes_adicionales`: Almacena los paquetes extra que se pueden añadir, con su nombre, descripción, precio y fotos.
     *   `propiedad_paquetes_adicionales`: Tabla intermedia que vincula una `propiedad` con los `paquetes_adicionales` que el usuario ha seleccionado.
+    *   `log_sincronizacion_outlook`: Registra todas las operaciones de sincronización entre la aplicación y Outlook, incluyendo errores y éxitos, lo que facilita la depuración y el monitoreo.
 
 ## Tecnologías Utilizadas
 
@@ -545,7 +575,7 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
     *   **Nueva Interfaz (`Front/cita_responsable.php`):** Se creó una página dedicada donde el responsable primero selecciona a un cliente de una lista desplegable. Una vez seleccionado, se cargan las propiedades de ese cliente para continuar con el proceso de agendamiento de forma similar al flujo del cliente.
     *   **Nuevo Endpoint (`api/user_list.php`):** Se añadió un endpoint para poblar la lista de clientes, accesible únicamente por responsables.
     *   **API Modificada (`api/obtener_propiedades.php`):** Se actualizó para que, si recibe un `id_usuario` como parámetro, devuelva las propiedades de ese usuario específico. Esto permite cargar dinámicamente las propiedades del cliente seleccionado en la nueva interfaz.
-    *   **API Modificada (`api/cita/cita_create.php`):** Se reforzó la seguridad para distinguir entre una petición de un responsable (que puede especificar para qué cliente es la cita) y la de un cliente (que solo puede agendar para sí mismo).
+    *   **API Modificada (`api/cita/cita_create.php`):** Se reforzó la seguridad para distinguir entre una petición de un responsable (que puede especificar para qué cliente es la cita) y la de un cliente (que solo puede agendar para sí mismo). También se ha mejorado la lógica de asignación de responsables para considerar la carga de trabajo y evitar solapamientos.
     *   **Mejoras de Usabilidad:**
         *   Se añadió un botón "Agendar para Cliente" en la vista del calendario (`Front/panel_calendario.php`) para dar un acceso directo a la nueva funcionalidad.
         *   El botón "Agendar" en la página de listado de citas (`Front/citas.php`) ahora es dinámico: lleva a la interfaz de agendamiento normal para clientes y a la nueva interfaz para responsables.
@@ -562,17 +592,16 @@ Para configurar y ejecutar el proyecto localmente, siga estos pasos generales:
 *   **Corrección en Carga de Propiedades para Citas Nuevas:**
     *   Se solucionó un error en `Front/cita_nueva.php` que impedía la carga de propiedades en el selector.
     *   **Causa:** La solicitud `fetch` a `api/obtener_propiedades.php` no incluía el token de autenticación en la cabecera `Authorization`.
-    *   **Solución:** Se modificó la llamada `fetch` para incluir el `Bearer Token`, asegurando la correcta autenticación y carga de los datos.
+    *   **Solución:** Se añadió el encabezado `Authorization: Bearer <token>` a la solicitud `fetch` para `api/obtener_propiedades.php` en `Front/menu_front.php`, asegurando la correcta autenticación y carga de los datos.
 
 *   **Visualización Dinámica de Módulos por Rol y Estado:**
     *   **Ocultar Módulo "Selección Acabados":** Se implementó una lógica en `Front/menu_front.php` y `Front/menu2.php` para que el módulo "Selección Acabados" se oculte completamente para los usuarios con el rol de "Residente" (`rol_id = 2`).
     *   **Desactivación de Módulos "Garantías" y "CTG":** Se extendió la funcionalidad para que el módulo "CTG" también se desactive (junto con "Garantías") si la garantía del usuario ha expirado. Esta restricción no se aplica a los usuarios "responsables".
     *   **Corrección de Visualización de Menú Principal:** Se ajustó la lógica en `Front/menu_front.php` para asegurar que, aunque se oculte un módulo para un rol específico, la vista principal siempre muestre 4 módulos, cargando el siguiente disponible en la lista.
     *   **Módulo de Notificaciones:**                                                                                                                                                      │
-    *   **Previsualización de Imágenes:** Se mejoró la página de notificaciones (`notificaciones.php`) para que, si una notificación está asociada a un adjunto de imagen,             │
-     se muestre una vista previa en miniatura (50x50px) directamente en la tarjeta de notificación, haciéndolas más informativas y visuales. 
+    *   **Previsualización de Imágenes:** Se mejoró la página de notificaciones (`notificaciones.php`) para que, si una notificación está asociada a un adjunto de imagen,             │     se muestre una vista previa en miniatura (50x50px) directamente en la tarjeta de notificación, haciéndolas más informativas y visuales. 
 
-    *   **Sistema Avanzado de Gestión de Notificaciones OneSignal (Diciembre 2024):**
+    *   **Sistema Avanzado de Gestión de Notificaciones Push OneSignal (Diciembre 2024):**
     *   **Ventana Emergente Personalizada de Suscripción:** Se implementó en `Front/menu_front.php` una ventana emergente elegante y responsiva que reemplaza el icono rojo molesto de OneSignal con una interfaz personalizada que incluye el mensaje "Estate al tanto de todas las novedades" y botones "No, gracias" y "Subscribirse".
     *   **Psicología Inversa en la Interfaz:** El botón "No, gracias" se implementó en color rojo para crear psicología inversa y hacer que el usuario se sienta más inclinado a hacer clic en "Subscribirse".
     *   **Detección Inteligente del Estado de Suscripción:** Se implementó un sistema robusto que verifica correctamente si el usuario está suscrito a OneSignal usando la API v16, con múltiples fallbacks y verificación periódica del estado.

@@ -15,7 +15,8 @@ if (isset($_GET['validationToken'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Respondemos inmediatamente a Microsoft para que no reintente la notificación.
     http_response_code(202); // 202 Accepted
-    flush();
+    // No need for flush() here, it can cause issues with some servers/proxies.
+    // The script will naturally exit after processing, sending the 202.
 
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);

@@ -193,6 +193,20 @@ try {
         importarEventosDeOutlook($responsableId, $accessToken);
         // --- FIN: Importación masiva ---
 
+        // --- INICIO: Eliminar suscripciones existentes antes de crear una nueva ---
+        // Obtener el ID de suscripción actual del responsable (si existe)
+        $stmtCurrentSub = $db->prepare("SELECT outlook_subscription_id FROM responsable WHERE id = :responsable_id");
+        $stmtCurrentSub->execute([':responsable_id' => $responsableId]);
+        $currentSubscriptionId = $stmtCurrentSub->fetchColumn();
+
+        if ($currentSubscriptionId) {
+            error_log("DEBUG: Attempting to delete old subscription: $currentSubscriptionId for responsable $responsableId.");
+            // Use the access token that was just acquired/refreshed
+            deleteOutlookWebhookSubscription($currentSubscriptionId, $accessToken);
+            // We don't stop the flow if deletion fails, just log it.
+        }
+        // --- FIN: Eliminar suscripciones existentes ---
+
         // Tokens guardados exitosamente, ahora crear la suscripción al webhook
         $webhookUrl = "https://app.costasol.com.ec/api/outlook_webhook.php"; // URL CORRECTA de tu webhook
         $subscription = createOutlookWebhookSubscription($responsableId, $accessToken, $webhookUrl);
@@ -206,11 +220,20 @@ try {
                     outlook_client_state = :client_state
                 WHERE id = :responsable_id
             ");
+                        // --- DEBUG LOGS START ---
+            error_log("DEBUG: oauth_callback.php - Attempting to update responsable $responsableId with clientState: " . $subscription['clientState']);
+            // --- DEBUG LOGS END ---
+
             $stmtSub->execute([
                 ':sub_id' => $subscription['id'],
                 ':client_state' => $subscription['clientState'],
                 ':responsable_id' => $responsableId
             ]);
+
+            // --- DEBUG LOGS START ---
+            $rowsAffected = $stmtSub->rowCount();
+            error_log("DEBUG: oauth_callback.php - Rows affected by clientState update: " . $rowsAffected);
+            // --- DEBUG LOGS END ---
             // Redirigir a una página de éxito en el frontend
             header('Location: /Front/perfil.php?outlook_status=success');
             exit();

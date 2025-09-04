@@ -97,7 +97,7 @@ function createOutlookWebhookSubscription(int $responsableId, string $accessToke
 
     $subscriptionData = [
         "changeType" => "created,updated,deleted",
-        "notificationUrl" => $webhookUrl, // Use the URL passed to the function
+        "notificationUrl" => $webhookUrl,
         "resource" => "me/events",
         // Format the date according to ISO 8601 with microseconds, as required by the API.
         "expirationDateTime" => $expirationDateTime->format('Y-m-d\TH:i:s.u\Z'),
@@ -130,4 +130,32 @@ function createOutlookWebhookSubscription(int $responsableId, string $accessToke
     }
 }
 
-?>
+/**
+ * Deletes an Outlook webhook subscription.
+ *
+ * @param string $subscriptionId The ID of the subscription to delete.
+ * @param string $accessToken The access token for the responsible.
+ * @return bool True on success, false on failure.
+ */
+function deleteOutlookWebhookSubscription(string $subscriptionId, string $accessToken): bool {
+    $graphUrl = "https://graph.microsoft.com/v1.0/subscriptions/{$subscriptionId}";
+
+    $ch = curl_init($graphUrl);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $accessToken
+    ]);
+
+    curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode === 204) { // 204 No Content is success for DELETE
+        error_log("DEBUG: Webhook subscription $subscriptionId deleted successfully.");
+        return true;
+    } else {
+        error_log("ERROR: Failed to delete webhook subscription $subscriptionId. HTTP Code: $httpCode. Response: " . curl_error($ch));
+        return false;
+    }
+}

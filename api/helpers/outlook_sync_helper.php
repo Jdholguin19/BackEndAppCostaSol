@@ -464,7 +464,12 @@ function procesarNotificacionWebhook(array $notification): void
                         ':outlook_event_id' => $outlookEventId,
                         ':id_propiedad' => $idPropiedad
                     ]);
-                    log_sync((int)$db->lastInsertId(), $responsableId, 'Outlook -> App', 'CREAR', 'Exito', 'Cita creada desde Outlook.');
+                    $insertedId = $db->lastInsertId();
+if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
+    log_sync((int)$insertedId, $responsableId, 'Outlook -> App', 'CREAR', 'Exito', 'Cita creada desde Outlook.');
+} else {
+    log_sync(null, $responsableId, 'Outlook -> App', 'CREAR', 'Error', 'Cita creada desde Outlook, pero no se pudo obtener el ID de inserción.');
+}
                 }
             } else {
                 log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Error al obtener detalles del evento: HTTP ' . $httpCode . ' - ' . json_encode($eventData));
