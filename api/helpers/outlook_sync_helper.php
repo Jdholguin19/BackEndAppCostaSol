@@ -280,7 +280,7 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
             }
 
             // Intenta parsear el propósito del asunto si sigue el patrón "Cita: [Proposito] - [Cliente]"
-            if (preg_match('/^Cita: (.+?) - /', $event['subject'], $matches)) {
+            if (preg_match('/^Cita: (.+?) - /', $event['subject'] ?? '', $matches)) {
                 $propositoNombre = trim($matches[1]);
                 $stmtProposito = $db->prepare("SELECT id FROM proposito_agendamiento WHERE proposito = :proposito");
                 $stmtProposito->execute([':proposito' => $propositoNombre]);
@@ -292,7 +292,7 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
 
             // Intenta parsear la propiedad del location o asunto si sigue el patrón "Propiedad M[manzana] V[villa]"
             $locationName = $event['location']['displayName'] ?? '';
-            if (preg_match('/Propiedad M(\w+) V(\w+)/', $locationName, $matches)) {
+            if (preg_match('/Propiedad M(\w+) V(\w+)/', $locationName ?? '', $matches)) {
                 $manzana = $matches[1];
                 $villa = $matches[2];
                 $stmtPropiedad = $db->prepare("SELECT id FROM propiedad WHERE manzana = :manzana AND villa = :villa");
@@ -383,6 +383,13 @@ function procesarNotificacionWebhook(array $notification): void
 
     log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Info', "Procesando: $changeType para evento $outlookEventId");
 
+    // NUEVA LÓGICA: Si el cambio es 'deleted', siempre re-sincronizamos INMEDIATAMENTE.
+    if ($changeType === 'deleted') {
+        log_sync(null, $responsableId, 'Outlook -> App', 'RE-SYNC_DELETED', 'Info', 'Detectada eliminación. Iniciando re-sincronización completa.');
+        importarEventosDeOutlook($responsableId, $accessToken);
+        return; // Salimos después de re-sincronizar por eliminación
+    }
+
     // 1. OBTENEMOS LOS DETALLES DEL EVENTO PRIMERO
     $graphUrl = "https://graph.microsoft.com/v1.0/me/events/{$outlookEventId}";
     $ch = curl_init($graphUrl);
@@ -411,16 +418,15 @@ function procesarNotificacionWebhook(array $notification): void
         return; // Salimos de la función
     }
 
-    // 2. NUEVA CONDICIÓN: ¿ES UNA SERIE MAESTRA?
-    if (isset($eventData['type']) && $eventData['type'] === 'seriesMaster') {
+    
 
+    // 2. NUEVA CONDICIÓN: ¿ES UNA SERIE MAESTRA? (Solo para created/updated)
+    if (isset($eventData['type']) && $eventData['type'] === 'seriesMaster') {
         // SÍ ES UNA SERIE: Activamos la re-sincronización total
         log_sync(null, $responsableId, 'Outlook -> App', 'RE-SYNC_SERIES', 'Info', 'Detectado cambio en serie maestra. Iniciando re-sincronización completa.');
         importarEventosDeOutlook($responsableId, $accessToken);
-
     } else {
-
-        // NO ES UNA SERIE: Procedemos con la lógica anterior para eventos simples
+        // NO ES UNA SERIE: Procedemos con la lógica anterior para eventos simples (created/updated)
         switch ($changeType) {
             case 'created':
             case 'updated':
@@ -445,7 +451,7 @@ function procesarNotificacionWebhook(array $notification): void
                 $idPropiedad = null;
 
                 // Intenta parsear el propósito del asunto si sigue el patrón "Cita: [Proposito] - [Cliente]"
-                if (preg_match('/^Cita: (.+?) - /', $eventData['subject'], $matches)) {
+                if (preg_match('/^Cita: (.+?) - /', $eventData['subject'] ?? '', $matches)) {
                     $propositoNombre = trim($matches[1]);
                     $stmtProposito = $db->prepare("SELECT id FROM proposito_agendamiento WHERE proposito = :proposito");
                     $stmtProposito->execute([':proposito' => $propositoNombre]);
@@ -457,7 +463,7 @@ function procesarNotificacionWebhook(array $notification): void
 
                 // Intenta parsear la propiedad del location o asunto si sigue el patrón "Propiedad M[manzana] V[villa]"
                 $locationName = $eventData['location']['displayName'] ?? '';
-                if (preg_match('/Propiedad M(\w+) V(\w+)/', $locationName, $matches)) {
+                if (preg_match('/Propiedad M(\w+) V(\w+)/', $locationName ?? '', $matches)) {
                     $manzana = $matches[1];
                     $villa = $matches[2];
                     $stmtPropiedad = $db->prepare("SELECT id FROM propiedad WHERE manzana = :manzana AND villa = :villa");
@@ -527,13 +533,7 @@ if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
                 }
                 break;
 
-            case 'deleted':
-                // En lugar de intentar cancelar una sola cita, re-sincronizamos completamente.
-                // Esto maneja la eliminación de series recurrentes de forma robusta.
-                log_sync(null, $responsableId, 'Outlook -> App', 'RE-SYNC_DELETED', 'Info', 'Detectada eliminación. Iniciando re-sincronización completa.');
-                importarEventosDeOutlook($responsableId, $accessToken);
-                break;
-
+            // El case 'deleted' se ha movido fuera del switch
             default:
                 log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Advertencia', 'Tipo de cambio de webhook no soportado: ' . $changeType);
                 break;
