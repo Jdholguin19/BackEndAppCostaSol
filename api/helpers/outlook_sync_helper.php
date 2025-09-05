@@ -215,23 +215,22 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
         return;
     }
 
-    // PASO 1: Limpiar la pizarra. Eliminar todas las citas futuras que fueron creadas por Outlook para este responsable.
-    // Esto elimina los "fantasmas" de ocurrencias que fueron canceladas en Outlook.
+    // PASO 1: Limpiar la pizarra. Eliminar todas las citas que fueron creadas por Outlook para este responsable.
     $stmtDelete = $db->prepare(
         "DELETE FROM agendamiento_visitas 
         WHERE responsable_id = :responsable_id 
           AND outlook_event_id IS NOT NULL"
     );
     $stmtDelete->execute([':responsable_id' => $responsableId]);
-    log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR_LIMPIEZA', 'Exito', $stmtDelete->rowCount() . ' citas futuras de Outlook eliminadas antes de la nueva importación.');
+    log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR_LIMPIEZA', 'Exito', $stmtDelete->rowCount() . ' citas de Outlook eliminadas antes de la nueva importación.');
 
 
     // PASO 2: Importar la lista fresca de eventos activos desde Outlook.
     $startWindow = new DateTime('first day of this month', new DateTimeZone('UTC'));
     $endWindow = (new DateTime('now', new DateTimeZone('UTC')))->add(new DateInterval('P1Y')); // Sincronizar 1 año hacia el futuro
 
-    $startWindowStr = $startWindow->format('Y-m-d\TH:i:s\Z');
-    $endWindowStr = $endWindow->format('Y-m-d\TH:i:s\Z');
+    $startWindowStr = $startWindow->format('Y-m-d\\TH:i:s\\Z');
+    $endWindowStr = $endWindow->format('Y-m-d\\TH:i:s\\Z');
 
     // Usar el endpoint calendarview que expande los eventos recurrentes y pedir hasta 200
     $graphUrl = "https://graph.microsoft.com/v1.0/me/calendars/{$calendarId}/calendarview?startDateTime={$startWindowStr}&endDateTime={$endWindowStr}&\$top=200";
@@ -251,8 +250,10 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
 
     if ($httpCode === 200 && isset($responseData['value'])) {
         foreach ($responseData['value'] as $event) {
-            // La vista de calendario ya filtra las ocurrencias canceladas.
-            // Y como hemos borrado las citas viejas, no necesitamos comprobar si ya existen.
+            // FILTRO DEFINITIVO: Ignorar las ocurrencias que están explícitamente canceladas.
+            if (isset($event['isCancelled']) && $event['isCancelled'] === true) {
+                continue; // No importar esta ocurrencia cancelada.
+            }
 
             // Convertir fechas y horas a formato local (America/Guayaquil)
             $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
@@ -333,6 +334,7 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
         log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR_DATOS', 'Error', 'Error al obtener eventos de Outlook: HTTP ' . $httpCode . ' - ' . json_encode($responseData));
     }
 }
+
 
 
 
