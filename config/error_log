@@ -1,0 +1,1295 @@
+[03-Sep-2025 10:48:29 America/Boise] oauth_callback.php: Session test var: Hello from perfil.php at 10:48:24
+[03-Sep-2025 11:06:47 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T17:06:47",
+            "request-id": "fe4fda86-e1c0-4a55-bad5-a8b7ed371450",
+            "client-request-id": "fe4fda86-e1c0-4a55-bad5-a8b7ed371450"
+        }
+    }
+}
+[03-Sep-2025 11:06:47 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 11:09:22 America/Boise] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php on line 98
+[03-Sep-2025 11:09:32 America/Boise] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php on line 98
+[03-Sep-2025 11:14:38 America/Boise] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php on line 98
+[03-Sep-2025 11:17:32 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T17:17:32",
+            "request-id": "722a32b1-ebeb-4eab-9be9-1948a4a45859",
+            "client-request-id": "722a32b1-ebeb-4eab-9be9-1948a4a45859"
+        }
+    }
+}
+[03-Sep-2025 11:17:32 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 11:55:51 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T17:55:51",
+            "request-id": "755fb6e1-69e7-493e-a930-aa6601716aa4",
+            "client-request-id": "755fb6e1-69e7-493e-a930-aa6601716aa4"
+        }
+    }
+}
+[03-Sep-2025 11:55:51 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:01:54 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:01:54",
+            "request-id": "1fe6aca5-8603-471d-bde0-b24d4b827124",
+            "client-request-id": "1fe6aca5-8603-471d-bde0-b24d4b827124"
+        }
+    }
+}
+[03-Sep-2025 12:01:54 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:06:18 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:06:18",
+            "request-id": "e6ae64fd-11a5-4254-b745-e7f3c7c210ae",
+            "client-request-id": "e6ae64fd-11a5-4254-b745-e7f3c7c210ae"
+        }
+    }
+}
+[03-Sep-2025 12:06:18 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:09:46 America/Boise] PHP Parse error:  syntax error, unexpected '$ch' (T_VARIABLE), expecting ']' in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php on line 104
+[03-Sep-2025 12:11:05 America/Boise] PHP Parse error:  syntax error, unexpected '$ch' (T_VARIABLE), expecting ']' in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php on line 104
+[03-Sep-2025 12:13:05 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:13:05",
+            "request-id": "c7672ee7-fd2d-4f24-b9f9-b2c497ad431d",
+            "client-request-id": "c7672ee7-fd2d-4f24-b9f9-b2c497ad431d"
+        }
+    }
+}
+[03-Sep-2025 12:13:05 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:16:12 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:16:12",
+            "request-id": "445e6b58-c40e-432f-a781-f9195ecde1cf",
+            "client-request-id": "445e6b58-c40e-432f-a781-f9195ecde1cf"
+        }
+    }
+}
+[03-Sep-2025 12:16:12 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:19:26 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:19:26",
+            "request-id": "89e5b579-80b0-4ca7-a3a8-d0d6ec09e031",
+            "client-request-id": "89e5b579-80b0-4ca7-a3a8-d0d6ec09e031"
+        }
+    }
+}
+[03-Sep-2025 12:19:26 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:27:34 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:27:34",
+            "request-id": "d483719c-e4d4-4bf0-8723-460ea2066521",
+            "client-request-id": "d483719c-e4d4-4bf0-8723-460ea2066521"
+        }
+    }
+}
+[03-Sep-2025 12:27:34 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:32:07 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "InvalidRequest",
+        "message": "Could not process subscription creation payload. Are all property names spelled and camelCased properly?Also are the dateTimeOffest properties in a valid Internet Date and Time format?",
+        "innerError": {
+            "date": "2025-09-03T18:32:07",
+            "request-id": "de0d18d9-5814-43bb-af7f-887289ccaaa8",
+            "client-request-id": "de0d18d9-5814-43bb-af7f-887289ccaaa8"
+        }
+    }
+}
+[03-Sep-2025 12:32:07 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:36:44 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "The request is invalid due to validation error.",
+        "innerError": {
+            "date": "2025-09-03T18:36:44",
+            "request-id": "beebe252-c08f-4b00-8de9-bf467af7b879",
+            "client-request-id": "beebe252-c08f-4b00-8de9-bf467af7b879"
+        }
+    }
+}
+[03-Sep-2025 12:36:44 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:37:20 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "The request is invalid due to validation error.",
+        "innerError": {
+            "date": "2025-09-03T18:37:20",
+            "request-id": "a3bd5c27-fa60-4cc3-ace5-99909eaeaedd",
+            "client-request-id": "a3bd5c27-fa60-4cc3-ace5-99909eaeaedd"
+        }
+    }
+}
+[03-Sep-2025 12:37:20 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:40:14 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "The request is invalid due to validation error.",
+        "innerError": {
+            "date": "2025-09-03T18:40:14",
+            "request-id": "44c07928-c3c4-437d-95cc-2a867c6b70a9",
+            "client-request-id": "44c07928-c3c4-437d-95cc-2a867c6b70a9"
+        }
+    }
+}
+[03-Sep-2025 12:40:14 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:43:08 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "The request is invalid due to validation error.",
+        "innerError": {
+            "date": "2025-09-03T18:43:08",
+            "request-id": "adbed6ae-b0ee-43ce-bb52-1f79fee0ddac",
+            "client-request-id": "adbed6ae-b0ee-43ce-bb52-1f79fee0ddac"
+        }
+    }
+}
+[03-Sep-2025 12:43:08 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:47:39 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "The request is invalid due to validation error.",
+        "innerError": {
+            "date": "2025-09-03T18:47:39",
+            "request-id": "e8057486-a55d-4eda-afb4-42c89d7c37bf",
+            "client-request-id": "e8057486-a55d-4eda-afb4-42c89d7c37bf"
+        }
+    }
+}
+[03-Sep-2025 12:47:39 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:51:38 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "This URL has no default content configured. <a href=\"https:\/\/webhook.site\/#!\/edit\/6111fe3c-045d-44e5-8b30-c93522521667\">Change response in Webhook.site<\/a>.",
+        "innerError": {
+            "date": "2025-09-03T18:51:38",
+            "request-id": "b5bdd01c-b8df-472d-be9d-895333bb1366",
+            "client-request-id": "b5bdd01c-b8df-472d-be9d-895333bb1366"
+        }
+    }
+}
+[03-Sep-2025 12:51:38 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[03-Sep-2025 12:54:11 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "This URL has no default content configured. <a href=\"https:\/\/webhook.site\/#!\/edit\/6111fe3c-045d-44e5-8b30-c93522521667\">Change response in Webhook.site<\/a>.",
+        "innerError": {
+            "date": "2025-09-03T18:54:11",
+            "request-id": "04198aec-a5a7-4977-96ef-3281b83a13fd",
+            "client-request-id": "04198aec-a5a7-4977-96ef-3281b83a13fd"
+        }
+    }
+}
+[03-Sep-2025 12:54:11 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 08:08:57 America/Boise] PHP Warning:  session_start(): open(/var/cpanel/php/sessions/ea-php83/sess_7200b705e53b1c8631bccf3e618d81e2, O_RDWR) failed: No such file or directory (2) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:08:57 America/Boise] PHP Warning:  session_start(): Failed to read session data: files (path: /var/cpanel/php/sessions/ea-php83) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:09:02 America/Boise] PHP Warning:  session_start(): open(/var/cpanel/php/sessions/ea-php83/sess_7200b705e53b1c8631bccf3e618d81e2, O_RDWR) failed: No such file or directory (2) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:09:02 America/Boise] PHP Warning:  session_start(): Failed to read session data: files (path: /var/cpanel/php/sessions/ea-php83) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:09:03 America/Boise] PHP Warning:  session_start(): open(/var/cpanel/php/sessions/ea-php83/sess_7200b705e53b1c8631bccf3e618d81e2, O_RDWR) failed: No such file or directory (2) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:09:03 America/Boise] PHP Warning:  session_start(): Failed to read session data: files (path: /var/cpanel/php/sessions/ea-php83) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:09:40 America/Boise] PHP Warning:  session_start(): open(/var/cpanel/php/sessions/ea-php83/sess_7200b705e53b1c8631bccf3e618d81e2, O_RDWR) failed: No such file or directory (2) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:09:40 America/Boise] PHP Warning:  session_start(): Failed to read session data: files (path: /var/cpanel/php/sessions/ea-php83) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 8
+[04-Sep-2025 08:21:30 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
+[04-Sep-2025 08:21:42 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request timed out.",
+        "innerError": {
+            "date": "2025-09-04T14:21:42",
+            "request-id": "55aeb437-fce6-4097-8594-895ef442b0b5",
+            "client-request-id": "55aeb437-fce6-4097-8594-895ef442b0b5"
+        }
+    }
+}
+[04-Sep-2025 08:21:42 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 08:26:33 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
+[04-Sep-2025 09:30:42 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
+[04-Sep-2025 09:31:27 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
+[04-Sep-2025 09:34:05 America/Boise] Error al obtener el ID del calendario para responsable 2: Interface "Microsoft\Kiota\Abstractions\Authentication\AuthenticationProvider" not found
+[04-Sep-2025 11:21:38 America/Boise] PHP Fatal error:  Cannot redeclare refreshOutlookAccessToken() (previously declared in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php:19) in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 80
+[04-Sep-2025 11:24:37 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'id_usuario' cannot be null
+[04-Sep-2025 11:27:46 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '2-2025-02-13-11:00:00' for key 'uq_responsable_hora'
+[04-Sep-2025 11:53:11 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T17:53:11",
+            "request-id": "8b78870a-5a92-4e0c-9530-5d8bb2e3a587",
+            "client-request-id": "8b78870a-5a92-4e0c-9530-5d8bb2e3a587"
+        }
+    }
+}
+[04-Sep-2025 11:53:11 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 11:55:51 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T17:55:51",
+            "request-id": "b89b1f9d-aec1-447d-827d-d83d4d279df9",
+            "client-request-id": "b89b1f9d-aec1-447d-827d-d83d4d279df9"
+        }
+    }
+}
+[04-Sep-2025 11:55:51 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 11:58:36 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T17:58:36",
+            "request-id": "c191073e-bd6d-4a6d-af68-98f20d0c331f",
+            "client-request-id": "c191073e-bd6d-4a6d-af68-98f20d0c331f"
+        }
+    }
+}
+[04-Sep-2025 11:58:36 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 12:17:12 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T18:17:12",
+            "request-id": "9afb3dd5-70ef-436c-80ee-87c03c364d4d",
+            "client-request-id": "9afb3dd5-70ef-436c-80ee-87c03c364d4d"
+        }
+    }
+}
+[04-Sep-2025 12:17:12 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 12:20:40 America/Boise] PHP Fatal error:  Cannot redeclare refreshOutlookAccessToken() (previously declared in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_auth_helper.php:19) in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 80
+[04-Sep-2025 12:28:39 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function importarEventosDeOutlook() in /home1/portalao/public_html/website_cc359709/oauth_callback.php:193
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 193
+[04-Sep-2025 12:30:38 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function importarEventosDeOutlook() in /home1/portalao/public_html/website_cc359709/oauth_callback.php:193
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 193
+[04-Sep-2025 12:42:25 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function importarEventosDeOutlook() in /home1/portalao/public_html/website_cc359709/oauth_callback.php:193
+Stack trace:
+#0 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 193
+[04-Sep-2025 12:48:46 America/Boise] Error al crear la suscripción a webhook para responsable 2 (HTTP 400): {
+    "error": {
+        "code": "ValidationError",
+        "message": "Subscription validation request failed. Notification endpoint must respond with 200 OK to validation request.",
+        "innerError": {
+            "date": "2025-09-04T18:48:46",
+            "request-id": "514ada02-2f3c-431f-a44e-9f0600139ed9",
+            "client-request-id": "514ada02-2f3c-431f-a44e-9f0600139ed9"
+        }
+    }
+}
+[04-Sep-2025 12:48:46 America/Boise] Error: Suscripción a webhook fallida para responsable 2.
+[04-Sep-2025 14:53:56 America/Boise] PHP Fatal error:  Uncaught TypeError: log_sync(): Argument #1 ($id_cita) must be of type ?int, string given, called in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 306 and defined in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php:13
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php(306): log_sync('265', 2, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importad...')
+#1 /home1/portalao/public_html/website_cc359709/oauth_callback.php(193): importarEventosDeOutlook(2, 'eyJ0eXAiOiJKV1Q...')
+#2 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 13
+[04-Sep-2025 15:10:43 America/Boise] PHP Fatal error:  Uncaught TypeError: log_sync(): Argument #1 ($id_cita) must be of type ?int, string given, called in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 306 and defined in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php:13
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php(306): log_sync('266', 2, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importad...')
+#1 /home1/portalao/public_html/website_cc359709/oauth_callback.php(193): importarEventosDeOutlook(2, 'eyJ0eXAiOiJKV1Q...')
+#2 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 13
+[04-Sep-2025 15:14:29 America/Boise] PHP Parse error:  syntax error, unexpected token "else" in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 468
+[04-Sep-2025 15:25:09 America/Boise] DEBUG: oauth_callback.php - Attempting to update responsable 2 with clientState: 4ba8b619d74e7aab1b1f5e37a5866dd0
+[04-Sep-2025 15:25:09 America/Boise] DEBUG: oauth_callback.php - Rows affected by clientState update: 1
+[04-Sep-2025 15:33:46 America/Boise] DEBUG: oauth_callback.php - Attempting to update responsable 2 with clientState: 4247100d4c5865303563662ea38ea4c5
+[04-Sep-2025 15:33:46 America/Boise] DEBUG: oauth_callback.php - Rows affected by clientState update: 1
+[04-Sep-2025 15:58:54 America/Boise] DEBUG: Webhook subscription 7cf1f1ff-edc5-48db-a1e4-621c664ca892 deleted successfully.
+[04-Sep-2025 15:58:55 America/Boise] DEBUG: Webhook subscription f2946473-6da1-49ac-b3f6-5bc5b657d906 deleted successfully.
+[04-Sep-2025 15:58:55 America/Boise] DEBUG: Webhook subscription daca95c7-6a09-452f-9d2f-b0705208de77 deleted successfully.
+[04-Sep-2025 15:58:56 America/Boise] DEBUG: Webhook subscription 5bb2cf2c-4478-46ff-a5df-c5beadd43214 deleted successfully.
+[04-Sep-2025 15:58:56 America/Boise] DEBUG: Webhook subscription 65e19b1c-ca4b-465f-b8bd-7026f580c6bf deleted successfully.
+[04-Sep-2025 15:58:57 America/Boise] DEBUG: Webhook subscription 1d832d00-dca2-4baa-bca6-5494c2617457 deleted successfully.
+[04-Sep-2025 15:58:57 America/Boise] DEBUG: Webhook subscription f87eac8c-e378-4573-b06b-0826e1ac8c65 deleted successfully.
+[04-Sep-2025 15:58:58 America/Boise] DEBUG: Webhook subscription 13733177-a9c0-4845-8e65-7ddbbbd7c3b7 deleted successfully.
+[04-Sep-2025 15:58:58 America/Boise] DEBUG: Webhook subscription ea9cb2f4-cf88-4205-9b82-062d695256eb deleted successfully.
+[04-Sep-2025 15:58:59 America/Boise] DEBUG: Webhook subscription f9cd513c-bc1c-48d4-9782-b4d1108d5ed0 deleted successfully.
+[04-Sep-2025 15:58:59 America/Boise] DEBUG: Webhook subscription 71e37277-95c5-4f8f-890c-449cbe2c4e75 deleted successfully.
+[04-Sep-2025 15:59:00 America/Boise] DEBUG: Webhook subscription c777390c-0034-4592-bf5e-dac2916e53e6 deleted successfully.
+[04-Sep-2025 15:59:01 America/Boise] DEBUG: Webhook subscription fe0bb959-f255-4c6b-a3c6-59b53fd28fa2 deleted successfully.
+[04-Sep-2025 15:59:01 America/Boise] DEBUG: Webhook subscription 73324fe0-6968-4efd-951e-3012e43cb0f9 deleted successfully.
+[04-Sep-2025 15:59:02 America/Boise] DEBUG: Webhook subscription 597044da-ae6c-4cfc-a5d2-6b3e9310d420 deleted successfully.
+[04-Sep-2025 15:59:02 America/Boise] DEBUG: Webhook subscription af02fa63-9d37-4ac5-8011-4ac7c66d8d97 deleted successfully.
+[04-Sep-2025 16:01:41 America/Boise] PHP Fatal error:  Uncaught TypeError: log_sync(): Argument #1 ($id_cita) must be of type ?int, string given, called in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 306 and defined in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php:13
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php(306): log_sync('267', 2, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importad...')
+#1 /home1/portalao/public_html/website_cc359709/oauth_callback.php(193): importarEventosDeOutlook(2, 'eyJ0eXAiOiJKV1Q...')
+#2 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 13
+[05-Sep-2025 07:30:25 America/Boise] PHP Fatal error:  Uncaught TypeError: log_sync(): Argument #1 ($id_cita) must be of type ?int, string given, called in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 306 and defined in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php:13
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php(306): log_sync('268', 2, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importad...')
+#1 /home1/portalao/public_html/website_cc359709/oauth_callback.php(193): importarEventosDeOutlook(2, 'eyJ0eXAiOiJKV1Q...')
+#2 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 13
+[05-Sep-2025 07:38:28 America/Boise] DEBUG: oauth_callback.php - Attempting to update responsable 2 with clientState: bd23096d41e60fddee6007ba7bd0c7c6
+[05-Sep-2025 07:38:28 America/Boise] DEBUG: oauth_callback.php - Rows affected by clientState update: 1
+[05-Sep-2025 08:52:20 America/Boise] DEBUG: Webhook subscription b4660ac7-c4d9-4e31-b807-ccd280fd485e deleted successfully.
+[05-Sep-2025 08:52:41 America/Boise] PHP Warning:  Undefined variable $top in /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php on line 226
+[05-Sep-2025 08:52:43 America/Boise] DEBUG: oauth_callback.php - Attempting to update responsable 2 with clientState: 1be26d417859915aeabad7ec755629eb
+[05-Sep-2025 08:52:43 America/Boise] DEBUG: oauth_callback.php - Rows affected by clientState update: 1
+[05-Sep-2025 08:52:43 America/Boise] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home1/portalao/public_html/website_cc359709/api/helpers/outlook_sync_helper.php:226) in /home1/portalao/public_html/website_cc359709/oauth_callback.php on line 224
+[05-Sep-2025 08:54:25 America/Boise] DEBUG: Webhook subscription fdc998ac-8a7b-46d8-9b40-c32f36a45df8 deleted successfully.
+[05-Sep-2025 08:54:44 America/Boise] Error al guardar tokens en DB: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'observaciones' at row 1
+[05-Sep-2025 08:55:40 America/Boise] Error al guardar tokens en DB: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'observaciones' at row 1
+[05-Sep-2025 08:58:10 America/Boise] DEBUG: oauth_callback.php - Attempting to update responsable 2 with clientState: 2dd1065556d4d6d74c879015b5d43fbb
+[05-Sep-2025 08:58:10 America/Boise] DEBUG: oauth_callback.php - Rows affected by clientState update: 1
+[05-Sep-2025 09:05:17 America/Boise] DEBUG: Webhook subscription bd8f7b9b-cd82-4330-9676-84ab1b4b1018 deleted successfully.
+[05-Sep-2025 09:05:48 America/Boise] DEBUG: oauth_callback.php - Attempting to update responsable 2 with clientState: 87179e461b0cf5b61d75156b414e4df0
+[05-Sep-2025 09:05:48 America/Boise] DEBUG: oauth_callback.php - Rows affected by clientState update: 1
+[05-Sep-2025 09:12:50 America/Boise] DEBUG: Webhook subscription df60280e-02c9-4312-a371-1aacd878342b deleted successfully.
+[05-Sep-2025 09:13:10 America/Boise] --- INICIO DE DEBUG DE EVENTOS DE OUTLOOK ---
+[05-Sep-2025 09:13:10 America/Boise] Evento 0: {
+    "@odata.etag": "W\/\"xbep3HYmykSNf77yTUHxwQABO5WuPw==\"",
+    "id": "AQMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYQExLWUwYWQ4MjRkNDNiNgBGAAADM6SdagXDXka9dwjpfWMPMAcAxbep3HYmykSNf77yTUHxwQAAAgENAAAAxbep3HYmykSNf77yTUHxwQABPEIL7gAAAA==",
+    "createdDateTime": "2025-09-03T14:08:32.9659126Z",
+    "lastModifiedDateTime": "2025-09-03T15:15:57.7839856Z",
+    "changeKey": "xbep3HYmykSNf77yTUHxwQABO5WuPw==",
+    "categories": [],
+    "transactionId": "localevent:16559988-94a3-5e15-5880-8c0f24e7b3ae",
+    "originalStartTimeZone": "SA Pacific Standard Time",
+    "originalEndTimeZone": "SA Pacific Standard Time",
+    "iCalUId": "040000008200E00074C5B7101A82E008000000007DD46C3BDC1CDC01000000000000000010000000DF52F1EE294D4941B5C41BF4804E416E",
+    "uid": "040000008200E00074C5B7101A82E008000000007DD46C3BDC1CDC01000000000000000010000000DF52F1EE294D4941B5C41BF4804E416E",
+    "reminderMinutesBeforeStart": 15,
+    "isReminderOn": true,
+    "hasAttachments": false,
+    "subject": "Revisar App Sinergy (Gesti\u00f3n de Obra) [En persona]",
+    "bodyPreview": "Estimados est\u00e1n invitados a la revisi\u00f3n del aplicativo\r\n\r\n________________________________________________________________________________\r\nMicrosoft Teams \u00bfNecesita ayuda?\r\nUnirse a la reuni\u00f3n ahora\r\nId. de reuni\u00f3n: 273 761 937 566 6\r\nC\u00f3digo de acceso: u",
+    "importance": "normal",
+    "sensitivity": "normal",
+    "isAllDay": false,
+    "isCancelled": false,
+    "isOrganizer": true,
+    "responseRequested": true,
+    "seriesMasterId": null,
+    "showAs": "busy",
+    "type": "singleInstance",
+    "webLink": "https:\/\/outlook.office365.com\/owa\/?itemid=AQMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYQExLWUwYWQ4MjRkNDNiNgBGAAADM6SdagXDXka9dwjpfWMPMAcAxbep3HYmykSNf77yTUHxwQAAAgENAAAAxbep3HYmykSNf77yTUHxwQABPEIL7gAAAA%3D%3D&exvsurl=1&path=\/calendar\/item",
+    "onlineMeetingUrl": null,
+    "isOnlineMeeting": true,
+    "onlineMeetingProvider": "teamsForBusiness",
+    "allowNewTimeProposals": true,
+    "occurrenceId": null,
+    "isDraft": false,
+    "hideAttendees": false,
+    "responseStatus": {
+        "response": "organizer",
+        "time": "0001-01-01T00:00:00Z"
+    },
+    "body": {
+        "contentType": "html",
+        "content": "<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=utf-8\">\r\n<\/head>\r\n<body>\r\n<div class=\"elementToProof\" style=\"font-family:Aptos,Aptos_EmbeddedFont,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)\">\r\nEstimados est\u00e1n invitados a la revisi\u00f3n del aplicativo&nbsp;<\/div>\r\n<br>\r\n<div class=\"me-email-text\" style=\"max-width:600px; color:#242424; font-family:'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif\">\r\n<div style=\"margin-bottom:24px; overflow:hidden; white-space:nowrap\">________________________________________________________________________________<\/div>\r\n<div style=\"margin-bottom:12px\"><span class=\"me-email-text\" style=\"font-size:24px; font-weight:700; margin-right:12px\">Microsoft&nbsp;Teams<\/span>\r\n<a href=\"https:\/\/aka.ms\/JoinTeamsMeeting?omkt=es-EC\" id=\"meet_invite_block.action.help\" class=\"me-email-link\" style=\"font-size:14px; text-decoration:underline; color:#5B5FC7\">\r\n\u00bfNecesita ayuda?<\/a> <\/div>\r\n<div style=\"margin-bottom:6px\"><a href=\"https:\/\/teams.microsoft.com\/l\/meetup-join\/19%3ameeting_NDM5NzI1NDktYjgwMy00MGFkLThjZDEtYmNhYzM4MDc0NTJm%40thread.v2\/0?context=%7b%22Tid%22%3a%22b9618ac6-2648-41ed-bb4f-03bcd94a7493%22%2c%22Oid%22%3a%22771bcff6-6f7d-476b-a3a5-2f70f888a1b5%22%7d\" id=\"meet_invite_block.action.join_link\" title=\"Meeting join link\" class=\"me-email-headline\" style=\"font-size:20px; font-weight:600; text-decoration:underline; color:#5B5FC7\">Unirse\r\n a la reuni\u00f3n ahora<\/a> <\/div>\r\n<div style=\"margin-bottom:6px\"><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">Id. de reuni\u00f3n:\r\n<\/span><span class=\"me-email-text\" style=\"font-size:14px; color:#242424\">273 761 937 566 6<\/span>\r\n<\/div>\r\n<div style=\"margin-bottom:24px\"><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">C\u00f3digo de acceso:\r\n<\/span><span class=\"me-email-text\" style=\"font-size:14px; color:#242424\">ua9ma9Fg<\/span>\r\n<\/div>\r\n<div style=\"margin-bottom:24px; max-width:532px\">\r\n<hr style=\"border:0; background:#D1D1D1; height:1px\">\r\n<\/div>\r\n<div><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">Para organizadores:\r\n<\/span><a href=\"https:\/\/teams.microsoft.com\/meetingOptions\/?organizerId=771bcff6-6f7d-476b-a3a5-2f70f888a1b5&amp;tenantId=b9618ac6-2648-41ed-bb4f-03bcd94a7493&amp;threadId=19_meeting_NDM5NzI1NDktYjgwMy00MGFkLThjZDEtYmNhYzM4MDc0NTJm@thread.v2&amp;messageId=0&amp;language=es-EC\" id=\"meet_invite_block.action.organizer_meet_options\" class=\"me-email-link\" style=\"font-size:14px; text-decoration:underline; color:#5B5FC7\">Opciones\r\n de la reuni\u00f3n<\/a> <\/div>\r\n<div style=\"margin-top:24px; margin-bottom:6px\"><\/div>\r\n<div style=\"margin-bottom:24px\"><\/div>\r\n<div style=\"margin-bottom:24px; overflow:hidden; white-space:nowrap\">________________________________________________________________________________<\/div>\r\n<\/div>\r\n<\/body>\r\n<\/html>\r\n"
+    },
+    "start": {
+        "dateTime": "2025-09-03T15:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "end": {
+        "dateTime": "2025-09-03T16:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "location": {
+        "displayName": "Sala Oasis",
+        "locationUri": "oasis@thaliavictoria.com.ec",
+        "locationType": "conferenceRoom",
+        "uniqueId": "oasis@thaliavictoria.com.ec",
+        "uniqueIdType": "directory",
+        "address": {
+            "street": "",
+            "city": "",
+            "state": "",
+            "countryOrRegion": "EC",
+            "postalCode": ""
+        },
+        "coordinates": []
+    },
+    "locations": [
+        {
+            "displayName": "Sala Oasis",
+            "locationUri": "oasis@thaliavictoria.com.ec",
+            "locationType": "conferenceRoom",
+            "uniqueId": "oasis@thaliavictoria.com.ec",
+            "uniqueIdType": "directory",
+            "address": {
+                "street": "",
+                "city": "",
+                "state": "",
+                "countryOrRegion": "EC",
+                "postalCode": ""
+            },
+            "coordinates": []
+        }
+    ],
+    "recurrence": null,
+    "attendees": [
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "2025-09-03T14:12:06.8661274Z"
+            },
+            "emailAddress": {
+                "name": "Carlos Pablo Henriques",
+                "address": "carlospablo@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "2025-09-03T15:12:56.2634464Z"
+            },
+            "emailAddress": {
+                "name": "Jimmy  Ramirez",
+                "address": "jramirez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jesus Motoche",
+                "address": "jmotoche@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "2025-09-03T14:53:41.4551989Z"
+            },
+            "emailAddress": {
+                "name": "Esteban Valdivieso",
+                "address": "evaldivieso@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sistemas CTV",
+                "address": "sistemas@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "2025-09-03T14:16:31.0266497Z"
+            },
+            "emailAddress": {
+                "name": "Mario Jimenez",
+                "address": "mjimenez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "resource",
+            "status": {
+                "response": "tentativelyAccepted",
+                "time": "2025-09-03T14:08:48.0902633Z"
+            },
+            "emailAddress": {
+                "name": "Sala Oasis",
+                "address": "oasis@thaliavictoria.com.ec"
+            }
+        }
+    ],
+    "organizer": {
+        "emailAddress": {
+            "name": "Guillermo E. Coello",
+            "address": "gcoello@thaliavictoria.com.ec"
+        }
+    },
+    "onlineMeeting": {
+        "joinUrl": "https:\/\/teams.microsoft.com\/l\/meetup-join\/19%3ameeting_NDM5NzI1NDktYjgwMy00MGFkLThjZDEtYmNhYzM4MDc0NTJm%40thread.v2\/0?context=%7b%22Tid%22%3a%22b9618ac6-2648-41ed-bb4f-03bcd94a7493%22%2c%22Oid%22%3a%22771bcff6-6f7d-476b-a3a5-2f70f888a1b5%22%7d"
+    }
+}
+[05-Sep-2025 09:13:10 America/Boise] Evento 1: {
+    "@odata.etag": "W\/\"xbep3HYmykSNf77yTUHxwQABO5W2RQ==\"",
+    "id": "AQMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYQExLWUwYWQ4MjRkNDNiNgBGAAADM6SdagXDXka9dwjpfWMPMAcAxbep3HYmykSNf77yTUHxwQAAAgENAAAAxbep3HYmykSNf77yTUHxwQABPEIL7QAAAA==",
+    "createdDateTime": "2025-09-03T14:01:21.1851505Z",
+    "lastModifiedDateTime": "2025-09-03T18:20:01.277541Z",
+    "changeKey": "xbep3HYmykSNf77yTUHxwQABO5W2RQ==",
+    "categories": [],
+    "transactionId": null,
+    "originalStartTimeZone": "SA Pacific Standard Time",
+    "originalEndTimeZone": "SA Pacific Standard Time",
+    "iCalUId": "040000008200E00074C5B7101A82E0080000000036CA902CDB1CDC01000000000000000010000000ED82EB28BA10AA4A90E844FDBBC35A8D",
+    "uid": "040000008200E00074C5B7101A82E0080000000036CA902CDB1CDC01000000000000000010000000ED82EB28BA10AA4A90E844FDBBC35A8D",
+    "reminderMinutesBeforeStart": 15,
+    "isReminderOn": true,
+    "hasAttachments": false,
+    "subject": "Sistemas - Proyectos, indicadores & gesti\u00f3n",
+    "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams \u00bfNecesita ayuda?\r\nUnirse a la reuni\u00f3n ahora\r\nId. de reuni\u00f3n: 258 314 064 017 6\r\nC\u00f3digo de acceso: iP7wP9HK\r\n________________________________\r\nPara organiza",
+    "importance": "normal",
+    "sensitivity": "normal",
+    "isAllDay": false,
+    "isCancelled": false,
+    "isOrganizer": false,
+    "responseRequested": true,
+    "seriesMasterId": null,
+    "showAs": "tentative",
+    "type": "singleInstance",
+    "webLink": "https:\/\/outlook.office365.com\/owa\/?itemid=AQMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYQExLWUwYWQ4MjRkNDNiNgBGAAADM6SdagXDXka9dwjpfWMPMAcAxbep3HYmykSNf77yTUHxwQAAAgENAAAAxbep3HYmykSNf77yTUHxwQABPEIL7QAAAA%3D%3D&exvsurl=1&path=\/calendar\/item",
+    "onlineMeetingUrl": null,
+    "isOnlineMeeting": true,
+    "onlineMeetingProvider": "teamsForBusiness",
+    "allowNewTimeProposals": true,
+    "occurrenceId": null,
+    "isDraft": false,
+    "hideAttendees": false,
+    "responseStatus": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+    },
+    "body": {
+        "contentType": "html",
+        "content": "<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=utf-8\">\r\n<\/head>\r\n<body>\r\n<br>\r\n<div class=\"me-email-text\" style=\"max-width:600px; color:#242424; font-family:'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif\">\r\n<div style=\"margin-bottom:24px; overflow:hidden; white-space:nowrap\">________________________________________________________________________________<\/div>\r\n<div style=\"margin-bottom:12px\"><span class=\"me-email-text\" style=\"font-size:24px; font-weight:700; margin-right:12px\">Microsoft&nbsp;Teams<\/span>\r\n<a href=\"https:\/\/aka.ms\/JoinTeamsMeeting?omkt=es-ES\" id=\"meet_invite_block.action.help\" class=\"me-email-link\" style=\"font-size:14px; text-decoration:underline; color:#5B5FC7\">\r\n\u00bfNecesita ayuda?<\/a> <\/div>\r\n<div style=\"margin-bottom:6px\"><a href=\"https:\/\/teams.microsoft.com\/l\/meetup-join\/19%3ameeting_M2Y0MmZkNzYtNjExYi00Zjk0LThiNDEtOTVjZDVjMjY4M2E5%40thread.v2\/0?context=%7b%22Tid%22%3a%22b9618ac6-2648-41ed-bb4f-03bcd94a7493%22%2c%22Oid%22%3a%2294e59629-04a3-47d0-91c2-13bbb2663fdf%22%7d\" id=\"meet_invite_block.action.join_link\" title=\"Meeting join link\" class=\"me-email-headline\" style=\"font-size:20px; font-weight:600; text-decoration:underline; color:#5B5FC7\">Unirse\r\n a la reuni\u00f3n ahora<\/a> <\/div>\r\n<div style=\"margin-bottom:6px\"><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">Id. de reuni\u00f3n:\r\n<\/span><span class=\"me-email-text\" style=\"font-size:14px; color:#242424\">258 314 064 017 6<\/span>\r\n<\/div>\r\n<div style=\"margin-bottom:24px\"><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">C\u00f3digo de acceso:\r\n<\/span><span class=\"me-email-text\" style=\"font-size:14px; color:#242424\">iP7wP9HK<\/span>\r\n<\/div>\r\n<div style=\"margin-bottom:24px; max-width:532px\">\r\n<hr style=\"border:0; background:#D1D1D1; height:1px\">\r\n<\/div>\r\n<div><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">Para organizadores:\r\n<\/span><a href=\"https:\/\/teams.microsoft.com\/meetingOptions\/?organizerId=94e59629-04a3-47d0-91c2-13bbb2663fdf&amp;tenantId=b9618ac6-2648-41ed-bb4f-03bcd94a7493&amp;threadId=19_meeting_M2Y0MmZkNzYtNjExYi00Zjk0LThiNDEtOTVjZDVjMjY4M2E5@thread.v2&amp;messageId=0&amp;language=es-ES\" id=\"meet_invite_block.action.organizer_meet_options\" class=\"me-email-link\" style=\"font-size:14px; text-decoration:underline; color:#5B5FC7\">Opciones\r\n de la reuni\u00f3n<\/a> <\/div>\r\n<div style=\"margin-top:24px; margin-bottom:6px\"><\/div>\r\n<div style=\"margin-bottom:24px\"><\/div>\r\n<div style=\"margin-bottom:24px; overflow:hidden; white-space:nowrap\">________________________________________________________________________________<\/div>\r\n<\/div>\r\n<\/body>\r\n<\/html>\r\n"
+    },
+    "start": {
+        "dateTime": "2025-09-04T14:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "end": {
+        "dateTime": "2025-09-04T15:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "location": {
+        "displayName": "Sala Canope",
+        "locationUri": "canope@thaliavictoria.com.ec",
+        "locationType": "conferenceRoom",
+        "uniqueId": "canope@thaliavictoria.com.ec",
+        "uniqueIdType": "directory",
+        "address": {
+            "street": "",
+            "city": "",
+            "state": "",
+            "countryOrRegion": "",
+            "postalCode": ""
+        },
+        "coordinates": []
+    },
+    "locations": [
+        {
+            "displayName": "Sala Canope",
+            "locationUri": "canope@thaliavictoria.com.ec",
+            "locationType": "conferenceRoom",
+            "uniqueId": "canope@thaliavictoria.com.ec",
+            "uniqueIdType": "directory",
+            "address": {
+                "street": "",
+                "city": "",
+                "state": "",
+                "countryOrRegion": "",
+                "postalCode": ""
+            },
+            "coordinates": []
+        }
+    ],
+    "recurrence": null,
+    "attendees": [
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Mario Jimenez",
+                "address": "mjimenez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sistemas CTV",
+                "address": "sistemas@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Guillermo E. Coello",
+                "address": "gcoello@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "resource",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sala Canope",
+                "address": "canope@thaliavictoria.com.ec"
+            }
+        }
+    ],
+    "organizer": {
+        "emailAddress": {
+            "name": "Mario Jimenez",
+            "address": "mjimenez@thaliavictoria.com.ec"
+        }
+    },
+    "onlineMeeting": {
+        "joinUrl": "https:\/\/teams.microsoft.com\/l\/meetup-join\/19%3ameeting_M2Y0MmZkNzYtNjExYi00Zjk0LThiNDEtOTVjZDVjMjY4M2E5%40thread.v2\/0?context=%7b%22Tid%22%3a%22b9618ac6-2648-41ed-bb4f-03bcd94a7493%22%2c%22Oid%22%3a%2294e59629-04a3-47d0-91c2-13bbb2663fdf%22%7d"
+    }
+}
+[05-Sep-2025 09:13:10 America/Boise] Evento 2: {
+    "@odata.etag": "W\/\"xbep3HYmykSNf77yTUHxwQABO5Xocg==\"",
+    "id": "AQMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYQExLWUwYWQ4MjRkNDNiNgBGAAADM6SdagXDXka9dwjpfWMPMAcAxbep3HYmykSNf77yTUHxwQAAAgENAAAAxbep3HYmykSNf77yTUHxwQABPFZ6IQAAAA==",
+    "createdDateTime": "2025-09-03T16:41:28.8564922Z",
+    "lastModifiedDateTime": "2025-09-04T14:27:42.84893Z",
+    "changeKey": "xbep3HYmykSNf77yTUHxwQABO5Xocg==",
+    "categories": [],
+    "transactionId": null,
+    "originalStartTimeZone": "SA Pacific Standard Time",
+    "originalEndTimeZone": "SA Pacific Standard Time",
+    "iCalUId": "040000008200E00074C5B7101A82E00800000000F8D81797F11CDC01000000000000000010000000DB2A46453058234194AF2CEE59C17D4F",
+    "uid": "040000008200E00074C5B7101A82E00800000000F8D81797F11CDC01000000000000000010000000DB2A46453058234194AF2CEE59C17D4F",
+    "reminderMinutesBeforeStart": 15,
+    "isReminderOn": true,
+    "hasAttachments": false,
+    "subject": "Salida a ShowRoom pantalla",
+    "bodyPreview": "",
+    "importance": "normal",
+    "sensitivity": "normal",
+    "isAllDay": false,
+    "isCancelled": false,
+    "isOrganizer": false,
+    "responseRequested": true,
+    "seriesMasterId": null,
+    "showAs": "tentative",
+    "type": "singleInstance",
+    "webLink": "https:\/\/outlook.office365.com\/owa\/?itemid=AQMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYQExLWUwYWQ4MjRkNDNiNgBGAAADM6SdagXDXka9dwjpfWMPMAcAxbep3HYmykSNf77yTUHxwQAAAgENAAAAxbep3HYmykSNf77yTUHxwQABPFZ6IQAAAA%3D%3D&exvsurl=1&path=\/calendar\/item",
+    "onlineMeetingUrl": null,
+    "isOnlineMeeting": false,
+    "onlineMeetingProvider": "unknown",
+    "allowNewTimeProposals": true,
+    "occurrenceId": null,
+    "isDraft": false,
+    "hideAttendees": false,
+    "responseStatus": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+    },
+    "body": {
+        "contentType": "html",
+        "content": ""
+    },
+    "start": {
+        "dateTime": "2025-09-04T20:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "end": {
+        "dateTime": "2025-09-04T22:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "location": {
+        "displayName": "",
+        "locationType": "default",
+        "uniqueIdType": "unknown",
+        "address": [],
+        "coordinates": []
+    },
+    "locations": [],
+    "recurrence": null,
+    "attendees": [
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jonathan  Quijano",
+                "address": "jquijano@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sistemas CTV",
+                "address": "sistemas@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Guillermo E. Coello",
+                "address": "gcoello@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Irma Perez",
+                "address": "iperez@thaliavictoria.com.ec"
+            }
+        }
+    ],
+    "organizer": {
+        "emailAddress": {
+            "name": "Jonathan  Quijano",
+            "address": "jquijano@thaliavictoria.com.ec"
+        }
+    },
+    "onlineMeeting": null
+}
+[05-Sep-2025 09:13:10 America/Boise] Evento 3: {
+    "@odata.etag": "W\/\"xbep3HYmykSNf77yTUHxwQAApaUwUw==\"",
+    "id": "AAMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYWExLWUwYWQ4MjRkNDNiNgBGAAAAAAAzpJ1qBcNeRr13COl9Yw8wBwDFt6ncdibKRI1-vvJNQfHBAAAAAAENAADFt6ncdibKRI1-vvJNQfHBAACmDLf4AAA=",
+    "createdDateTime": "2025-01-20T16:33:40.5295772Z",
+    "lastModifiedDateTime": "2025-01-21T00:23:25.9254713Z",
+    "changeKey": "xbep3HYmykSNf77yTUHxwQAApaUwUw==",
+    "categories": [],
+    "transactionId": null,
+    "originalStartTimeZone": "SA Pacific Standard Time",
+    "originalEndTimeZone": "SA Pacific Standard Time",
+    "iCalUId": "040000008200E00074C5B7101A82E008000000000274840C596BDB01000000000000000010000000AAE0FF22E131E549901038B446C45A1D",
+    "uid": "040000008200E00074C5B7101A82E008000000000274840C596BDB01000000000000000010000000AAE0FF22E131E549901038B446C45A1D",
+    "reminderMinutesBeforeStart": 15,
+    "isReminderOn": true,
+    "hasAttachments": false,
+    "subject": "FUTURA PROJECT exposici\u00f3n 3er trimestre",
+    "bodyPreview": "________________________________________________________________________________\r\nMicrosoft Teams \u00bfNecesita ayuda?\r\nUnirse a la reuni\u00f3n ahora\r\nId. de reuni\u00f3n: 272 377 755 532\r\nC\u00f3digo de acceso: ZW2qV2YS\r\n________________________________\r\nPara organizado",
+    "importance": "normal",
+    "sensitivity": "normal",
+    "isAllDay": false,
+    "isCancelled": false,
+    "isOrganizer": false,
+    "responseRequested": true,
+    "seriesMasterId": null,
+    "showAs": "busy",
+    "type": "singleInstance",
+    "webLink": "https:\/\/outlook.office365.com\/owa\/?itemid=AAMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYWExLWUwYWQ4MjRkNDNiNgBGAAAAAAAzpJ1qBcNeRr13COl9Yw8wBwDFt6ncdibKRI1%2FvvJNQfHBAAAAAAENAADFt6ncdibKRI1%2FvvJNQfHBAACmDLf4AAA%3D&exvsurl=1&path=\/calendar\/item",
+    "onlineMeetingUrl": null,
+    "isOnlineMeeting": true,
+    "onlineMeetingProvider": "teamsForBusiness",
+    "allowNewTimeProposals": true,
+    "occurrenceId": null,
+    "isDraft": false,
+    "hideAttendees": false,
+    "responseStatus": {
+        "response": "accepted",
+        "time": "2025-01-20T16:35:49.9348207Z"
+    },
+    "body": {
+        "contentType": "html",
+        "content": "<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" content=\"text\/html; charset=utf-8\">\r\n<\/head>\r\n<body>\r\n<br>\r\n<div class=\"me-email-text\" style=\"max-width:520px; color:#242424; font-family:'Segoe UI','Helvetica Neue',Helvetica,Arial,sans-serif\">\r\n<div style=\"margin-bottom:24px; overflow:hidden; white-space:nowrap\">________________________________________________________________________________<\/div>\r\n<div style=\"margin-bottom:12px\"><span class=\"me-email-text\" style=\"font-size:24px; font-weight:700; margin-right:12px\">Microsoft&nbsp;Teams<\/span>\r\n<a href=\"https:\/\/aka.ms\/JoinTeamsMeeting?omkt=es-ES\" id=\"meet_invite_block.action.help\" class=\"me-email-link\" style=\"font-size:14px; text-decoration:underline; color:#5B5FC7\">\r\n\u00bfNecesita ayuda?<\/a> <\/div>\r\n<div style=\"margin-bottom:6px\"><a href=\"https:\/\/teams.microsoft.com\/l\/meetup-join\/19%3ameeting_YTYwYmM4NGYtOGYyYy00NGQwLWIwNGMtNGI0N2I4MDEwMWYy%40thread.v2\/0?context=%7b%22Tid%22%3a%22b9618ac6-2648-41ed-bb4f-03bcd94a7493%22%2c%22Oid%22%3a%2209469574-067e-4515-aa9e-fa2467520281%22%7d\" id=\"meet_invite_block.action.join_link\" title=\"Meeting join link\" class=\"me-email-headline\" style=\"font-size:20px; font-weight:600; text-decoration:underline; color:#5B5FC7\">Unirse\r\n a la reuni\u00f3n ahora<\/a> <\/div>\r\n<div style=\"margin-bottom:6px\"><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">Id. de reuni\u00f3n:\r\n<\/span><span class=\"me-email-text\" style=\"font-size:14px; color:#242424\">272 377 755 532<\/span>\r\n<\/div>\r\n<div style=\"margin-bottom:24px\"><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">C\u00f3digo de acceso:\r\n<\/span><span class=\"me-email-text\" style=\"font-size:14px; color:#242424\">ZW2qV2YS<\/span>\r\n<\/div>\r\n<div style=\"margin-bottom:24px; max-width:532px\">\r\n<hr style=\"border:0; background:#D1D1D1; height:1px\">\r\n<\/div>\r\n<div><span class=\"me-email-text-secondary\" style=\"font-size:14px; color:#616161\">Para organizadores:\r\n<\/span><a href=\"https:\/\/teams.microsoft.com\/meetingOptions\/?organizerId=09469574-067e-4515-aa9e-fa2467520281&amp;tenantId=b9618ac6-2648-41ed-bb4f-03bcd94a7493&amp;threadId=19_meeting_YTYwYmM4NGYtOGYyYy00NGQwLWIwNGMtNGI0N2I4MDEwMWYy@thread.v2&amp;messageId=0&amp;language=es-ES\" id=\"meet_invite_block.action.organizer_meet_options\" class=\"me-email-link\" style=\"font-size:14px; text-decoration:underline; color:#5B5FC7\">Opciones\r\n de la reuni\u00f3n<\/a> <\/div>\r\n<div style=\"margin-top:24px; margin-bottom:6px\"><\/div>\r\n<div style=\"margin-bottom:24px\"><\/div>\r\n<div style=\"margin-bottom:24px; overflow:hidden; white-space:nowrap\">________________________________________________________________________________<\/div>\r\n<\/div>\r\n<\/body>\r\n<\/html>\r\n"
+    },
+    "start": {
+        "dateTime": "2025-09-25T20:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "end": {
+        "dateTime": "2025-09-25T21:30:00.0000000",
+        "timeZone": "UTC"
+    },
+    "location": {
+        "displayName": "Sala Canope",
+        "locationUri": "canope@thaliavictoria.com.ec",
+        "locationType": "conferenceRoom",
+        "uniqueId": "canope@thaliavictoria.com.ec",
+        "uniqueIdType": "directory",
+        "address": {
+            "street": "",
+            "city": "",
+            "state": "",
+            "countryOrRegion": "",
+            "postalCode": ""
+        },
+        "coordinates": []
+    },
+    "locations": [
+        {
+            "displayName": "Sala Canope",
+            "locationUri": "canope@thaliavictoria.com.ec",
+            "locationType": "conferenceRoom",
+            "uniqueId": "canope@thaliavictoria.com.ec",
+            "uniqueIdType": "directory",
+            "address": {
+                "street": "",
+                "city": "",
+                "state": "",
+                "countryOrRegion": "",
+                "postalCode": ""
+            },
+            "coordinates": []
+        }
+    ],
+    "recurrence": null,
+    "attendees": [
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Ivan  Toledo",
+                "address": "itoledo@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Andrea Calle",
+                "address": "controller@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Carlos Pablo Henriques",
+                "address": "carlospablo@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jose Bonilla",
+                "address": "jbonilla@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jonathan  Quijano",
+                "address": "jquijano@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jesus Motoche",
+                "address": "jmotoche@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Irma Perez",
+                "address": "iperez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Esteban Valdivieso",
+                "address": "evaldivieso@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sistemas CTV",
+                "address": "sistemas@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Alexander  Burgos",
+                "address": "aburgos@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Guillermo E. Coello",
+                "address": "gcoello@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jimmy  Ramirez",
+                "address": "jramirez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Dario  Antepara",
+                "address": "datanalyst@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "resource",
+            "status": {
+                "response": "declined",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sala Canope",
+                "address": "canope@thaliavictoria.com.ec"
+            }
+        }
+    ],
+    "organizer": {
+        "emailAddress": {
+            "name": "Ivan  Toledo",
+            "address": "itoledo@thaliavictoria.com.ec"
+        }
+    },
+    "onlineMeeting": {
+        "joinUrl": "https:\/\/teams.microsoft.com\/l\/meetup-join\/19%3ameeting_YTYwYmM4NGYtOGYyYy00NGQwLWIwNGMtNGI0N2I4MDEwMWYy%40thread.v2\/0?context=%7b%22Tid%22%3a%22b9618ac6-2648-41ed-bb4f-03bcd94a7493%22%2c%22Oid%22%3a%2209469574-067e-4515-aa9e-fa2467520281%22%7d"
+    }
+}
+[05-Sep-2025 09:13:10 America/Boise] Evento 4: {
+    "@odata.etag": "W\/\"xbep3HYmykSNf77yTUHxwQAApaUwUQ==\"",
+    "id": "AAMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYWExLWUwYWQ4MjRkNDNiNgBGAAAAAAAzpJ1qBcNeRr13COl9Yw8wBwDFt6ncdibKRI1-vvJNQfHBAAAAAAENAADFt6ncdibKRI1-vvJNQfHBAACmDLf5AAA=",
+    "createdDateTime": "2025-01-20T16:37:08.9493065Z",
+    "lastModifiedDateTime": "2025-01-21T00:23:25.8526564Z",
+    "changeKey": "xbep3HYmykSNf77yTUHxwQAApaUwUQ==",
+    "categories": [],
+    "transactionId": null,
+    "originalStartTimeZone": "SA Pacific Standard Time",
+    "originalEndTimeZone": "SA Pacific Standard Time",
+    "iCalUId": "040000008200E00074C5B7101A82E00800000000AAF8E08A596BDB01000000000000000010000000E4AE02FBB284F449BC19531B1E41BFB6",
+    "uid": "040000008200E00074C5B7101A82E00800000000AAF8E08A596BDB01000000000000000010000000E4AE02FBB284F449BC19531B1E41BFB6",
+    "reminderMinutesBeforeStart": 15,
+    "isReminderOn": true,
+    "hasAttachments": false,
+    "subject": "FUTURA PROJECT exposici\u00f3n 4to trimestre",
+    "bodyPreview": "",
+    "importance": "normal",
+    "sensitivity": "normal",
+    "isAllDay": false,
+    "isCancelled": false,
+    "isOrganizer": false,
+    "responseRequested": true,
+    "seriesMasterId": null,
+    "showAs": "tentative",
+    "type": "singleInstance",
+    "webLink": "https:\/\/outlook.office365.com\/owa\/?itemid=AAMkADAyZjVkMWU2LWY0ZTMtNDA0Yi1hYWExLWUwYWQ4MjRkNDNiNgBGAAAAAAAzpJ1qBcNeRr13COl9Yw8wBwDFt6ncdibKRI1%2FvvJNQfHBAAAAAAENAADFt6ncdibKRI1%2FvvJNQfHBAACmDLf5AAA%3D&exvsurl=1&path=\/calendar\/item",
+    "onlineMeetingUrl": null,
+    "isOnlineMeeting": false,
+    "onlineMeetingProvider": "unknown",
+    "allowNewTimeProposals": true,
+    "occurrenceId": null,
+    "isDraft": false,
+    "hideAttendees": false,
+    "responseStatus": {
+        "response": "notResponded",
+        "time": "0001-01-01T00:00:00Z"
+    },
+    "body": {
+        "contentType": "html",
+        "content": ""
+    },
+    "start": {
+        "dateTime": "2025-12-18T20:00:00.0000000",
+        "timeZone": "UTC"
+    },
+    "end": {
+        "dateTime": "2025-12-18T21:30:00.0000000",
+        "timeZone": "UTC"
+    },
+    "location": {
+        "displayName": "Sala Canope",
+        "locationUri": "canope@thaliavictoria.com.ec",
+        "locationType": "conferenceRoom",
+        "uniqueId": "canope@thaliavictoria.com.ec",
+        "uniqueIdType": "directory",
+        "address": {
+            "street": "",
+            "city": "",
+            "state": "",
+            "countryOrRegion": "",
+            "postalCode": ""
+        },
+        "coordinates": []
+    },
+    "locations": [
+        {
+            "displayName": "Sala Canope",
+            "locationUri": "canope@thaliavictoria.com.ec",
+            "locationType": "conferenceRoom",
+            "uniqueId": "canope@thaliavictoria.com.ec",
+            "uniqueIdType": "directory",
+            "address": {
+                "street": "",
+                "city": "",
+                "state": "",
+                "countryOrRegion": "",
+                "postalCode": ""
+            },
+            "coordinates": []
+        }
+    ],
+    "recurrence": null,
+    "attendees": [
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Ivan  Toledo",
+                "address": "itoledo@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Andrea Calle",
+                "address": "controller@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Carlos Pablo Henriques",
+                "address": "carlospablo@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jose Bonilla",
+                "address": "jbonilla@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jonathan  Quijano",
+                "address": "jquijano@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jesus Motoche",
+                "address": "jmotoche@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Irma Perez",
+                "address": "iperez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Esteban Valdivieso",
+                "address": "evaldivieso@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sistemas CTV",
+                "address": "sistemas@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "accepted",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Alexander  Burgos",
+                "address": "aburgos@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Guillermo E. Coello",
+                "address": "gcoello@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Jimmy  Ramirez",
+                "address": "jramirez@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "required",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Dario  Antepara",
+                "address": "datanalyst@thaliavictoria.com.ec"
+            }
+        },
+        {
+            "type": "resource",
+            "status": {
+                "response": "none",
+                "time": "0001-01-01T00:00:00Z"
+            },
+            "emailAddress": {
+                "name": "Sala Canope",
+                "address": "canope@thaliavictoria.com.ec"
+            }
+        }
+    ],
+    "organizer": {
+        "emailAddress": {
+            "name": "Ivan  Toledo",
+            "address": "itoledo@thaliavictoria.com.ec"
+        }
+    },
+    "onlineMeeting": null
+}
+[05-Sep-2025 09:13:10 America/Boise] --- FIN DE DEBUG DE EVENTOS DE OUTLOOK ---
+[05-Sep-2025 09:20:53 America/Boise] Error al guardar tokens en DB: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '2-2025-09-03-10:00:00' for key 'uq_responsable_hora'

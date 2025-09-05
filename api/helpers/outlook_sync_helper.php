@@ -215,7 +215,26 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
         return;
     }
 
-    $graphUrl = "https://graph.microsoft.com/v1.0/me/calendars/{$calendarId}/events";
+    // PASO 1: Limpiar la pizarra. Eliminar todas las citas futuras que fueron creadas por Outlook para este responsable.
+    // Esto elimina los "fantasmas" de ocurrencias que fueron canceladas en Outlook.
+    $stmtDelete = $db->prepare(
+        "DELETE FROM agendamiento_visitas 
+        WHERE responsable_id = :responsable_id 
+          AND outlook_event_id IS NOT NULL"
+    );
+    $stmtDelete->execute([':responsable_id' => $responsableId]);
+    log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR_LIMPIEZA', 'Exito', $stmtDelete->rowCount() . ' citas futuras de Outlook eliminadas antes de la nueva importación.');
+
+
+    // PASO 2: Importar la lista fresca de eventos activos desde Outlook.
+    $startWindow = new DateTime('first day of this month', new DateTimeZone('UTC'));
+    $endWindow = (new DateTime('now', new DateTimeZone('UTC')))->add(new DateInterval('P1Y')); // Sincronizar 1 año hacia el futuro
+
+    $startWindowStr = $startWindow->format('Y-m-d\TH:i:s\Z');
+    $endWindowStr = $endWindow->format('Y-m-d\TH:i:s\Z');
+
+    // Usar el endpoint calendarview que expande los eventos recurrentes y pedir hasta 200
+    $graphUrl = "https://graph.microsoft.com/v1.0/me/calendars/{$calendarId}/calendarview?startDateTime={$startWindowStr}&endDateTime={$endWindowStr}&\$top=200";
 
     $ch = curl_init($graphUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -232,13 +251,8 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
 
     if ($httpCode === 200 && isset($responseData['value'])) {
         foreach ($responseData['value'] as $event) {
-            // Verificar si el evento ya existe en la DB local
-            $stmtCheck = $db->prepare("SELECT id FROM agendamiento_visitas WHERE outlook_event_id = :outlook_event_id");
-            $stmtCheck->execute([':outlook_event_id' => $event['id']]);
-            if ($stmtCheck->fetch()) {
-                // Evento ya existe, saltar
-                continue;
-            }
+            // La vista de calendario ya filtra las ocurrencias canceladas.
+            // Y como hemos borrado las citas viejas, no necesitamos comprobar si ya existen.
 
             // Convertir fechas y horas a formato local (America/Guayaquil)
             $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
@@ -258,6 +272,11 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
             $propositoId = 5; // Default to 'Evento de Calendario'
             $idPropiedad = null;
             $observaciones = $event['body']['content'] ?? $event['subject'];
+
+            // Truncar las observaciones si son demasiado largas para la columna TEXT de la DB
+            if (mb_strlen($observaciones, 'UTF-8') > 65000) {
+                $observaciones = mb_substr($observaciones, 0, 65000, 'UTF-8') . '... [Contenido truncado]';
+            }
 
             // Intenta parsear el propósito del asunto si sigue el patrón "Cita: [Proposito] - [Cliente]"
             if (preg_match('/^Cita: (.+?) - /', $event['subject'], $matches)) {
@@ -305,15 +324,17 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
             ]);
             $insertedId = $db->lastInsertId();
             if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
-                log_sync((int)$insertedId, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importado desde Outlook.');
+                log_sync((int)$insertedId, $responsableId, 'Outlook -> App', 'IMPORTAR_NUEVO', 'Exito', 'Evento importado desde Outlook.');
             } else {
-                log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Error', 'Evento importado desde Outlook, pero no se pudo obtener el ID de inserción.');
+                log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR_NUEVO', 'Error', 'Evento importado desde Outlook, pero no se pudo obtener el ID de inserción.');
             }
         }
     } else {
-        log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Error', 'Error al obtener eventos de Outlook: HTTP ' . $httpCode . ' - ' . json_encode($responseData));
+        log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR_DATOS', 'Error', 'Error al obtener eventos de Outlook: HTTP ' . $httpCode . ' - ' . json_encode($responseData));
     }
 }
+
+
 
 
 /**
@@ -477,7 +498,17 @@ if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
 }
                 }
             } else {
-                log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Error al obtener detalles del evento: HTTP ' . $httpCode . ' - ' . json_encode($eventData));
+                // Si obtenemos un 404, es muy probable que el evento haya sido eliminado justo antes de que llegara la notificación de 'updated'.
+                // Lo tratamos como una eliminación para evitar errores en el log.
+                if ($httpCode === 404) {
+                    $stmtDelete = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_event_id");
+                    $stmtDelete->execute([':outlook_event_id' => $outlookEventId]);
+                    if ($stmtDelete->rowCount() > 0) {
+                        log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Exito', 'Cita (detectada como eliminada en un update) cancelada localmente.');
+                    }
+                } else {
+                    log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Error al obtener detalles del evento: HTTP ' . $httpCode . ' - ' . json_encode($eventData));
+                }
             }
             break;
 
