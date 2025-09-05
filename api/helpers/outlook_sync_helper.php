@@ -303,7 +303,12 @@ function importarEventosDeOutlook(int $responsableId, string $accessToken): void
                 ':outlook_event_id' => $event['id'],
                 ':id_propiedad' => $idPropiedad
             ]);
-            log_sync($db->lastInsertId(), $responsableId, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importado desde Outlook.');
+            $insertedId = $db->lastInsertId();
+            if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
+                log_sync((int)$insertedId, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Exito', 'Evento importado desde Outlook.');
+            } else {
+                log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Error', 'Evento importado desde Outlook, pero no se pudo obtener el ID de inserción.');
+            }
         }
     } else {
         log_sync(null, $responsableId, 'Outlook -> App', 'IMPORTAR', 'Error', 'Error al obtener eventos de Outlook: HTTP ' . $httpCode . ' - ' . json_encode($responseData));
@@ -356,8 +361,8 @@ function procesarNotificacionWebhook(array $notification): void
     log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Info', "Procesando: $changeType para evento $outlookEventId");
 
     switch ($changeType) {
-        case 'Created':
-        case 'Updated':
+        case 'created':
+        case 'updated':
             // Obtener detalles completos del evento desde Graph API
             $graphUrl = "https://graph.microsoft.com/v1.0/me/events/{$outlookEventId}";
             $ch = curl_init($graphUrl);
@@ -476,7 +481,7 @@ if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
             }
             break;
 
-        case 'Deleted':
+        case 'deleted':
             // Marcar cita local como CANCELADO o eliminarla
             $stmtDelete = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_event_id");
             $stmtDelete->execute([':outlook_event_id' => $outlookEventId]);
