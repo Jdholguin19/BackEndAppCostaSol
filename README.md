@@ -231,8 +231,9 @@ El proyecto ofrece las siguientes funcionalidades principales:
     *   Visualización de noticias y comunicados.
     *   Funcionalidades para administradores para crear y eliminar noticias (`noticia.php`).
 *   **Calendario de Responsables:**
-    *   Cada responsable puede ver su propia agenda.
-    *   El responsable administrador (ID 3) tiene la capacidad de ver los calendarios de todos los responsables (`panel_calendario.php`).
+    *   Cada responsable puede ver su propia agenda unificada en `panel_calendario.php`.
+    *   El calendario muestra tanto las citas creadas desde la aplicación como las sincronizadas desde su calendario de Outlook.
+    *   El responsable administrador (ID 3) tiene la capacidad de ver los calendarios de todos los responsables.
 *   **Manuales y Documentos:**
     *   Acceso a documentos PDF como el Manual de Uso y Mantenimiento (`api/mcm.php`) y la Paleta Vegetal (`api/paletavegetal.php`).
 *   **Gestión de Usuarios (Administrador):**
@@ -289,22 +290,25 @@ Esta sección detalla los endpoints de la API existentes y sus funcionalidades p
 
 ### Integración con Microsoft Outlook
 
-El sistema ofrece una sincronización bidireccional robusta con los calendarios de Outlook de los responsables, permitiendo una gestión centralizada de las citas.
+El sistema ofrece una sincronización robusta con los calendarios de Outlook de los responsables, permitiendo una gestión centralizada de las citas.
 
-*   **Sincronización de la App a Outlook (Unidireccional):**
-    *   **Creación de Citas:** Al crear una cita en la aplicación (`api/cita/cita_create.php`), se genera automáticamente un evento en el calendario de Outlook del responsable asignado. El ID del evento de Outlook (`outlook_event_id`) se almacena en la tabla `agendamiento_visitas`.
-    *   **Cancelación/Actualización de Citas:** Si una cita se cancela (`api/cita/cita_cancelar.php`) o su estado se actualiza a 'CANCELADO' (`api/cita/cita_update_estado.php`) en la aplicación, el evento correspondiente en Outlook se elimina.
+*   **Sincronización de la App a Outlook:**
+    *   **Creación/Cancelación de Citas:** Al crear o cancelar una cita desde la aplicación, se genera o elimina un evento en el calendario de Outlook del responsable asignado. Esto se maneja en `api/cita/cita_create.php` y `api/cita/cita_cancelar.php`.
 
-*   **Sincronización de Outlook a la App (Unidireccional vía Webhooks):**
-    *   **Webhooks:** El sistema establece suscripciones de webhook con Microsoft Graph (`oauth_callback.php`, `api/helpers/outlook_auth_helper.php`). Outlook notifica a la aplicación (`api/outlook_webhook.php`) sobre cambios (creación, actualización, eliminación) en los eventos del calendario del responsable.
-    *   **Procesamiento de Notificaciones:** La función `procesarNotificacionWebhook` en `api/helpers/outlook_sync_helper.php` procesa estas notificaciones. Identifica el tipo de cambio y actualiza la base de datos local (`agendamiento_visitas`) en consecuencia (creando, actualizando o marcando como cancelada la cita).
-    *   **Validación de `clientState`:** Cada notificación de webhook incluye un `clientState` único, que se utiliza para verificar la autenticidad de la notificación y asociarla al responsable correcto.
+*   **Sincronización de Outlook a la App (Webhooks y Sincronización Total):**
+    *   **Conexión Inicial y Re-sincronización (Proceso Mejorado):** El proceso de conexión (`oauth_callback.php`) ahora es un sistema de sincronización completo y robusto.
+        *   **1. Borrón y Cuenta Nueva:** Antes de importar, el sistema primero **elimina todas las citas existentes** en la base de datos de la app que pertenecen a ese responsable y que fueron sincronizadas previamente con Outlook. Esto previene la acumulación de datos obsoletos o "fantasmas".
+        *   **2. Importación Completa:** A continuación, solicita a Microsoft una **"vista de calendario" (`calendarview`)** del próximo año. Esta vista es especial porque expande todas las series de eventos recurrentes en citas individuales.
+        *   **3. Filtro de Eventos Cancelados:** Durante la importación, el sistema revisa cada evento. Si un evento tiene la marca `"isCancelled": true` (lo que ocurre con ocurrencias de una serie que han sido canceladas), **es ignorado y no se guarda en la base de datos.**
+        *   **Resultado:** Se crea una copia limpia y fiel del calendario de Outlook en la aplicación, incluyendo eventos recurrentes y excluyendo las ocurrencias canceladas.
 
-*   **Gestión de Suscripciones y Limpieza:**
-    *   **`oauth_callback.php`:** Maneja el flujo de autenticación OAuth 2.0 con Microsoft. Tras obtener los tokens, intenta eliminar cualquier suscripción de webhook existente para el responsable antes de crear una nueva. Esto asegura que solo una suscripción activa y válida esté en uso.
-    *   **`api/helpers/outlook_auth_helper.php`:** Contiene funciones para refrescar tokens (`refreshOutlookAccessToken`), crear suscripciones (`createOutlookWebhookSubscription`), y eliminar suscripciones (`deleteOutlookWebhookSubscription`).
-    *   **`api/outlook_webhook.php`:** El endpoint que recibe las notificaciones de webhook de Outlook. Responde con el código HTTP 202 Accepted para confirmar la recepción y luego procesa la notificación.
-    *   **`log_sincronizacion_outlook` (Tabla de Base de Datos):** Registra todas las operaciones de sincronización entre la aplicación y Outlook, incluyendo errores y éxitos, lo que facilita la depuración y el monitoreo.
+    *   **Sincronización en Tiempo Real (Webhooks):**
+        *   Para cambios en **eventos simples**, el webhook (`api/outlook_webhook.php`) procesa notificaciones de `created`, `updated` y `deleted` para mantener la sincronización al momento.
+        *   Se ha mejorado el sistema para manejar de forma más elegante las notificaciones de `updated` que llegan justo antes de una de `deleted`, evitando errores innecesarios en los logs.
+        *   **Nota:** La sincronización en tiempo real de cambios en **series recurrentes completas** (ej. mover toda una serie a otro día) no está implementada actualmente. Un cambio de este tipo requerirá una re-sincronización manual (desconectar y volver a conectar el calendario) para reflejarse en la app.
+
+*   **Panel de Responsable (`panel_calendario.php`):**
+    *   Muestra todos los eventos importados desde Outlook y los creados en la aplicación, proporcionando una vista unificada de la agenda del responsable.
 
 ### Gestión de CTG (Contingencias)
 
@@ -730,7 +734,7 @@ Este `README.md` proporciona una visión general completa del proyecto. Para det
 *   **Mejora en Carga de Archivos para CTG y PQR:**
     *   Se ha actualizado el sistema de subida de archivos en los módulos de CTG y PQR para mejorar la flexibilidad y robustez.
     *   **Tipos de Archivo:** Se eliminó la restricción que limitaba las subidas a imágenes y PDF. Ahora el sistema **acepta cualquier tipo de archivo**.
-    *   **Tamaño de Archivo:** El límite de tamaño de archivo se ha incrementado a **1 GB**. 
+    *   **Tamaño de Archivo:** El límite de tamaño de archivo se ha incrementado a **1 GB**.
         *   **Nota Importante:** Este cambio requiere configuración a nivel de servidor. En proveedores como Bluehost, esto debe ajustarse en el **"MultiPHP INI Editor"** dentro de cPanel, modificando directivas como `upload_max_filesize` y `post_max_size`.
     *   **Nomenclatura de Archivos:** Se ha modificado la forma en que se guardan los archivos para que conserven su **nombre original**. Para prevenir que un archivo sobrescriba a otro con el mismo nombre, el sistema ahora añade un contador numérico al final del nombre si detecta una colisión (ej: `documento(1).pdf`, `documento(2).pdf`).
     *   **Archivos Modificados:**
