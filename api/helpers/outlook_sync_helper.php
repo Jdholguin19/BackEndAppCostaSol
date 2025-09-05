@@ -383,23 +383,49 @@ function procesarNotificacionWebhook(array $notification): void
 
     log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Info', "Procesando: $changeType para evento $outlookEventId");
 
-    switch ($changeType) {
-        case 'created':
-        case 'updated':
-            // Obtener detalles completos del evento desde Graph API
-            $graphUrl = "https://graph.microsoft.com/v1.0/me/events/{$outlookEventId}";
-            $ch = curl_init($graphUrl);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $accessToken,
-                'Content-Type: application/json'
-            ]);
-            $response = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
-            $eventData = json_decode($response, true);
+    // 1. OBTENEMOS LOS DETALLES DEL EVENTO PRIMERO
+    $graphUrl = "https://graph.microsoft.com/v1.0/me/events/{$outlookEventId}";
+    $ch = curl_init($graphUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $accessToken,
+        'Content-Type: application/json'
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    $eventData = json_decode($response, true);
 
-            if ($httpCode === 200) {
+    // Si la llamada para obtener detalles falla, registramos el error y salimos.
+    if ($httpCode !== 200) {
+        // (Aquí va el manejo de error que ya teníamos para el caso 404)
+        if ($httpCode === 404) {
+            $stmtDelete = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_event_id");
+            $stmtDelete->execute([':outlook_event_id' => $outlookEventId]);
+            if ($stmtDelete->rowCount() > 0) {
+                log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Exito', 'Cita (detectada como eliminada en un update) cancelada localmente.');
+            }
+        } else {
+            log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Error al obtener detalles del evento: HTTP ' . $httpCode . ' - ' . json_encode($eventData));
+        }
+        return; // Salimos de la función
+    }
+
+    // 2. NUEVA CONDICIÓN: ¿ES UNA SERIE MAESTRA?
+    if (isset($eventData['type']) && $eventData['type'] === 'seriesMaster') {
+
+        // SÍ ES UNA SERIE: Activamos la re-sincronización total
+        log_sync(null, $responsableId, 'Outlook -> App', 'RE-SYNC_SERIES', 'Info', 'Detectado cambio en serie maestra. Iniciando re-sincronización completa.');
+        importarEventosDeOutlook($responsableId, $accessToken);
+
+    } else {
+
+        // NO ES UNA SERIE: Procedemos con la lógica anterior para eventos simples
+        switch ($changeType) {
+            case 'created':
+            case 'updated':
+                // ... (TODA la lógica que ya existía para insertar/actualizar una cita simple) ...
+                // No necesitamos volver a obtener $eventData, porque ya lo tenemos.
                 // Convertir fechas y horas a formato local (America/Guayaquil)
                 $zonaHorariaLocal = new DateTimeZone('America/Guayaquil');
 
@@ -499,34 +525,18 @@ if ($insertedId !== false && $insertedId !== null && $insertedId !== '') {
     log_sync(null, $responsableId, 'Outlook -> App', 'CREAR', 'Error', 'Cita creada desde Outlook, pero no se pudo obtener el ID de inserción.');
 }
                 }
-            } else {
-                // Si obtenemos un 404, es muy probable que el evento haya sido eliminado justo antes de que llegara la notificación de 'updated'.
-                // Lo tratamos como una eliminación para evitar errores en el log.
-                if ($httpCode === 404) {
-                    $stmtDelete = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_event_id");
-                    $stmtDelete->execute([':outlook_event_id' => $outlookEventId]);
-                    if ($stmtDelete->rowCount() > 0) {
-                        log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Exito', 'Cita (detectada como eliminada en un update) cancelada localmente.');
-                    }
-                } else {
-                    log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Error', 'Error al obtener detalles del evento: HTTP ' . $httpCode . ' - ' . json_encode($eventData));
-                }
-            }
-            break;
+                break;
 
-        case 'deleted':
-            // Marcar cita local como CANCELADO o eliminarla
-            $stmtDelete = $db->prepare("UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE outlook_event_id = :outlook_event_id");
-            $stmtDelete->execute([':outlook_event_id' => $outlookEventId]);
-            if ($stmtDelete->rowCount() > 0) {
-                log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Exito', 'Cita cancelada/eliminada localmente desde Outlook.');
-            } else {
-                log_sync(null, $responsableId, 'Outlook -> App', 'ELIMINAR', 'Error', 'Cita no encontrada localmente para eliminar desde Outlook.');
-            }
-            break;
+            case 'deleted':
+                // En lugar de intentar cancelar una sola cita, re-sincronizamos completamente.
+                // Esto maneja la eliminación de series recurrentes de forma robusta.
+                log_sync(null, $responsableId, 'Outlook -> App', 'RE-SYNC_DELETED', 'Info', 'Detectada eliminación. Iniciando re-sincronización completa.');
+                importarEventosDeOutlook($responsableId, $accessToken);
+                break;
 
-        default:
-            log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Advertencia', 'Tipo de cambio de webhook no soportado: ' . $changeType);
-            break;
+            default:
+                log_sync(null, $responsableId, 'Outlook -> App', 'WEBHOOK', 'Advertencia', 'Tipo de cambio de webhook no soportado: ' . $changeType);
+                break;
+        }
     }
 }
