@@ -22,8 +22,8 @@ try {
                      SEC_TO_TIME(COALESCE(v.duracion_minutos, 45) * 60)) AS end,
              CASE
                   WHEN v.estado = 'CANCELADO' THEN '#dc3545'
-                  WHEN v.id_usuario IS NOT NULL THEN '#198754' -- Citas de la app en verde
-                  ELSE '#6c757d' -- Citas de Outlook en gris
+                  WHEN v.id_usuario IS NOT NULL THEN '#52cb7d' -- Citas de la app en verde
+                  ELSE '#828486' -- Citas de Outlook en gris
              END                             AS color
       FROM  agendamiento_visitas      v
       JOIN  proposito_agendamiento    pa ON pa.id = v.proposito_id

@@ -27,6 +27,10 @@
     <select id="selResp" class="form-select w-auto"></select>
     <a href="cita_responsable.php" id="btnAgendarCliente" class="btn btn-primary">Agendar para Cliente</a>
     <button id="btnRefreshCalendar" class="btn btn-outline-primary"><i class="bi bi-arrow-clockwise"></i> Refrescar</button>
+    <p style="align-items: center; margin-bottom: 0;">Citas de outlook de color</p>
+    <div class="caja"></div>
+    <p style="align-items: center; margin-bottom: 0;">Citas aplicación</p>
+    <div class="caja1"></div>
   </div>
 
   <div id="calendar"></div>
@@ -65,10 +69,10 @@ if (!is_admin_responsible) {
 }
 
 /* ---------- calendario ---------- */
-let calendar; // Declare calendar in a higher scope
+let calendar;
 
 function initCalendar(){
-  calendar=new FullCalendar.Calendar(
+  const calendar=new FullCalendar.Calendar(
     document.getElementById('calendar'),
     {
       locale:'es',
