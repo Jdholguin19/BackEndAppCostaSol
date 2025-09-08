@@ -27,33 +27,27 @@ try {
     $db->beginTransaction();
 
     // 1. Verificar que la cita exista y se pueda cancelar, y obtener datos de Outlook
-    $sqlCheck = "SELECT outlook_event_id, responsable_id FROM agendamiento_visitas WHERE id = :id_cita AND estado = 'PROGRAMADO'";
-    $paramsCheck = [':id_cita' => $idCita];
-
-    if (!$is_admin_responsible) {
-        $sqlCheck .= " AND id_usuario = :id_usuario";
-        $paramsCheck[':id_usuario'] = $idUsuario;
-    }
-
+    $sqlCheck = "SELECT outlook_event_id, responsable_id, id_usuario FROM agendamiento_visitas WHERE id = :id_cita AND estado = 'PROGRAMADO'";
     $stCheck = $db->prepare($sqlCheck);
-    $stCheck->execute($paramsCheck);
+    $stCheck->execute([':id_cita' => $idCita]);
     $cita = $stCheck->fetch(PDO::FETCH_ASSOC);
 
-    if (!$cita) {
+    // 2. Validar permisos: la cita debe existir y el usuario debe ser el dueño o un admin.
+    if (!$cita || (!$is_admin_responsible && $cita['id_usuario'] != $idUsuario)) {
         $db->rollBack();
         http_response_code(403); // Forbidden
         echo json_encode(['ok' => false, 'message' => 'La cita no existe, no le pertenece o no puede ser cancelada en su estado actual.']);
         exit();
     }
 
-    // 2. Si la cita está vinculada a Outlook, intentar eliminar el evento de allá primero.
+    // 3. Si la cita está vinculada a Outlook, intentar eliminar el evento de allá primero.
     if (!empty($cita['outlook_event_id'])) {
         require_once __DIR__ . '/../helpers/outlook_sync_helper.php';
         eliminarEventoEnOutlook($cita['outlook_event_id'], (int)$cita['responsable_id'], $idCita);
         // No detenemos el flujo si la eliminación en Outlook falla, el error ya se registró en el log.
     }
 
-    // 3. Actualizar el estado de la cita local a 'CANCELADO'
+    // 4. Actualizar el estado de la cita local a 'CANCELADO'
     $sqlUpdate = "UPDATE agendamiento_visitas SET estado = 'CANCELADO' WHERE id = :id_cita";
     $stUpdate = $db->prepare($sqlUpdate);
     $stUpdate->execute([':id_cita' => $idCita]);

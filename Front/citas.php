@@ -162,7 +162,7 @@ async function cancelar(idCita){
 
   const idUsuario = u.id; // Obtener el ID del usuario del objeto 'u' global
   let requestBody = `id_cita=${idCita}&id_usuario=${idUsuario}`;
-  if (u.is_responsable && u.id === 3) {
+  if (u.is_responsable) {
     requestBody += `&is_admin_responsible=true`;
   }
 
@@ -199,7 +199,7 @@ async function eliminarCita(idCita){
 
   const idUsuario = u.id; // Obtener el ID del usuario del objeto 'u' global
   let requestBody = `id_cita=${idCita}&id_usuario=${idUsuario}`;
-  if (u.is_responsable && u.id === 3) {
+  if (u.is_responsable) {
     requestBody += `&is_admin_responsible=true`;
   }
 
