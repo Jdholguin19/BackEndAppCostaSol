@@ -289,7 +289,7 @@ btnOk.onclick = ()=>{
   fd.append('observaciones', document.getElementById('txtObservaciones').value);
   fd.append('duracion', citaDuracion); // Enviar la duración
 
-  fetch('../api/cita/cita_create.php',{method:'POST',body:fd})
+  fetch('../api/cita/cita_create.php',{method:'POST', body:fd, headers: {'Authorization': `Bearer ${token}`}})
    .then(r=>r.json()).then(d=>{
       if(d.ok){ alert('Cita agendada ✔'); location.href='citas.php'; }
       else    { alert(d.msg||'No se pudo agendar'); btnOk.disabled=false; btnOk.innerHTML='<i class="bi bi-check-circle"></i> Confirmar'; }

@@ -20,7 +20,7 @@ try {
              CONCAT(v.fecha_reunion,'T',v.hora_reunion)           AS start,
              ADDTIME(CONCAT(v.fecha_reunion,' ',v.hora_reunion),
                      SEC_TO_TIME(COALESCE(v.duracion_minutos, 45) * 60)) AS end,
-             CONCAT('Proyecto ', ur.nombre, ' - Mz ', pr.manzana, ', Villa ', pr.villa) AS proyecto,
+             CONCAT(ur.nombre, ' - Mz ', pr.manzana, ', Villa ', pr.villa) AS proyecto,
              CASE
                   WHEN v.estado = 'CANCELADO' THEN '#dc3545'
                   WHEN v.id_usuario IS NOT NULL THEN '#198754' -- Citas de la app en verde
