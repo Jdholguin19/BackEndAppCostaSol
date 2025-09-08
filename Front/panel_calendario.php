@@ -100,6 +100,7 @@ function initCalendar(){
         const popoverTitle = info.event.start.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         const popoverContent = `
           <p class="mb-1">${info.event.title}</p>
+          ${info.event.extendedProps.proyecto ? `<p class="mb-1 text-muted"><i class="bi bi-building"></i> ${info.event.extendedProps.proyecto}</p>` : ''}
           <hr class="my-1">
           <small class="text-muted">
             ${info.event.start.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} -
