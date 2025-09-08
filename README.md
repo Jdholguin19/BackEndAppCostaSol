@@ -230,9 +230,9 @@ El proyecto ofrece las siguientes funcionalidades principales:
 *   **Gestión de Noticias:**
     *   Visualización de noticias y comunicados.
     *   Funcionalidades para administradores para crear y eliminar noticias (`noticia.php`).
-*   **Calendario de Responsables:**
-    *   Cada responsable puede ver su propia agenda unificada en `panel_calendario.php`.
-    *   El calendario muestra tanto las citas creadas desde la aplicación como las sincronizadas desde su calendario de Outlook.
+*   **Calendario de Responsables (`panel_calendario.php`):**
+    *   Cada responsable puede ver su propia agenda unificada, que incluye tanto las citas creadas desde la aplicación como las sincronizadas desde su calendario de Outlook.
+    *   Gracias a las mejoras en la sincronización de webhooks, este calendario se mantiene actualizado de forma robusta ante cualquier cambio (creación, actualización, eliminación) en el calendario de Outlook, incluyendo series recurrentes.
     *   El responsable administrador (ID 3) tiene la capacidad de ver los calendarios de todos los responsables.
 *   **Manuales y Documentos:**
     *   Acceso a documentos PDF como el Manual de Uso y Mantenimiento (`api/mcm.php`) y la Paleta Vegetal (`api/paletavegetal.php`).
@@ -303,7 +303,9 @@ El sistema ofrece una sincronización robusta con los calendarios de Outlook de 
         *   **Resultado:** Se crea una copia limpia y fiel del calendario de Outlook en la aplicación, incluyendo eventos recurrentes y excluyendo las ocurrencias canceladas.
 
     *   **Sincronización en Tiempo Real (Webhooks):**
-        *   Para cambios en **eventos simples**, el webhook (`api/outlook_webhook.php`) procesa notificaciones de `created`, `updated` y `deleted` para mantener la sincronización al momento.
+        *   El webhook (`api/outlook_webhook.php`) procesa notificaciones de `created`, `updated` y `deleted` para mantener la sincronización en tiempo real.
+    *   **Manejo Robusto de Series Recurrentes:** Para cambios en **series recurrentes completas** (creación, actualización o eliminación), el sistema ahora activa una **re-sincronización completa** del calendario del responsable. Esto asegura la integridad y consistencia de los datos en la aplicación, reflejando fielmente el estado del calendario de Outlook, aunque la actualización no sea instantánea (puede tardar unos segundos).
+    *   **Robustez del Webhook:** La función `procesarNotificacionWebhook` en `api/helpers/outlook_sync_helper.php` ha sido mejorada para manejar de forma más robusta las notificaciones, incluyendo la corrección de errores de `preg_match` y la activación de la re-sincronización para cualquier tipo de eliminación (`deleted`), garantizando que el calendario de la aplicación siempre esté actualizado.
         *   Se ha mejorado el sistema para manejar de forma más elegante las notificaciones de `updated` que llegan justo antes de una de `deleted`, evitando errores innecesarios en los logs.
         *   **Nota:** La sincronización en tiempo real de cambios en **series recurrentes completas** (ej. mover toda una serie a otro día) no está implementada actualmente. Un cambio de este tipo requerirá una re-sincronización manual (desconectar y volver a conectar el calendario) para reflejarse en la app.
 

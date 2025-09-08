@@ -20,11 +20,11 @@ try {
              CONCAT(v.fecha_reunion,'T',v.hora_reunion)           AS start,
              ADDTIME(CONCAT(v.fecha_reunion,' ',v.hora_reunion),
                      SEC_TO_TIME(COALESCE(v.duracion_minutos, 45) * 60)) AS end,
-             CASE v.estado
-                  WHEN 'PROGRAMADO' THEN '#ffc107'
-                  WHEN 'REALIZADO'  THEN '#198754'
-                  WHEN 'CANCELADO'  THEN '#dc3545'
-                  ELSE '#6c757d' END                             AS color
+             CASE
+                  WHEN v.estado = 'CANCELADO' THEN '#dc3545'
+                  WHEN v.id_usuario IS NOT NULL THEN '#198754' -- Citas de la app en verde
+                  ELSE '#6c757d' -- Citas de Outlook en gris
+             END                             AS color
       FROM  agendamiento_visitas      v
       JOIN  proposito_agendamiento    pa ON pa.id = v.proposito_id
       LEFT JOIN  usuario              u  ON u.id  = v.id_usuario -- Cambiado a LEFT JOIN
