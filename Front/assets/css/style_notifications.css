@@ -132,7 +132,6 @@ body {
 
 .notification-body {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     gap: 1rem;
     margin: 0.5rem 0;
@@ -144,12 +143,17 @@ body {
     color: #6b7280;
     line-height: 1.4;
     margin: 0; /* Reset margin */
-    flex: 1 1 70%;
+    flex-grow: 1;
     /* Fix for overflowing text in flexbox */
     min-width: 0;
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    /* Override external styles */
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
 }
 
 .notification-meta {
@@ -180,15 +184,20 @@ body {
     background: transparent;
     border-radius: 6px;
     border: none;
-    flex: 0 0 30%;
+    flex-shrink: 0;
     text-align: right;
 }
 
 .notification-attachment a {
+    display: inline-block;
+    background: #f3f4f6;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
     color: #2d5a3d;
     text-decoration: none;
     font-size: 0.75rem;
     font-weight: 500;
+    transition: background-color 0.2s ease;
 }
 
 .notification-attachment a:hover {
@@ -307,17 +316,11 @@ body {
 /* --- Attachment Image Styles --- */
 .notification-attachment-image {
   margin-top: 0; /* Reset margin */
-  flex: 0 0 30%;
+  flex-shrink: 0;
   text-align: right;
 }
 
 .notification-attachment-image img {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 1px solid #e5e7eb;
-}chment-image img {
   width: 50px;
   height: 50px;
   border-radius: 8px;

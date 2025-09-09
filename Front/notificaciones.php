@@ -132,13 +132,8 @@ if (!token) {
                                             <img src="${notif.url_adjunto}" alt="Adjunto">
                                         </div>`;
                                     } else {
-                                        // Fallback for non-image files
-                                        return `
-                                        <div class="notification-attachment">
-                                            <a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">
-                                                <i class="bi bi-file-earmark-text"></i> Archivo Adjunto
-                                            </a>
-                                        </div>`;
+                                        // For non-image files, show nothing.
+                                        return '';
                                     }
                                 })()}
                             </div>
