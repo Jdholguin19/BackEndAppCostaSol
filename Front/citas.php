@@ -113,7 +113,17 @@ function card(c){
       <p><i class="bi bi-clock"></i>${horaMostrada}</p>
     </div>
     <p><i class="bi bi-geo-alt"></i>${c.proyecto}</p>
-    ${c.observaciones ? `<p><i class="bi bi-chat-right-text"></i>${c.observaciones}</p>` : ''}
+    ${(() => {
+        if (!c.observaciones) return '';
+        const match = c.observaciones.match(/<b>Observaciones:<\/b>?(.*?)<(?!\/b>)/i);
+        if (match && match[1]) {
+            const obsText = match[1].replace(/<br\s*\/?>/gi, ' ').trim();
+            if (obsText.length > 0) {
+                return `<p><i class="bi bi-chat-right-text"></i>${obsText}</p>`;
+            }
+        }
+        return '';
+    })()}
 
     <div class="responsable-section">
       <img src="${c.url_foto || 'https://via.placeholder.com/42'}" class="responsable-avatar">

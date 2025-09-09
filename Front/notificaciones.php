@@ -136,7 +136,7 @@ if (!token) {
                                         return `
                                         <div class="notification-attachment">
                                             <a href="${notif.url_adjunto}" target="_blank" onclick="event.stopPropagation();">
-                                                <i class="bi bi-file-earmark-text"></i> Ver adjunto
+                                                <i class="bi bi-file-earmark-text"></i> Archivo Adjunto
                                             </a>
                                         </div>`;
                                     }
