@@ -6,7 +6,7 @@ try{
     $db   = DB::getDB();
     $rows = $db->query("SELECT id,proposito,url_icono
                         FROM proposito_agendamiento
-                        WHERE estado = 1
+                        WHERE estado = 1 AND id <> 5
                         ORDER BY id")
                ->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode(['ok'=>true,'items'=>$rows]);
