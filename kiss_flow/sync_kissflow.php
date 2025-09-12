@@ -127,12 +127,8 @@ while (true) {
         ];
         
         
-        echo "DEBUG: Contando variables...\n";
-        echo "COUNT(params_to_bind): " . count($params_to_bind) . "\n";
-        $types = 'ssssssssssisssssssssssbididsssssssssbbsssssssssssssssssssssssss';
-        echo "STRLEN(types): " . strlen($types) . "\n";
-        exit; // Detener el script aquí para depurar
 
+        $types = 'ssssssssssisssssssssssbididsssssssssbbsssssssssssssssssssss';
         $stmt->bind_param($types, ...$params_to_bind);
         
         
