@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHTMLX Gantt Standalone</title>
+    <!-- Incluye los archivos CSS de DHTMLX Gantt -->
+    <link rel="stylesheet" href="codebase/dhtmlxgantt.css">
+    <!-- Incluye tu archivo de estilos personalizado -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="gantt-header">
+        <label for="project-select">Seleccionar Proyecto:</label>
+        <select id="project-select"></select>
+        <button id="new-project-btn">Nuevo Proyecto</button>
+        <button onclick="addNewTask()">Añadir Tarea</button>
+    </div>
+    <div id="gantt_here" style="width:100%; height:calc(100vh - 50px);"></div>
+
+    <!-- Custom Task Edit Modal -->
+    <div id="custom-lightbox-modal" class="custom-modal" style="display: none;">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" onclick="closeCustomLightbox()">&times;</span>
+            <h2>Editar Tarea</h2>
+            <form id="custom-lightbox-form">
+                <input type="hidden" id="modal-task-id">
+                <input type="hidden" id="modal-task-is-new">
+                <input type="hidden" id="modal-task-parent-id">
+                <input type="hidden" id="modal-task-parent">
+                <input type="hidden" id="modal-task-project-id">
+
+                <label for="modal-task-text">Nombre de Tarea:</label>
+                <input type="text" id="modal-task-text" required>
+
+                <label for="modal-task-start-date">Fecha Inicio:</label>
+                <input type="date" id="modal-task-start-date" required>
+
+                <label for="modal-task-duration">Duración (días):</label>
+                <input type="number" id="modal-task-duration" min="1" required>
+
+                <label for="modal-task-progress">Progreso (%):</label>
+                <input type="range" id="modal-task-progress" min="0" max="1" step="0.1">
+                <span id="modal-task-progress-value">0%</span>
+
+                <label for="modal-task-owners">Dueños:</label>
+                <select id="modal-task-owners" multiple size="5"></select>
+
+                <div class="modal-section-header">
+                    <h3>Dependencias entre Proyectos</h3>
+                    <button type="button" class="gantt_button" onclick="showCrossProjectLinkModal(document.getElementById('modal-task-id').value)">Añadir Dependencia</button>
+                </div>
+                <ul id="cross-links-list-modal"></ul>
+
+                <div class="modal-buttons">
+                    <button type="button" onclick="saveCustomTask()">Guardar</button>
+                    <button type="button" onclick="deleteCustomTask()">Eliminar</button>
+                    <button type="button" onclick="closeCustomLightbox()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cross-Project Link Modal -->
+    <div id="cross-link-modal" class="custom-modal" style="display: none;">
+        <div class="custom-modal-content">
+            <span class="custom-modal-close" onclick="closeCrossLinkModal()">&times;</span>
+            <h2>Añadir Dependencia entre Proyectos</h2>
+            <form id="cross-link-form">
+                <input type="hidden" id="cross-link-source-task-id">
+                
+                <label for="cross-link-project-select">Seleccionar Proyecto Destino:</label>
+                <select id="cross-link-project-select" required></select>
+                
+                <label for="cross-link-task-select">Seleccionar Tarea Destino:</label>
+                <select id="cross-link-task-select" required></select>
+                
+                <label for="cross-link-type-select">Tipo de Dependencia:</label>
+                <select id="cross-link-type-select">
+                    <option value="0">Fin a Inicio</option>
+                    <option value="1">Inicio a Inicio</option>
+                    <option value="2">Fin a Fin</option>
+                    <option value="3">Inicio a Fin</option>
+                </select>
+
+                <div class="modal-buttons">
+                    <button type="button" onclick="saveCrossProjectLink()">Guardar Dependencia</button>
+                    <button type="button" onclick="closeCrossLinkModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Incluye los archivos JavaScript de DHTMLX Gantt -->
+    <script src="codebase/dhtmlxgantt.js"></script>
+    <!-- Incluye tu archivo de script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
