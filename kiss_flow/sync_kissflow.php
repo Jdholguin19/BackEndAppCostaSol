@@ -129,13 +129,7 @@ while (true) {
         $types = 'ssssssssssisssssssssssbididsssssssssbbsssssssssssssssssssssssss';
         $stmt->bind_param($types, ...$params_to_bind);
         
-        $types = 'ssssssssssisssssssssssbididsssssssssbbsssssssssssssssssssss';
-        echo "DEBUG: Contando variables...\n";
-        echo "COUNT(params_to_bind): " . count($params_to_bind) . "\n";
-        echo "STRLEN(types): " . strlen($types) . "\n";
-        exit; // Detener el script aquí para depurar
-
-        $stmt->bind_param($types, ...$params_to_bind);
+        
 
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 1) { // 1 for INSERT, 2 for UPDATE
