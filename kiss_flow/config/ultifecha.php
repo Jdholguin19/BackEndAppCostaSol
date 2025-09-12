@@ -34,16 +34,7 @@ function call_kissflow_api(string $url): ?array {
     return json_decode($response, true);
 }
 
-// 1. Obtener la fecha del último registro modificado para traer solo los más nuevos
-$last_sync_date = null;
-$result = $conn->query("SELECT MAX(_modified_at) AS last_date FROM kissflow_emision_pagos");
-if ($result && $result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    if ($row['last_date'] !== null) {
-        $last_sync_date = $row['last_date'];
-        echo "Última modificación detectada: $last_sync_date\n";
-    }
-}
+
 
 // 2. Preparar la consulta de inserción/actualización
 $sql = "INSERT INTO kissflow_emision_pagos (
@@ -90,12 +81,6 @@ while (true) {
         }
 
         
-
-        // Solo procesar si el item fue modificado después de nuestra última sincronización
-        $item_modified_at = $summary_item['_modified_at'] ?? '1970-01-01T00:00:00Z';
-        if ($last_sync_date && strtotime($item_modified_at) < strtotime($last_sync_date)) {
-            continue; // Saltar item porque no es nuevo
-        }
 
         echo "Obteniendo detalle para item $item_id...\n";
         $detail_url = KISSFLOW_API_HOST . "/process/2/{$accountId}/{$processName}/{$item_id}/{$activity_instance_id}";
