@@ -20,6 +20,15 @@ body {
     overflow: hidden;
 }
 
+.status-summary {
+    padding: 10px 15px;
+    background-color: #e9ecef;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 0.9em;
+    color: #495057;
+    text-align: center;
+}
+
 .chat-window {
     flex-grow: 1;
     padding: 15px;

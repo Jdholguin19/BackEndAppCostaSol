@@ -9,14 +9,41 @@ require_once __DIR__ . '/config/db.php';
 $input = json_decode(file_get_contents('php://input'), true);
 $query = $input['query'] ?? '';
 
-if (empty($query)) {
-    echo json_encode(['ok' => false, 'mensaje' => 'Por favor, escribe algo.']);
-    exit;
-}
-
-$response_message = 'Lo siento, no encontré resultados para "' . htmlspecialchars($query) . '".';
+// Convertir la consulta a minúsculas para una comparación insensible a mayúsculas y minúsculas
+$lower_query = strtolower(trim($query));
 
 try {
+    // --- Lógica para obtener el resumen de estados ---
+    if ($lower_query === 'resumen estados' || $lower_query === 'estados' || $lower_query === 'status') {
+        $counts = [];
+        $statuses = ['Completed', 'InProgress', 'Rejected', 'Withdrawn']; // Incluir Withdrawn también
+
+        foreach ($statuses as $status) {
+            $stmt = $conn->prepare("SELECT COUNT(*) AS count FROM kissflow_emision_pagos WHERE _status = ?");
+            if ($stmt === false) {
+                throw new Exception("Error al preparar la consulta de conteo para $status: " . $conn->error);
+            }
+            $stmt->bind_param("s", $status);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $counts[$status] = $row['count'];
+            $stmt->close();
+        }
+
+        echo json_encode(['ok' => true, 'type' => 'status_summary', 'data' => $counts]);
+        $conn->close();
+        exit;
+    }
+
+    // --- Lógica existente para buscar por número de factura, proveedor o motivo ---
+    if (empty($query)) {
+        echo json_encode(['ok' => false, 'mensaje' => 'Por favor, escribe algo.']);
+        exit;
+    }
+
+    $response_message = 'Lo siento, no encontré resultados para "' . htmlspecialchars($query) . '".';
+
     // Intentar buscar por número de factura
     if (is_numeric($query)) {
         $stmt = $conn->prepare("SELECT * FROM kissflow_emision_pagos WHERE request_number = ? LIMIT 1");
@@ -43,6 +70,7 @@ try {
         $response_message .= "  Monto: $" . number_format((float)($row['Monto'] ?? 0.0), 2) . "\n";
         $response_message .= "  Motivo: " . ($row['Motivo'] ?? 'N/A') . "\n";
         $response_message .= "  Fecha de Pago: " . ($row['Fecha_de_Pago'] ?? 'N/A') . "\n";
+        $response_message .= "  Estado: " . ($row['_status'] ?? 'N/A') . "\n"; // Añadir el estado
         // Puedes añadir más campos aquí
     } else {
         $response_message = 'No encontré ningún registro que coincida con "' . htmlspecialchars($query) . '".';

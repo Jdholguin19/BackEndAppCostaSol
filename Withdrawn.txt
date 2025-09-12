@@ -1,0 +1,82 @@
+{
+  "_id": "PkRlClSs4AgFA",
+  "Name": "2020-12-09  ( 514 )   CNEL /$ 100 USD   ",
+  "_created_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_modified_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_created_at": "2020-10-19T18:50:42Z",
+  "_modified_at": "2021-05-19T14:03:43Z",
+  "_flow_name": "Emisión de Pagos ",
+  "_completed_at": "2021-05-19T14:03:43Z",
+  "_status": "Withdrawn",
+  "_stage": 6,
+  "_root_process_instance": "Pk9RClSs4z9Ou",
+  "_submitted_at": "2020-12-01T16:34:48Z",
+  "_request_number": 514,
+  "_counter": 456,
+  "_last_completed_step": "Pk1aClSs4zxqQ",
+  "_progress": 100,
+  "_note": [
+    {
+      "NotifiedBy": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "Note": "prueba",
+      "NotifiedAt": "2021-05-19T14:03:43Z",
+      "Type": "withdraw"
+    }
+  ],
+  "Proveedor": "CNEL",
+  "Monto": 100,
+  "Fecha_de_Pago": "2020-12-09",
+  "Motivo": "Planilla CNEL Noviembre KM 19",
+  "Por_que_se_necesita": "medidor 1 $50 medidor 2 $35\n",
+  "Cheque_ya_firmado": false,
+  "Notifico_al_proveedor_que_el_cheque_esta_listo": false,
+  "Valor_de_Pago": 100,
+  "Desea_que_Kissflow_notifique_automaticamente_al_proveedor_que_el_cheque_ya_esta_listo": true,
+  "Start_time": "2020-10-19T18:50:42Z",
+  "Deadline": "2020-10-21T18:50:42Z",
+  "Completed_time": "2021-05-19T14:03:43Z",
+  "Total_allowed_time": 48,
+  "Total_time_taken": 3658.12666666667,
+  "Percentage_of_time_taken": 7621.097222,
+  "Tipo_de_Pago": [
+    "Factura"
+  ],
+  "Cheque_o_Transferencia_1": [
+    "Cheque"
+  ],
+  "Solicita": "514",
+  "Necesita_Factura": true,
+  "viene_de": "Emisión de Pagos",
+  "proceso_actual": "Emisión de Pagos ",
+  "Ordenes_deTranferencias_ya_estan_cargadas": false,
+  "_activity_instance_id": "Pk1aClSs4zxqQ",
+  "_activity_id": "Activity_SzNyvKjO9c",
+  "_entity_id": "Pk1aClSs4zxqQ",
+  "IsSelfPickEnabled": false,
+  "_current_context": [
+    {
+      "_context_assigned_to": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User"
+        }
+      ],
+      "_context_assigned_at": "2021-05-19T14:03:43Z",
+      "_status": "Withdrawn"
+    }
+  ],
+  "_meta_version": "1755787705177124"
+}

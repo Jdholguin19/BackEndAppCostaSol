@@ -65,7 +65,7 @@ $total_nuevos_registros = 0;
 $total_actualizados = 0;
 $accountId = 'AcNcc9rydX9F';
 $processName = 'Emisio_n_de_Pagos_';
-$list_base_url = KISSFLOW_API_HOST . "/process/2/{$accountId}/{$processName}/myitems/completed";
+$list_base_url = KISSFLOW_API_HOST . "/process/2/{$accountId}/{$processName}/myitems";
 
 while (true) {
     $params = ['page_number' => $page_number, 'page_size' => $page_size];
