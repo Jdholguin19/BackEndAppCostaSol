@@ -12,6 +12,7 @@ ini_set('error_log', __DIR__ . '/../config/error_log'); // Added this line
 
 ini_set('display_errors', 'Off');
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/helpers/audit_helper.php'; // Incluir el helper de auditoría
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -62,6 +63,8 @@ try {
         $_SESSION['cs_usuario'] = json_encode($authenticated_user_info);
         echo json_encode(['ok'=>true,'token'=>$token,'user'=>$authenticated_user_info]);
 
+        log_audit_action($db, 'LOGIN_SUCCESS', $user['id'], 'usuario'); // Log de auditoría
+
     } else {
        /* ---------- 5. Consulta en tabla 'responsable' ---------- */
         $sql = 'SELECT id, nombre, correo, url_foto_perfil, area, contrasena_hash
@@ -89,10 +92,13 @@ try {
             $_SESSION['cs_usuario'] = json_encode($authenticated_user_info);
             echo json_encode(['ok'=>true,'token'=>$token,'user'=>$authenticated_user_info]);
 
+            log_audit_action($db, 'LOGIN_SUCCESS', $responsable['id'], 'responsable'); // Log de auditoría
+
         } else {
             /* ---------- 8. Credenciales incorrectas ---------- */
             http_response_code(401);
             echo json_encode(['ok'=>false,'mensaje'=>'Credenciales incorrectas']);
+            log_audit_action($db, 'LOGIN_FAILURE', null, 'sistema', null, null, ['correo_intentado' => $correo]); // Log de auditoría
              // No hay authenticated_user_info en caso de credenciales incorrectas
         }
     }

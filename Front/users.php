@@ -268,7 +268,10 @@ function initializeUserFunctions() {
             try {
                 const response = await fetch('../api/user_crud.php', {
                     method: metodo,
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token // Añadir el token de autorización
+                    },
                     body: JSON.stringify(data)
                 });
                 const result = await response.json();
@@ -312,8 +315,11 @@ async function borrarUsuario(id) {
     }
     
     try {
-        const response = await fetch('user_crud.php?id=' + id, { 
-            method: 'DELETE' 
+        const response = await fetch('../api/user_crud.php?id=' + id, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + token // Añadir el token de autorización
+            }
         });
         const result = await response.json();
         
