@@ -12,6 +12,7 @@
  *      { ok:true, id:123, numero:'SAC00007' }
  */
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 $db = DB::getDB();
@@ -171,6 +172,7 @@ try{
     // --- FIN: Lógica de envío de correo a responsable ---
 
     echo json_encode(['ok'=>true,'id'=>$db->lastInsertId(),'numero'=>$numero]);
+    log_audit_action($db, 'CREATE_CTG', $authenticated_user_id, 'usuario', 'ctg', $db->lastInsertId(), ['numero_solicitud' => $numero, 'id_propiedad' => $pid, 'tipo_id' => $tipo, 'subtipo_id' => $sub, 'descripcion' => $desc, 'urgencia_id' => $urgencia_id, 'responsable_id' => $respId]);
 
 }catch(Throwable $e){
     error_log('ctg_create: '.$e->getMessage());

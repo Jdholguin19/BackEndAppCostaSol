@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 header('Content-Type: application/json; charset=UTF-8');
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/helpers/audit_helper.php'; // Incluir el helper de auditoría
 require_once __DIR__ . '/../correos/EnviarCorreoNotificacionResponsable.php';
 
 // --- Lógica de Autenticación por Token ---
@@ -98,6 +99,8 @@ try {
     }
 
     $conn->commit();
+
+    log_audit_action($conn, 'SAVE_ACABADOS', $auth_user_id, 'usuario', 'propiedad', $propiedad_id, ['kit_id' => $kit_id, 'color_nombre' => $color_nombre, 'paquetes_adicionales_ids' => $paquetes_adicionales_ids]); // Log de auditoría
 
     // Enviar correo después de confirmar la transacción
     try {

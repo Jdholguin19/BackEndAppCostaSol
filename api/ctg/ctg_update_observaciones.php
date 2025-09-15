@@ -7,6 +7,7 @@
  *  → { ok:true, mensaje: "Observaciones actualizadas correctamente" }
  */
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 // --- Lógica de Autenticación --- //
@@ -68,6 +69,12 @@ if (strlen($observaciones) > 700) {
 
 try{
     $db = DB::getDB(); // Reutilizar la conexión de la autenticación
+
+    // Obtener las observaciones actuales del CTG para el log de auditoría
+    $sql_old_obs = 'SELECT observaciones FROM ctg WHERE id = :ctg_id LIMIT 1';
+    $stmt_old_obs = $db->prepare($sql_old_obs);
+    $stmt_old_obs->execute([':ctg_id' => $ctgId]);
+    $old_observaciones = $stmt_old_obs->fetchColumn();
     
     // Verificar que el usuario es responsable y está asignado a este CTG
     if (!$is_responsable) {
@@ -100,6 +107,7 @@ try{
     ]);
     
     if ($result) {
+        log_audit_action($db, 'UPDATE_CTG_OBSERVATION', $authenticated_user['id'], 'responsable', 'ctg', $ctgId, ['old_observaciones' => $old_observaciones, 'new_observaciones' => $observaciones]); // Log de auditoría
         echo json_encode([
             'ok' => true, 
             'mensaje' => 'Observaciones actualizadas correctamente'
