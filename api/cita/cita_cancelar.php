@@ -9,6 +9,7 @@
  *     { ok: true } o { ok: false, message: "..." }
  */
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 $idCita = (int)($_POST['id_cita'] ?? 0);
@@ -54,6 +55,9 @@ try {
 
     if ($stUpdate->rowCount() > 0) {
         $db->commit();
+        $auditor_id = $is_admin_responsible ? $cita['responsable_id'] : $idUsuario;
+        $auditor_type = $is_admin_responsible ? 'responsable' : 'usuario';
+        log_audit_action($db, 'CANCEL_CITA', $auditor_id, $auditor_type, 'agendamiento_visitas', $idCita, ['reason' => 'Cita cancelada por el usuario/responsable']); // Log de auditoría
         echo json_encode(['ok' => true]);
     } else {
         $db->rollBack();

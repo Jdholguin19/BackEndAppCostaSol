@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 // --- Lógica de Autenticación por Token ---
@@ -49,6 +50,12 @@ if (!$cita_id || !in_array($new_status, $allowed_statuses)) {
 try {
     $db = DB::getDB();
 
+    // Obtener el estado actual de la cita para el log de auditoría
+    $sql_old_status = 'SELECT estado FROM agendamiento_visitas WHERE id = :cita_id LIMIT 1';
+    $stmt_old_status = $db->prepare($sql_old_status);
+    $stmt_old_status->execute([':cita_id' => $cita_id]);
+    $old_status = $stmt_old_status->fetchColumn();
+
     // 1. Verificar que el responsable esté asignado a esta cita y obtener el ID de evento de Outlook
     $stmt_verify = $db->prepare('SELECT responsable_id, outlook_event_id FROM agendamiento_visitas WHERE id = :cita_id');
     $stmt_verify->execute([':cita_id' => $cita_id]);
@@ -78,6 +85,7 @@ try {
         }
 
         echo json_encode(['ok' => true, 'mensaje' => 'Estado de la cita actualizado.']);
+        log_audit_action($db, 'UPDATE_CITA_STATUS', $auth_id, 'responsable', 'agendamiento_visitas', $cita_id, ['old_estado' => $old_status, 'new_estado' => $new_status]); // Log de auditoría
     } else {
         echo json_encode(['ok' => true, 'mensaje' => 'El estado de la cita no ha cambiado.']);
     }

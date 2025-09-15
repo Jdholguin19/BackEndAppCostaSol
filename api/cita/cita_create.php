@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 // --- Validación de Token y Rol ---
@@ -230,8 +231,10 @@ if ($lastInsertId) {
 }
 // --- FIN: Sincronización con Outlook Calendar ---
 
-$db->commit();
-echo json_encode(['ok'=>true]);
+    $db->commit();
+    $is_responsable_creating_for_client = ($responsable !== false); // Check if $responsable was found in auth block
+    log_audit_action($db, 'CREATE_CITA', $uid, ($is_responsable_creating_for_client ? 'responsable' : 'usuario'), 'agendamiento_visitas', $lastInsertId, ['id_propiedad' => $propiedad, 'proposito_id' => $proposito, 'fecha_reunion' => $fecha, 'hora_reunion' => $hora, 'duracion_minutos' => $duracion_a_guardar, 'responsable_id' => $respId]);
+    echo json_encode(['ok'=>true]);
 }catch(PDOException $e){
  $db->rollBack();
  if($e->errorInfo[1]==1062)

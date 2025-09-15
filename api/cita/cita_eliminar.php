@@ -10,6 +10,7 @@
  *     { ok: true } o { ok: false, message: "..." }
  */
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 $idCita = (int)($_POST['id_cita'] ?? 0);
@@ -24,6 +25,12 @@ if (!$idCita || (!$idUsuario && !$is_admin_responsible)) {
 
 try {
     $db = DB::getDB();
+
+    // Obtener los datos de la cita a eliminar para el log de auditoría
+    $sql_get_cita_data = "SELECT id_usuario, responsable_id, proposito_id, fecha_reunion, hora_reunion, estado, duracion_minutos FROM agendamiento_visitas WHERE id = :id_cita LIMIT 1";
+    $stmt_get_cita_data = $db->prepare($sql_get_cita_data);
+    $stmt_get_cita_data->execute([':id_cita' => $idCita]);
+    $deleted_cita_data = $stmt_get_cita_data->fetch(PDO::FETCH_ASSOC);
 
     // Verificar que la cita existe, está cancelada y pertenece al usuario o es un admin responsable
     $sqlCheck = "SELECT id FROM agendamiento_visitas WHERE id = :id_cita AND estado = 'CANCELADO'";
@@ -49,6 +56,8 @@ try {
     $stDelete->execute([':id_cita' => $idCita]);
 
     if ($stDelete->rowCount() > 0) {
+        $auditor_type = $is_admin_responsible ? 'responsable' : 'usuario';
+        log_audit_action($db, 'DELETE_CITA', $idUsuario, $auditor_type, 'agendamiento_visitas', $idCita, ['deleted_cita_data' => $deleted_cita_data]); // Log de auditoría
         echo json_encode(['ok' => true]);
     } else {
         http_response_code(500);
