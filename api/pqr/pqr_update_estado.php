@@ -10,6 +10,7 @@
  *      { ok: false, mensaje: "..." }
  */
 require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 // --- Lógica de Autenticación (Verificar token y si es responsable) --- //
@@ -63,6 +64,12 @@ try {
     // Reutilizar la conexión de la autenticación
     $db = DB::getDB();
 
+    // Obtener el estado actual del PQR para el log de auditoría
+    $sql_old_estado = 'SELECT estado_id FROM pqr WHERE id = :pqr_id LIMIT 1';
+    $stmt_old_estado = $db->prepare($sql_old_estado);
+    $stmt_old_estado->execute([':pqr_id' => $pqrId]);
+    $old_estado_id = $stmt_old_estado->fetchColumn();
+
     // Opcional: Verificar si el PQR con ese ID existe y está asignado a este responsable (medida de seguridad adicional)
     $sql_check_pqr = 'SELECT id FROM pqr WHERE id = :pqr_id AND responsable_id = :responsable_id LIMIT 1';
     $stmt_check_pqr = $db->prepare($sql_check_pqr);
@@ -90,6 +97,7 @@ try {
          // Opcional: Si el nuevo estado es "Resuelto" o "Cerrado", podrías añadir lógica adicional aquí (ej: enviar una última notificación al cliente).
 
         echo json_encode(['ok' => true, 'mensaje' => 'Estado actualizado correctamente']);
+        log_audit_action($db, 'UPDATE_PQR_STATUS', $authenticated_user['id'], 'responsable', 'pqr', $pqrId, ['old_estado_id' => $old_estado_id, 'new_estado_id' => $estadoId]); // Log de auditoría
     } else {
         http_response_code(500); 
         echo json_encode(['ok' => false, 'mensaje' => 'No se pudo actualizar el estado del PQR.']);

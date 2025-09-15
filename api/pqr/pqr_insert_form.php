@@ -18,6 +18,7 @@
 @ini_set('max_input_time', '3600');
 
 require_once __DIR__.'/../../config/db.php';
+require_once __DIR__ . '/../helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 // --- Lógica de Autenticación --- //
@@ -193,6 +194,7 @@ try{
 
 
     echo json_encode(['ok'=>true]);
+    log_audit_action($db, 'ADD_PQR_RESPONSE', $authenticated_user['id'], ($is_responsable ? 'responsable' : 'usuario'), 'respuesta_pqr', $db->lastInsertId(), ['pqr_id' => $pqrId, 'mensaje' => $mensaje, 'url_adjunto' => $urlAdjunto]);
 
 }catch(Throwable $e){
     error_log('pqr_insert_form: '.$e->getMessage());
