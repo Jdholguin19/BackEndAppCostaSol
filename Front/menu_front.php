@@ -528,7 +528,28 @@ include '../api/bottom_nav.php';
     </div>`;
   }
 
-  function openModule(menu){
+  async function logModuleAccess(menuId, menuName, token) {
+    try {
+      await fetch('../api/log_module_access.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          menu_id: menuId,
+          menu_name: menuName
+        })
+      });
+    } catch (error) {
+      console.error('Error al registrar acceso al módulo:', error);
+    }
+  }
+
+  async function openModule(menu){
+    // Log access before redirecting
+    await logModuleAccess(menu.id, menu.nombre, token);
+
     // Si el nombre es CTG lanzamos ctg.php
     if ((menu.nombre || '').trim().toUpperCase() === 'CTG'){
         location.href = 'ctg/ctg.php';               // ctg.php leerá el usuario desde localStorage

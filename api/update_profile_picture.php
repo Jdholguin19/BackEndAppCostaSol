@@ -14,6 +14,7 @@
  */
 
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/helpers/audit_helper.php'; // Incluir el helper de auditoría
 header('Content-Type: application/json; charset=utf-8');
 
 try {
@@ -68,6 +69,13 @@ try {
         echo json_encode(['ok' => false, 'mensaje' => 'Token inválido o expirado']);
         exit;
     }
+
+    // Obtener la URL de la foto de perfil actual para el log de auditoría
+    $table_name = $is_responsable ? 'responsable' : 'usuario';
+    $sql_get_old_url = "SELECT url_foto_perfil FROM $table_name WHERE id = :id LIMIT 1";
+    $stmt_get_old_url = $db->prepare($sql_get_old_url);
+    $stmt_get_old_url->execute([':id' => $authenticated_user['id']]);
+    $old_url_foto_perfil = $stmt_get_old_url->fetchColumn();
     
     // --- Validar archivo subido --- //
     if (!isset($_FILES['profile_picture']) || $_FILES['profile_picture']['error'] !== UPLOAD_ERR_OK) {
@@ -159,6 +167,7 @@ try {
         'url_foto_perfil' => $url_foto_perfil,
         'mensaje' => 'Foto de perfil actualizada correctamente'
     ]);
+    log_audit_action($db, 'UPDATE_PROFILE_PICTURE', $authenticated_user['id'], ($is_responsable ? 'responsable' : 'usuario'), ($is_responsable ? 'responsable' : 'usuario'), $authenticated_user['id'], ['old_url_foto_perfil' => $old_url_foto_perfil, 'new_url_foto_perfil' => $url_foto_perfil]); // Log de auditoría
     
 } catch (Exception $e) {
     error_log("Update Profile Picture API - Error: " . $e->getMessage());

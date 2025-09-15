@@ -44,7 +44,7 @@ CREATE TABLE `audit_log` (
 
 ### Creación de un Helper de Auditoría
 
-Se creará un nuevo archivo `api/helpers/audit_helper.php`. Este archivo contendrá una función reutilizable para registrar eventos de auditoría.
+Se creó el archivo `api/helpers/audit_helper.php`. Este archivo contiene una función reutilizable para registrar eventos de auditoría.
 
 ```php
 <?php
@@ -84,63 +84,74 @@ function log_audit_action($conn, $action, $user_id, $user_type, $target_resource
 
 ### Integración en los Endpoints de la API
 
-Se modificará cada archivo de la API en el directorio `api/` para incluir y utilizar la función `log_audit_action`. Esto se hará en cada punto donde se realice una acción significativa.
+Se modificaron los archivos de la API en el directorio `api/` para incluir y utilizar la función `log_audit_action` en cada punto donde se realiza una acción significativa.
 
-**Ejemplo en `api/login.php`:**
+## 4. Módulos Auditados
 
-```php
-// ... al inicio del archivo
-require_once '../helpers/audit_helper.php';
+A continuación, se listan los módulos y las acciones clave que han sido auditadas:
 
-// ... después de un login exitoso
-log_audit_action($conn, 'LOGIN_SUCCESS', $user['id'], 'usuario');
+*   **Autenticación**
+    *   `LOGIN_SUCCESS`: Registrado en `api/login.php` al iniciar sesión exitosamente (usuario o responsable).
+    *   `LOGIN_FAILURE`: Registrado en `api/login.php` al fallar un intento de inicio de sesión.
+    *   `LOGOUT`: Registrado en `api/logout.php` al cerrar sesión.
 
-// ... después de un login fallido
-log_audit_action($conn, 'LOGIN_FAILURE', null, 'sistema', null, null, ['correo_intentado' => $correo]);
-```
+*   **Gestión de Usuarios**
+    *   `CREATE_USER`: Registrado en `api/user_crud.php` al crear un nuevo usuario.
+    *   `UPDATE_USER`: Registrado en `api/user_crud.php` al actualizar un usuario (incluye datos antiguos y nuevos).
+    *   `DELETE_USER`: Registrado en `api/user_crud.php` al eliminar un usuario (incluye datos del usuario eliminado).
 
-## 4. Plan de Integración por Módulo
+*   **Gestión de Citas**
+    *   `CREATE_CITA`: Registrado en `api/cita/cita_create.php` al crear una nueva cita.
+    *   `CANCEL_CITA`: Registrado en `api/cita/cita_cancelar.php` al cancelar una cita.
+    *   `UPDATE_CITA_STATUS`: Registrado en `api/cita/cita_update_estado.php` al actualizar el estado de una cita (incluye estado antiguo y nuevo).
+    *   `DELETE_CITA`: Registrado en `api/cita/cita_eliminar.php` al eliminar una cita (incluye datos de la cita eliminada).
 
-A continuación, se listan los módulos y las acciones clave a auditar:
+*   **Gestión de CTG**
+    *   `CREATE_CTG`: Registrado en `api/ctg/ctg_create.php` al crear una nueva solicitud de CTG.
+    *   `UPDATE_CTG_STATUS`: Registrado en `api/ctg/ctg_update_estado.php` al actualizar el estado de una CTG (incluye estado antiguo y nuevo).
+    *   `ADD_CTG_RESPONSE`: Registrado en `api/ctg/ctg_insert_form.php` al añadir una respuesta a una CTG.
+    *   `UPDATE_CTG_OBSERVATION`: Registrado en `api/ctg/ctg_update_observaciones.php` al actualizar las observaciones de una CTG (incluye observaciones antiguas y nuevas).
 
-*   **Autenticación (`api/login.php`, `api/logout.php`)**
-    *   `LOGIN_SUCCESS`, `LOGIN_FAILURE`
-    *   `LOGOUT`
-*   **Gestión de Usuarios (`api/user_crud.php`)**
-    *   `CREATE_USER`, `UPDATE_USER`, `DELETE_USER`
-*   **Gestión de Citas (`api/cita/*`)**
-    *   `CREATE_CITA`, `CANCEL_CITA`, `UPDATE_CITA_STATUS`, `DELETE_CITA`
-*   **Gestión de CTG (`api/ctg/*`)**
-    *   `CREATE_CTG`, `UPDATE_CTG_STATUS`, `ADD_CTG_RESPONSE`, `UPDATE_CTG_OBSERVATION`
-*   **Gestión de PQR (`api/pqr/*`)**
-    *   `CREATE_PQR`, `UPDATE_PQR_STATUS`, `ADD_PQR_RESPONSE`, `UPDATE_PQR_OBSERVATION`
-*   **Selección de Acabados (`api/guardar_seleccion_acabados.php`)**
-    *   `SAVE_ACABADOS`
-*   **Perfil de Usuario (`api/update_profile_picture.php`)**
-    *   `UPDATE_PROFILE_PICTURE`
-*   **Notificaciones Push (`api/update_player_id.php`)**
-    *   `UPDATE_ONESIGNAL_PLAYER_ID`
+*   **Gestión de PQR**
+    *   `CREATE_PQR`: Registrado en `api/pqr/pqr_create.php` al crear una nueva solicitud de PQR.
+    *   `UPDATE_PQR_STATUS`: Registrado en `api/pqr/pqr_update_estado.php` al actualizar el estado de una PQR (incluye estado antiguo y nuevo).
+    *   `ADD_PQR_RESPONSE`: Registrado en `api/pqr/pqr_insert_form.php` al añadir una respuesta a una PQR.
+    *   `UPDATE_PQR_OBSERVATION`: Registrado en `api/pqr/pqr_update_observaciones.php` al actualizar las observaciones de una PQR (incluye observaciones antiguas y nuevas).
 
-Este proceso se repetirá para **todas las funciones y endpoints relevantes** de la API.
+*   **Selección de Acabados**
+    *   `SAVE_ACABADOS`: Registrado en `api/guardar_seleccion_acabados.php` al guardar la selección de acabados de una propiedad.
 
----
+*   **Perfil de Usuario**
+    *   `UPDATE_PROFILE_PICTURE`: Registrado en `api/update_profile_picture.php` al actualizar la foto de perfil (incluye URLs antiguas y nuevas).
 
-## 5. Alcance Detallado y Aclaraciones
+*   **Notificaciones Push (OneSignal)**
+    *   `UPDATE_ONESIGNAL_PLAYER_ID`: Registrado en `api/update_player_id.php` al actualizar el Player ID de OneSignal (incluye ID antiguo, nuevo y tipo de cambio: suscripción/desuscripción).
+
+## 5. Funcionalidades Adicionales Implementadas
+
+Además de los módulos priorizados, se han implementado las siguientes funcionalidades de auditoría y mejoras:
+
+*   **Registro de Acceso a Módulos**
+    *   `ACCESS_MODULE`: Registrado en `api/log_module_access.php` cada vez que un usuario o responsable accede a un módulo del menú principal (`Front/menu_front.php` y `Front/menu2.php`). Esto permite analizar la interacción y el uso de los módulos.
+
+*   **Renovación Automática de Suscripciones de Webhook de Outlook**
+    *   Se creó el script `api/outlook_webhook_renewer.php` para ser ejecutado como un cron job. Este script se encarga de renovar automáticamente las suscripciones de webhook de Outlook que están próximas a expirar, asegurando la continuidad de la sincronización bidireccional (`Outlook -> App`).
+
+## 6. Alcance Detallado y Aclaraciones
 
 ### Nivel de Detalle de Auditoría
 
-Se ha definido que el nivel de auditoría debe ser **detallado**.
+Se ha definido que el nivel de auditoría es **detallado**.
 
-*   **Para todas las operaciones de actualización (UPDATE)**, el sistema deberá registrar tanto el **valor antiguo** como el **valor nuevo** de los campos que se modifiquen. Esto se almacenará en la columna `details` (JSON) de la tabla `audit_log`.
-*   **Ejemplo de implementación:** Antes de ejecutar una consulta `UPDATE`, se realizará una consulta `SELECT` para obtener el estado actual del registro. Luego, ambos datos (el antiguo y el nuevo) se pasarán a la función `log_audit_action`.
+*   **Para todas las operaciones de actualización (UPDATE)**, el sistema registra tanto el **valor antiguo** como el **valor nuevo** de los campos que se modifican. Esto se almacena en la columna `details` (JSON) de la tabla `audit_log`.
 
 ### Registro de Fechas de Creación
 
 La solicitud de poder consultar elementos creados dentro de un rango de fechas (ej. "cuántos CTG se crearon entre dos fechas") se cubre de forma nativa con el diseño propuesto.
 
-*   Cada vez que se cree un nuevo elemento (un CTG, un usuario, una cita, etc.), se registrará una acción (`CREATE_CTG`, `CREATE_USER`, etc.) en la tabla `audit_log`.
-*   La columna `timestamp` de esa tabla guardará la fecha y hora exactas de la creación.
-*   Será posible realizar consultas SQL para filtrar por rangos de fechas. Ejemplo:
+*   Cada vez que se crea un nuevo elemento (un CTG, un usuario, una cita, etc.), se registra una acción (`CREATE_CTG`, `CREATE_USER`, etc.) en la tabla `audit_log`.
+*   La columna `timestamp` de esa tabla guarda la fecha y hora exactas de la creación.
+*   Es posible realizar consultas SQL para filtrar por rangos de fechas. Ejemplo:
     ```sql
     SELECT COUNT(*)
     FROM audit_log
@@ -148,26 +159,10 @@ La solicitud de poder consultar elementos creados dentro de un rango de fechas (
     AND timestamp BETWEEN '2025-01-01 00:00:00' AND '2025-01-31 23:59:59';
     ```
 
----
+## 7. Conclusiones y Próximos Pasos
 
-## 6. Decisiones Finales y Prioridades
+*   **Prioridades de Implementación:** Los módulos considerados más críticos han sido completamente auditados.
+*   **Visualización de Auditoría:** La creación de una interfaz de usuario para consultar los registros de auditoría se pospone para una fase futura. El enfoque actual se ha centrado en la captura de datos en el backend.
+*   **Estructura de la Tabla:** La estructura de la tabla `audit_log` ha sido aprobada y proporciona la flexibilidad necesaria para añadir información detallada específica de cada evento sin requerir cambios futuros en la estructura de la base de datos.
 
-Se han definido los siguientes puntos para finalizar el alcance del proyecto:
-
-*   **Prioridades de Implementación:** El trabajo se centrará inicialmente en los siguientes módulos, considerados los más críticos:
-    1.  Gestión de Citas (`api/cita/*`)
-    2.  Gestión de CTG (`api/ctg/*`)
-    3.  Gestión de PQR (`api/pqr/*`)
-    4.  Selección de Acabados (`api/guardar_seleccion_acabados.php`)
-
-*   **Acciones No Autenticadas:** No se registrarán los intentos de inicio de sesión fallidos en la nueva tabla `audit_log`, ya que esta información ya es capturada por la tabla existente `registro_login`.
-
-*   **Visualización de Auditoría:** La creación de una interfaz de usuario para consultar los registros de auditoría se pospone para una fase futura. El enfoque actual es 100% en la captura de datos en el backend.
-
-*   **Estructura de la Tabla:** Se aprueba la estructura de la tabla `audit_log` como está definida. La columna `details` de tipo JSON proporciona la flexibilidad necesaria para añadir información detallada específica de cada evento sin requerir cambios futuros en la estructura de la base de datos.
-
-## 7. Siguientes Pasos
-
-1.  **Modificar el archivo `portalao_appcostasol.sql`:** Añadir la sentencia `CREATE TABLE` para la nueva tabla `audit_log`.
-2.  **Crear el archivo `helper`:** Implementar el archivo `api/helpers/audit_helper.php` con la función `log_audit_action()`.
-3.  **Comenzar la Integración:** Empezar a integrar la función de auditoría en el primer módulo prioritario: **Gestión de Citas**.
+La implementación del registro de auditoría en el backend ha sido completada según el alcance definido.
