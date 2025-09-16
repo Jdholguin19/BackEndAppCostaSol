@@ -33,6 +33,13 @@ gantt.config.columns = [
     {name: "text", label: "Nombre de Tarea", tree: true, width: ''},
     {name: "start_date", label: "Fecha Inicio", align: "center"},
     {name: "duration", label: "Duración", align: "center"},
+    {name: "end_date", label: "Fecha Fin", align: "center", template: function(task) {
+        if (task.start_date && task.duration) {
+            const endDate = gantt.calculateEndDate(task.start_date, task.duration);
+            return formatDateToYYYYMMDD(endDate);
+        }
+        return "";
+    }},
     {name: "owners", label: "Dueños", align: "center", template: function(task) {
         if (!task.owners || allUsers.length === 0) return "";
         let ownerIds = Array.isArray(task.owners) ? task.owners : String(task.owners).split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
