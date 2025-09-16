@@ -3,14 +3,6 @@
 
 require_once '../config/db.php'; // Incluye la configuración de la base de datos
 
-// --- Debugging ---
-error_log("--- save.php received request ---");
-error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
-error_log("POST Data: " . print_r($_POST, true));
-error_log("Raw Input: " . file_get_contents('php://input'));
-error_log("--- End save.php debug ---");
-// --- End Debugging ---
-
 header('Content-Type: application/json');
 
 // Get the temporary ID from the 'ids' parameter
@@ -81,25 +73,22 @@ try {
             break;
 
         case 'inserted_link':
-            error_log("save.php: inserted_link - POST Data: " . print_r($_POST, true));
             $source = (int)$_POST[$temp_id . '_source'];
             $target = (int)$_POST[$temp_id . '_target'];
             $type = htmlspecialchars($_POST[$temp_id . '_type']);
 
             $stmt = $conn->prepare("INSERT INTO gantt_links (source, target, type) VALUES (?, ?, ?)");
             if ($stmt === false) {
-                throw new Exception("save.php: Error preparing INSERT link statement: " . $conn->error);
+                throw new Exception("Error preparing INSERT link statement: " . $conn->error);
             }
             $stmt->bind_param("iis", $source, $target, $type);
             if (!$stmt->execute()) {
-                throw new Exception("save.php: Error executing INSERT link statement: " . $stmt->error);
+                throw new Exception("Error executing INSERT link statement: " . $stmt->error);
             }
             $response['tid'] = $stmt->insert_id;
-            error_log("save.php: inserted_link - Link inserted with ID: " . $stmt->insert_id);
             break;
 
         case 'updated_link':
-            error_log("save.php: updated_link - POST Data: " . print_r($_POST, true));
             $source = (int)$_POST[$temp_id . '_source'];
             $target = (int)$_POST[$temp_id . '_target'];
             $type = htmlspecialchars($_POST[$temp_id . '_type']);
@@ -107,32 +96,23 @@ try {
 
             $stmt = $conn->prepare("UPDATE gantt_links SET source=?, target=?, type=? WHERE id=?");
             if ($stmt === false) {
-                throw new Exception("save.php: Error preparing UPDATE link statement: " . $conn->error);
+                throw new Exception("Error preparing UPDATE link statement: " . $conn->error);
             }
             $stmt->bind_param("iisi", $source, $target, $type, $id);
             if (!$stmt->execute()) {
-                throw new Exception("save.php: Error executing UPDATE link statement: " . $stmt->error);
+                throw new Exception("Error executing UPDATE link statement: " . $stmt->error);
             }
-            error_log("save.php: updated_link - Link updated for ID: " . $id);
             break;
 
         case 'deleted_link':
-            error_log("save.php: deleted_link - POST Data: " . print_r($_POST, true));
             $id = (int)$id; // Ensure ID is an integer
             $stmt = $conn->prepare("DELETE FROM gantt_links WHERE id=?");
-            if ($stmt === false) {
-                throw new Exception("save.php: Error preparing DELETE link statement: " . $conn->error);
-            }
             $stmt->bind_param("i", $id);
-            if (!$stmt->execute()) {
-                throw new Exception("save.php: Error executing DELETE link statement: " . $stmt->error);
-            }
-            error_log("save.php: deleted_link - Link deleted for ID: " . $id);
+            $stmt->execute();
             break;
         default:
             $response['action'] = 'error';
             $response['message'] = 'Acción no reconocida o vacía.';
-            error_log("Acción no reconocida o vacía: " . $action);
             break;
     }
 
@@ -146,7 +126,6 @@ try {
 } catch (Exception $e) {
     $response['action'] = 'error';
     $response['message'] = $e->getMessage();
-    error_log("Error en save.php: " . $e->getMessage());
 }
 
 echo json_encode($response);

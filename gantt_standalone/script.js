@@ -85,6 +85,7 @@ gantt.config.date_grid = "%Y-%m-%d";
 // Formato para enviar fechas al servidor, compatible con MySQL DATETIME
 gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
 gantt.config.grid_width = 500; // Añadido para forzar un ancho de cuadrícula y ayudar a la renderización del splitter
+gantt.config.links_editable = true; // Asegurar que los enlaces sean editables
 
 gantt.templates.task_class = function (start, end, task) {
     if (task.color) {
@@ -166,6 +167,27 @@ dp.attachEvent("onAfterUpdate", function(id, action, tid, response){
     if(action == "deleted"){
         gantt.message("Task deleted");
     }
+});
+
+gantt.attachEvent("onAfterLinkAdd", function(id, item){
+    console.log("Gantt: onAfterLinkAdd event fired! ID:", id, "Item:", item);
+    dp.setUpdated(id, true, "inserted_link"); // Explicitly set status for new link
+    dp.sendData(); // Send data
+    return true;
+});
+
+gantt.attachEvent("onAfterLinkUpdate", function(id, item){
+    console.log("Gantt: onAfterLinkUpdate event fired! ID:", id, "Item:", item);
+    dp.setUpdated(id, true, "updated_link"); // Explicitly set status for updated link
+    dp.sendData(); // Send data
+    return true;
+});
+
+gantt.attachEvent("onAfterLinkDelete", function(id, item){
+    console.log("Gantt: onAfterLinkDelete event fired! ID:", id, "Item:", item);
+    dp.setUpdated(id, true, "deleted_link"); // Explicitly set status for deleted link
+    dp.sendData(); // Send data
+    return true;
 });
 
 // --- Carga de Datos Inicial ---
