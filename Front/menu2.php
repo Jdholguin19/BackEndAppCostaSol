@@ -209,6 +209,13 @@ include '../api/bottom_nav.php';
         return;
     }
 
+
+    if ( menu.id === 14 ||
+        (menu.nombre || '').toUpperCase().includes('AUDITORIA') ){
+        location.href = '../auditoria/dashboard.php';          // <<<<<<
+        return;
+    }
+
     // …aquí podrías despachar otros módulos por nombre o id
     alert('Abrir módulo '+menu.id);
   }

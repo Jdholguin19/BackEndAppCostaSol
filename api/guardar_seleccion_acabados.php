@@ -100,7 +100,12 @@ try {
 
     $conn->commit();
 
-    log_audit_action($conn, 'SAVE_ACABADOS', $auth_user_id, 'usuario', 'propiedad', $propiedad_id, ['kit_id' => $kit_id, 'color_nombre' => $color_nombre, 'paquetes_adicionales_ids' => $paquetes_adicionales_ids]); // Log de auditoría
+    // Obtener nombre del kit para la auditoría
+    $stmt_kit_name = $conn->prepare("SELECT nombre FROM acabado_kit WHERE id = :kit_id");
+    $stmt_kit_name->execute([':kit_id' => $kit_id]);
+    $kit_name = $stmt_kit_name->fetchColumn();
+
+    log_audit_action($conn, 'SAVE_ACABADOS', $auth_user_id, 'usuario', 'propiedad', $propiedad_id, ['kit_id' => $kit_id, 'kit_name' => $kit_name, 'color_nombre' => $color_nombre, 'paquetes_adicionales_ids' => $paquetes_adicionales_ids]); // Log de auditoría
 
     // Enviar correo después de confirmar la transacción
     try {
