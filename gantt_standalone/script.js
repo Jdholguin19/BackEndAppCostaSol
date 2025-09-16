@@ -30,17 +30,17 @@ function formatDateToYYYYMMDD(dateObj) {
 
 // --- Configuración de las columnas del Gantt ---
 gantt.config.columns = [
-    {name: "text", label: "Nombre de Tarea", tree: true, width: ''},
-    {name: "start_date", label: "Fecha Inicio", align: "center"},
-    {name: "duration", label: "Duración", align: "center"},
-    {name: "end_date", label: "Fecha Fin", align: "center", template: function(task) {
+    {name: "text", label: "Nombre de Tarea", tree: true, width: '*'},
+    {name: "start_date", label: "Fecha Inicio", align: "center", width: '180'},
+    {name: "duration", label: "Duración", align: "center", width: '60'},
+    {name: "end_date", label: "Fecha Fin", align: "center", width: '200', template: function(task) {
         if (task.start_date && task.duration) {
             const endDate = gantt.calculateEndDate(task.start_date, task.duration);
             return formatDateToYYYYMMDD(endDate);
         }
         return "";
     }},
-    {name: "owners", label: "Dueños", align: "center", template: function(task) {
+    {name: "owners", label: "Dueños", align: "center", width: '120', template: function(task) {
         if (!task.owners || allUsers.length === 0) return "";
         let ownerIds = Array.isArray(task.owners) ? task.owners : String(task.owners).split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
         const ownerNames = ownerIds.map(id => {
@@ -60,6 +60,7 @@ gantt.config.columns = [
 ];
 
 gantt.config.editable = true;
+gantt.config.grid_resize = true; // Habilitar el redimensionamiento de columnas
 gantt.config.date_grid = "%Y-%m-%d";
 // Formato para enviar fechas al servidor, compatible con MySQL DATETIME
 gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
@@ -87,7 +88,45 @@ gantt.attachEvent("onBeforeLightbox", function(id) {
     return false;
 });
 
+// --- Funciones para guardar/cargar anchos de columna ---
+function loadColumnWidths() {
+    const savedWidths = localStorage.getItem('gantt_column_widths');
+    if (savedWidths) {
+        try {
+            const widths = JSON.parse(savedWidths);
+            gantt.config.columns.forEach(column => {
+                if (widths[column.name]) {
+                    column.width = widths[column.name];
+                }
+            });
+        } catch (e) {
+            console.error("Error al parsear anchos de columna guardados:", e);
+            localStorage.removeItem('gantt_column_widths'); // Limpiar datos corruptos
+        }
+    }
+}
+
+function saveColumnWidths() {
+    const currentWidths = {};
+    gantt.config.columns.forEach(column => {
+        const gridColumn = gantt.getGridColumn(column.name);
+        if (gridColumn) {
+            currentWidths[column.name] = gridColumn.width;
+        } else {
+            currentWidths[column.name] = column.width; // Fallback si no está en la cuadrícula
+        }
+    });
+    localStorage.setItem('gantt_column_widths', JSON.stringify(currentWidths));
+}
+
+loadColumnWidths(); // Cargar anchos antes de inicializar Gantt
+
 gantt.init("gantt_here");
+
+// Guardar anchos de columna al finalizar el redimensionamiento
+gantt.attachEvent("onColumnResizeEnd", function(columnId, newWidth){
+    saveColumnWidths();
+});
 
 // --- Configuración del DataProcessor ---
 const dp = new gantt.dataProcessor("api/save.php");
