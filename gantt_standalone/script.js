@@ -3,6 +3,7 @@ console.log("script.js loaded");
 let selectedProjectId = null;
 let allUsers = [];
 
+
 // --- Funciones de Utilidad para Fechas ---
 function parseDateCustom(dateString) {
     if (typeof dateString === 'string' && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
@@ -85,6 +86,12 @@ gantt.init("gantt_here");
 const dp = new gantt.dataProcessor("api/save.php");
 dp.setUpdateMode("row"); // Forzar el envío de todos los datos de la fila en cada actualización
 dp.init(gantt);
+
+dp.attachEvent("onAfterUpdate", function(id, action, tid, response){
+    if(action == "deleted"){
+        gantt.message("Task deleted");
+    }
+});
 
 // --- Carga de Datos Inicial ---
 (async () => {
@@ -389,6 +396,7 @@ function saveCustomTask() {
         };
         // addTask should trigger the DataProcessor automatically with 'inserted' status
         gantt.addTask(newTask, parentId);
+        dp.sendData(); // Forzar el envío de datos pendientes para asegurar el guardado inmediato.
     } else {
         const taskId = document.getElementById('modal-task-id').value;
         if (!gantt.isTaskExists(taskId)) {
@@ -431,6 +439,8 @@ function deleteCustomTask() {
             if (result) {
                 if (gantt.isTaskExists(taskId)) {
                     gantt.deleteTask(taskId);
+                    dp.setUpdated(taskId, true, 'deleted');
+                    dp.sendData();
                 }
             } else {
                 customLightbox.style.display = 'block';
@@ -471,4 +481,9 @@ gantt.attachEvent("onTaskLoading", function(task) {
         task.start_date = parseDateCustom(task.start_date);
     }
     return true;
+});
+
+gantt.attachEvent("onAfterTaskDrag", function(id, mode, e){
+    const task = gantt.getTask(id);
+    dp.sendData(id);
 });

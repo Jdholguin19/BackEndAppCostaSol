@@ -74,6 +74,7 @@ try {
             break;
 
         case 'deleted':
+            $id = (int)$temp_id;
             $stmt = $conn->prepare("DELETE FROM gantt_tasks WHERE id=?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
