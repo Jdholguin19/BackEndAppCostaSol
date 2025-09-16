@@ -31,9 +31,9 @@ function formatDateToYYYYMMDD(dateObj) {
 // --- Configuración de las columnas del Gantt ---
 gantt.config.columns = [
     {name: "text", label: "Nombre de Tarea", tree: true, width: '*'},
-    {name: "start_date", label: "Fecha Inicio", align: "center", width: '180'},
+    {name: "start_date", label: "Fecha Inicio", align: "center", width: '90'},
     {name: "duration", label: "Duración", align: "center", width: '60'},
-    {name: "end_date", label: "Fecha Fin", align: "center", width: '200', template: function(task) {
+    {name: "end_date", label: "Fecha Fin", align: "center", width: '90', template: function(task) {
         if (task.start_date && task.duration) {
             const endDate = gantt.calculateEndDate(task.start_date, task.duration);
             return formatDateToYYYYMMDD(endDate);
@@ -61,9 +61,30 @@ gantt.config.columns = [
 
 gantt.config.editable = true;
 gantt.config.grid_resize = true; // Habilitar el redimensionamiento de columnas
+gantt.config.layout = {
+    css: "gantt_container",
+    rows: [
+        {
+            cols: [
+                { view: "grid", id: "grid", scrollX: "gridScroll", scrollY: "scrollVer", resize: true },
+                { resizer: true, width: 1 },
+                { view: "timeline", id: "timeline", scrollX: "timelineScroll", scrollY: "scrollVer" },
+                { view: "scrollbar", id: "scrollVer" }
+            ]
+        },
+        { resizer: true, width: 1 },
+        {
+            cols: [
+                { view: "scrollbar", id: "gridScroll", group: "horizontal" },
+                { view: "scrollbar", id: "timelineScroll", group: "horizontal" }
+            ]
+        }
+    ]
+};
 gantt.config.date_grid = "%Y-%m-%d";
 // Formato para enviar fechas al servidor, compatible con MySQL DATETIME
 gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
+gantt.config.grid_width = 500; // Añadido para forzar un ancho de cuadrícula y ayudar a la renderización del splitter
 
 gantt.templates.task_class = function (start, end, task) {
     if (task.color) {
@@ -125,6 +146,13 @@ gantt.init("gantt_here");
 
 // Guardar anchos de columna al finalizar el redimensionamiento
 gantt.attachEvent("onColumnResizeEnd", function(columnId, newWidth){
+    // Find the column in gantt.config.columns and update its width
+    for (let i = 0; i < gantt.config.columns.length; i++) {
+        if (gantt.config.columns[i].name === columnId) {
+            gantt.config.columns[i].width = newWidth;
+            break;
+        }
+    }
     saveColumnWidths();
 });
 
