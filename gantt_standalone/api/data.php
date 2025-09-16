@@ -1,7 +1,7 @@
 <?php
 // data.php - Carga los datos de tareas y enlaces para DHTMLX Gantt
 
-require_once './config/db.php'; // Incluye la configuración de la base de datos
+require_once '../config/db.php'; // Incluye la configuración de la base de datos
 
 header('Content-Type: application/json');
 
@@ -16,7 +16,7 @@ $tasks = [];
 $links = [];
 
 // Obtener tareas para el proyecto seleccionado
-$stmt_tasks = $conn->prepare("SELECT id, text, start_date, duration, progress, parent, sortorder, open, owners FROM gantt_tasks WHERE project_id = ? ORDER BY sortorder ASC");
+$stmt_tasks = $conn->prepare("SELECT id, text, start_date, duration, progress, parent, sortorder, open, owners, color FROM gantt_tasks WHERE project_id = ? ORDER BY sortorder ASC");
 $stmt_tasks->bind_param("i", $projectId);
 $stmt_tasks->execute();
 $result_tasks = $stmt_tasks->get_result();

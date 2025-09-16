@@ -1,7 +1,7 @@
 <?php
 // get_tasks_by_project.php - Obtiene las tareas de un proyecto específico
 
-require_once './config/db.php'; // Incluye la configuración de la base de datos
+require_once '../config/db.php'; // Incluye la configuración de la base de datos
 
 header('Content-Type: application/json');
 

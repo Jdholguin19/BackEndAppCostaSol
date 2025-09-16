@@ -56,6 +56,23 @@ gantt.config.date_grid = "%Y-%m-%d";
 // Formato para enviar fechas al servidor, compatible con MySQL DATETIME
 gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
 
+gantt.templates.task_class = function (start, end, task) {
+    if (task.color) {
+        return "custom-task-color";
+    }
+    return "";
+};
+
+gantt.templates.task_style = function(start, end, task) {
+    if (task.color) {
+        return {
+            background: task.color,
+            borderColor: task.color
+        };
+    }
+    return {};
+};
+
 // --- Deshabilitar Lightbox por Defecto ---
 gantt.config.show_lightbox = false;
 gantt.attachEvent("onBeforeLightbox", function(id) {
@@ -65,7 +82,7 @@ gantt.attachEvent("onBeforeLightbox", function(id) {
 gantt.init("gantt_here");
 
 // --- Configuración del DataProcessor ---
-const dp = new gantt.dataProcessor("./save.php");
+const dp = new gantt.dataProcessor("api/save.php");
 dp.setUpdateMode("row"); // Forzar el envío de todos los datos de la fila en cada actualización
 dp.init(gantt);
 
@@ -87,7 +104,7 @@ const newProjectBtn = document.getElementById('new-project-btn');
 
 async function loadProjects() {
     try {
-        const response = await fetch('./get_projects.php');
+        const response = await fetch('api/get_projects.php');
         if (!response.ok) throw new Error('Error al cargar proyectos: ' + response.statusText);
         const projects = await response.json();
         projectSelect.innerHTML = '<option value="">-- Seleccionar Proyecto --</option>';
@@ -118,7 +135,7 @@ async function loadProjects() {
 function loadGanttData(projectId) {
     if (projectId) {
         gantt.clearAll();
-        gantt.load(`./data.php?project_id=${projectId}`);
+        gantt.load(`api/data.php?project_id=${projectId}`);
     } else {
         gantt.clearAll();
     }
@@ -133,7 +150,7 @@ newProjectBtn.addEventListener('click', async () => {
     const projectName = prompt('Introduce el nombre del nuevo proyecto:');
     if (projectName) {
         try {
-            const response = await fetch('./create_project.php', {
+            const response = await fetch('api/create_project.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ name: projectName })
@@ -156,7 +173,7 @@ newProjectBtn.addEventListener('click', async () => {
 // --- Carga de Usuarios ---
 async function loadUsers() {
     try {
-        const response = await fetch('./get_users.php');
+        const response = await fetch('api/get_users.php');
         if (!response.ok) throw new Error('Error al cargar usuarios: ' + response.statusText);
         const users = await response.json();
         allUsers = users.map(user => ({ id: parseInt(user.id, 10), name: user.name }));
@@ -201,7 +218,7 @@ document.getElementById('cross-link-project-select').addEventListener('change', 
         return;
     }
     try {
-        const response = await fetch(`./get_tasks_by_project.php?project_id=${projectId}`);
+        const response = await fetch(`api/get_tasks_by_project.php?project_id=${projectId}`);
         if (!response.ok) throw new Error('Error al cargar las tareas del proyecto.');
         const tasks = await response.json();
         taskSelect.innerHTML = '<option value="">-- Seleccione una tarea --</option>';
@@ -229,7 +246,7 @@ async function saveCrossProjectLink() {
     }
     const link = { source_task_id: parseInt(source_task_id), source_project_id: parseInt(selectedProjectId), target_task_id: parseInt(target_task_id), target_project_id: parseInt(target_project_id), type: type };
     try {
-        const response = await fetch('./save_cross_project_link.php', {
+        const response = await fetch('api/save_cross_project_link.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(link)
@@ -252,7 +269,7 @@ async function loadCrossProjectLinks(taskId) {
     const listElement = document.getElementById('cross-links-list-modal');
     listElement.innerHTML = '<li>Cargando dependencias...</li>';
     try {
-        const response = await fetch(`./get_cross_project_links.php?task_id=${taskId}&project_id=${selectedProjectId}`);
+        const response = await fetch(`api/get_cross_project_links.php?task_id=${taskId}&project_id=${selectedProjectId}`);
         if (!response.ok) throw new Error('No se pudieron cargar las dependencias.');
         const links = await response.json();
         listElement.innerHTML = '';
@@ -307,6 +324,7 @@ function openCustomLightbox(taskId, isNew, parentId) {
     const progressInput = document.getElementById('modal-task-progress');
     const progressValue = document.getElementById('modal-task-progress-value');
     const ownersSelect = document.getElementById('modal-task-owners');
+    const colorInput = document.getElementById('modal-task-color');
     const taskIdInput = document.getElementById('modal-task-id');
     const isNewInput = document.getElementById('modal-task-is-new');
     const parentIdInput = document.getElementById('modal-task-parent-id');
@@ -329,6 +347,7 @@ function openCustomLightbox(taskId, isNew, parentId) {
         durationInput.value = 1;
         progressInput.value = 0;
         progressValue.textContent = '0%';
+        colorInput.value = '#3498db'; // Default color
         document.getElementById('cross-links-list-modal').innerHTML = '<li>Las dependencias se pueden añadir una vez guardada la tarea.</li>';
     } else {
         const task = gantt.getTask(taskId);
@@ -345,6 +364,7 @@ function openCustomLightbox(taskId, isNew, parentId) {
         Array.from(ownersSelect.options).forEach(opt => {
             opt.selected = ownerIds.includes(parseInt(opt.value));
         });
+        colorInput.value = task.color || '#3498db';
         loadCrossProjectLinks(taskId);
     }
     modal.style.display = 'block';
@@ -364,7 +384,8 @@ function saveCustomTask() {
             start_date: document.getElementById('modal-task-start-date').value,
             duration: parseInt(document.getElementById('modal-task-duration').value, 10) || 1,
             progress: parseFloat(document.getElementById('modal-task-progress').value) || 0,
-            owners: Array.from(document.getElementById('modal-task-owners').selectedOptions).map(opt => opt.value)
+            owners: Array.from(document.getElementById('modal-task-owners').selectedOptions).map(opt => opt.value),
+            color: document.getElementById('modal-task-color').value
         };
         // addTask should trigger the DataProcessor automatically with 'inserted' status
         gantt.addTask(newTask, parentId);
@@ -386,6 +407,7 @@ function saveCustomTask() {
 
         task.progress = parseFloat(document.getElementById('modal-task-progress').value) || 0;
         task.owners = Array.from(document.getElementById('modal-task-owners').selectedOptions).map(opt => parseInt(opt.value));
+        task.color = document.getElementById('modal-task-color').value;
         
         // Refresh the UI for the task
         gantt.updateTask(taskId);
@@ -430,6 +452,11 @@ dp.attachEvent("onBeforeUpdate", function(id, status, data){
         data.owners = data.owners.join(',');
     } else if (!data.owners) {
         data.owners = "";
+    }
+    if (data.color) {
+        // Already a string, just ensure it's sent
+    } else {
+        data.color = "";
     }
     return true;
 });

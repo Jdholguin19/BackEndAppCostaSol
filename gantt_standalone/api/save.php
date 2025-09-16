@@ -1,7 +1,7 @@
 <?php
 // save.php - Maneja las operaciones CRUD (crear, actualizar, eliminar) para DHTMLX Gantt
 
-require_once './config/db.php'; // Incluye la configuración de la base de datos
+require_once '../config/db.php'; // Incluye la configuración de la base de datos
 
 // --- Debugging ---
 error_log("--- save.php received request ---");
@@ -47,9 +47,10 @@ try {
             $sortorder = isset($_POST[$temp_id . '_sortorder']) ? htmlspecialchars($_POST[$temp_id . '_sortorder']) : 10; // Default sortorder
             $open = isset($_POST[$temp_id . '_open']) ? htmlspecialchars($_POST[$temp_id . '_open']) : 1; // Default open (1 for true)
             $owners = isset($_POST[$temp_id . '_owners']) ? htmlspecialchars($_POST[$temp_id . '_owners']) : NULL;
+            $color = isset($_POST[$temp_id . '_color']) ? htmlspecialchars($_POST[$temp_id . '_color']) : '#3498db'; // Default color
 
-            $stmt = $conn->prepare("INSERT INTO gantt_tasks (project_id, text, start_date, duration, progress, parent, sortorder, open, owners) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("issdiisis", $project_id, $text, $start_date, $duration, $progress, $parent, $sortorder, $open, $owners);
+            $stmt = $conn->prepare("INSERT INTO gantt_tasks (project_id, text, start_date, duration, progress, parent, sortorder, open, owners, color) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("issdiisiss", $project_id, $text, $start_date, $duration, $progress, $parent, $sortorder, $open, $owners, $color);
             $stmt->execute();
             $response['tid'] = $stmt->insert_id; // tid is the real ID from the database
             break;
@@ -64,10 +65,11 @@ try {
             $sortorder = (int)$_POST[$temp_id . '_sortorder'];
             $open = (int)$_POST[$temp_id . '_open'];
             $owners = isset($_POST[$temp_id . '_owners']) ? htmlspecialchars($_POST[$temp_id . '_owners']) : NULL;
+            $color = isset($_POST[$temp_id . '_color']) ? htmlspecialchars($_POST[$temp_id . '_color']) : '#3498db'; // Default color
             $id = (int)$id;
 
-            $stmt = $conn->prepare("UPDATE gantt_tasks SET text=?, start_date=?, duration=?, progress=?, parent=?, sortorder=?, open=?, owners=? WHERE id=?");
-            $stmt->bind_param("ssddiiisi", $text, $start_date, $duration, $progress, $parent, $sortorder, $open, $owners, $id);
+            $stmt = $conn->prepare("UPDATE gantt_tasks SET text=?, start_date=?, duration=?, progress=?, parent=?, sortorder=?, open=?, owners=?, color=? WHERE id=?");
+            $stmt->bind_param("ssddiiissi", $text, $start_date, $duration, $progress, $parent, $sortorder, $open, $owners, $color, $id);
             $stmt->execute();
             break;
 

@@ -1,7 +1,7 @@
 <?php
 // save_cross_project_link.php - Guarda una dependencia entre proyectos
 
-require_once './config/db.php'; // Incluye la configuración de la base de datos
+require_once '../config/db.php'; // Incluye la configuración de la base de datos
 
 header('Content-Type: application/json');
 
