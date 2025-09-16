@@ -28,19 +28,19 @@ function formatDateToYYYYMMDD(dateObj) {
 }
 
 
-// --- Configuración de las columnas del Gantt ---
+// --- Configuración de las columnas del Gantt con valores por defecto ---
 gantt.config.columns = [
-    {name: "text", label: "Nombre de Tarea", tree: true, width: '*'},
-    {name: "start_date", label: "Fecha Inicio", align: "center", width: '90'},
-    {name: "duration", label: "Duración", align: "center", width: '60'},
-    {name: "end_date", label: "Fecha Fin", align: "center", width: '90', template: function(task) {
+    {name: "text", label: "Nombre de Tarea", tree: true, width: 100, resize: true},
+    {name: "start_date", label: "Fecha Inicio", align: "center", width: 100, resize: true},
+    {name: "duration", label: "Duración", align: "center", width: 70, resize: true},
+    {name: "end_date", label: "Fecha Fin", align: "center", width: 100, resize: true, template: function(task) {
         if (task.start_date && task.duration) {
             const endDate = gantt.calculateEndDate(task.start_date, task.duration);
             return formatDateToYYYYMMDD(endDate);
         }
         return "";
     }},
-    {name: "owners", label: "Dueños", align: "center", width: '120', template: function(task) {
+    {name: "owners", label: "Dueños", align: "center", width: 100, resize: true, template: function(task) {
         if (!task.owners || allUsers.length === 0) return "";
         let ownerIds = Array.isArray(task.owners) ? task.owners : String(task.owners).split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
         const ownerNames = ownerIds.map(id => {
@@ -52,7 +52,7 @@ gantt.config.columns = [
     {
         name: "add_subtask",
         label: "",
-        width: 44,
+        width: 50,
         template: function (task) {
             return '<div class="gantt_add"></div>';
         }
@@ -60,7 +60,7 @@ gantt.config.columns = [
 ];
 
 gantt.config.editable = true;
-gantt.config.grid_resize = true; // Habilitar el redimensionamiento de columnas
+
 gantt.config.layout = {
     css: "gantt_container",
     rows: [
@@ -72,7 +72,7 @@ gantt.config.layout = {
                 { view: "scrollbar", id: "scrollVer" }
             ]
         },
-        { resizer: true, width: 1 },
+        { resizer: true, height: 1 },
         {
             cols: [
                 { view: "scrollbar", id: "gridScroll", group: "horizontal" },
@@ -143,6 +143,7 @@ function saveColumnWidths() {
 loadColumnWidths(); // Cargar anchos antes de inicializar Gantt
 
 gantt.init("gantt_here");
+gantt.render(); // Forzar render después de init
 
 // Guardar anchos de columna al finalizar el redimensionamiento
 gantt.attachEvent("onColumnResizeEnd", function(columnId, newWidth){

@@ -81,30 +81,53 @@ try {
             break;
 
         case 'inserted_link':
-            $source = htmlspecialchars($_POST[$temp_id . '_source']);
-            $target = htmlspecialchars($_POST[$temp_id . '_target']);
+            error_log("save.php: inserted_link - POST Data: " . print_r($_POST, true));
+            $source = (int)$_POST[$temp_id . '_source'];
+            $target = (int)$_POST[$temp_id . '_target'];
             $type = htmlspecialchars($_POST[$temp_id . '_type']);
 
             $stmt = $conn->prepare("INSERT INTO gantt_links (source, target, type) VALUES (?, ?, ?)");
+            if ($stmt === false) {
+                throw new Exception("save.php: Error preparing INSERT link statement: " . $conn->error);
+            }
             $stmt->bind_param("iis", $source, $target, $type);
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception("save.php: Error executing INSERT link statement: " . $stmt->error);
+            }
             $response['tid'] = $stmt->insert_id;
+            error_log("save.php: inserted_link - Link inserted with ID: " . $stmt->insert_id);
             break;
 
         case 'updated_link':
-            $source = htmlspecialchars($_POST[$temp_id . '_source']);
-            $target = htmlspecialchars($_POST[$temp_id . '_target']);
+            error_log("save.php: updated_link - POST Data: " . print_r($_POST, true));
+            $source = (int)$_POST[$temp_id . '_source'];
+            $target = (int)$_POST[$temp_id . '_target'];
             $type = htmlspecialchars($_POST[$temp_id . '_type']);
+            $id = (int)$id; // Ensure ID is an integer
 
             $stmt = $conn->prepare("UPDATE gantt_links SET source=?, target=?, type=? WHERE id=?");
+            if ($stmt === false) {
+                throw new Exception("save.php: Error preparing UPDATE link statement: " . $conn->error);
+            }
             $stmt->bind_param("iisi", $source, $target, $type, $id);
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception("save.php: Error executing UPDATE link statement: " . $stmt->error);
+            }
+            error_log("save.php: updated_link - Link updated for ID: " . $id);
             break;
 
         case 'deleted_link':
+            error_log("save.php: deleted_link - POST Data: " . print_r($_POST, true));
+            $id = (int)$id; // Ensure ID is an integer
             $stmt = $conn->prepare("DELETE FROM gantt_links WHERE id=?");
+            if ($stmt === false) {
+                throw new Exception("save.php: Error preparing DELETE link statement: " . $conn->error);
+            }
             $stmt->bind_param("i", $id);
-            $stmt->execute();
+            if (!$stmt->execute()) {
+                throw new Exception("save.php: Error executing DELETE link statement: " . $stmt->error);
+            }
+            error_log("save.php: deleted_link - Link deleted for ID: " . $id);
             break;
         default:
             $response['action'] = 'error';
