@@ -1,0 +1,6 @@
+[17-Sep-2025 11:53:17 America/Boise] Error de API para https://thaliavictoria.kissflow.com/flow/2/AcNcc9rydX9F/Warranty_Claim. Código: 404. Respuesta: {"type":"EndpointNotFound","error_code":"KISSFLOW_ERROR_00137","en_message":"Resource not found. Verify the request URL and try again.","message":"Resource not found. Verify the request URL and try again.","_id":"a3d3ab6b-c019-4625-b742-63c3ab39d3ff","args":{},"status":"error","request_id":"None-a2da0258-4cb4-4c01-a7e1-fd90110179c7"}
+
+[17-Sep-2025 11:53:17 America/Boise] Error en ctg_handler.php: La creación del Warranty Claim en Kiss Flow falló. La API no respondió o devolvió un error.
+[17-Sep-2025 12:42:02 America/Boise] Error de API para https://thaliavictoria.kissflow.com/api/v2/processes/Tickets%20De%20Atenci%C3%B3n%20de%20Contingencia/items. Código: 404. Respuesta: {"type":"EndpointNotFound","error_code":"KISSFLOW_ERROR_00137","en_message":"Resource not found. Verify the request URL and try again.","message":"Resource not found. Verify the request URL and try again.","_id":"31076a8d-da70-408e-9d29-5fc878ebd04e","args":{},"status":"error","request_id":"None-98842c7f-8261-4cd5-a4f0-eb3ab6268723"}
+
+[17-Sep-2025 12:42:02 America/Boise] Error en ctg_handler.php: La creación del Warranty Claim en Kiss Flow falló. La API no respondió o devolvió un error.

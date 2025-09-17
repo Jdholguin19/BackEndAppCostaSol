@@ -1,0 +1,36 @@
+PLAN DE ACCIÓN Y ANÁLISIS - Integración CTG con Kiss Flow
+
+== ANÁLISIS FINAL (17-Sep-2025) ==
+
+**Conclusión Definitiva:** La creación de un item en el proceso "Warranty Claim" es un flujo de 3 pasos que debe ser replicado por nuestra API.
+
+---
+
+### **Flujo de Creación en 3 Pasos**
+
+**Paso 1: Iniciar el Proceso y Crear Borrador (Draft)**
+*   **Método:** `POST`
+*   **URL:** `https://thaliavictoria.kissflow.com/process/2/AcNcc9rydX9F/Warranty_Claim`
+*   **Payload:** `{}` (Objeto JSON vacío).
+*   **Respuesta Esperada:** Un objeto JSON que contiene `_id` (ID del item) y `_activity_instance_id` (ID de la actividad).
+
+**Paso 2: Guardar los Datos en el Borrador**
+*   **Método:** `POST`
+*   **URL:** `.../process/2/AcNcc9rydX9F/Warranty_Claim/{_id}/{_activity_instance_id}` (los IDs se obtienen del Paso 1).
+*   **Payload:** Un objeto JSON que contiene todos los datos del formulario (nombre, email, descripción, etc.), incluyendo también el `_id` del item dentro del payload.
+
+**Paso 3: Enviar/Finalizar el Borrador**
+*   **Método:** `POST`
+*   **URL:** `.../process/2/AcNcc9rydX9F/Warranty_Claim/{_id}/{_activity_instance_id}/submit` (los IDs se obtienen del Paso 1).
+*   **Payload:** `{}` (Objeto JSON vacío).
+
+---
+
+### **Implementación en el Código**
+
+El script `api/ctg/kissflow_ctg/ctg_handler.php` será modificado para ejecutar estas tres llamadas a la API en secuencia:
+
+1.  Llamar al endpoint del **Paso 1** para obtener los IDs.
+2.  Si es exitoso, construir la URL y el payload para el **Paso 2** y ejecutar la llamada para guardar los datos.
+3.  Si es exitoso, construir la URL para el **Paso 3** y ejecutar la llamada final para enviar el ticket.
+4.  Si cualquiera de los pasos falla, el proceso se detendrá y se registrará un error detallado.

@@ -111,7 +111,7 @@ try {
         ]
     ];
 
-    $create_url = KISSFLOW_API_HOST . '/flow/2/AcNcc9rydX9F/Warranty_Claim';
+    $create_url = KISSFLOW_API_HOST . '/api/v2/processes/' . rawurlencode('Tickets De Atención de Contingencia') . '/items';
 
     $creation_response = call_kissflow_api($create_url, 'POST', $warranty_payload);
 
