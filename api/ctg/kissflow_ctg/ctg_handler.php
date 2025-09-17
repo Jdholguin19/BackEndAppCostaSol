@@ -72,58 +72,68 @@ try {
     }
 
     // -------------------------------------------------------------------
-    // PASO 1: BÚSQUEDA DEL CLIENTE EN KISS FLOW
+    // PASO 1: BUSCAR AL CLIENTE EN EL DATASET
     // -------------------------------------------------------------------
     $encoded_cedula = urlencode($cedula);
-    // URL confirmada gracias a la captura de la petición de red
     $search_url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/list?q={$encoded_cedula}&search_field=Identificacion";
-
     $cliente_response = call_kissflow_api($search_url);
-
-    // La respuesta de la API anida los resultados bajo la clave 'Data'
     $cliente_data = $cliente_response['Data'] ?? null;
 
     if (empty($cliente_data) || !isset($cliente_data[0]['_id'])) {
         throw new Exception("Cliente con cédula {$cedula} no fue encontrado en Kiss Flow. No se puede continuar.");
     }
-    
-    // Asumimos que el primer resultado es el correcto
     $kissflow_cliente_id = $cliente_data[0]['_id'];
 
+    // -------------------------------------------------------------------
+    // PASO 2: INICIAR PROCESO Y CREAR BORRADOR (DRAFT)
+    // -------------------------------------------------------------------
+    // Ahora enviamos el ID del cliente en la petición inicial para que Kiss Flow lo asocie.
+    $init_payload = [
+        'Cliente' => ['_id' => $kissflow_cliente_id]
+    ];
+    $init_url = KISSFLOW_API_HOST . '/process/2/AcNcc9rydX9F/Warranty_Claim';
+    $init_response = call_kissflow_api($init_url, 'POST', $init_payload);
+
+    if (empty($init_response) || !isset($init_response['_id']) || !isset($init_response['_activity_instance_id'])) {
+        throw new Exception('No se pudo iniciar el proceso en Kiss Flow o la respuesta no contiene los IDs necesarios.');
+    }
+    $item_id = $init_response['_id'];
+    $activity_id = $init_response['_activity_instance_id'];
 
     // -------------------------------------------------------------------
-    // PASO 2: CREACIÓN DEL "WARRANTY CLAIM"
+    // PASO 3: GUARDAR DATOS EN EL BORRADOR
     // -------------------------------------------------------------------
-
-    // Mapear los campos recibidos al payload que espera Kiss Flow
-    $warranty_payload = [
-        'Requestor_Name' => $input_data['nombre_cliente'] ?? 'N/A',
+    // Quitamos los campos que la API no nos permite actualizar (Cliente, Requestor_Name, Request_Date)
+    $update_payload = [
+        '_id' => $item_id, // <-- Incluir el ID del item en el payload es crucial
         'Email_1' => $input_data['email'] ?? 'N/A',
         'Phone' => $input_data['telefono'] ?? 'N/A',
-        'Request_Date' => date('Y-m-d'),
         'Descripcion_del_Dano' => $input_data['descripcion_dano'] ?? 'Sin descripción.',
-        'Contingencia' => $input_data['contingencia_nombre'] ?? 'OTROS', // <-- Usamos el nombre de la contingencia
-        'Cliente' => [
-            '_id' => $kissflow_cliente_id
-        ],
-        'Ubicacion' => [
-            '_id' => $kissflow_cliente_id
-        ]
+        'Contingencia' => $input_data['contingencia_nombre'] ?? 'OTROS',
+        'Ubicacion' => ['_id' => $kissflow_cliente_id] // Mantenemos Ubicacion por si acaso no está protegido
     ];
 
-    $create_url = KISSFLOW_API_HOST . '/api/v2/processes/' . rawurlencode('Tickets De Atención de Contingencia') . '/items';
+    $update_url = KISSFLOW_API_HOST . "/process/2/AcNcc9rydX9F/Warranty_Claim/{$item_id}/{$activity_id}";
+    $update_response = call_kissflow_api($update_url, 'POST', $update_payload);
 
-    $creation_response = call_kissflow_api($create_url, 'POST', $warranty_payload);
+    if ($update_response === null) { // call_kissflow_api devuelve null en error
+        throw new Exception('Falló el guardado de datos en el borrador de Kiss Flow.');
+    }
 
-    if (!$creation_response) {
-        throw new Exception('La creación del Warranty Claim en Kiss Flow falló. La API no respondió o devolvió un error.');
+    // -------------------------------------------------------------------
+    // PASO 4: ENVIAR EL BORRADOR (SUBMIT)
+    // -------------------------------------------------------------------
+    $submit_url = $update_url . '/submit'; // La URL de submit es la de update + /submit
+    $submit_response = call_kissflow_api($submit_url, 'POST', []); // Payload vacío
+
+    if ($submit_response === null) {
+        throw new Exception('Falló el envío final del ticket en Kiss Flow.');
     }
 
     $response = [
         'ok' => true, 
-        'mensaje' => 'El CTG ha sido registrado en Kiss Flow exitosamente.',
-        'kissflow_cliente_id' => $kissflow_cliente_id,
-        'respuesta_kissflow' => $creation_response
+        'mensaje' => 'El CTG ha sido registrado y enviado en Kiss Flow exitosamente.',
+        'kissflow_item_id' => $item_id
     ];
 
 } catch (Exception $e) {
