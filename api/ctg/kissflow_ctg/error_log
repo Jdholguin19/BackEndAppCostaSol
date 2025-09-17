@@ -6,3 +6,11 @@
 [17-Sep-2025 12:56:42 America/Boise] Respuesta de ctg_handler.php para CTG SAC00039 (HTTP 400): {"ok":false,"mensaje":"Fall\u00f3 el guardado de datos en el borrador de Kiss Flow."}
 [17-Sep-2025 13:00:49 America/Boise] Correo electrónico de notificación a responsable enviado correctamente a sistemas@thaliavictoria.com.ec
 [17-Sep-2025 13:00:50 America/Boise] Respuesta de ctg_handler.php para CTG SAC00040 (HTTP 200): {"ok":true,"mensaje":"El CTG ha sido registrado y enviado en Kiss Flow exitosamente.","kissflow_item_id":"PkC5qRh0AURp"}
+[17-Sep-2025 13:09:18 America/Boise] Correo electrónico de notificación a responsable enviado correctamente a gcoello@thaliavictoria.com.ec
+[17-Sep-2025 13:09:20 America/Boise] Respuesta de ctg_handler.php para CTG SAC00041 (HTTP 200): {"ok":true,"mensaje":"El CTG ha sido registrado y enviado en Kiss Flow exitosamente.","kissflow_item_id":"PkC5q_G4CMtn"}
+[17-Sep-2025 13:23:56 America/Boise] Correo electrónico de notificación a responsable enviado correctamente a gcoello@thaliavictoria.com.ec
+[17-Sep-2025 13:23:57 America/Boise] Respuesta de ctg_handler.php para CTG SAC00042 (HTTP 200): {"ok":true,"mensaje":"El CTG ha sido registrado y enviado en Kiss Flow exitosamente.","kissflow_item_id":"PkC5qnxMskE6"}
+[17-Sep-2025 13:33:04 America/Boise] Correo electrónico de notificación a responsable enviado correctamente a sistemas@thaliavictoria.com.ec
+[17-Sep-2025 13:33:06 America/Boise] Respuesta de ctg_handler.php para CTG SAC00043 (HTTP 200): {"ok":true,"mensaje":"El CTG ha sido registrado y enviado en Kiss Flow exitosamente.","kissflow_item_id":"PkC5qxANSirt"}
+[17-Sep-2025 13:36:03 America/Boise] Correo electrónico de notificación a responsable enviado correctamente a gcoello@thaliavictoria.com.ec
+[17-Sep-2025 13:36:04 America/Boise] Respuesta de ctg_handler.php para CTG SAC00044 (HTTP 200): {"ok":true,"mensaje":"El CTG ha sido registrado y enviado en Kiss Flow exitosamente.","kissflow_item_id":"PkC5r0A5BXkw"}

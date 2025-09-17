@@ -91,6 +91,8 @@ try {
     $initial_payload = [
         'Cliente' => ['_id' => $kissflow_cliente_id],
         'Ubicacion' => ['_id' => $kissflow_cliente_id],
+        'Identificacion' => $input_data['cedula'] ?? 'N/A', // <-- AÑADIDO
+        'Requestor_Name' => $input_data['nombre_cliente'] ?? 'N/A', // <-- AÑADIDO
         'Email_1' => $input_data['email'] ?? 'N/A',
         'Phone' => $input_data['telefono'] ?? 'N/A',
         'Descripcion_del_Dano' => $input_data['descripcion_dano'] ?? 'Sin descripción.',
