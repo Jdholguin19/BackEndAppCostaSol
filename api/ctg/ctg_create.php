@@ -59,26 +59,20 @@ $authenticated_user_id = $authenticated_user['id'];
 
 try{
     /* ---------- 1. validar ---------- */
-    // Ya no obtenemos id_usuario del POST; usamos el del usuario autenticado
-    // $uid   = (int)($_POST['id_usuario']   ?? 0);
     $pid   = (int)($_POST['id_propiedad'] ?? 0);
-    $tipo  = (int)($_POST['tipo_id']      ?? 0);
-    $sub   = (int)($_POST['subtipo_id']   ?? 0);
+    $tipo  = (int)($_POST['tipo_id']      ?? 0); // Este es ahora el ID de la contingencia de la tabla tipo_ctg
     $desc  = trim($_POST['descripcion']   ?? '');
 
-    // Validar que los campos requeridos (excluyendo id_usuario) estén presentes
-    if(!$pid||!$tipo||!$sub||$desc===''){
+    // Validar que los campos requeridos estén presentes (subtipo_id ya no es necesario)
+    if(!$pid||!$tipo||$desc===''){
         http_response_code(400);
-        exit(json_encode(['ok'=>false,'msg'=>'Datos incompletos (id_propiedad, tipo_id, subtipo_id, o descripcion faltante)']));
+        exit(json_encode(['ok'=>false,'msg'=>'Datos incompletos (id_propiedad, tipo_id, o descripcion faltante)']));
     }
 
-    /* ---------- 2. obtener urgencia_id del subtipo ---------- */
-    $sql_get_urgencia = 'SELECT urgencia_id FROM subtipo_ctg WHERE id = :subtipo_id LIMIT 1';
-    $stmt_get_urgencia = $db->prepare($sql_get_urgencia);
-    $stmt_get_urgencia->execute([':subtipo_id' => $sub]);
-    $urgencia_data = $stmt_get_urgencia->fetch(PDO::FETCH_ASSOC);
-
-    $urgencia_id = $urgencia_data['urgencia_id'] ?? 1; // Default a 1 (BASICA) si no se encuentra
+    /* ---------- 2. obtener urgencia_id (Lógica Simplificada) ---------- */
+    // Como los subtipos se han eliminado, la urgencia se establece a 1 (BASICA) por defecto.
+    // Esta lógica puede revisarse si la urgencia debe depender de los nuevos tipos de contingencia.
+    $urgencia_id = 1; 
 
 
     /* ---------- 3. gestionar adjunto ---------- */
@@ -115,19 +109,20 @@ try{
             (numero_solicitud,id_usuario,id_propiedad,tipo_id,subtipo_id,estado_id,
              descripcion,urgencia_id,url_problema,responsable_id,fecha_compromiso)
             VALUES
-            (:num,:uid,:pid,:tipo,:sub,1,          /* 1 = Ingresado */
-             :des,:urgencia_id,:url,:resp,DATE_ADD(NOW(),INTERVAL 5 DAY))'; // Usar :urgencia_id aquí
+            (:num,:uid,:pid,:tipo,NULL,1,          /* subtipo_id es ahora NULL */
+             :des,:urgencia_id,:url,:resp,DATE_ADD(NOW(),INTERVAL 5 DAY))';
     $db->prepare($sql)->execute([
         ':num'=>$numero,
-        ':uid'=>$authenticated_user_id, // <-- Usamos el ID del usuario autenticado
+        ':uid'=>$authenticated_user_id,
         ':pid'=>$pid,
         ':tipo'=>$tipo,
-        ':sub'=>$sub,
         ':des'=>$desc,
-        ':urgencia_id'=>$urgencia_id, // <-- Usar el urgencia_id obtenido
+        ':urgencia_id'=>$urgencia_id,
         ':url'=>$urlProblema,
         ':resp'=>$respId
     ]);
+
+    $new_ctg_id = $db->lastInsertId();
 
     // --- INICIO: Lógica de envío de correo a responsable ---
     require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
@@ -145,11 +140,11 @@ try{
     $cliente_data = $stmt_cliente_nombre->fetch(PDO::FETCH_ASSOC);
     $nombreCliente = trim($cliente_data['nombres'] . ' ' . $cliente_data['apellidos']);
 
-    // Obtener nombre del tipo de CTG
+    // Obtener nombre de la contingencia desde la tabla tipo_ctg
     $sql_tipo_ctg_nombre = 'SELECT nombre FROM tipo_ctg WHERE id = :tipo_id LIMIT 1';
     $stmt_tipo_ctg_nombre = $db->prepare($sql_tipo_ctg_nombre);
     $stmt_tipo_ctg_nombre->execute([':tipo_id' => $tipo]);
-    $tipoTicket = $stmt_tipo_ctg_nombre->fetchColumn();
+    $nombreContingencia = $stmt_tipo_ctg_nombre->fetchColumn();
 
     // Obtener nombre de la propiedad
     $sql_propiedad_nombre = 'SELECT CONCAT("Manzana ", manzana, ", Villa ", villa) AS nombre_propiedad FROM propiedad WHERE id = :prop_id LIMIT 1';
@@ -163,7 +158,7 @@ try{
             $correoResponsable,
             $nombreCliente,
             "CTG", // Tipo de solicitud
-            $tipoTicket,
+            $nombreContingencia, // Usamos el nombre de la nueva contingencia
             $nombrePropiedad
         );
     } else {
@@ -171,8 +166,54 @@ try{
     }
     // --- FIN: Lógica de envío de correo a responsable ---
 
-    echo json_encode(['ok'=>true,'id'=>$db->lastInsertId(),'numero'=>$numero]);
-    log_audit_action($db, 'CREATE_CTG', $authenticated_user_id, 'usuario', 'ctg', $db->lastInsertId(), ['numero_solicitud' => $numero, 'id_propiedad' => $pid, 'tipo_id' => $tipo, 'subtipo_id' => $sub, 'descripcion' => $desc, 'urgencia_id' => $urgencia_id, 'responsable_id' => $respId]);
+    // --- INICIO: Lógica de creación en Kiss Flow ---
+    try {
+        // Obtener datos adicionales del usuario para Kiss Flow (cédula, correo y teléfono)
+        $sql_user_details = 'SELECT cedula, correo, telefono FROM usuario WHERE id = :user_id LIMIT 1';
+        $stmt_user_details = $db->prepare($sql_user_details);
+        $stmt_user_details->execute([':user_id' => $authenticated_user_id]);
+        $user_details = $stmt_user_details->fetch(PDO::FETCH_ASSOC);
+
+        if ($user_details && !empty($user_details['cedula'])) {
+            $kissflow_payload = [
+                'cedula' => $user_details['cedula'],
+                'nombre_cliente' => $nombreCliente,
+                'email' => $user_details['correo'] ?? '',
+                'telefono' => $user_details['telefono'] ?? '',
+                'descripcion_dano' => $desc,
+                'contingencia_nombre' => $nombreContingencia // <-- Dato clave para el handler
+            ];
+
+            $handler_url = 'https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/kissflow_ctg/ctg_handler.php';
+            
+            $ch = curl_init($handler_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($kissflow_payload));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            // Descomentar si se usa SSL en un entorno de desarrollo sin certificado válido
+            // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+            $handler_response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($handler_response === false) {
+                error_log("Error al llamar a ctg_handler.php para el CTG $numero.");
+            } else {
+                // Registrar la respuesta del handler para depuración
+                error_log("Respuesta de ctg_handler.php para CTG $numero (HTTP $http_code): " . $handler_response);
+            }
+        } else {
+            error_log("No se pudo enviar a Kiss Flow para el CTG $numero: falta la cédula del usuario ID " . $authenticated_user_id);
+        }
+    } catch (Throwable $ke) {
+        error_log("Error durante la llamada a Kiss Flow para el CTG $numero: " . $ke->getMessage());
+    }
+    // --- FIN: Lógica de creación en Kiss Flow ---
+
+    echo json_encode(['ok'=>true,'id'=>$new_ctg_id,'numero'=>$numero]);
+    log_audit_action($db, 'CREATE_CTG', $authenticated_user_id, 'usuario', 'ctg', $new_ctg_id, ['numero_solicitud' => $numero, 'id_propiedad' => $pid, 'tipo_id' => $tipo, 'subtipo_id' => null, 'descripcion' => $desc, 'urgencia_id' => $urgencia_id, 'responsable_id' => $respId]);
 
 }catch(Throwable $e){
     error_log('ctg_create: '.$e->getMessage());

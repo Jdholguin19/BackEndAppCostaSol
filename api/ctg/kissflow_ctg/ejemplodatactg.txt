@@ -1,0 +1,259 @@
+Aqui sucede dos primero tenemos la data que solo se me muestra a mi osea los Warranty_Claim mios y los que tengo asignado pero como soy el super admin tambien tengo otro apartado donde puedo ver todos los Warranty_Claim o ctg que hay te paso el ejemplo de los datos, pero de momento como estamos en purbeas simplemente vamos a crearlo simplemente para mi
+
+
+https://thaliavictoria.kissflow.com/process/2/AcNcc9rydX9F/Warranty_Claim/PkAz9Ms8C7uh/PkAz9Ms8eUG9
+
+
+{
+  "_id": "PkAz9Ms8C7uh",
+  "Name": " -  MARIA ELIZABETH ORTEGA ARMAS  ( 7108-03 )",
+  "_created_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_modified_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_created_at": "2025-03-10T21:02:30Z",
+  "_modified_at": "2025-03-10T21:44:36Z",
+  "_flow_name": "Tickets De Atención de Contingencia",
+  "_flow_type": "Process",
+  "_doc_version": "184620992749283619",
+  "_current_step": "Start",
+  "_current_assigned_to": [
+    {
+      "_id": "UsknBC_RrPXT",
+      "Name": "Sistemas",
+      "Kind": "User"
+    }
+  ],
+  "_status": "Draft",
+  "_stage": 0,
+  "_root_process_instance": "PkAz9Ms8aI45",
+  "_counter": 51,
+  "_progress": 0,
+  "Requestor_Name": "MARIA ELIZABETH ORTEGA ARMAS",
+  "Email_1": "controller@thaliavictoria.com.ec",
+  "Phone": "33333",
+  "Address": "7108-03",
+  "Request_Date": "2025-03-10",
+  "Request_Number": "TDC20253",
+  "Cliente": {
+    "Nombre_Cliente": "MARIA ELIZABETH ORTEGA ARMAS",
+    "Mz_Solar": "7108-03",
+    "Identificacion": "060360021-4",
+    "_id": "DS_Documentos_Cliente_6M7yVoAbXu6",
+    "Name": "161"
+  },
+  "Convenio": "CSEB019",
+  "Etapa": "Basilea",
+  "Modelo": "Isabela",
+  "Identificacion": "060360021-4",
+  "Ubicacion": {
+    "Mz_Solar": "7108-03",
+    "_id": "DS_Documentos_Cliente_6M7yVoAbXu6",
+    "Name": "161"
+  },
+  "Fecha_de_Entrega": "2025-01-16",
+  "Dias_para_Garantia": "Dentro de Periodo de Garantia",
+  "Garantia": 1,
+  "Contingencia": "OTROS",
+  "AlertaAgendamientoInspeccion": "Estimado Cliente, se requiere realizar una inspección de su contingencia, le llegará un correo electrónico para solicitar el agendamiento al finalizar el ingreso de su requerimiento",
+  "_activity_instance_id": "PkAz9Ms8eUG9",
+  "_activity_id": "Activity_7w60KztrkN",
+  "_note": null,
+  "_entity_id": "PkAz9Ms8eUG9",
+  "IsSelfPickEnabled": false,
+  "_current_context": [
+    {
+      "_context_assigned_to": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User"
+        }
+      ],
+      "_context_assigned_at": "2025-03-10T21:02:30Z",
+      "_status": "Draft"
+    }
+  ],
+  "_meta_version": "1753912318304347"
+}
+
+
+https://thaliavictoria.kissflow.com/process/2/AcNcc9rydX9F/admin/Warranty_Claim/PkC59ZLo8HpQ
+{
+  "_id": "PkC59ZLo8HpQ",
+  "Name": "75 -  Xin Jiang  ( 7103-11 )",
+  "_created_by": {
+    "_id": "guest",
+    "Name": "Guest",
+    "Kind": "User"
+  },
+  "_modified_by": {
+    "_id": "guest",
+    "Name": "Guest",
+    "Kind": "User"
+  },
+  "_created_at": "2025-09-15T21:13:39Z",
+  "_modified_at": "2025-09-15T21:22:07Z",
+  "_flow_name": "Tickets De Atención de Contingencia",
+  "_flow_type": "Process",
+  "_doc_version": "188884742307363072",
+  "_current_step": "Visita de Inspección",
+  "_current_assigned_to": [
+    {
+      "_id": "UsYgfhq37KOYi",
+      "Name": "Fernando Amaya",
+      "Kind": "User"
+    },
+    {
+      "_id": "Us5s9rzruiK3",
+      "Name": "Jesus Motoche",
+      "Kind": "User"
+    },
+    {
+      "_id": "Us3AMVPNi4MYb",
+      "Name": "Servicios al Cliente",
+      "Kind": "User"
+    },
+    {
+      "_id": "UsknBC_RrPXT",
+      "Name": "Sistemas",
+      "Kind": "User"
+    }
+  ],
+  "_status": "InProgress",
+  "_stage": 1,
+  "_root_process_instance": "PkC59ZLoadAr",
+  "_submitted_at": "2025-09-15T21:22:07Z",
+  "_request_number": 75,
+  "_is_public_form": true,
+  "_counter": 102,
+  "_last_completed_step": "PkC59ZLoadAs",
+  "_progress": 14.29,
+  "Requestor_Name": "Xin Jiang",
+  "Email_1": "andrea.calle@hotmail.com",
+  "Phone": "0962000991",
+  "Address": "7103-11",
+  "Request_Date": "2025-09-15",
+  "Request_Number": "TDC202590075",
+  "Can_the_product_be_repaired": false,
+  "Link": "https://outlook.office.com/bookwithme/user/1499044b1c9d493b983711ee5f1ff22e@thaliavictoria.com.ec/meetingtype/29212oSWjk6rSZXjnk5c-A2?anonymous",
+  "Cliente": {
+    "Nombre_Cliente": "Xin Jiang",
+    "Mz_Solar": "7103-11",
+    "Identificacion": "0956578470",
+    "_id": "DS_Documentos_Cliente_7uErfoaNz9",
+    "Name": "512"
+  },
+  "Convenio": "CSEA150\r\n",
+  "Etapa": "Arienzo",
+  "Modelo": "Cristina Plus 2",
+  "Descripcion_del_Dano": "DAÑO EN PUERTA",
+  "Evidencia_del_dano": [
+    {
+      "uploaded": 100,
+      "name": "CTV logo.png",
+      "id": "Attach_Fv8199U7qi",
+      "key": "publicform/Warranty_Claim/PkC59ZLo8HpQ/Attach_Fv8199U7qi/CTV_logo.png",
+      "size": 7249,
+      "fileExtension": "png",
+      "photos": [
+        {
+          "name": "CTV_logo.png",
+          "fileExtension": "png",
+          "width": 237,
+          "height": 45,
+          "size": 7347,
+          "key": "publicform/Warranty_Claim/PkC59ZLo8HpQ/Attach_Fv8199U7qi/CTV_logo.png"
+        },
+        {
+          "name": "1200x800.png",
+          "fileExtension": "png",
+          "width": 237,
+          "height": 45,
+          "size": 9582,
+          "key": "publicform/Warranty_Claim/PkC59ZLo8HpQ/Attach_Fv8199U7qi/photos/1200x800.png"
+        },
+        {
+          "name": "100x100.png",
+          "fileExtension": "png",
+          "width": 100,
+          "height": 19,
+          "size": 4282,
+          "key": "publicform/Warranty_Claim/PkC59ZLo8HpQ/Attach_Fv8199U7qi/photos/100x100.png"
+        }
+      ],
+      "_modified_at": "2025-09-15T21:21:44.985Z",
+      "_created_at": "2025-09-15T21:21:44.985Z"
+    }
+  ],
+  "Que_tan_probable_es_que_recomiende_la_constructoria_de_Thali": 0,
+  "Facilidad_de_contactar_a_la_constructora_para_reportar_sus_c": 1,
+  "Tiempo_de_recepcion_e_inspeccion_del_problema": 1,
+  "Tiempo_de_solucion_al_problema": 1,
+  "Calidad_en_solucion_al_problema": 1,
+  "Atencion_del_personal_involucrado": 1,
+  "Untitled_Field": 1,
+  "Esta_dentro_del_periodo_de_Garantia": false,
+  "EL_dano_es_Urgente": false,
+  "Trabajos_autorizados_fueron_ejecutados_con_exito": false,
+  "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad": false,
+  "Identificacion": "0956578470",
+  "Ubicacion": {
+    "Mz_Solar": "7103-11",
+    "_id": "DS_Documentos_Cliente_7uErfoaNz9",
+    "Name": "512"
+  },
+  "Requiere_agendamiento_de_inspeccion": false,
+  "Fecha_de_Entrega": "2024-10-14",
+  "Dias_para_Garantia": "Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda",
+  "Garantia": 0,
+  "Contingencia": "OTROS",
+  "AlertaAgendamientoInspeccion": "Estimado Cliente, se requiere realizar una inspección de su contingencia, le llegará un correo electrónico para solicitar el agendamiento al finalizar el ingreso de su requerimiento",
+  "Se_necesita_presupuesto": false,
+  "Se_necesita_Orden_de_Compra": false,
+  "Atencion_autorizada_por_Gerencia": false,
+  "Solicitante": "guest@kissflow.com",
+  "Registrable": 1,
+  "_current_context": [
+    {
+      "_context_current_step": "Visita de Inspección",
+      "_context_assigned_to": [
+        {
+          "_id": "UsYgfhq37KOYi",
+          "Name": "Fernando Amaya",
+          "Kind": "User"
+        },
+        {
+          "_id": "Us5s9rzruiK3",
+          "Name": "Jesus Motoche",
+          "Kind": "User"
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Servicios al Cliente",
+          "Kind": "User"
+        },
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User"
+        }
+      ],
+      "_context_action_info": [],
+      "NodeType": "UserTask",
+      "_context_assigned_at": "2025-09-15T21:22:07Z",
+      "_context_activity_id": "Activity_qPg1HgLEx",
+      "_context_activity_instance_id": "PkC59grX6FfR",
+      "_context_is_step_reassigned": false,
+      "_context_last_self_picked_by": null,
+      "ExpectedAt": null
+    }
+  ],
+  "_meta_version": "1753912318304347"
+}

@@ -26,14 +26,10 @@
     <select id="selProp" name="id_propiedad" class="ctg-form-select" required></select>
 
     <!-- tipo -->
-    <label class="ctg-form-label">Tipo</label>
+    <label class="ctg-form-label">Contingencia</label>
     <select id="selTipo" name="tipo_id" class="ctg-form-select" required></select>
 
-    <!-- subtipo -->
-    <label class="ctg-form-label">Sub-tipo</label>
-    <select id="selSub" name="subtipo_id" class="ctg-form-select" required disabled>
-      <option value="">— Seleccione tipo —</option>
-    </select>
+    <!-- subtipo (ELIMINADO) -->
 
     <!-- descripción -->
     <label class="ctg-form-label">Descripción</label>
@@ -105,20 +101,7 @@ if (!token) {
 
 
 
-    /* ---------- cuando cambia tipo → cargar sub-tipos ---------- */
-    document.getElementById('selTipo').addEventListener('change',e=>{
-      const tid=e.target.value, selSub=document.getElementById('selSub');
-      selSub.innerHTML='<option>— Cargando… —</option>'; selSub.disabled=true;
-      // Asegúrate de que esta API (subtipo_ctg.php) maneja token si es necesario
-      fetch('../../api/ctg/subtipo_ctg.php?tipo_id='+tid).then(r=>r.json()).then(d=>{ // <-- Si subtipo_ctg.php usa token, ajusta esta llamada
-          selSub.innerHTML='<option value="">— Seleccione —</option>';
-          if(d.ok){
-            d.subtipos.forEach(s=>selSub.insertAdjacentHTML('beforeend',
-               `<option value="${s.id}">${s.nombre}</option>`));
-          }
-          selSub.disabled=false;
-      });
-    });
+    /* ---------- Lógica de subtipos eliminada ---------- */
 
     /* ---------- envío ---------- */
     document.getElementById('frmCtg').addEventListener('submit',e=>{

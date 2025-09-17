@@ -1,0 +1,7407 @@
+aqui te paso dos link de schema no se bien cual usar
+
+
+https://thaliavictoria.kissflow.com/metadata/2/AcNcc9rydX9F/process/Warranty_Claim/schema
+{
+  "Root": "Warranty_Claim",
+  "Warranty_Claim": {
+    "Id": "Warranty_Claim",
+    "Name": "Tickets De Atención de Contingencia",
+    "Kind": "Model",
+    "FlowType": "Process",
+    "Description": "",
+    "Model::Row": [
+      "Row_VNywhw7pv",
+      "Row_RDW0Ropnjx",
+      "Row_PMu2LIjMb",
+      "Row_gVyxGPDIt",
+      "Row_IHiv8vw6x",
+      "Row_1Fi6lVuxR",
+      "Row_T7GpJJAue2",
+      "Row_1ol7O72bk",
+      "Row_zEG-GnNcO",
+      "Row_q6eLzVcECW",
+      "Row_8X3W8bpDe"
+    ],
+    "Model::Field": [
+      "Requestor_Name",
+      "Email_1",
+      "Phone",
+      "Address",
+      "Request_Date",
+      "Request_Number",
+      "Can_the_product_be_repaired",
+      "Consentimiento",
+      "Link",
+      "Cliente",
+      "Convenio",
+      "Etapa",
+      "Modelo",
+      "Descripcion_del_Dano",
+      "Evidencia_del_dano",
+      "Que_tan_probable_es_que_recomiende_la_constructoria_de_Thali",
+      "Facilidad_de_contactar_a_la_constructora_para_reportar_sus_c",
+      "Tiempo_de_recepcion_e_inspeccion_del_problema",
+      "Tiempo_de_solucion_al_problema",
+      "Calidad_en_solucion_al_problema",
+      "Atencion_del_personal_involucrado",
+      "Untitled_Field",
+      "Comentarios_agregados_del_Servicio",
+      "QUISIERAMOS_CONOCER_SUS_SUGERENCIAS",
+      "Esta_dentro_del_periodo_de_Garantia",
+      "EL_dano_es_Urgente",
+      "Fecha_de_Inspeccion",
+      "Trabajos_autorizados_fueron_ejecutados_con_exito",
+      "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad",
+      "Comentario",
+      "Identificacion",
+      "Ubicacion",
+      "Fecha_de_Culminacion_de_trabajos",
+      "Comentario_sin_Garania",
+      "Soporte_de_Requerimiento",
+      "Requiere_agendamiento_de_inspeccion",
+      "Fecha_de_Entrega",
+      "Dias_para_Garantia",
+      "Garantia",
+      "Registros",
+      "Solucionados",
+      "Contingencia",
+      "AlertaAgendamientoInspeccion",
+      "Comentario_de_Visita_de_Inspeccion",
+      "Se_necesita_presupuesto",
+      "Se_necesita_Orden_de_Compra",
+      "Analisis_de_Rubros",
+      "Firma_de_conformidad",
+      "Atencion_autorizada_por_Gerencia",
+      "Solicitante",
+      "Registrable",
+      "Fecha_envio_agendamiento",
+      "Fecha_Presupuesto",
+      "Fecha_recepcion",
+      "ToT_envio_de_agendamiento",
+      "ToT_Visita_de_inspeccion",
+      "ToT_Ejecucion",
+      "ToT_Presupuesto",
+      "ToT_Recepcion",
+      "Fecha_Ejecucion",
+      "ToT_Verificacion"
+    ],
+    "Model::ProcessDef": [
+      "ProcessDef_s6-4RW3v-7"
+    ],
+    "RootProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Button::Row": [
+      "Row_j1Jp7PSGnz"
+    ],
+    "Model::Model": [
+      "Detalle_de_Inspeccion"
+    ]
+  },
+  "Row_VNywhw7pv": {
+    "Id": "Row_VNywhw7pv",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column__aM1yFdz4W"
+    ]
+  },
+  "Column__aM1yFdz4W": {
+    "Id": "Column__aM1yFdz4W",
+    "Kind": "Column",
+    "Type": "Section",
+    "Name": "Reporte de Contingencias y Daños (Cliente)",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_VNywhw7pv",
+    "Column::Row": [
+      "Row_4aAEQ0xvhn",
+      "Row_BU4T2DArs",
+      "Row_WTV79vMct",
+      "Row_AfxhY3afC",
+      "Row_hObur7gMLI"
+    ]
+  },
+  "Row_4aAEQ0xvhn": {
+    "Id": "Row_4aAEQ0xvhn",
+    "Kind": "Row",
+    "Column": "Column__aM1yFdz4W",
+    "Row::Column": [
+      "Column_aBjyCLFSF",
+      "Column_xYk0kaeqX",
+      "Column_yEbiYpQmlv",
+      "Column_yYE1TBbCK"
+    ]
+  },
+  "Column_HKZHGSUYaH": {
+    "Id": "Column_HKZHGSUYaH",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 6,
+    "Row": "Row_BU4T2DArs",
+    "Column::Field": [
+      "Requestor_Name"
+    ]
+  },
+  "ProcessDef_s6-4RW3v-7": {
+    "Id": "ProcessDef_s6-4RW3v-7",
+    "Kind": "ProcessDef",
+    "WorkflowType": "Sequence",
+    "Model": "Warranty_Claim",
+    "ProcessDef::Activity": [
+      "Activity_7w60KztrkN",
+      "Activity_qNqRTWmEQ",
+      "Activity_2EC-sDg3Z",
+      "Activity_qPg1HgLEx",
+      "Activity_-C_u8h4xf",
+      "Activity_te7nnWPLOf",
+      "Activity_Mv4_poHwui",
+      "Activity_om-qSPGCpN",
+      "Activity_C9fpoUlhc",
+      "Activity_DVl0dI8Ju",
+      "Activity_qrPwqIXNt",
+      "Activity_Oa_XJIo1k",
+      "Activity_bJHc_mFyM",
+      "Activity_DCw_LIqoo",
+      "Activity_i7Ovy8zF8",
+      "Activity_Q8lJXrTNDM"
+    ]
+  },
+  "Activity_7w60KztrkN": {
+    "Id": "Activity_7w60KztrkN",
+    "Kind": "Activity",
+    "NodeType": "StartEvent",
+    "Name": "Start",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Activity::Permission": [
+      "Permission_caIa4g7bP",
+      "Permission_FO-Fmmkay",
+      "Permission_4gucnFoI6",
+      "Permission_wwa_UM8RW",
+      "Permission_LUa6LTV3B",
+      "Permission_uaTNNT77y",
+      "Permission_8jSMEUV-1",
+      "Permission_OpmE_tvA8h",
+      "Permission_4SsBZ2A0tL",
+      "Permission_CZMqZ1FdBQ"
+    ]
+  },
+  "Activity_Q8lJXrTNDM": {
+    "Id": "Activity_Q8lJXrTNDM",
+    "Kind": "Activity",
+    "NodeType": "EndEvent",
+    "Name": "Completed",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7"
+  },
+  "Row_j1Jp7PSGnz": {
+    "Id": "Row_j1Jp7PSGnz",
+    "Kind": "Row",
+    "Button": "Warranty_Claim",
+    "Row::Column": [
+      "Column_5HK159mhk",
+      "Column_qQRNDCak5",
+      "Column_nHx93diaL",
+      "Column_beEYndmMW"
+    ],
+    "Initiator::Column": [
+      "Column_f-fCNwD9Y",
+      "Column_GDzxyhZ8P"
+    ]
+  },
+  "Requestor_Name": {
+    "Id": "Requestor_Name",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:43:28.014Z",
+    "Type": "Text",
+    "Model": "Warranty_Claim",
+    "Column": "Column_HKZHGSUYaH",
+    "Name": "Nombre del Propietario",
+    "BlockNameChange": true,
+    "Field::Expression": [
+      "Expression_7926qvFbX"
+    ]
+  },
+  "Column_YMAGTMIp4": {
+    "Id": "Column_YMAGTMIp4",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 3,
+    "Row": "Row_cbv6tZ8BXw",
+    "Column::Field": [
+      "Email_1"
+    ]
+  },
+  "Email_1": {
+    "Id": "Email_1",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:44:32.509Z",
+    "Type": "Email",
+    "Model": "Warranty_Claim",
+    "Name": "Email",
+    "Column": "Column_YMAGTMIp4",
+    "BlockNameChange": true,
+    "Required": true
+  },
+  "Column_lWzs6mqxO": {
+    "Id": "Column_lWzs6mqxO",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 3,
+    "End": 5,
+    "Row": "Row_cbv6tZ8BXw",
+    "Column::Field": [
+      "Phone"
+    ]
+  },
+  "Phone": {
+    "Id": "Phone",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:44:41.030Z",
+    "Type": "Text",
+    "Model": "Warranty_Claim",
+    "Name": "Teléfono",
+    "Column": "Column_lWzs6mqxO",
+    "BlockNameChange": true,
+    "Required": true
+  },
+  "Column_yEbiYpQmlv": {
+    "Id": "Column_yEbiYpQmlv",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 3,
+    "End": 4,
+    "Row": "Row_4aAEQ0xvhn",
+    "Column::Field": [
+      "Address"
+    ],
+    "IsHidden": true
+  },
+  "Address": {
+    "Id": "Address",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:44:51.528Z",
+    "Type": "Text",
+    "Model": "Warranty_Claim",
+    "Name": "Address",
+    "Column": "Column_yEbiYpQmlv",
+    "BlockNameChange": true,
+    "Field::Expression": [
+      "Expression_Re-Iw68Vy"
+    ]
+  },
+  "Column_yYE1TBbCK": {
+    "Id": "Column_yYE1TBbCK",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_4aAEQ0xvhn",
+    "Column::Field": [
+      "Request_Date"
+    ],
+    "Hint": "Auto Generated",
+    "Column::Appearance": [
+      "Appearance__R6pEK1OIB"
+    ]
+  },
+  "Request_Date": {
+    "Id": "Request_Date",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:45:29.217Z",
+    "Type": "Date",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha Solicitud",
+    "Column": "Column_yYE1TBbCK",
+    "BlockNameChange": true,
+    "Field::Expression": [
+      "Expression_2k8LbfAWOV"
+    ],
+    "Field::Node": [
+      "Node_EALAJbHAFB"
+    ]
+  },
+  "Column_aBjyCLFSF": {
+    "Id": "Column_aBjyCLFSF",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_4aAEQ0xvhn",
+    "Column::Field": [
+      "Request_Number"
+    ],
+    "Hint": "Auto Generated"
+  },
+  "Request_Number": {
+    "Id": "Request_Number",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:46:03.134Z",
+    "Type": "Text",
+    "Model": "Warranty_Claim",
+    "Column": "Column_aBjyCLFSF",
+    "BlockNameChange": true,
+    "Field::Expression": [
+      "Expression_91FrWElAQ"
+    ],
+    "Name": "Número Solicitud"
+  },
+  "Row_gVyxGPDIt": {
+    "Id": "Row_gVyxGPDIt",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_TQf5soXhaA"
+    ]
+  },
+  "Column_TQf5soXhaA": {
+    "Id": "Column_TQf5soXhaA",
+    "Kind": "Column",
+    "Start": 0,
+    "End": 6,
+    "Type": "Section",
+    "Name": "Visita de inspección (Residente)",
+    "Row": "Row_gVyxGPDIt",
+    "Column::Row": [
+      "Row_MxYETyTwU5",
+      "Row_mhoytwIiy"
+    ],
+    "Column::Permission": [
+      "Permission_pkn_ldBDO",
+      "Permission_caIa4g7bP",
+      "Permission_qkEyFVTcQ"
+    ]
+  },
+  "Row_MxYETyTwU5": {
+    "Id": "Row_MxYETyTwU5",
+    "Kind": "Row",
+    "Column": "Column_TQf5soXhaA",
+    "Row::Column": [
+      "Column_xu4CkJb6FR",
+      "Column_fivEE3bCx",
+      "Column_XOf7173r8r"
+    ]
+  },
+  "Column_xu4CkJb6FR": {
+    "Id": "Column_xu4CkJb6FR",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_MxYETyTwU5",
+    "Column::Field": [
+      "Can_the_product_be_repaired"
+    ]
+  },
+  "Can_the_product_be_repaired": {
+    "Id": "Can_the_product_be_repaired",
+    "Kind": "Field",
+    "CreatedAt": "2021-06-28T09:55:25.512Z",
+    "Type": "Boolean",
+    "Model": "Warranty_Claim",
+    "Name": "Se realizó Visita de inspección?",
+    "Column": "Column_xu4CkJb6FR",
+    "BlockNameChange": true,
+    "LHSOwnField::Condition": [
+      "Condition_qMZtWiqRY",
+      "Condition_k2zSJhxaV"
+    ],
+    "Field::Node": [
+      "Node_O8PDlLIhbj"
+    ]
+  },
+  "Activity_qPg1HgLEx": {
+    "Id": "Activity_qPg1HgLEx",
+    "Kind": "Activity",
+    "Name": "Visita de Inspección",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Activity::Resource": [
+      "Resource_pJIlcES6z",
+      "Resource_slsvIpuD0",
+      "Resource_Iuf9utKXv",
+      "Resource_6pEpn-iEI"
+    ],
+    "Activity::Permission": [
+      "Permission_pkn_ldBDO",
+      "Permission_V378WCC5a",
+      "Permission_k6y5hJxYz",
+      "Permission_vk_FzK6i6",
+      "Permission_8NeFoXRCp",
+      "Permission_fcFlmO68f",
+      "Permission_Kyk3rJ-kO",
+      "Permission_HQp0lgjBA",
+      "Permission_WFRuZwBCH",
+      "Permission_fjjg2uz1T",
+      "Permission_02VArUheS",
+      "Permission_72YE_rEtr",
+      "Permission_ermWPy8Ip",
+      "Permission_baqrwvVSD",
+      "Permission_gFSM71AnF",
+      "Permission_4D-lHM2-5",
+      "Permission_4ztQM4b5R",
+      "Permission_ITOgAXoDl",
+      "Permission_jl62kXXlI",
+      "Permission_MMZaVkPtp",
+      "Permission_TJbMfqnIZ",
+      "Permission_svhRnQnNXJ",
+      "Permission_ijZVckapMS",
+      "Permission_QTolpjLsLW",
+      "Permission_PvrK_PDiZ-",
+      "Permission_MZUj4ELQy3"
+    ]
+  },
+  "Permission_pkn_ldBDO": {
+    "Id": "Permission_pkn_ldBDO",
+    "Kind": "Permission",
+    "Column": "Column_TQf5soXhaA",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "SendBackToInitiator": {
+    "Id": "SendBackToInitiator",
+    "Kind": "Activity",
+    "NodeType": "SendBackToInitiator",
+    "BaseMetadata": "Activity_7w60KztrkN"
+  },
+  "PublishedAt": "2025-07-30T21:51:58Z",
+  "_meta_version": "1753912318304347",
+  "Row_PMu2LIjMb": {
+    "Id": "Row_PMu2LIjMb",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_Nt9TOHwHRr"
+    ]
+  },
+  "Column_Nt9TOHwHRr": {
+    "Id": "Column_Nt9TOHwHRr",
+    "Kind": "Column",
+    "Start": 0,
+    "End": 6,
+    "Type": "Section",
+    "Name": "Agendamiento de Inspección (SAC)",
+    "Row": "Row_PMu2LIjMb",
+    "Column::Row": [
+      "Row_WdSZSy_LT",
+      "Row_rmbe_1xpj",
+      "Row_bp9QvoS4D"
+    ],
+    "Column::Permission": [
+      "Permission_FO-Fmmkay",
+      "Permission_Wn-1iKB1a",
+      "Permission_vk_FzK6i6"
+    ]
+  },
+  "Row_WdSZSy_LT": {
+    "Id": "Row_WdSZSy_LT",
+    "Kind": "Row",
+    "Column": "Column_Nt9TOHwHRr",
+    "Row::Column": [
+      "Column_6N9H6at7H9"
+    ]
+  },
+  "Permission_caIa4g7bP": {
+    "Id": "Permission_caIa4g7bP",
+    "Kind": "Permission",
+    "Column": "Column_TQf5soXhaA",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Resource_pJIlcES6z": {
+    "Id": "Resource_pJIlcES6z",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Activity_bJHc_mFyM": {
+    "Id": "Activity_bJHc_mFyM",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Recepción de Trabajo ejecutado",
+    "Activity::Resource": [
+      "Resource_CLl_UGMEl",
+      "Resource_WPfpgh2dM"
+    ],
+    "Activity::Permission": [
+      "Permission_56oQONmRp",
+      "Permission_TUolfFBmg",
+      "Permission_WfzONP4Pc",
+      "Permission_JQNbecakK",
+      "Permission_y0CATGRqN"
+    ]
+  },
+  "Row_8X3W8bpDe": {
+    "Id": "Row_8X3W8bpDe",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_S-ovqv4GFi"
+    ]
+  },
+  "Column_S-ovqv4GFi": {
+    "Id": "Column_S-ovqv4GFi",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": "ENCUESTA SERVICIO DE CONTINGENCIA",
+    "Row": "Row_8X3W8bpDe",
+    "Column::Row": [
+      "Row_YUU9SPAU4E",
+      "Row_t_omHBgnc",
+      "Row_Cui7rBkei",
+      "Row_YSuRMn4mS",
+      "Row_ebc9XtMPm",
+      "Row_7jXJorsEG",
+      "Row_-4y8iNgUv",
+      "Row_KTCC_CCXW",
+      "Row_N_WenR76k",
+      "Row_6XCLc7K6X",
+      "Row_bQYwi9M9R",
+      "Row_A-HbTjYsv"
+    ],
+    "Column::Permission": [
+      "Permission_4gucnFoI6",
+      "Permission_56oQONmRp",
+      "Permission_sJoJmGomJ",
+      "Permission_V378WCC5a",
+      "Permission_v-njK-5Jh",
+      "Permission_5Uybx0k3s",
+      "Permission_KaIiwb1Mq",
+      "Permission_3ht7AcrmM"
+    ],
+    "Description": "[{\"type\":\"paragraph\",\"data\":{},\"nodes\":[{\"type\":\"text\",\"text\":\"Siendo 1 la menor calificación, y 5 la mayor calificación. Califique los siguientes criterios:\"}]}]",
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_il8sHA0_j"
+    ]
+  },
+  "Row_YUU9SPAU4E": {
+    "Id": "Row_YUU9SPAU4E",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_V4oPWg3DV"
+    ]
+  },
+  "Column_ZX1WPL4NLR": {
+    "Id": "Column_ZX1WPL4NLR",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 3,
+    "Row": "Row_6XCLc7K6X",
+    "Column::Field": [
+      "Consentimiento"
+    ]
+  },
+  "Consentimiento": {
+    "Id": "Consentimiento",
+    "Kind": "Field",
+    "Type": "Signature",
+    "CreatedAt": "2023-06-02T15:33:48.487Z",
+    "Model": "Warranty_Claim",
+    "Name": "Consentimiento",
+    "Column": "Column_ZX1WPL4NLR",
+    "Required": false
+  },
+  "Activity_i7Ovy8zF8": {
+    "Id": "Activity_i7Ovy8zF8",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "TEMPO",
+    "Activity::Resource": [
+      "Resource_fO7qfbHOz"
+    ]
+  },
+  "Resource_fO7qfbHOz": {
+    "Id": "Resource_fO7qfbHOz",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_i7Ovy8zF8"
+  },
+  "Column_ApsBc933pW": {
+    "Id": "Column_ApsBc933pW",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 6,
+    "Row": "Row_bp9QvoS4D",
+    "Column::Field": [
+      "Link"
+    ],
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_mhE2tuDdV"
+    ],
+    "Column::Permission": [
+      "Permission_XnvwNXWE_"
+    ]
+  },
+  "Link": {
+    "Id": "Link",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-06-02T15:51:32.926Z",
+    "Model": "Warranty_Claim",
+    "Name": "Link",
+    "Column": "Column_ApsBc933pW",
+    "DefaultValue": "https://outlook.office.com/bookwithme/user/1499044b1c9d493b983711ee5f1ff22e@thaliavictoria.com.ec/meetingtype/29212oSWjk6rSZXjnk5c-A2?anonymous"
+  },
+  "Resource_CLl_UGMEl": {
+    "Id": "Resource_CLl_UGMEl",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_bJHc_mFyM"
+  },
+  "Column_xYk0kaeqX": {
+    "Id": "Column_xYk0kaeqX",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 3,
+    "Row": "Row_4aAEQ0xvhn",
+    "Column::Field": [
+      "Cliente"
+    ],
+    "IsHidden": true
+  },
+  "QueryDefinition_7JK-BlgJj": {
+    "Id": "QueryDefinition_7JK-BlgJj",
+    "Kind": "QueryDefinition",
+    "Field": "Cliente",
+    "LHSModel": "DS_Documentos_Cliente",
+    "LookupField": [
+      {
+        "Type": "Text",
+        "Name": "Nombre Cliente",
+        "Id": "Nombre_Cliente"
+      },
+      {
+        "Type": "Text",
+        "Name": "Mz_Solar",
+        "Id": "Mz_Solar"
+      },
+      {
+        "Type": "Text",
+        "Name": "Identificación",
+        "Id": "Identificacion"
+      }
+    ],
+    "AutoFill": true,
+    "FlowType": "Dataset",
+    "SortBy": [
+      {
+        "Field": "Nombre_Cliente"
+      }
+    ],
+    "QueryDefinition::Criteria": [
+      "Criteria_IHEE4Dlws"
+    ]
+  },
+  "Cliente": {
+    "Id": "Cliente",
+    "Kind": "Field",
+    "Type": "Reference",
+    "CreatedAt": "2023-06-06T20:52:41.947Z",
+    "Model": "Warranty_Claim",
+    "Column": "Column_xYk0kaeqX",
+    "Field::QueryDefinition": [
+      "QueryDefinition_7JK-BlgJj"
+    ],
+    "Name": "Cliente",
+    "Field::Node": [
+      "Node_dacVnf3FAF"
+    ]
+  },
+  "Column_XXK1QOXW7": {
+    "Id": "Column_XXK1QOXW7",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 3,
+    "Row": "Row_WTV79vMct",
+    "Column::Field": [
+      "Convenio"
+    ]
+  },
+  "Convenio": {
+    "Id": "Convenio",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-06-06T20:55:36.917Z",
+    "Model": "Warranty_Claim",
+    "Name": "Convenio",
+    "Column": "Column_XXK1QOXW7",
+    "Field::Expression": [
+      "Expression_FMXS9jSHl"
+    ]
+  },
+  "Row_WTV79vMct": {
+    "Id": "Row_WTV79vMct",
+    "Kind": "Row",
+    "Column": "Column__aM1yFdz4W",
+    "Row::Column": [
+      "Column_u6aBuLzZD",
+      "Column_XXK1QOXW7",
+      "Column_rOQNlDVdfi",
+      "Column_TjViQPpkh",
+      "Column_4ukBfZQBS"
+    ]
+  },
+  "Column_rOQNlDVdfi": {
+    "Id": "Column_rOQNlDVdfi",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 3,
+    "End": 4,
+    "Row": "Row_WTV79vMct",
+    "Column::Field": [
+      "Etapa"
+    ]
+  },
+  "Etapa": {
+    "Id": "Etapa",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-06-06T20:58:58.529Z",
+    "Model": "Warranty_Claim",
+    "Name": "Etapa",
+    "Column": "Column_rOQNlDVdfi",
+    "Field::Expression": [
+      "Expression_bXOLFkmLy"
+    ]
+  },
+  "Criteria_IHEE4Dlws": {
+    "Id": "Criteria_IHEE4Dlws",
+    "Kind": "Criteria",
+    "QueryDefinition": "QueryDefinition_7JK-BlgJj",
+    "Criteria::Condition": [
+      "Condition_tiKtswo5D",
+      "Condition_XiA4a5Ili"
+    ]
+  },
+  "Expression_7926qvFbX": {
+    "Id": "Expression_7926qvFbX",
+    "Kind": "Expression",
+    "ExpressionStr": "Cliente.Nombre_Cliente",
+    "Field": "Requestor_Name",
+    "Expression::Node": [
+      "Node_R_ooJKMH-b"
+    ]
+  },
+  "Node_R_ooJKMH-b": {
+    "Id": "Node_R_ooJKMH-b",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_7926qvFbX",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_dacVnf3FAF",
+      "Node_-ea1_QMpNP"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_dacVnf3FAF": {
+    "Id": "Node_dacVnf3FAF",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Cliente",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_R_ooJKMH-b"
+  },
+  "Node_-ea1_QMpNP": {
+    "Id": "Node_-ea1_QMpNP",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Nombre_Cliente",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_R_ooJKMH-b"
+  },
+  "Column_TjViQPpkh": {
+    "Id": "Column_TjViQPpkh",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 5,
+    "Row": "Row_WTV79vMct",
+    "Column::Field": [
+      "Modelo"
+    ]
+  },
+  "Modelo": {
+    "Id": "Modelo",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-06-06T21:06:51.196Z",
+    "Model": "Warranty_Claim",
+    "Name": "Modelo",
+    "Column": "Column_TjViQPpkh",
+    "Field::Expression": [
+      "Expression_bk2P1abuM"
+    ],
+    "LHSOwnField::Condition": [
+      "Condition_On5MCC0fC"
+    ]
+  },
+  "Condition_tiKtswo5D": {
+    "Id": "Condition_tiKtswo5D",
+    "Kind": "Condition",
+    "Criteria": "Criteria_IHEE4Dlws",
+    "LHSField": "Estado",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Value",
+    "RHSValue": "1"
+  },
+  "Column_N0ORTj7mFm": {
+    "Id": "Column_N0ORTj7mFm",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_PmDTKIFldv",
+    "Column::Field": [
+      "Descripcion_del_Dano"
+    ]
+  },
+  "Descripcion_del_Dano": {
+    "Id": "Descripcion_del_Dano",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-06-06T21:14:28.841Z",
+    "Model": "Warranty_Claim",
+    "Column": "Column_N0ORTj7mFm",
+    "Name": "Descripción del Daño/Imprevisto",
+    "Required": true
+  },
+  "Expression_91FrWElAQ": {
+    "Id": "Expression_91FrWElAQ",
+    "Kind": "Expression",
+    "ExpressionStr": "concatenate(\"TDC\", _created_at.year().toText(), _created_at.month().toText(), _request_number.toText(\"0000\"))",
+    "Field": "Request_Number",
+    "Expression::Node": [
+      "Node_znoHxan8CO"
+    ]
+  },
+  "Node_znoHxan8CO": {
+    "Id": "Node_znoHxan8CO",
+    "Kind": "Node",
+    "Value": "concatenate",
+    "Expression": "Expression_91FrWElAQ",
+    "Node::Node": [
+      "Node_gOi-lZLrA7",
+      "Node_eHFTqLDWWj",
+      "Node_cgv2g-8eIB",
+      "Node_oTz5na5TDJ"
+    ],
+    "DataType": "String",
+    "Category": "String",
+    "Type": "Function"
+  },
+  "Node_gOi-lZLrA7": {
+    "Id": "Node_gOi-lZLrA7",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "TDC",
+    "DataType": "String",
+    "Node": "Node_znoHxan8CO"
+  },
+  "Node_eHFTqLDWWj": {
+    "Id": "Node_eHFTqLDWWj",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "toText",
+    "Syntax": "Chain",
+    "Node": "Node_znoHxan8CO",
+    "Node::Node": [
+      "Node_pazA0_1Mql"
+    ],
+    "DataType": "String",
+    "Category": "Number"
+  },
+  "Node_pazA0_1Mql": {
+    "Id": "Node_pazA0_1Mql",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "year",
+    "Syntax": "Chain",
+    "Node": "Node_eHFTqLDWWj",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_s20w1d4akm"
+    ],
+    "DataType": "Number",
+    "Category": "DateTime"
+  },
+  "Node_s20w1d4akm": {
+    "Id": "Node_s20w1d4akm",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "_created_at",
+    "DataType": "DateTime",
+    "IsSystemField": true,
+    "FieldModel": "Warranty_Claim",
+    "Node": "Node_pazA0_1Mql"
+  },
+  "Node_cgv2g-8eIB": {
+    "Id": "Node_cgv2g-8eIB",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "toText",
+    "Syntax": "Chain",
+    "Node": "Node_znoHxan8CO",
+    "Node::Node": [
+      "Node_JJ_oTLCBW7"
+    ],
+    "DataType": "String",
+    "Category": "Number"
+  },
+  "Node_JJ_oTLCBW7": {
+    "Id": "Node_JJ_oTLCBW7",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "month",
+    "Syntax": "Chain",
+    "Node": "Node_cgv2g-8eIB",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_nSoMQIT0Dx"
+    ],
+    "DataType": "Number",
+    "Category": "DateTime"
+  },
+  "Node_nSoMQIT0Dx": {
+    "Id": "Node_nSoMQIT0Dx",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "_created_at",
+    "DataType": "DateTime",
+    "IsSystemField": true,
+    "FieldModel": "Warranty_Claim",
+    "Node": "Node_JJ_oTLCBW7"
+  },
+  "Node_oTz5na5TDJ": {
+    "Id": "Node_oTz5na5TDJ",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "toText",
+    "Syntax": "Chain",
+    "Node": "Node_znoHxan8CO",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_xDdsAgjfd_",
+      "Node_DdrNVmrcEI"
+    ],
+    "DataType": "String",
+    "Category": "Number"
+  },
+  "Node_xDdsAgjfd_": {
+    "Id": "Node_xDdsAgjfd_",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "_request_number",
+    "DataType": "Number",
+    "IsSystemField": true,
+    "FieldModel": "Warranty_Claim",
+    "Node": "Node_oTz5na5TDJ"
+  },
+  "Node_DdrNVmrcEI": {
+    "Id": "Node_DdrNVmrcEI",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "0000",
+    "DataType": "String",
+    "Node": "Node_oTz5na5TDJ"
+  },
+  "Permission_FO-Fmmkay": {
+    "Id": "Permission_FO-Fmmkay",
+    "Kind": "Permission",
+    "Column": "Column_Nt9TOHwHRr",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Permission_4gucnFoI6": {
+    "Id": "Permission_4gucnFoI6",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Column_sSmiC2KO3": {
+    "Id": "Column_sSmiC2KO3",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_myo8XECcug",
+    "Column::Field": [
+      "Evidencia_del_dano"
+    ]
+  },
+  "Evidencia_del_dano": {
+    "Id": "Evidencia_del_dano",
+    "Kind": "Field",
+    "Type": "Attachment",
+    "CreatedAt": "2023-06-06T21:33:58.941Z",
+    "Model": "Warranty_Claim",
+    "Name": "Evidencia del daño",
+    "Column": "Column_sSmiC2KO3"
+  },
+  "Column_kbt66wtOl": {
+    "Id": "Column_kbt66wtOl",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_N_WenR76k",
+    "Column::Field": [
+      "Que_tan_probable_es_que_recomiende_la_constructoria_de_Thali"
+    ]
+  },
+  "Column_V4oPWg3DV": {
+    "Id": "Column_V4oPWg3DV",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_YUU9SPAU4E",
+    "Column::Field": [
+      "Facilidad_de_contactar_a_la_constructora_para_reportar_sus_c"
+    ]
+  },
+  "Facilidad_de_contactar_a_la_constructora_para_reportar_sus_c": {
+    "Id": "Facilidad_de_contactar_a_la_constructora_para_reportar_sus_c",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:35:13.699Z",
+    "Model": "Warranty_Claim",
+    "Name": "Facilidad de contactar a la constructora para reportar sus contingencias",
+    "Column": "Column_V4oPWg3DV",
+    "MinValue": "1",
+    "MaxValue": "5",
+    "IntervalSize": "1",
+    "DefaultValue": "1"
+  },
+  "Row_t_omHBgnc": {
+    "Id": "Row_t_omHBgnc",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_cjTfoGVkMm"
+    ]
+  },
+  "Column_cjTfoGVkMm": {
+    "Id": "Column_cjTfoGVkMm",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_t_omHBgnc",
+    "Column::Field": [
+      "Tiempo_de_recepcion_e_inspeccion_del_problema"
+    ]
+  },
+  "Tiempo_de_recepcion_e_inspeccion_del_problema": {
+    "Id": "Tiempo_de_recepcion_e_inspeccion_del_problema",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:36:17.714Z",
+    "Model": "Warranty_Claim",
+    "Name": "Tiempo de recepción e inspección del problema",
+    "Column": "Column_cjTfoGVkMm",
+    "MinValue": "1",
+    "MaxValue": "5",
+    "IntervalSize": "1",
+    "DefaultValue": "1"
+  },
+  "Row_Cui7rBkei": {
+    "Id": "Row_Cui7rBkei",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_pZS0gnEmq"
+    ]
+  },
+  "Column_pZS0gnEmq": {
+    "Id": "Column_pZS0gnEmq",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_Cui7rBkei",
+    "Column::Field": [
+      "Tiempo_de_solucion_al_problema"
+    ]
+  },
+  "Tiempo_de_solucion_al_problema": {
+    "Id": "Tiempo_de_solucion_al_problema",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:37:24.595Z",
+    "Model": "Warranty_Claim",
+    "Name": "Tiempo de solución al problema",
+    "Column": "Column_pZS0gnEmq",
+    "MinValue": "1",
+    "MaxValue": "5",
+    "IntervalSize": "1",
+    "DefaultValue": "1"
+  },
+  "Column_GmIG41lcj": {
+    "Id": "Column_GmIG41lcj",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_YSuRMn4mS",
+    "Column::Field": [
+      "Calidad_en_solucion_al_problema"
+    ]
+  },
+  "Calidad_en_solucion_al_problema": {
+    "Id": "Calidad_en_solucion_al_problema",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:37:51.403Z",
+    "Model": "Warranty_Claim",
+    "Name": "Calidad en solución al problema",
+    "Column": "Column_GmIG41lcj",
+    "MinValue": "1",
+    "MaxValue": "5",
+    "IntervalSize": "1",
+    "DefaultValue": "1"
+  },
+  "Column_0feifINQY": {
+    "Id": "Column_0feifINQY",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_ebc9XtMPm",
+    "Column::Field": [
+      "Atencion_del_personal_involucrado"
+    ]
+  },
+  "Atencion_del_personal_involucrado": {
+    "Id": "Atencion_del_personal_involucrado",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:38:11.059Z",
+    "Model": "Warranty_Claim",
+    "Name": "Atención del personal involucrado",
+    "Column": "Column_0feifINQY",
+    "MinValue": "1",
+    "MaxValue": "5",
+    "IntervalSize": "1",
+    "DefaultValue": "1"
+  },
+  "Column_5b8gJHqr6": {
+    "Id": "Column_5b8gJHqr6",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_7jXJorsEG",
+    "Column::Field": [
+      "Untitled_Field"
+    ]
+  },
+  "Untitled_Field": {
+    "Id": "Untitled_Field",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:38:26.836Z",
+    "Model": "Warranty_Claim",
+    "Name": "Untitled field",
+    "Column": "Column_5b8gJHqr6",
+    "MinValue": "1",
+    "MaxValue": "5",
+    "IntervalSize": "1",
+    "DefaultValue": "1"
+  },
+  "Row_-4y8iNgUv": {
+    "Id": "Row_-4y8iNgUv",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_NYzwSiRP9v"
+    ]
+  },
+  "Column_NYzwSiRP9v": {
+    "Id": "Column_NYzwSiRP9v",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_-4y8iNgUv",
+    "Column::Field": [
+      "Comentarios_agregados_del_Servicio"
+    ]
+  },
+  "Comentarios_agregados_del_Servicio": {
+    "Id": "Comentarios_agregados_del_Servicio",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-06-06T21:38:49.705Z",
+    "Model": "Warranty_Claim",
+    "Name": "Comentarios agregados del Servicio",
+    "Column": "Column_NYzwSiRP9v"
+  },
+  "Column_ZKBOZYoW_": {
+    "Id": "Column_ZKBOZYoW_",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_KTCC_CCXW",
+    "Column::Field": [
+      "QUISIERAMOS_CONOCER_SUS_SUGERENCIAS"
+    ]
+  },
+  "QUISIERAMOS_CONOCER_SUS_SUGERENCIAS": {
+    "Id": "QUISIERAMOS_CONOCER_SUS_SUGERENCIAS",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-06-06T21:38:55.916Z",
+    "Model": "Warranty_Claim",
+    "Name": "QUISIERAMOS CONOCER SUS SUGERENCIAS",
+    "Column": "Column_ZKBOZYoW_"
+  },
+  "Row_N_WenR76k": {
+    "Id": "Row_N_WenR76k",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_kbt66wtOl"
+    ]
+  },
+  "Que_tan_probable_es_que_recomiende_la_constructoria_de_Thali": {
+    "Id": "Que_tan_probable_es_que_recomiende_la_constructoria_de_Thali",
+    "Kind": "Field",
+    "Type": "Slider",
+    "CreatedAt": "2023-06-06T21:34:38.363Z",
+    "Model": "Warranty_Claim",
+    "Name": "¿Qué tan probable es que recomiende la constructoria de Thalia Victoria a sus conocidos?",
+    "Column": "Column_kbt66wtOl",
+    "MinValue": "0",
+    "MaxValue": "10",
+    "IntervalSize": "1",
+    "DefaultValue": "0"
+  },
+  "Row_YSuRMn4mS": {
+    "Id": "Row_YSuRMn4mS",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_GmIG41lcj"
+    ]
+  },
+  "Row_ebc9XtMPm": {
+    "Id": "Row_ebc9XtMPm",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_0feifINQY"
+    ]
+  },
+  "Row_7jXJorsEG": {
+    "Id": "Row_7jXJorsEG",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_5b8gJHqr6"
+    ]
+  },
+  "Row_KTCC_CCXW": {
+    "Id": "Row_KTCC_CCXW",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_ZKBOZYoW_"
+    ]
+  },
+  "Permission_56oQONmRp": {
+    "Id": "Permission_56oQONmRp",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_bJHc_mFyM"
+  },
+  "Column_DH206b7oZ": {
+    "Id": "Column_DH206b7oZ",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 6,
+    "Row": "Row_rmbe_1xpj",
+    "Column::Field": [
+      "Esta_dentro_del_periodo_de_Garantia"
+    ],
+    "IsHidden": true
+  },
+  "Esta_dentro_del_periodo_de_Garantia": {
+    "Id": "Esta_dentro_del_periodo_de_Garantia",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2023-06-06T21:47:30.538Z",
+    "Model": "Warranty_Claim",
+    "Name": "Está dentro del período de Garantía?",
+    "Column": "Column_DH206b7oZ"
+  },
+  "Activity_qNqRTWmEQ": {
+    "Id": "Activity_qNqRTWmEQ",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Agendamiento de Inspección",
+    "Activity::Resource": [
+      "Resource_MwEj1fbsHW",
+      "Resource_nWFwJKHh6"
+    ],
+    "Activity::Permission": [
+      "Permission_Wn-1iKB1a",
+      "Permission_qkEyFVTcQ",
+      "Permission_Glqx0mFDb",
+      "Permission_sJoJmGomJ",
+      "Permission_DvoZJG5eH",
+      "Permission_CImBRtAL8",
+      "Permission_JvjoJZ3GI",
+      "Permission_V9p2gYwOiU",
+      "Permission_Y9r-dNTbtm",
+      "Permission_XnvwNXWE_",
+      "Permission_jLcdE3uLDN",
+      "Permission_hdJ2DXVcHY",
+      "Permission_lVgvK_tG1Q"
+    ],
+    "Goto::Activity": [
+      "Activity_-C_u8h4xf"
+    ],
+    "Activity::Expression": [
+      "Expression_jUtVCJxcFz"
+    ]
+  },
+  "Resource_MwEj1fbsHW": {
+    "Id": "Resource_MwEj1fbsHW",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Activity_-C_u8h4xf": {
+    "Id": "Activity_-C_u8h4xf",
+    "Kind": "Activity",
+    "NodeType": "GotoTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Goto": "Activity_qNqRTWmEQ",
+    "Name": "Goto-Agendamiento de Inspección",
+    "Activity::Expression": [
+      "Expression_RlCVOI6kl"
+    ]
+  },
+  "Activity_2EC-sDg3Z": {
+    "Id": "Activity_2EC-sDg3Z",
+    "Kind": "Activity",
+    "NodeType": "GotoTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Goto-TEMPO",
+    "IsSuspended": true,
+    "SuspendedAt": "2023-11-09T20:46:55.867Z"
+  },
+  "Column_bwv9A1qGl": {
+    "Id": "Column_bwv9A1qGl",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 5,
+    "Row": "Row_2OHD6HcpeS",
+    "Column::Field": [
+      "EL_dano_es_Urgente"
+    ],
+    "IsHidden": true
+  },
+  "EL_dano_es_Urgente": {
+    "Id": "EL_dano_es_Urgente",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2023-06-07T13:52:17.243Z",
+    "Model": "Warranty_Claim",
+    "Name": "El daño es Urgente?",
+    "Column": "Column_bwv9A1qGl"
+  },
+  "Row_IHiv8vw6x": {
+    "Id": "Row_IHiv8vw6x",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_Q_1YiQrAx_"
+    ]
+  },
+  "Column_Q_1YiQrAx_": {
+    "Id": "Column_Q_1YiQrAx_",
+    "Kind": "Column",
+    "Type": "Model",
+    "Start": 0,
+    "End": 6,
+    "Name": "Detalle de Inspección",
+    "Row": "Row_IHiv8vw6x",
+    "Column::Model": [
+      "Detalle_de_Inspeccion"
+    ],
+    "Column::Permission": [
+      "Permission_Glqx0mFDb",
+      "Permission_k6y5hJxYz",
+      "Permission_wwa_UM8RW",
+      "Permission_ft1wzJDbT",
+      "Permission_mcnMvcIf4"
+    ],
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_gUhFi77gX"
+    ]
+  },
+  "Row_8P2MIxDHVC": {
+    "Id": "Row_8P2MIxDHVC",
+    "Kind": "Row",
+    "Model": "Detalle_de_Inspeccion",
+    "Row::Column": [
+      "Column_DFy8RmuiAL",
+      "Column_uBJRAuVvJ",
+      "Column_ZWLQxPnlQ",
+      "Column_MbEGx2rZ9",
+      "Column_H2d4Xm3SN",
+      "Column_2afhbrlXO5",
+      "Column_2kN0dGpKiI",
+      "Column_Lr-EUSiup",
+      "Column_M9RC8QRvb",
+      "Column_bLqmyiJUW",
+      "Column_l_XlT0rxK",
+      "Column_u17hp5ZAs",
+      "Column_QmYvNs9Jjz",
+      "Column_aAYo2y3l1",
+      "Column_VLI5C8rts",
+      "Column_SLm-thY4q",
+      "Column_ye_knAxIy",
+      "Column_aF_PQeZSg",
+      "Column_WqopFK8tDQ"
+    ]
+  },
+  "Column_DFy8RmuiAL": {
+    "Id": "Column_DFy8RmuiAL",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Tipo_de_Dano"
+    ],
+    "Width": "200px",
+    "Column::Permission": [
+      "Permission_HQp0lgjBA",
+      "Permission_BJ28D5SmO",
+      "Permission_yzpjOJDGe",
+      "Permission_t5_2sS5_l",
+      "Permission_YTCbn0CdB"
+    ]
+  },
+  "Tipo_de_Dano": {
+    "Id": "Tipo_de_Dano",
+    "Kind": "Field",
+    "Type": "Reference",
+    "CreatedAt": "2023-06-07T13:56:13.967Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Tipo de Daño",
+    "Column": "Column_DFy8RmuiAL",
+    "Field::QueryDefinition": [
+      "QueryDefinition_v_J0kAyND"
+    ],
+    "Field::Node": [
+      "Node_3mxuWAE1GQ"
+    ],
+    "Required": true
+  },
+  "QueryDefinition_v_J0kAyND": {
+    "Id": "QueryDefinition_v_J0kAyND",
+    "Kind": "QueryDefinition",
+    "Field": "Tipo_de_Dano",
+    "LHSModel": "DS_Da_o_Categoria",
+    "LookupField": [
+      {
+        "Type": "Text",
+        "Name": "EstadoTipo",
+        "Id": "Estado"
+      },
+      {
+        "Type": "Text",
+        "Name": "CategoriaTicket",
+        "Id": "CategoriaTicket"
+      },
+      {
+        "Type": "Text",
+        "Name": "TipoTicket",
+        "Id": "TipoTicket"
+      }
+    ],
+    "AutoFill": false,
+    "FlowType": "Dataset",
+    "HiddenField": [
+      "Estado",
+      "TipoTicket"
+    ],
+    "SortBy": [
+      {
+        "Field": "CategoriaTicket"
+      }
+    ],
+    "QueryDefinition::Criteria": [
+      "Criteria_jSFaljp2Dx"
+    ]
+  },
+  "Detalle_de_Inspeccion": {
+    "Id": "Detalle_de_Inspeccion",
+    "Kind": "Model",
+    "Model": "Warranty_Claim",
+    "Name": "Detalle de Inspección",
+    "CreatedAt": "2023-06-07T13:56:13.964Z",
+    "Column": "Column_Q_1YiQrAx_",
+    "Model::Row": [
+      "Row_8P2MIxDHVC"
+    ],
+    "Model::Field": [
+      "Tipo_de_Dano",
+      "Categoria",
+      "Subcategoria",
+      "Observacion",
+      "Foto",
+      "Foto_Inspeccion",
+      "Contratista",
+      "Fecha_Solucion",
+      "Tiempo_de_Atencion",
+      "Solucion",
+      "Scategoria",
+      "Aplica",
+      "Fecha_Programada",
+      "Clasificacion",
+      "Justificacion_de_atraso",
+      "Fecha_Reprogramada",
+      "Vigencia",
+      "FechaEntrega",
+      "Recibido"
+    ]
+  },
+  "Permission_Wn-1iKB1a": {
+    "Id": "Permission_Wn-1iKB1a",
+    "Kind": "Permission",
+    "Column": "Column_Nt9TOHwHRr",
+    "Permission": "Editable",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_qkEyFVTcQ": {
+    "Id": "Permission_qkEyFVTcQ",
+    "Kind": "Permission",
+    "Column": "Column_TQf5soXhaA",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_Glqx0mFDb": {
+    "Id": "Permission_Glqx0mFDb",
+    "Kind": "Permission",
+    "Column": "Column_Q_1YiQrAx_",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_sJoJmGomJ": {
+    "Id": "Permission_sJoJmGomJ",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_V378WCC5a": {
+    "Id": "Permission_V378WCC5a",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_k6y5hJxYz": {
+    "Id": "Permission_k6y5hJxYz",
+    "Kind": "Permission",
+    "Column": "Column_Q_1YiQrAx_",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Column_uBJRAuVvJ": {
+    "Id": "Column_uBJRAuVvJ",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Categoria"
+    ],
+    "Width": "100px",
+    "Column::Permission": [
+      "Permission_WFRuZwBCH",
+      "Permission_h-JJzPJqG",
+      "Permission_qJlEFYPOl",
+      "Permission_YG8GNUAbQ",
+      "Permission_MOGthZiE_"
+    ],
+    "IsHidden": true
+  },
+  "Categoria": {
+    "Id": "Categoria",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-06-07T16:16:05.783Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Categoria",
+    "Column": "Column_uBJRAuVvJ",
+    "Field::Expression": [
+      "Expression_Ov3opZgQCg"
+    ],
+    "RHSField::Condition": [
+      "Condition_sKPB8fn0dc"
+    ]
+  },
+  "Column_ZWLQxPnlQ": {
+    "Id": "Column_ZWLQxPnlQ",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Subcategoria"
+    ],
+    "Width": "200px",
+    "Column::Permission": [
+      "Permission_fjjg2uz1T",
+      "Permission_6e6qyjBIm",
+      "Permission_5970TB3RO",
+      "Permission_Sk87q0cVH",
+      "Permission_LX8Hkfdx_"
+    ]
+  },
+  "QueryDefinition_WkViHMtg1l": {
+    "Id": "QueryDefinition_WkViHMtg1l",
+    "Kind": "QueryDefinition",
+    "Field": "Subcategoria",
+    "LHSModel": "DS_TIPO_DE_DA_O",
+    "LookupField": [
+      {
+        "Type": "Text",
+        "Name": "SubcategoriaTicket",
+        "Id": "SubcategoriaTicket"
+      },
+      {
+        "Type": "Text",
+        "Name": "EstadoTipo",
+        "Id": "Estado"
+      },
+      {
+        "Type": "Text",
+        "Name": "TipoTicket",
+        "Id": "TipoTicket"
+      },
+      {
+        "Type": "Text",
+        "Name": "CategoriaTicket",
+        "Id": "CategoriaTicket"
+      },
+      {
+        "Type": "Text",
+        "Name": "Responsable",
+        "Id": "Responsable"
+      },
+      {
+        "Type": "Text",
+        "Name": "Prioridad",
+        "Id": "Prioridad"
+      },
+      {
+        "Type": "Number",
+        "Name": "Tiempo Garantía",
+        "Id": "Untitled_field"
+      }
+    ],
+    "FlowType": "Dataset",
+    "QueryDefinition::Criteria": [
+      "Criteria_oeAKKbkE2"
+    ],
+    "SortBy": [
+      {
+        "Field": "SubcategoriaTicket"
+      }
+    ],
+    "HiddenField": [
+      "Estado",
+      "TipoTicket",
+      "CategoriaTicket",
+      "Responsable",
+      "Prioridad",
+      "Untitled_field"
+    ]
+  },
+  "Subcategoria": {
+    "Id": "Subcategoria",
+    "Kind": "Field",
+    "Type": "Reference",
+    "CreatedAt": "2023-06-07T16:16:43.045Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Subcategoria",
+    "Column": "Column_ZWLQxPnlQ",
+    "Field::QueryDefinition": [
+      "QueryDefinition_WkViHMtg1l"
+    ],
+    "Field::Node": [
+      "Node_f-HAO2TJt3",
+      "Node_F7znvAEl19",
+      "Node_ywaeRkOfeg"
+    ],
+    "Required": true
+  },
+  "Criteria_oeAKKbkE2": {
+    "Id": "Criteria_oeAKKbkE2",
+    "Kind": "Criteria",
+    "QueryDefinition": "QueryDefinition_WkViHMtg1l",
+    "Criteria::Condition": [
+      "Condition_HsiZz6G-v",
+      "Condition_sKPB8fn0dc"
+    ],
+    "IsOR": false
+  },
+  "Condition_HsiZz6G-v": {
+    "Id": "Condition_HsiZz6G-v",
+    "Kind": "Condition",
+    "Criteria": "Criteria_oeAKKbkE2",
+    "LHSField": "Estado",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Value",
+    "RHSValue": "Activo"
+  },
+  "Permission_wwa_UM8RW": {
+    "Id": "Permission_wwa_UM8RW",
+    "Kind": "Permission",
+    "Column": "Column_Q_1YiQrAx_",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Column_fivEE3bCx": {
+    "Id": "Column_fivEE3bCx",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 5,
+    "Row": "Row_MxYETyTwU5",
+    "Column::Field": [
+      "Fecha_de_Inspeccion"
+    ],
+    "Column::Permission": [
+      "Permission_ITOgAXoDl"
+    ],
+    "Column::Appearance": [
+      "Appearance_032mKQI5E3"
+    ]
+  },
+  "Fecha_de_Inspeccion": {
+    "Id": "Fecha_de_Inspeccion",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2023-06-07T16:38:37.646Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha de Inspección",
+    "Column": "Column_fivEE3bCx",
+    "Field::Node": [
+      "Node_ORLcxOuGmt",
+      "Node_PJFwIsHsgC",
+      "Node_ufSxrbaULN"
+    ]
+  },
+  "Column_aAYo2y3l1": {
+    "Id": "Column_aAYo2y3l1",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Observacion"
+    ],
+    "Width": "200px",
+    "Column::Permission": [
+      "Permission_02VArUheS",
+      "Permission_bbs7AVTFh",
+      "Permission_UcwPpE4ba",
+      "Permission_bNIYbWhlE",
+      "Permission_4ClYbBD9o",
+      "Permission_hZ9IdufQyx"
+    ]
+  },
+  "Observacion": {
+    "Id": "Observacion",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-06-07T16:41:24.314Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Column": "Column_aAYo2y3l1",
+    "Name": "Detalle"
+  },
+  "Column_SLm-thY4q": {
+    "Id": "Column_SLm-thY4q",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Foto"
+    ],
+    "Column::Permission": [
+      "Permission_ermWPy8Ip",
+      "Permission_R7NUMGsec",
+      "Permission_cW4BaM9a-",
+      "Permission_MBI0-31mn",
+      "Permission_WtTGXvC-9"
+    ]
+  },
+  "Foto": {
+    "Id": "Foto",
+    "Kind": "Field",
+    "Type": "Attachment",
+    "CreatedAt": "2023-06-07T16:41:56.222Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Foto Solución",
+    "Column": "Column_SLm-thY4q"
+  },
+  "Row_1Fi6lVuxR": {
+    "Id": "Row_1Fi6lVuxR",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_374UQTNmSE"
+    ]
+  },
+  "Column_374UQTNmSE": {
+    "Id": "Column_374UQTNmSE",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": " ",
+    "Row": "Row_1Fi6lVuxR",
+    "Column::Row": [
+      "Row_2OHD6HcpeS"
+    ],
+    "Column::Permission": [
+      "Permission_8NeFoXRCp",
+      "Permission_LUa6LTV3B",
+      "Permission_DvoZJG5eH"
+    ]
+  },
+  "Row_2OHD6HcpeS": {
+    "Id": "Row_2OHD6HcpeS",
+    "Kind": "Row",
+    "Column": "Column_374UQTNmSE",
+    "Row::Column": [
+      "Column_OCrq6TEWcY",
+      "Column___3GGz5vMT",
+      "Column_W0XKaX9eIZ",
+      "Column_bwv9A1qGl"
+    ]
+  },
+  "Row_1ol7O72bk": {
+    "Id": "Row_1ol7O72bk",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_CJ_ka2JIMf"
+    ]
+  },
+  "Column_CJ_ka2JIMf": {
+    "Id": "Column_CJ_ka2JIMf",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": "Verificación de Ejecución de trabajos (Obra)",
+    "Row": "Row_1ol7O72bk",
+    "Column::Row": [
+      "Row_1wsSKE8QK2"
+    ],
+    "Column::Permission": [
+      "Permission_fcFlmO68f",
+      "Permission_uaTNNT77y",
+      "Permission_CImBRtAL8",
+      "Permission_s06tbcNS-",
+      "Permission_ApUwrJD6k",
+      "Permission_fjCp3W_6T"
+    ]
+  },
+  "Row_1wsSKE8QK2": {
+    "Id": "Row_1wsSKE8QK2",
+    "Kind": "Row",
+    "Column": "Column_CJ_ka2JIMf",
+    "Row::Column": [
+      "Column_GjuzZDsQpZ",
+      "Column_CtB5teFTw"
+    ]
+  },
+  "Column_GjuzZDsQpZ": {
+    "Id": "Column_GjuzZDsQpZ",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 4,
+    "Row": "Row_1wsSKE8QK2",
+    "Column::Field": [
+      "Trabajos_autorizados_fueron_ejecutados_con_exito"
+    ]
+  },
+  "Trabajos_autorizados_fueron_ejecutados_con_exito": {
+    "Id": "Trabajos_autorizados_fueron_ejecutados_con_exito",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2023-06-07T16:59:34.807Z",
+    "Model": "Warranty_Claim",
+    "Name": "Trabajos autorizados fueron ejecutados con éxito?",
+    "Column": "Column_GjuzZDsQpZ"
+  },
+  "Row_zEG-GnNcO": {
+    "Id": "Row_zEG-GnNcO",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_-d0mvfL2jq"
+    ]
+  },
+  "Column_-d0mvfL2jq": {
+    "Id": "Column_-d0mvfL2jq",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": "Recepción de Trabajo por parte del Cliente (SAC)",
+    "Row": "Row_zEG-GnNcO",
+    "Column::Row": [
+      "Row_eEaxu0SQZZ",
+      "Row_byJ0p0I_U",
+      "Row_kqzDIbMSA9"
+    ],
+    "Column::Permission": [
+      "Permission_Kyk3rJ-kO",
+      "Permission_8jSMEUV-1",
+      "Permission_JvjoJZ3GI",
+      "Permission_TUolfFBmg",
+      "Permission_bBTeshXMU",
+      "Permission_pbSuOVgyz",
+      "Permission_movSldwbt"
+    ]
+  },
+  "Row_eEaxu0SQZZ": {
+    "Id": "Row_eEaxu0SQZZ",
+    "Kind": "Row",
+    "Column": "Column_-d0mvfL2jq",
+    "Row::Column": [
+      "Column_ewVfuBxnt",
+      "Column_Tza_qCL0XB"
+    ]
+  },
+  "Column_ewVfuBxnt": {
+    "Id": "Column_ewVfuBxnt",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 3,
+    "Row": "Row_eEaxu0SQZZ",
+    "Column::Field": [
+      "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad"
+    ]
+  },
+  "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad": {
+    "Id": "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2023-06-07T17:03:08.572Z",
+    "Model": "Warranty_Claim",
+    "Column": "Column_ewVfuBxnt",
+    "Name": "Los trabajos ejecutados fueron recibidos a conformidad?",
+    "Field::Node": [
+      "Node_bvo_zpWvX3"
+    ],
+    "LHSOwnField::Condition": [
+      "Condition_jlv7uQJHo"
+    ]
+  },
+  "Row_byJ0p0I_U": {
+    "Id": "Row_byJ0p0I_U",
+    "Kind": "Row",
+    "Column": "Column_-d0mvfL2jq",
+    "Row::Column": [
+      "Column_VCXGVYM3Jc"
+    ]
+  },
+  "Column_VCXGVYM3Jc": {
+    "Id": "Column_VCXGVYM3Jc",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_byJ0p0I_U",
+    "Column::Field": [
+      "Comentario"
+    ]
+  },
+  "Comentario": {
+    "Id": "Comentario",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-06-07T17:04:56.710Z",
+    "Model": "Warranty_Claim",
+    "Name": "Comentario",
+    "Column": "Column_VCXGVYM3Jc"
+  },
+  "Activity_C9fpoUlhc": {
+    "Id": "Activity_C9fpoUlhc",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Aprobación de Ejecución",
+    "Activity::Permission": [
+      "Permission_v-njK-5Jh",
+      "Permission_ft1wzJDbT",
+      "Permission_R7NUMGsec",
+      "Permission_MQJnGVIgD",
+      "Permission_bbs7AVTFh",
+      "Permission_6e6qyjBIm",
+      "Permission_h-JJzPJqG",
+      "Permission_BJ28D5SmO",
+      "Permission_B_0VxVIkx"
+    ],
+    "IsSuspended": true,
+    "SuspendedAt": "2023-10-18T15:45:50.845Z"
+  },
+  "Resource_slsvIpuD0": {
+    "Id": "Resource_slsvIpuD0",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Jesus Motoche",
+    "Value": "Us5s9rzruiK3",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Resource_nWFwJKHh6": {
+    "Id": "Resource_nWFwJKHh6",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sharon Vera",
+    "Value": "Us3AMVPNi4MYb",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Activity_DVl0dI8Ju": {
+    "Id": "Activity_DVl0dI8Ju",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Agendamiento de Ejecución",
+    "Activity::Permission": [
+      "Permission_fjCp3W_6T",
+      "Permission_movSldwbt",
+      "Permission_3ht7AcrmM",
+      "Permission_MBI0-31mn",
+      "Permission_lnVcut7dN",
+      "Permission_NtGXfNFEB",
+      "Permission_Zzp9TAeb0",
+      "Permission_wW_Sx3EJd",
+      "Permission_bNIYbWhlE",
+      "Permission_XiZ18lwD4",
+      "Permission_Sk87q0cVH",
+      "Permission_YG8GNUAbQ",
+      "Permission_t5_2sS5_l",
+      "Permission_5rZIlFq8t",
+      "Permission_vq7HG4xZa",
+      "Permission_nhYRuDfRi",
+      "Permission_jgm5w1iBH"
+    ],
+    "IsSuspended": true,
+    "SuspendedAt": "2024-02-19T15:50:57.386Z"
+  },
+  "Activity_Oa_XJIo1k": {
+    "Id": "Activity_Oa_XJIo1k",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Verificación de Ejecución de Trabajos",
+    "Activity::Resource": [
+      "Resource_4Y3dGqhf5",
+      "Resource_En9Axarsq"
+    ],
+    "Goto::Activity": [
+      "Activity_DCw_LIqoo"
+    ],
+    "Activity::Permission": [
+      "Permission_s06tbcNS-",
+      "Permission_pbSuOVgyz",
+      "Permission_KaIiwb1Mq",
+      "Permission_YTCbn0CdB",
+      "Permission_MOGthZiE_",
+      "Permission_LX8Hkfdx_",
+      "Permission_tVFRts9Tx",
+      "Permission_4ClYbBD9o",
+      "Permission_tJFOzzWsS",
+      "Permission_ivR8Z-qOg",
+      "Permission_qW2HOydwt",
+      "Permission_ifj6yh1dD",
+      "Permission_WtTGXvC-9",
+      "Permission_GYktl-SNb",
+      "Permission_p7RUqWZmz",
+      "Permission_XXezs1nS5",
+      "Permission_r0oXD7PGz"
+    ],
+    "Activity::Expression": [
+      "Expression_QznI10G11R"
+    ]
+  },
+  "Resource_4Y3dGqhf5": {
+    "Id": "Resource_4Y3dGqhf5",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Resource_WPfpgh2dM": {
+    "Id": "Resource_WPfpgh2dM",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sharon Vera",
+    "Value": "Us3AMVPNi4MYb",
+    "Activity": "Activity_bJHc_mFyM"
+  },
+  "Activity_DCw_LIqoo": {
+    "Id": "Activity_DCw_LIqoo",
+    "Kind": "Activity",
+    "NodeType": "GotoTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Goto": "Activity_Oa_XJIo1k",
+    "Name": "Goto-Verificación de Ejecución de Trabajos",
+    "Activity::Expression": [
+      "Expression_USlzaVjYk"
+    ]
+  },
+  "Row_6XCLc7K6X": {
+    "Id": "Row_6XCLc7K6X",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi",
+    "Row::Column": [
+      "Column_ZX1WPL4NLR"
+    ]
+  },
+  "Activity_qrPwqIXNt": {
+    "Id": "Activity_qrPwqIXNt",
+    "Kind": "Activity",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Name": "Ejecución de trabajo",
+    "Activity::Resource": [
+      "Resource_N2n8lsrZq",
+      "Resource_UZYRvZvz3e",
+      "Resource_9jBHdDlF4e"
+    ],
+    "Activity::Permission": [
+      "Permission_mcnMvcIf4",
+      "Permission_yzpjOJDGe",
+      "Permission_qJlEFYPOl",
+      "Permission_5970TB3RO",
+      "Permission_UcwPpE4ba",
+      "Permission_qzwYpyjPL",
+      "Permission_cW4BaM9a-",
+      "Permission_ApUwrJD6k",
+      "Permission_bBTeshXMU",
+      "Permission_5Uybx0k3s",
+      "Permission_-x-wumtOg",
+      "Permission_6NIPx7dDm",
+      "Permission_v1jqWuExb",
+      "Permission_vnLj7g79z",
+      "Permission_uv0REWJmi",
+      "Permission_tsfFMiT4b",
+      "Permission_VxY8MDe_k",
+      "Permission_JNXr5YK3yu",
+      "Permission_vNxy2TU-y0",
+      "Permission_WcU7AZThAx"
+    ]
+  },
+  "Resource_N2n8lsrZq": {
+    "Id": "Resource_N2n8lsrZq",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Column_M9RC8QRvb": {
+    "Id": "Column_M9RC8QRvb",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Foto_Inspeccion"
+    ],
+    "Column::Permission": [
+      "Permission_72YE_rEtr",
+      "Permission_MQJnGVIgD",
+      "Permission_qzwYpyjPL",
+      "Permission_XiZ18lwD4",
+      "Permission_tVFRts9Tx"
+    ],
+    "Width": "165px"
+  },
+  "Foto_Inspeccion": {
+    "Id": "Foto_Inspeccion",
+    "Kind": "Field",
+    "Type": "Attachment",
+    "CreatedAt": "2023-06-07T17:27:50.011Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Foto Inspección",
+    "Column": "Column_M9RC8QRvb",
+    "Required": false
+  },
+  "Row_BU4T2DArs": {
+    "Id": "Row_BU4T2DArs",
+    "Kind": "Row",
+    "Column": "Column__aM1yFdz4W",
+    "Row::Column": [
+      "Column_VMoG4RKSq",
+      "Column_HKZHGSUYaH"
+    ]
+  },
+  "Condition_XiA4a5Ili": {
+    "Id": "Condition_XiA4a5Ili",
+    "Kind": "Condition",
+    "Criteria": "Criteria_IHEE4Dlws",
+    "LHSField": "Identificacion",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Field",
+    "RHSField": "Identificacion"
+  },
+  "Column_VMoG4RKSq": {
+    "Id": "Column_VMoG4RKSq",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_BU4T2DArs",
+    "Column::Field": [
+      "Identificacion"
+    ],
+    "Hint": "Cédula/Pasaporte del Titular"
+  },
+  "Identificacion": {
+    "Id": "Identificacion",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-06-13T21:27:25.555Z",
+    "Model": "Warranty_Claim",
+    "Name": "Identificación",
+    "Column": "Column_VMoG4RKSq",
+    "RHSField::Condition": [
+      "Condition_XiA4a5Ili",
+      "Condition_qZ9WeX4GRe"
+    ],
+    "LHSOwnField::Condition": [
+      "Condition_hAl9Vv5YRZ"
+    ]
+  },
+  "Column_u6aBuLzZD": {
+    "Id": "Column_u6aBuLzZD",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_WTV79vMct",
+    "Column::Field": [
+      "Ubicacion"
+    ],
+    "Hint": "Escoger Manzana - Solar"
+  },
+  "QueryDefinition_z2QJjsmtsL": {
+    "Id": "QueryDefinition_z2QJjsmtsL",
+    "Kind": "QueryDefinition",
+    "Field": "Ubicacion",
+    "LHSModel": "DS_Documentos_Cliente",
+    "LookupField": [
+      {
+        "Type": "Text",
+        "Name": "Mz_Solar",
+        "Id": "Mz_Solar"
+      },
+      {
+        "Type": "Text",
+        "Name": "Etapa",
+        "Id": "Etapa"
+      },
+      {
+        "Type": "Text",
+        "Name": "Modelo",
+        "Id": "Modelo"
+      },
+      {
+        "Type": "Text",
+        "Name": "Convenio",
+        "Id": "Convenio"
+      },
+      {
+        "Type": "Date",
+        "Name": "Fecha de Entrega",
+        "Id": "Fecha_de_Entrega"
+      }
+    ],
+    "FlowType": "Dataset",
+    "SortBy": [
+      {
+        "Field": "Mz_Solar"
+      }
+    ],
+    "QueryDefinition::Criteria": [
+      "Criteria_SXq5YVqTC"
+    ],
+    "HiddenField": [
+      "Etapa",
+      "Modelo",
+      "Convenio",
+      "Fecha_de_Entrega"
+    ]
+  },
+  "Ubicacion": {
+    "Id": "Ubicacion",
+    "Kind": "Field",
+    "Type": "Reference",
+    "CreatedAt": "2023-06-13T21:32:21.429Z",
+    "Model": "Warranty_Claim",
+    "Name": "Ubicación",
+    "Column": "Column_u6aBuLzZD",
+    "Field::QueryDefinition": [
+      "QueryDefinition_z2QJjsmtsL"
+    ],
+    "Field::Node": [
+      "Node_1qV68auvJh",
+      "Node_OT_Xpue6Jx",
+      "Node_vCACWgcB9w",
+      "Node_Gfozw8k2aE",
+      "Node_iG2QxvffXd",
+      "Node_WLk1UTL2v9"
+    ]
+  },
+  "Criteria_SXq5YVqTC": {
+    "Id": "Criteria_SXq5YVqTC",
+    "Kind": "Criteria",
+    "QueryDefinition": "QueryDefinition_z2QJjsmtsL",
+    "Criteria::Condition": [
+      "Condition_qZ9WeX4GRe",
+      "Condition_8aDRTiqOd"
+    ]
+  },
+  "Condition_qZ9WeX4GRe": {
+    "Id": "Condition_qZ9WeX4GRe",
+    "Kind": "Condition",
+    "Criteria": "Criteria_SXq5YVqTC",
+    "LHSField": "Identificacion",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Field",
+    "RHSField": "Identificacion"
+  },
+  "Condition_8aDRTiqOd": {
+    "Id": "Condition_8aDRTiqOd",
+    "Kind": "Condition",
+    "Criteria": "Criteria_SXq5YVqTC",
+    "LHSField": "Estado",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Value",
+    "RHSValue": "1"
+  },
+  "Expression_bXOLFkmLy": {
+    "Id": "Expression_bXOLFkmLy",
+    "Kind": "Expression",
+    "ExpressionStr": "Ubicacion.Etapa",
+    "Field": "Etapa",
+    "Expression::Node": [
+      "Node_ZsqJm_pBsA"
+    ]
+  },
+  "Node_ZsqJm_pBsA": {
+    "Id": "Node_ZsqJm_pBsA",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_bXOLFkmLy",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_1qV68auvJh",
+      "Node_JLUAFj78jm"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_1qV68auvJh": {
+    "Id": "Node_1qV68auvJh",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Ubicacion",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_ZsqJm_pBsA"
+  },
+  "Node_JLUAFj78jm": {
+    "Id": "Node_JLUAFj78jm",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Etapa",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_ZsqJm_pBsA"
+  },
+  "Expression_bk2P1abuM": {
+    "Id": "Expression_bk2P1abuM",
+    "Kind": "Expression",
+    "ExpressionStr": "Ubicacion.Modelo",
+    "Field": "Modelo",
+    "Expression::Node": [
+      "Node_ipmfYK95NJ"
+    ]
+  },
+  "Node_ipmfYK95NJ": {
+    "Id": "Node_ipmfYK95NJ",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_bk2P1abuM",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_OT_Xpue6Jx",
+      "Node_Npqd3ioi8K"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_OT_Xpue6Jx": {
+    "Id": "Node_OT_Xpue6Jx",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Ubicacion",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_ipmfYK95NJ"
+  },
+  "Node_Npqd3ioi8K": {
+    "Id": "Node_Npqd3ioi8K",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Modelo",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_ipmfYK95NJ"
+  },
+  "Expression_FMXS9jSHl": {
+    "Id": "Expression_FMXS9jSHl",
+    "Kind": "Expression",
+    "ExpressionStr": "Ubicacion.Convenio",
+    "Field": "Convenio",
+    "Expression::Node": [
+      "Node_2vhrLIYSoL"
+    ]
+  },
+  "Node_2vhrLIYSoL": {
+    "Id": "Node_2vhrLIYSoL",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_FMXS9jSHl",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_vCACWgcB9w",
+      "Node_44-gZzcqzv"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_vCACWgcB9w": {
+    "Id": "Node_vCACWgcB9w",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Ubicacion",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_2vhrLIYSoL"
+  },
+  "Node_44-gZzcqzv": {
+    "Id": "Node_44-gZzcqzv",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Convenio",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_2vhrLIYSoL"
+  },
+  "Expression_Re-Iw68Vy": {
+    "Id": "Expression_Re-Iw68Vy",
+    "Kind": "Expression",
+    "ExpressionStr": "Ubicacion.Mz_Solar",
+    "Field": "Address",
+    "Expression::Node": [
+      "Node_kDZJm02_rI"
+    ]
+  },
+  "Node_kDZJm02_rI": {
+    "Id": "Node_kDZJm02_rI",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_Re-Iw68Vy",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_Gfozw8k2aE",
+      "Node_juoc6tuLEu"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_Gfozw8k2aE": {
+    "Id": "Node_Gfozw8k2aE",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Ubicacion",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_kDZJm02_rI"
+  },
+  "Node_juoc6tuLEu": {
+    "Id": "Node_juoc6tuLEu",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Mz_Solar",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_kDZJm02_rI"
+  },
+  "Permission_vk_FzK6i6": {
+    "Id": "Permission_vk_FzK6i6",
+    "Kind": "Permission",
+    "Column": "Column_Nt9TOHwHRr",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_8NeFoXRCp": {
+    "Id": "Permission_8NeFoXRCp",
+    "Kind": "Permission",
+    "Column": "Column_374UQTNmSE",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_fcFlmO68f": {
+    "Id": "Permission_fcFlmO68f",
+    "Kind": "Permission",
+    "Column": "Column_CJ_ka2JIMf",
+    "Permission": "Hidden",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_Kyk3rJ-kO": {
+    "Id": "Permission_Kyk3rJ-kO",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Hidden",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_LUa6LTV3B": {
+    "Id": "Permission_LUa6LTV3B",
+    "Kind": "Permission",
+    "Column": "Column_374UQTNmSE",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Permission_uaTNNT77y": {
+    "Id": "Permission_uaTNNT77y",
+    "Kind": "Permission",
+    "Column": "Column_CJ_ka2JIMf",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Permission_8jSMEUV-1": {
+    "Id": "Permission_8jSMEUV-1",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Permission_DvoZJG5eH": {
+    "Id": "Permission_DvoZJG5eH",
+    "Kind": "Permission",
+    "Column": "Column_374UQTNmSE",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_CImBRtAL8": {
+    "Id": "Permission_CImBRtAL8",
+    "Kind": "Permission",
+    "Column": "Column_CJ_ka2JIMf",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_JvjoJZ3GI": {
+    "Id": "Permission_JvjoJZ3GI",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_v-njK-5Jh": {
+    "Id": "Permission_v-njK-5Jh",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_HQp0lgjBA": {
+    "Id": "Permission_HQp0lgjBA",
+    "Kind": "Permission",
+    "Column": "Column_DFy8RmuiAL",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_WFRuZwBCH": {
+    "Id": "Permission_WFRuZwBCH",
+    "Kind": "Permission",
+    "Column": "Column_uBJRAuVvJ",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_fjjg2uz1T": {
+    "Id": "Permission_fjjg2uz1T",
+    "Kind": "Permission",
+    "Column": "Column_ZWLQxPnlQ",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_02VArUheS": {
+    "Id": "Permission_02VArUheS",
+    "Kind": "Permission",
+    "Column": "Column_aAYo2y3l1",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_72YE_rEtr": {
+    "Id": "Permission_72YE_rEtr",
+    "Kind": "Permission",
+    "Column": "Column_M9RC8QRvb",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_ermWPy8Ip": {
+    "Id": "Permission_ermWPy8Ip",
+    "Kind": "Permission",
+    "Column": "Column_SLm-thY4q",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_ft1wzJDbT": {
+    "Id": "Permission_ft1wzJDbT",
+    "Kind": "Permission",
+    "Column": "Column_Q_1YiQrAx_",
+    "Permission": "Editable",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_R7NUMGsec": {
+    "Id": "Permission_R7NUMGsec",
+    "Kind": "Permission",
+    "Column": "Column_SLm-thY4q",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_MQJnGVIgD": {
+    "Id": "Permission_MQJnGVIgD",
+    "Kind": "Permission",
+    "Column": "Column_M9RC8QRvb",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_bbs7AVTFh": {
+    "Id": "Permission_bbs7AVTFh",
+    "Kind": "Permission",
+    "Column": "Column_aAYo2y3l1",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_6e6qyjBIm": {
+    "Id": "Permission_6e6qyjBIm",
+    "Kind": "Permission",
+    "Column": "Column_ZWLQxPnlQ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_h-JJzPJqG": {
+    "Id": "Permission_h-JJzPJqG",
+    "Kind": "Permission",
+    "Column": "Column_uBJRAuVvJ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_BJ28D5SmO": {
+    "Id": "Permission_BJ28D5SmO",
+    "Kind": "Permission",
+    "Column": "Column_DFy8RmuiAL",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Permission_s06tbcNS-": {
+    "Id": "Permission_s06tbcNS-",
+    "Kind": "Permission",
+    "Column": "Column_CJ_ka2JIMf",
+    "Permission": "Editable",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_TUolfFBmg": {
+    "Id": "Permission_TUolfFBmg",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Editable",
+    "Activity": "Activity_bJHc_mFyM"
+  },
+  "Permission_mcnMvcIf4": {
+    "Id": "Permission_mcnMvcIf4",
+    "Kind": "Permission",
+    "Column": "Column_Q_1YiQrAx_",
+    "Permission": "Editable",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_yzpjOJDGe": {
+    "Id": "Permission_yzpjOJDGe",
+    "Kind": "Permission",
+    "Column": "Column_DFy8RmuiAL",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_qJlEFYPOl": {
+    "Id": "Permission_qJlEFYPOl",
+    "Kind": "Permission",
+    "Column": "Column_uBJRAuVvJ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_5970TB3RO": {
+    "Id": "Permission_5970TB3RO",
+    "Kind": "Permission",
+    "Column": "Column_ZWLQxPnlQ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_UcwPpE4ba": {
+    "Id": "Permission_UcwPpE4ba",
+    "Kind": "Permission",
+    "Column": "Column_aAYo2y3l1",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_qzwYpyjPL": {
+    "Id": "Permission_qzwYpyjPL",
+    "Kind": "Permission",
+    "Column": "Column_M9RC8QRvb",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_cW4BaM9a-": {
+    "Id": "Permission_cW4BaM9a-",
+    "Kind": "Permission",
+    "Column": "Column_SLm-thY4q",
+    "Permission": "Editable",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Column_l_XlT0rxK": {
+    "Id": "Column_l_XlT0rxK",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Contratista"
+    ],
+    "Column::Permission": [
+      "Permission_B_0VxVIkx",
+      "Permission_gFSM71AnF",
+      "Permission_Zzp9TAeb0",
+      "Permission_6NIPx7dDm",
+      "Permission_ivR8Z-qOg"
+    ],
+    "Width": "160px"
+  },
+  "Contratista": {
+    "Id": "Contratista",
+    "Kind": "Field",
+    "Type": "Select",
+    "CreatedAt": "2023-06-22T22:28:20.603Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Contratista",
+    "Column": "Column_l_XlT0rxK",
+    "ReferredList": "Contratista_EQ",
+    "Required": true
+  },
+  "Permission_B_0VxVIkx": {
+    "Id": "Permission_B_0VxVIkx",
+    "Kind": "Permission",
+    "Column": "Column_l_XlT0rxK",
+    "Permission": "Editable",
+    "Activity": "Activity_C9fpoUlhc"
+  },
+  "Column_VLI5C8rts": {
+    "Id": "Column_VLI5C8rts",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Fecha_Solucion"
+    ],
+    "Width": "169px",
+    "Column::Permission": [
+      "Permission_4ztQM4b5R",
+      "Permission_lnVcut7dN",
+      "Permission_vnLj7g79z",
+      "Permission_ifj6yh1dD"
+    ]
+  },
+  "Fecha_Solucion": {
+    "Id": "Fecha_Solucion",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2023-07-06T16:28:04.877Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Fecha Solución",
+    "Column": "Column_VLI5C8rts",
+    "SelfAggregateField::QueryDefinition": [
+      "QueryDefinition_a_-y5IKLtU"
+    ],
+    "Required": true
+  },
+  "Resource_Iuf9utKXv": {
+    "Id": "Resource_Iuf9utKXv",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Jonathan Saavedra",
+    "Value": "UsYgfhq37KOYi",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Column_CtB5teFTw": {
+    "Id": "Column_CtB5teFTw",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_1wsSKE8QK2",
+    "Column::Field": [
+      "Fecha_de_Culminacion_de_trabajos"
+    ],
+    "Column::Permission": [
+      "Permission_GYktl-SNb"
+    ]
+  },
+  "Fecha_de_Culminacion_de_trabajos": {
+    "Id": "Fecha_de_Culminacion_de_trabajos",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2023-10-13T17:53:57.293Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha de Culminación de trabajos",
+    "Column": "Column_CtB5teFTw",
+    "Field::Node": [
+      "Node_U48u9l2pKR",
+      "Node_RF9jb_cjpc"
+    ]
+  },
+  "Column_Dd1xROz3Fq": {
+    "Id": "Column_Dd1xROz3Fq",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_rmbe_1xpj",
+    "Column::Field": [
+      "Comentario_sin_Garania"
+    ],
+    "IsHidden": true
+  },
+  "Comentario_sin_Garania": {
+    "Id": "Comentario_sin_Garania",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-10-13T19:55:29.378Z",
+    "Model": "Warranty_Claim",
+    "Name": "Comentario sin Garanía",
+    "Column": "Column_Dd1xROz3Fq",
+    "Required": true
+  },
+  "Criteria_mhE2tuDdV": {
+    "Id": "Criteria_mhE2tuDdV",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_ApsBc933pW",
+    "Criteria::Condition": [
+      "Condition_l8h1lw1oH"
+    ]
+  },
+  "Column_5HK159mhk": {
+    "Id": "Column_5HK159mhk",
+    "Kind": "Column",
+    "Type": "Button",
+    "Name": "Reassign",
+    "Label": "Reassign",
+    "Start": 1,
+    "End": 2,
+    "Row": "Row_j1Jp7PSGnz",
+    "Column::Permission": [
+      "Permission_V9p2gYwOiU",
+      "Permission_MMZaVkPtp",
+      "Permission_5rZIlFq8t",
+      "Permission_uv0REWJmi",
+      "Permission_p7RUqWZmz",
+      "Permission_WfzONP4Pc"
+    ]
+  },
+  "Permission_V9p2gYwOiU": {
+    "Id": "Permission_V9p2gYwOiU",
+    "Kind": "Permission",
+    "Column": "Column_5HK159mhk",
+    "Activity": "Activity_qNqRTWmEQ",
+    "Permission": "Hidden"
+  },
+  "Column_qQRNDCak5": {
+    "Id": "Column_qQRNDCak5",
+    "Kind": "Column",
+    "Type": "Button",
+    "Name": "Send back",
+    "Label": "Send back",
+    "Start": 2,
+    "End": 3,
+    "Row": "Row_j1Jp7PSGnz",
+    "Column::Permission": [
+      "Permission_Y9r-dNTbtm",
+      "Permission_vq7HG4xZa"
+    ]
+  },
+  "Permission_Y9r-dNTbtm": {
+    "Id": "Permission_Y9r-dNTbtm",
+    "Kind": "Permission",
+    "Column": "Column_qQRNDCak5",
+    "Activity": "Activity_qNqRTWmEQ",
+    "Permission": "Hidden"
+  },
+  "Permission_XnvwNXWE_": {
+    "Id": "Permission_XnvwNXWE_",
+    "Kind": "Permission",
+    "Column": "Column_ApsBc933pW",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Row_rmbe_1xpj": {
+    "Id": "Row_rmbe_1xpj",
+    "Kind": "Row",
+    "Column": "Column_Nt9TOHwHRr",
+    "Row::Column": [
+      "Column_Dd1xROz3Fq",
+      "Column_ug5yJMwXf",
+      "Column_DH206b7oZ"
+    ]
+  },
+  "Column_ug5yJMwXf": {
+    "Id": "Column_ug5yJMwXf",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 4,
+    "Row": "Row_rmbe_1xpj",
+    "Column::Field": [
+      "Soporte_de_Requerimiento"
+    ],
+    "IsHidden": true
+  },
+  "Soporte_de_Requerimiento": {
+    "Id": "Soporte_de_Requerimiento",
+    "Kind": "Field",
+    "Type": "Attachment",
+    "CreatedAt": "2023-10-18T13:58:18.009Z",
+    "Model": "Warranty_Claim",
+    "Name": "Soporte de Requerimiento",
+    "Column": "Column_ug5yJMwXf"
+  },
+  "Row_bp9QvoS4D": {
+    "Id": "Row_bp9QvoS4D",
+    "Kind": "Row",
+    "Column": "Column_Nt9TOHwHRr",
+    "Row::Column": [
+      "Column_bvuyKe2Iw",
+      "Column_ApsBc933pW"
+    ]
+  },
+  "Column_bvuyKe2Iw": {
+    "Id": "Column_bvuyKe2Iw",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_bp9QvoS4D",
+    "Column::Field": [
+      "Requiere_agendamiento_de_inspeccion"
+    ]
+  },
+  "Requiere_agendamiento_de_inspeccion": {
+    "Id": "Requiere_agendamiento_de_inspeccion",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2023-10-23T13:18:16.257Z",
+    "Model": "Warranty_Claim",
+    "Name": "Requiere agendamiento de inspección?",
+    "Column": "Column_bvuyKe2Iw",
+    "LHSOwnField::Condition": [
+      "Condition_l8h1lw1oH"
+    ],
+    "Field::Node": [
+      "Node_NkuCGC85xE"
+    ]
+  },
+  "Condition_l8h1lw1oH": {
+    "Id": "Condition_l8h1lw1oH",
+    "Kind": "Condition",
+    "Criteria": "Criteria_mhE2tuDdV",
+    "LHSOwnField": "Requiere_agendamiento_de_inspeccion",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Value",
+    "RHSValue": "true"
+  },
+  "Resource_En9Axarsq": {
+    "Id": "Resource_En9Axarsq",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Jesus Motoche",
+    "Value": "Us5s9rzruiK3",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Column_bLqmyiJUW": {
+    "Id": "Column_bLqmyiJUW",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Tiempo_de_Atencion"
+    ],
+    "Column::Permission": [
+      "Permission_baqrwvVSD",
+      "Permission_wW_Sx3EJd",
+      "Permission_-x-wumtOg",
+      "Permission_tJFOzzWsS"
+    ],
+    "Width": "191px"
+  },
+  "Tiempo_de_Atencion": {
+    "Id": "Tiempo_de_Atencion",
+    "Kind": "Field",
+    "Type": "Select",
+    "CreatedAt": "2023-10-25T18:36:24.400Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Tiempo de Atención",
+    "Column": "Column_bLqmyiJUW",
+    "ReferredList": "Tiempo_Atencion",
+    "Required": true,
+    "SelfAggregateField::QueryDefinition": [
+      "QueryDefinition_ale6LeynY"
+    ]
+  },
+  "Column_ye_knAxIy": {
+    "Id": "Column_ye_knAxIy",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Solucion"
+    ],
+    "Column::Permission": [
+      "Permission_4D-lHM2-5",
+      "Permission_NtGXfNFEB",
+      "Permission_v1jqWuExb",
+      "Permission_qW2HOydwt"
+    ]
+  },
+  "Solucion": {
+    "Id": "Solucion",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2023-10-25T18:42:37.771Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Solución",
+    "Column": "Column_ye_knAxIy",
+    "Required": true
+  },
+  "Permission_ApUwrJD6k": {
+    "Id": "Permission_ApUwrJD6k",
+    "Kind": "Permission",
+    "Column": "Column_CJ_ka2JIMf",
+    "Permission": "Hidden",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_bBTeshXMU": {
+    "Id": "Permission_bBTeshXMU",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Hidden",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_5Uybx0k3s": {
+    "Id": "Permission_5Uybx0k3s",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_pbSuOVgyz": {
+    "Id": "Permission_pbSuOVgyz",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Hidden",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_KaIiwb1Mq": {
+    "Id": "Permission_KaIiwb1Mq",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_fjCp3W_6T": {
+    "Id": "Permission_fjCp3W_6T",
+    "Kind": "Permission",
+    "Column": "Column_CJ_ka2JIMf",
+    "Permission": "Hidden",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_movSldwbt": {
+    "Id": "Permission_movSldwbt",
+    "Kind": "Permission",
+    "Column": "Column_-d0mvfL2jq",
+    "Permission": "Hidden",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_3ht7AcrmM": {
+    "Id": "Permission_3ht7AcrmM",
+    "Kind": "Permission",
+    "Column": "Column_S-ovqv4GFi",
+    "Permission": "Hidden",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Criteria_gUhFi77gX": {
+    "Id": "Criteria_gUhFi77gX",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_Q_1YiQrAx_",
+    "Criteria::Condition": [
+      "Condition_qMZtWiqRY"
+    ]
+  },
+  "Condition_qMZtWiqRY": {
+    "Id": "Condition_qMZtWiqRY",
+    "Kind": "Condition",
+    "Criteria": "Criteria_gUhFi77gX",
+    "LHSOwnField": "Can_the_product_be_repaired",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Value",
+    "RHSValue": "true"
+  },
+  "Permission_baqrwvVSD": {
+    "Id": "Permission_baqrwvVSD",
+    "Kind": "Permission",
+    "Column": "Column_bLqmyiJUW",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_gFSM71AnF": {
+    "Id": "Permission_gFSM71AnF",
+    "Kind": "Permission",
+    "Column": "Column_l_XlT0rxK",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_4D-lHM2-5": {
+    "Id": "Permission_4D-lHM2-5",
+    "Kind": "Permission",
+    "Column": "Column_ye_knAxIy",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_4ztQM4b5R": {
+    "Id": "Permission_4ztQM4b5R",
+    "Kind": "Permission",
+    "Column": "Column_VLI5C8rts",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_MBI0-31mn": {
+    "Id": "Permission_MBI0-31mn",
+    "Kind": "Permission",
+    "Column": "Column_SLm-thY4q",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_lnVcut7dN": {
+    "Id": "Permission_lnVcut7dN",
+    "Kind": "Permission",
+    "Column": "Column_VLI5C8rts",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_NtGXfNFEB": {
+    "Id": "Permission_NtGXfNFEB",
+    "Kind": "Permission",
+    "Column": "Column_ye_knAxIy",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_Zzp9TAeb0": {
+    "Id": "Permission_Zzp9TAeb0",
+    "Kind": "Permission",
+    "Column": "Column_l_XlT0rxK",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_wW_Sx3EJd": {
+    "Id": "Permission_wW_Sx3EJd",
+    "Kind": "Permission",
+    "Column": "Column_bLqmyiJUW",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_bNIYbWhlE": {
+    "Id": "Permission_bNIYbWhlE",
+    "Kind": "Permission",
+    "Column": "Column_aAYo2y3l1",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_XiZ18lwD4": {
+    "Id": "Permission_XiZ18lwD4",
+    "Kind": "Permission",
+    "Column": "Column_M9RC8QRvb",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_Sk87q0cVH": {
+    "Id": "Permission_Sk87q0cVH",
+    "Kind": "Permission",
+    "Column": "Column_ZWLQxPnlQ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_YG8GNUAbQ": {
+    "Id": "Permission_YG8GNUAbQ",
+    "Kind": "Permission",
+    "Column": "Column_uBJRAuVvJ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_t5_2sS5_l": {
+    "Id": "Permission_t5_2sS5_l",
+    "Kind": "Permission",
+    "Column": "Column_DFy8RmuiAL",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_DVl0dI8Ju"
+  },
+  "Permission_-x-wumtOg": {
+    "Id": "Permission_-x-wumtOg",
+    "Kind": "Permission",
+    "Column": "Column_bLqmyiJUW",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_6NIPx7dDm": {
+    "Id": "Permission_6NIPx7dDm",
+    "Kind": "Permission",
+    "Column": "Column_l_XlT0rxK",
+    "Permission": "Editable",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_v1jqWuExb": {
+    "Id": "Permission_v1jqWuExb",
+    "Kind": "Permission",
+    "Column": "Column_ye_knAxIy",
+    "Permission": "Editable",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_vnLj7g79z": {
+    "Id": "Permission_vnLj7g79z",
+    "Kind": "Permission",
+    "Column": "Column_VLI5C8rts",
+    "Permission": "Editable",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_YTCbn0CdB": {
+    "Id": "Permission_YTCbn0CdB",
+    "Kind": "Permission",
+    "Column": "Column_DFy8RmuiAL",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_MOGthZiE_": {
+    "Id": "Permission_MOGthZiE_",
+    "Kind": "Permission",
+    "Column": "Column_uBJRAuVvJ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_LX8Hkfdx_": {
+    "Id": "Permission_LX8Hkfdx_",
+    "Kind": "Permission",
+    "Column": "Column_ZWLQxPnlQ",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_tVFRts9Tx": {
+    "Id": "Permission_tVFRts9Tx",
+    "Kind": "Permission",
+    "Column": "Column_M9RC8QRvb",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_4ClYbBD9o": {
+    "Id": "Permission_4ClYbBD9o",
+    "Kind": "Permission",
+    "Column": "Column_aAYo2y3l1",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_tJFOzzWsS": {
+    "Id": "Permission_tJFOzzWsS",
+    "Kind": "Permission",
+    "Column": "Column_bLqmyiJUW",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_ivR8Z-qOg": {
+    "Id": "Permission_ivR8Z-qOg",
+    "Kind": "Permission",
+    "Column": "Column_l_XlT0rxK",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_qW2HOydwt": {
+    "Id": "Permission_qW2HOydwt",
+    "Kind": "Permission",
+    "Column": "Column_ye_knAxIy",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_ifj6yh1dD": {
+    "Id": "Permission_ifj6yh1dD",
+    "Kind": "Permission",
+    "Column": "Column_VLI5C8rts",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_WtTGXvC-9": {
+    "Id": "Permission_WtTGXvC-9",
+    "Kind": "Permission",
+    "Column": "Column_SLm-thY4q",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_GYktl-SNb": {
+    "Id": "Permission_GYktl-SNb",
+    "Kind": "Permission",
+    "Column": "Column_CtB5teFTw",
+    "Permission": "Editable",
+    "Activity": "Activity_Oa_XJIo1k"
+  },
+  "Permission_ITOgAXoDl": {
+    "Id": "Permission_ITOgAXoDl",
+    "Kind": "Permission",
+    "Column": "Column_fivEE3bCx",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Column_MbEGx2rZ9": {
+    "Id": "Column_MbEGx2rZ9",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Scategoria"
+    ],
+    "Width": "100px",
+    "IsHidden": true,
+    "Column::Permission": [
+      "Permission_WcU7AZThAx"
+    ]
+  },
+  "Scategoria": {
+    "Id": "Scategoria",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-11-08T20:43:01.973Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Scategoria",
+    "Column": "Column_MbEGx2rZ9",
+    "Field::Expression": [
+      "Expression_hD5tt2WZG"
+    ]
+  },
+  "Expression_hD5tt2WZG": {
+    "Id": "Expression_hD5tt2WZG",
+    "Kind": "Expression",
+    "ExpressionStr": "Subcategoria.SubcategoriaTicket",
+    "Field": "Scategoria",
+    "Expression::Node": [
+      "Node_xGfIq0uDdE"
+    ]
+  },
+  "Node_xGfIq0uDdE": {
+    "Id": "Node_xGfIq0uDdE",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_hD5tt2WZG",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_f-HAO2TJt3",
+      "Node_8d0FoSTSzm"
+    ],
+    "SourceFlowId": "DS_TIPO_DE_DA_O",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_f-HAO2TJt3": {
+    "Id": "Node_f-HAO2TJt3",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Subcategoria",
+    "DataType": "Reference",
+    "FlowId": "DS_TIPO_DE_DA_O",
+    "FlowType": "Dataset",
+    "Node": "Node_xGfIq0uDdE"
+  },
+  "Node_8d0FoSTSzm": {
+    "Id": "Node_8d0FoSTSzm",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "SubcategoriaTicket",
+    "RefModel": "DS_TIPO_DE_DA_O",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_xGfIq0uDdE"
+  },
+  "Expression_USlzaVjYk": {
+    "Id": "Expression_USlzaVjYk",
+    "Kind": "Expression",
+    "ExpressionStr": "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad=false()",
+    "Activity": "Activity_DCw_LIqoo",
+    "Expression::Node": [
+      "Node_LfvSKjqH2d"
+    ]
+  },
+  "Node_LfvSKjqH2d": {
+    "Id": "Node_LfvSKjqH2d",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Expression": "Expression_USlzaVjYk",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_bvo_zpWvX3",
+      "Node_2DLfIlgsqX"
+    ],
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Node_bvo_zpWvX3": {
+    "Id": "Node_bvo_zpWvX3",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad",
+    "DataType": "Boolean",
+    "Node": "Node_LfvSKjqH2d"
+  },
+  "Node_2DLfIlgsqX": {
+    "Id": "Node_2DLfIlgsqX",
+    "Kind": "Node",
+    "Value": "false",
+    "Node": "Node_LfvSKjqH2d",
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Column_4ukBfZQBS": {
+    "Id": "Column_4ukBfZQBS",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_WTV79vMct",
+    "Column::Field": [
+      "Fecha_de_Entrega"
+    ],
+    "Column::Appearance": [
+      "Appearance_kRPgZxb9oN"
+    ]
+  },
+  "Fecha_de_Entrega": {
+    "Id": "Fecha_de_Entrega",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2023-11-09T13:20:28.787Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha de Entrega",
+    "Column": "Column_4ukBfZQBS",
+    "Field::Expression": [
+      "Expression_--Pp1n8Fs"
+    ],
+    "Field::Node": [
+      "Node_utiJrN8_q1"
+    ]
+  },
+  "Expression_--Pp1n8Fs": {
+    "Id": "Expression_--Pp1n8Fs",
+    "Kind": "Expression",
+    "ExpressionStr": "Ubicacion.Fecha_de_Entrega",
+    "Field": "Fecha_de_Entrega",
+    "Expression::Node": [
+      "Node_GdzyTP0kra"
+    ]
+  },
+  "Node_GdzyTP0kra": {
+    "Id": "Node_GdzyTP0kra",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_--Pp1n8Fs",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_iG2QxvffXd",
+      "Node_69KTvhkr82"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "Date",
+    "Category": "Reference"
+  },
+  "Node_iG2QxvffXd": {
+    "Id": "Node_iG2QxvffXd",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Ubicacion",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_GdzyTP0kra"
+  },
+  "Node_69KTvhkr82": {
+    "Id": "Node_69KTvhkr82",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Fecha_de_Entrega",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "Date",
+    "RefFlowType": "Dataset",
+    "Node": "Node_GdzyTP0kra"
+  },
+  "Column_SjkJHRJpx": {
+    "Id": "Column_SjkJHRJpx",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_AfxhY3afC",
+    "Column::Field": [
+      "Dias_para_Garantia"
+    ],
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_XqADSwGrZ"
+    ],
+    "Column::Appearance": [
+      "Appearance_3v9JJZ_-0",
+      "Appearance_7LOMQBrvw"
+    ]
+  },
+  "Dias_para_Garantia": {
+    "Id": "Dias_para_Garantia",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2023-11-09T16:41:07.712Z",
+    "Model": "Warranty_Claim",
+    "Name": "Estado de Garantia",
+    "Column": "Column_SjkJHRJpx",
+    "LHSOwnField::Condition": [
+      "Condition_oQESBB2aRT"
+    ],
+    "Field::Node": [
+      "Node_QXEXvfaLy7",
+      "Node_zrIoJ1B-yU"
+    ],
+    "Field::Expression": [
+      "Expression_fJEBqNt7G-"
+    ]
+  },
+  "Column_bjjAEe-uT": {
+    "Id": "Column_bjjAEe-uT",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 1,
+    "Row": "Row_55u8QFuTxL",
+    "Column::Field": [
+      "Garantia"
+    ],
+    "IsHidden": true,
+    "Column::Appearance": [
+      "Appearance_Chi5XQqetp"
+    ]
+  },
+  "Garantia": {
+    "Id": "Garantia",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2023-11-09T16:57:13.926Z",
+    "Model": "Warranty_Claim",
+    "Name": "Garantia",
+    "Column": "Column_bjjAEe-uT",
+    "Field::Expression": [
+      "Expression_TZz9vxsaa"
+    ]
+  },
+  "Column_f-fCNwD9Y": {
+    "Id": "Column_f-fCNwD9Y",
+    "Kind": "Column",
+    "Type": "Button",
+    "Name": "Submit",
+    "Label": "Submit",
+    "Start": 2,
+    "End": 3,
+    "Initiator": "Row_j1Jp7PSGnz",
+    "Column::Permission": [
+      "Permission_OpmE_tvA8h"
+    ]
+  },
+  "Permission_OpmE_tvA8h": {
+    "Id": "Permission_OpmE_tvA8h",
+    "Kind": "Permission",
+    "Column": "Column_f-fCNwD9Y",
+    "Activity": "Activity_7w60KztrkN",
+    "Label": "Solicitar",
+    "Permission::Criteria": [
+      "Criteria_fEtg3FtwzR"
+    ]
+  },
+  "Expression_RlCVOI6kl": {
+    "Id": "Expression_RlCVOI6kl",
+    "Kind": "Expression",
+    "ExpressionStr": "Can_the_product_be_repaired=false()",
+    "Activity": "Activity_-C_u8h4xf",
+    "Expression::Node": [
+      "Node_u-BpKHGriS"
+    ]
+  },
+  "Node_u-BpKHGriS": {
+    "Id": "Node_u-BpKHGriS",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Expression": "Expression_RlCVOI6kl",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_O8PDlLIhbj",
+      "Node_zAEsMnfTlL"
+    ],
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Node_O8PDlLIhbj": {
+    "Id": "Node_O8PDlLIhbj",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Can_the_product_be_repaired",
+    "DataType": "Boolean",
+    "Node": "Node_u-BpKHGriS"
+  },
+  "Node_zAEsMnfTlL": {
+    "Id": "Node_zAEsMnfTlL",
+    "Kind": "Node",
+    "Value": "false",
+    "Node": "Node_u-BpKHGriS",
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Column_nHx93diaL": {
+    "Id": "Column_nHx93diaL",
+    "Kind": "Column",
+    "Type": "Button",
+    "Name": "Reject",
+    "Label": "Reject",
+    "Start": 3,
+    "End": 4,
+    "Row": "Row_j1Jp7PSGnz",
+    "Column::Permission": [
+      "Permission_jLcdE3uLDN",
+      "Permission_jl62kXXlI",
+      "Permission_nhYRuDfRi",
+      "Permission_tsfFMiT4b",
+      "Permission_XXezs1nS5",
+      "Permission_JQNbecakK"
+    ]
+  },
+  "Permission_jLcdE3uLDN": {
+    "Id": "Permission_jLcdE3uLDN",
+    "Kind": "Permission",
+    "Column": "Column_nHx93diaL",
+    "Activity": "Activity_qNqRTWmEQ",
+    "Permission": "Hidden"
+  },
+  "Column_beEYndmMW": {
+    "Id": "Column_beEYndmMW",
+    "Kind": "Column",
+    "Type": "Button",
+    "Name": "Submit",
+    "Label": "Submit",
+    "Start": 4,
+    "End": 5,
+    "Row": "Row_j1Jp7PSGnz",
+    "Column::Permission": [
+      "Permission_hdJ2DXVcHY",
+      "Permission_TJbMfqnIZ",
+      "Permission_jgm5w1iBH",
+      "Permission_VxY8MDe_k",
+      "Permission_r0oXD7PGz",
+      "Permission_y0CATGRqN"
+    ]
+  },
+  "Permission_hdJ2DXVcHY": {
+    "Id": "Permission_hdJ2DXVcHY",
+    "Kind": "Permission",
+    "Column": "Column_beEYndmMW",
+    "Activity": "Activity_qNqRTWmEQ",
+    "Label": "Enviar"
+  },
+  "Permission_jl62kXXlI": {
+    "Id": "Permission_jl62kXXlI",
+    "Kind": "Permission",
+    "Column": "Column_nHx93diaL",
+    "Activity": "Activity_qPg1HgLEx",
+    "Permission": "Hidden"
+  },
+  "Permission_MMZaVkPtp": {
+    "Id": "Permission_MMZaVkPtp",
+    "Kind": "Permission",
+    "Column": "Column_5HK159mhk",
+    "Activity": "Activity_qPg1HgLEx",
+    "Permission": "Hidden"
+  },
+  "Permission_TJbMfqnIZ": {
+    "Id": "Permission_TJbMfqnIZ",
+    "Kind": "Permission",
+    "Column": "Column_beEYndmMW",
+    "Activity": "Activity_qPg1HgLEx",
+    "Label": "Enviar",
+    "Permission::Criteria": [
+      "Criteria_Oj86FdSyV"
+    ]
+  },
+  "Permission_5rZIlFq8t": {
+    "Id": "Permission_5rZIlFq8t",
+    "Kind": "Permission",
+    "Column": "Column_5HK159mhk",
+    "Activity": "Activity_DVl0dI8Ju",
+    "Permission": "Hidden"
+  },
+  "Permission_vq7HG4xZa": {
+    "Id": "Permission_vq7HG4xZa",
+    "Kind": "Permission",
+    "Column": "Column_qQRNDCak5",
+    "Activity": "Activity_DVl0dI8Ju",
+    "Permission": "Hidden"
+  },
+  "Permission_nhYRuDfRi": {
+    "Id": "Permission_nhYRuDfRi",
+    "Kind": "Permission",
+    "Column": "Column_nHx93diaL",
+    "Activity": "Activity_DVl0dI8Ju",
+    "Permission": "Hidden"
+  },
+  "Permission_jgm5w1iBH": {
+    "Id": "Permission_jgm5w1iBH",
+    "Kind": "Permission",
+    "Column": "Column_beEYndmMW",
+    "Activity": "Activity_DVl0dI8Ju",
+    "Label": "Enviar"
+  },
+  "Permission_uv0REWJmi": {
+    "Id": "Permission_uv0REWJmi",
+    "Kind": "Permission",
+    "Column": "Column_5HK159mhk",
+    "Activity": "Activity_qrPwqIXNt",
+    "Permission": "Hidden"
+  },
+  "Permission_tsfFMiT4b": {
+    "Id": "Permission_tsfFMiT4b",
+    "Kind": "Permission",
+    "Column": "Column_nHx93diaL",
+    "Activity": "Activity_qrPwqIXNt",
+    "Permission": "Hidden"
+  },
+  "Permission_VxY8MDe_k": {
+    "Id": "Permission_VxY8MDe_k",
+    "Kind": "Permission",
+    "Column": "Column_beEYndmMW",
+    "Activity": "Activity_qrPwqIXNt",
+    "Label": "Terminado",
+    "Permission::Criteria": [
+      "Criteria_WqJHKeFOi"
+    ]
+  },
+  "Permission_p7RUqWZmz": {
+    "Id": "Permission_p7RUqWZmz",
+    "Kind": "Permission",
+    "Column": "Column_5HK159mhk",
+    "Activity": "Activity_Oa_XJIo1k",
+    "Permission": "Hidden"
+  },
+  "Permission_XXezs1nS5": {
+    "Id": "Permission_XXezs1nS5",
+    "Kind": "Permission",
+    "Column": "Column_nHx93diaL",
+    "Activity": "Activity_Oa_XJIo1k",
+    "Permission": "Hidden"
+  },
+  "Permission_r0oXD7PGz": {
+    "Id": "Permission_r0oXD7PGz",
+    "Kind": "Permission",
+    "Column": "Column_beEYndmMW",
+    "Activity": "Activity_Oa_XJIo1k",
+    "Label": "Aprobado"
+  },
+  "Permission_WfzONP4Pc": {
+    "Id": "Permission_WfzONP4Pc",
+    "Kind": "Permission",
+    "Column": "Column_5HK159mhk",
+    "Activity": "Activity_bJHc_mFyM",
+    "Permission": "Hidden"
+  },
+  "Permission_JQNbecakK": {
+    "Id": "Permission_JQNbecakK",
+    "Kind": "Permission",
+    "Column": "Column_nHx93diaL",
+    "Activity": "Activity_bJHc_mFyM",
+    "Permission": "Hidden"
+  },
+  "Permission_y0CATGRqN": {
+    "Id": "Permission_y0CATGRqN",
+    "Kind": "Permission",
+    "Column": "Column_beEYndmMW",
+    "Activity": "Activity_bJHc_mFyM",
+    "Label": "Recibido"
+  },
+  "Row_bQYwi9M9R": {
+    "Id": "Row_bQYwi9M9R",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi"
+  },
+  "Column_W0XKaX9eIZ": {
+    "Id": "Column_W0XKaX9eIZ",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 3,
+    "End": 4,
+    "Row": "Row_2OHD6HcpeS",
+    "Column::Field": [
+      "Registros"
+    ],
+    "IsHidden": true
+  },
+  "QueryDefinition_ale6LeynY": {
+    "Id": "QueryDefinition_ale6LeynY",
+    "Kind": "QueryDefinition",
+    "Field": "Registros",
+    "LookupField": [],
+    "LHSModel": "Detalle_de_Inspeccion",
+    "LHSRootModel": "Warranty_Claim",
+    "FlowType": "Process",
+    "AggregateField": "Tiempo_de_Atencion",
+    "SelfAggregateField": "Tiempo_de_Atencion",
+    "AggregateType": "Count"
+  },
+  "Registros": {
+    "Id": "Registros",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2023-11-09T21:35:03.033Z",
+    "Model": "Warranty_Claim",
+    "Name": "Registros",
+    "Column": "Column_W0XKaX9eIZ",
+    "Widget": "Aggregation",
+    "Field::QueryDefinition": [
+      "QueryDefinition_ale6LeynY"
+    ],
+    "LHSOwnField::Condition": [
+      "Condition_j79N-eiE-c",
+      "Condition_PhdTciop2V"
+    ]
+  },
+  "Row_A-HbTjYsv": {
+    "Id": "Row_A-HbTjYsv",
+    "Kind": "Row",
+    "Column": "Column_S-ovqv4GFi"
+  },
+  "Column___3GGz5vMT": {
+    "Id": "Column___3GGz5vMT",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 3,
+    "Row": "Row_2OHD6HcpeS",
+    "Column::Field": [
+      "Solucionados"
+    ],
+    "IsHidden": true
+  },
+  "QueryDefinition_a_-y5IKLtU": {
+    "Id": "QueryDefinition_a_-y5IKLtU",
+    "Kind": "QueryDefinition",
+    "Field": "Solucionados",
+    "LookupField": [],
+    "LHSModel": "Detalle_de_Inspeccion",
+    "LHSRootModel": "Warranty_Claim",
+    "FlowType": "Process",
+    "AggregateField": "Fecha_Solucion",
+    "SelfAggregateField": "Fecha_Solucion",
+    "AggregateType": "Count",
+    "QueryDefinition::Criteria": [
+      "Criteria_qY70P43Zg"
+    ]
+  },
+  "Solucionados": {
+    "Id": "Solucionados",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2023-11-10T14:44:02.551Z",
+    "Model": "Warranty_Claim",
+    "Name": "Solucionados",
+    "Column": "Column___3GGz5vMT",
+    "Widget": "Aggregation",
+    "Field::QueryDefinition": [
+      "QueryDefinition_a_-y5IKLtU"
+    ],
+    "RHSField::Condition": [
+      "Condition_j79N-eiE-c"
+    ]
+  },
+  "Criteria_qY70P43Zg": {
+    "Id": "Criteria_qY70P43Zg",
+    "Kind": "Criteria",
+    "QueryDefinition": "QueryDefinition_a_-y5IKLtU",
+    "Criteria::Condition": [
+      "Condition_Q7Au6ZMhyl"
+    ]
+  },
+  "Condition_Q7Au6ZMhyl": {
+    "Id": "Condition_Q7Au6ZMhyl",
+    "Kind": "Condition",
+    "Criteria": "Criteria_qY70P43Zg",
+    "LHSField": "Fecha_Solucion",
+    "Operator": "NOT_EMPTY",
+    "HasArguments": false
+  },
+  "Criteria_WqJHKeFOi": {
+    "Id": "Criteria_WqJHKeFOi",
+    "Kind": "Criteria",
+    "Permission": "Permission_VxY8MDe_k",
+    "Criteria::Condition": [
+      "Condition_j79N-eiE-c"
+    ]
+  },
+  "Condition_j79N-eiE-c": {
+    "Id": "Condition_j79N-eiE-c",
+    "Kind": "Condition",
+    "Criteria": "Criteria_WqJHKeFOi",
+    "LHSOwnField": "Registros",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Field",
+    "RHSField": "Solucionados"
+  },
+  "Criteria_Oj86FdSyV": {
+    "Id": "Criteria_Oj86FdSyV",
+    "Kind": "Criteria",
+    "Permission": "Permission_TJbMfqnIZ",
+    "Criteria::Condition": [
+      "Condition_PhdTciop2V"
+    ]
+  },
+  "Condition_PhdTciop2V": {
+    "Id": "Condition_PhdTciop2V",
+    "Kind": "Condition",
+    "Criteria": "Criteria_Oj86FdSyV",
+    "LHSOwnField": "Registros",
+    "Operator": "GREATER_THAN",
+    "RHSType": "Value",
+    "RHSValue": "0"
+  },
+  "Column_GDzxyhZ8P": {
+    "Id": "Column_GDzxyhZ8P",
+    "Kind": "Column",
+    "Type": "Button",
+    "Name": "Discard",
+    "Label": "Discard",
+    "Start": 1,
+    "End": 2,
+    "Initiator": "Row_j1Jp7PSGnz",
+    "Column::Permission": [
+      "Permission_4SsBZ2A0tL"
+    ]
+  },
+  "Permission_4SsBZ2A0tL": {
+    "Id": "Permission_4SsBZ2A0tL",
+    "Kind": "Permission",
+    "Column": "Column_GDzxyhZ8P",
+    "Activity": "Activity_7w60KztrkN",
+    "Label": "Fuera de Garantía"
+  },
+  "Expression_TZz9vxsaa": {
+    "Id": "Expression_TZz9vxsaa",
+    "Kind": "Expression",
+    "ExpressionStr": "if(Dias_para_Garantia=\"Dentro de Periodo de Garantia\",1,0)",
+    "Field": "Garantia",
+    "Expression::Node": [
+      "Node_LxODMxxar7"
+    ]
+  },
+  "Node_LxODMxxar7": {
+    "Id": "Node_LxODMxxar7",
+    "Kind": "Node",
+    "Value": "if",
+    "Expression": "Expression_TZz9vxsaa",
+    "Node::Node": [
+      "Node_4em0iMzLN1",
+      "Node_y-xL9o0G0S",
+      "Node_Iz_3iFS84K"
+    ],
+    "DataType": "Number",
+    "Category": "IF",
+    "Type": "Function"
+  },
+  "Node_4em0iMzLN1": {
+    "Id": "Node_4em0iMzLN1",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Node": "Node_LxODMxxar7",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_QXEXvfaLy7",
+      "Node_C4AUAfvG1_"
+    ],
+    "DataType": "Boolean",
+    "Category": "String",
+    "Type": "Function"
+  },
+  "Node_QXEXvfaLy7": {
+    "Id": "Node_QXEXvfaLy7",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Dias_para_Garantia",
+    "DataType": "String",
+    "Node": "Node_4em0iMzLN1"
+  },
+  "Node_C4AUAfvG1_": {
+    "Id": "Node_C4AUAfvG1_",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "Dentro de Periodo de Garantia",
+    "DataType": "String",
+    "Node": "Node_4em0iMzLN1"
+  },
+  "Node_y-xL9o0G0S": {
+    "Id": "Node_y-xL9o0G0S",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "1",
+    "DataType": "Number",
+    "Node": "Node_LxODMxxar7"
+  },
+  "Node_Iz_3iFS84K": {
+    "Id": "Node_Iz_3iFS84K",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "0",
+    "DataType": "Number",
+    "Node": "Node_LxODMxxar7"
+  },
+  "Resource_6pEpn-iEI": {
+    "Id": "Resource_6pEpn-iEI",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Servicios al Cliente",
+    "Value": "Us3AMVPNi4MYb",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Criteria_XqADSwGrZ": {
+    "Id": "Criteria_XqADSwGrZ",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_SjkJHRJpx",
+    "Criteria::Condition": [
+      "Condition_On5MCC0fC",
+      "Condition_hAl9Vv5YRZ"
+    ],
+    "IsOR": false
+  },
+  "Condition_On5MCC0fC": {
+    "Id": "Condition_On5MCC0fC",
+    "Kind": "Condition",
+    "Criteria": "Criteria_XqADSwGrZ",
+    "LHSOwnField": "Modelo",
+    "Operator": "NOT_EMPTY",
+    "HasArguments": false
+  },
+  "Column_rynM_cdne": {
+    "Id": "Column_rynM_cdne",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 5,
+    "Row": "Row_myo8XECcug",
+    "Column::Field": [
+      "Contingencia"
+    ]
+  },
+  "Column_IHYhsceSfm": {
+    "Id": "Column_IHYhsceSfm",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_vVTKbaF5Q5",
+    "Column::Field": [
+      "AlertaAgendamientoInspeccion"
+    ],
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_lDJwUm9rg"
+    ],
+    "Column::Appearance": [
+      "Appearance_x31WpWYjr"
+    ]
+  },
+  "AlertaAgendamientoInspeccion": {
+    "Id": "AlertaAgendamientoInspeccion",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2024-02-15T13:43:47.893Z",
+    "Model": "Warranty_Claim",
+    "Name": "!",
+    "Column": "Column_IHYhsceSfm",
+    "Field::Expression": [
+      "Expression_ARcPk1yiTU"
+    ]
+  },
+  "Contingencia": {
+    "Id": "Contingencia",
+    "Kind": "Field",
+    "Type": "Select",
+    "CreatedAt": "2024-02-15T13:31:46.960Z",
+    "Model": "Warranty_Claim",
+    "Name": "Contingencia en :",
+    "Column": "Column_rynM_cdne",
+    "ReferredList": "Contingencia",
+    "LHSOwnField::Condition": [
+      "Condition_4F-xDnu00"
+    ],
+    "Field::Node": [
+      "Node_5vlLtYqtXv",
+      "Node_JJQIc_TWFj"
+    ],
+    "Required": true
+  },
+  "Criteria_lDJwUm9rg": {
+    "Id": "Criteria_lDJwUm9rg",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_IHYhsceSfm",
+    "Criteria::Condition": [
+      "Condition_4F-xDnu00"
+    ]
+  },
+  "Condition_4F-xDnu00": {
+    "Id": "Condition_4F-xDnu00",
+    "Kind": "Condition",
+    "Criteria": "Criteria_lDJwUm9rg",
+    "LHSOwnField": "Contingencia",
+    "Operator": "NOT_EMPTY",
+    "HasArguments": false
+  },
+  "Appearance_x31WpWYjr": {
+    "Id": "Appearance_x31WpWYjr",
+    "Kind": "Appearance",
+    "Column": "Column_IHYhsceSfm",
+    "Appearance::Style": [
+      "Style_iTq68tYIwv"
+    ]
+  },
+  "Style_iTq68tYIwv": {
+    "Id": "Style_iTq68tYIwv",
+    "Kind": "Style",
+    "Appearance": "Appearance_x31WpWYjr",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Five.500"
+      }
+    }
+  },
+  "Appearance_3v9JJZ_-0": {
+    "Id": "Appearance_3v9JJZ_-0",
+    "Kind": "Appearance",
+    "Column": "Column_SjkJHRJpx",
+    "Appearance::Style": [
+      "Style_SeyPM6kRrb"
+    ]
+  },
+  "Style_SeyPM6kRrb": {
+    "Id": "Style_SeyPM6kRrb",
+    "Kind": "Style",
+    "Appearance": "Appearance_3v9JJZ_-0",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Four.500"
+      }
+    }
+  },
+  "Appearance_7LOMQBrvw": {
+    "Id": "Appearance_7LOMQBrvw",
+    "Kind": "Appearance",
+    "Type": "Conditional",
+    "Column": "Column_SjkJHRJpx",
+    "Appearance::Condition": [
+      "Condition_CLcpmZWdzC"
+    ],
+    "Appearance::Style": [
+      "Style_8t_vRnvVZ6"
+    ]
+  },
+  "Condition_CLcpmZWdzC": {
+    "Id": "Condition_CLcpmZWdzC",
+    "Kind": "Condition",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "Appearance": "Appearance_7LOMQBrvw",
+    "RHSType": "Value",
+    "RHSValue": "Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda"
+  },
+  "Style_8t_vRnvVZ6": {
+    "Id": "Style_8t_vRnvVZ6",
+    "Kind": "Style",
+    "Appearance": "Appearance_7LOMQBrvw",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.One.500"
+      }
+    }
+  },
+  "Row_AfxhY3afC": {
+    "Id": "Row_AfxhY3afC",
+    "Kind": "Row",
+    "Column": "Column__aM1yFdz4W",
+    "Row::Column": [
+      "Column_SjkJHRJpx"
+    ]
+  },
+  "Column_Lr-EUSiup": {
+    "Id": "Column_Lr-EUSiup",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Aplica"
+    ],
+    "Width": "116px",
+    "Column::Permission": [
+      "Permission_svhRnQnNXJ"
+    ]
+  },
+  "Aplica": {
+    "Id": "Aplica",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2024-02-15T14:24:18.629Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Column": "Column_Lr-EUSiup",
+    "Name": "Garantia"
+  },
+  "Column_u17hp5ZAs": {
+    "Id": "Column_u17hp5ZAs",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Fecha_Programada"
+    ],
+    "Width": "177px",
+    "Column::Permission": [
+      "Permission_JNXr5YK3yu",
+      "Permission_ijZVckapMS",
+      "Permission_BsG-ol_in-"
+    ]
+  },
+  "Fecha_Programada": {
+    "Id": "Fecha_Programada",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2024-02-15T14:55:00.081Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Fecha Programada",
+    "Column": "Column_u17hp5ZAs",
+    "Required": true
+  },
+  "Column_H2d4Xm3SN": {
+    "Id": "Column_H2d4Xm3SN",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Clasificacion"
+    ],
+    "Column::Permission": [
+      "Permission_vNxy2TU-y0"
+    ],
+    "Width": "200px"
+  },
+  "Clasificacion": {
+    "Id": "Clasificacion",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2024-02-15T14:59:55.703Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Clasificacion",
+    "Column": "Column_H2d4Xm3SN",
+    "Field::Expression": [
+      "Expression_d3Qx4Iw4tc"
+    ]
+  },
+  "Column_aF_PQeZSg": {
+    "Id": "Column_aF_PQeZSg",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Justificacion_de_atraso"
+    ],
+    "Column::Permission": [
+      "Permission_QTolpjLsLW"
+    ]
+  },
+  "Justificacion_de_atraso": {
+    "Id": "Justificacion_de_atraso",
+    "Kind": "Field",
+    "Type": "Select",
+    "CreatedAt": "2024-02-15T17:12:07.465Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Justificacion de atraso",
+    "Column": "Column_aF_PQeZSg",
+    "ReferredList": "Justificacion_de_atraso"
+  },
+  "Row_mhoytwIiy": {
+    "Id": "Row_mhoytwIiy",
+    "Kind": "Row",
+    "Column": "Column_TQf5soXhaA",
+    "Row::Column": [
+      "Column_CMV4jFopqq"
+    ]
+  },
+  "Column_CMV4jFopqq": {
+    "Id": "Column_CMV4jFopqq",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 6,
+    "Row": "Row_mhoytwIiy",
+    "Column::Field": [
+      "Comentario_de_Visita_de_Inspeccion"
+    ],
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_ih3Hic_mH"
+    ]
+  },
+  "Comentario_de_Visita_de_Inspeccion": {
+    "Id": "Comentario_de_Visita_de_Inspeccion",
+    "Kind": "Field",
+    "Type": "Textarea",
+    "CreatedAt": "2024-02-15T17:17:58.136Z",
+    "Model": "Warranty_Claim",
+    "Name": "Comentario de Visita de Inspección",
+    "Column": "Column_CMV4jFopqq"
+  },
+  "Criteria_ih3Hic_mH": {
+    "Id": "Criteria_ih3Hic_mH",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_CMV4jFopqq",
+    "Criteria::Condition": [
+      "Condition_k2zSJhxaV"
+    ]
+  },
+  "Condition_k2zSJhxaV": {
+    "Id": "Condition_k2zSJhxaV",
+    "Kind": "Condition",
+    "Criteria": "Criteria_ih3Hic_mH",
+    "LHSOwnField": "Can_the_product_be_repaired",
+    "Operator": "EQUAL_TO",
+    "HasArguments": true,
+    "RHSType": "Value",
+    "RHSValue": "false"
+  },
+  "Criteria_il8sHA0_j": {
+    "Id": "Criteria_il8sHA0_j",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_S-ovqv4GFi",
+    "Criteria::Condition": [
+      "Condition_jlv7uQJHo"
+    ],
+    "IsOR": false,
+    "IsHidden": true
+  },
+  "Condition_jlv7uQJHo": {
+    "Id": "Condition_jlv7uQJHo",
+    "Kind": "Condition",
+    "Criteria": "Criteria_il8sHA0_j",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Value",
+    "RHSValue": "true",
+    "HasArguments": true,
+    "LHSOwnField": "Los_trabajos_ejecutados_fueron_recibidos_a_conformidad"
+  },
+  "PublishedBy": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "Permission_JNXr5YK3yu": {
+    "Id": "Permission_JNXr5YK3yu",
+    "Kind": "Permission",
+    "Column": "Column_u17hp5ZAs",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_svhRnQnNXJ": {
+    "Id": "Permission_svhRnQnNXJ",
+    "Kind": "Permission",
+    "Column": "Column_Lr-EUSiup",
+    "Permission": "Editable",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_ijZVckapMS": {
+    "Id": "Permission_ijZVckapMS",
+    "Kind": "Permission",
+    "Column": "Column_u17hp5ZAs",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_vNxy2TU-y0": {
+    "Id": "Permission_vNxy2TU-y0",
+    "Kind": "Permission",
+    "Column": "Column_H2d4Xm3SN",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Permission_WcU7AZThAx": {
+    "Id": "Permission_WcU7AZThAx",
+    "Kind": "Permission",
+    "Column": "Column_MbEGx2rZ9",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Criteria_jSFaljp2Dx": {
+    "Id": "Criteria_jSFaljp2Dx",
+    "Kind": "Criteria",
+    "QueryDefinition": "QueryDefinition_v_J0kAyND",
+    "Criteria::Condition": [
+      "Condition_8T_k-MXyYu",
+      "Condition_pC0uNTEgCB"
+    ],
+    "IsOR": false
+  },
+  "Condition_8T_k-MXyYu": {
+    "Id": "Condition_8T_k-MXyYu",
+    "Kind": "Condition",
+    "Criteria": "Criteria_jSFaljp2Dx",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Value",
+    "RHSValue": "Activo",
+    "HasArguments": true,
+    "LHSField": "Estado"
+  },
+  "Condition_pC0uNTEgCB": {
+    "Id": "Condition_pC0uNTEgCB",
+    "Kind": "Condition",
+    "Operator": "EQUAL_TO",
+    "RHSValue": "CONTINGENCIAS",
+    "RHSType": "Value",
+    "HasArguments": true,
+    "LHSField": "TipoTicket",
+    "Criteria": "Criteria_jSFaljp2Dx"
+  },
+  "Expression_Ov3opZgQCg": {
+    "Id": "Expression_Ov3opZgQCg",
+    "Kind": "Expression",
+    "ExpressionStr": "Tipo_de_Dano.CategoriaTicket",
+    "Field": "Categoria",
+    "Expression::Node": [
+      "Node_ket9_rb1vd"
+    ]
+  },
+  "Node_ket9_rb1vd": {
+    "Id": "Node_ket9_rb1vd",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_Ov3opZgQCg",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_3mxuWAE1GQ",
+      "Node_iK0ASI53yl"
+    ],
+    "SourceFlowId": "DS_Da_o_Categoria",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_3mxuWAE1GQ": {
+    "Id": "Node_3mxuWAE1GQ",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Tipo_de_Dano",
+    "DataType": "Reference",
+    "FlowId": "DS_Da_o_Categoria",
+    "FlowType": "Dataset",
+    "Node": "Node_ket9_rb1vd"
+  },
+  "Node_iK0ASI53yl": {
+    "Id": "Node_iK0ASI53yl",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "CategoriaTicket",
+    "RefModel": "DS_Da_o_Categoria",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_ket9_rb1vd"
+  },
+  "Condition_sKPB8fn0dc": {
+    "Id": "Condition_sKPB8fn0dc",
+    "Kind": "Condition",
+    "Criteria": "Criteria_oeAKKbkE2",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Field",
+    "RHSField": "Categoria",
+    "HasArguments": true,
+    "LHSField": "CategoriaTicket"
+  },
+  "Expression_d3Qx4Iw4tc": {
+    "Id": "Expression_d3Qx4Iw4tc",
+    "Kind": "Expression",
+    "ExpressionStr": "Subcategoria.Prioridad",
+    "Field": "Clasificacion",
+    "Expression::Node": [
+      "Node_-7YHo9sPoL"
+    ]
+  },
+  "Node_-7YHo9sPoL": {
+    "Id": "Node_-7YHo9sPoL",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_d3Qx4Iw4tc",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_F7znvAEl19",
+      "Node_OqFX9AVPGc"
+    ],
+    "SourceFlowId": "DS_TIPO_DE_DA_O",
+    "SourceFlowType": "Dataset",
+    "DataType": "String",
+    "Category": "Reference"
+  },
+  "Node_F7znvAEl19": {
+    "Id": "Node_F7znvAEl19",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Subcategoria",
+    "DataType": "Reference",
+    "FlowId": "DS_TIPO_DE_DA_O",
+    "FlowType": "Dataset",
+    "Node": "Node_-7YHo9sPoL"
+  },
+  "Node_OqFX9AVPGc": {
+    "Id": "Node_OqFX9AVPGc",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Prioridad",
+    "RefModel": "DS_TIPO_DE_DA_O",
+    "DataType": "String",
+    "RefFlowType": "Dataset",
+    "Node": "Node_-7YHo9sPoL"
+  },
+  "Condition_hAl9Vv5YRZ": {
+    "Id": "Condition_hAl9Vv5YRZ",
+    "Kind": "Condition",
+    "Criteria": "Criteria_XqADSwGrZ",
+    "Operator": "NOT_EMPTY",
+    "HasArguments": false,
+    "LHSOwnField": "Identificacion"
+  },
+  "Row_RDW0Ropnjx": {
+    "Id": "Row_RDW0Ropnjx",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_LIUHEPKA0H"
+    ]
+  },
+  "Column_LIUHEPKA0H": {
+    "Id": "Column_LIUHEPKA0H",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": " ",
+    "Row": "Row_RDW0Ropnjx",
+    "Column::Row": [
+      "Row_55u8QFuTxL",
+      "Row_cbv6tZ8BXw",
+      "Row_myo8XECcug",
+      "Row_vVTKbaF5Q5",
+      "Row_PmDTKIFldv"
+    ],
+    "IsHidden": true,
+    "ColumnVisibility::Criteria": [
+      "Criteria_1LvUOd87YW"
+    ]
+  },
+  "Row_PmDTKIFldv": {
+    "Id": "Row_PmDTKIFldv",
+    "Kind": "Row",
+    "Column": "Column_LIUHEPKA0H",
+    "Row::Column": [
+      "Column_N0ORTj7mFm"
+    ]
+  },
+  "Row_vVTKbaF5Q5": {
+    "Id": "Row_vVTKbaF5Q5",
+    "Kind": "Row",
+    "Column": "Column_LIUHEPKA0H",
+    "Row::Column": [
+      "Column_IHYhsceSfm"
+    ]
+  },
+  "Row_myo8XECcug": {
+    "Id": "Row_myo8XECcug",
+    "Kind": "Row",
+    "Column": "Column_LIUHEPKA0H",
+    "Row::Column": [
+      "Column_rynM_cdne",
+      "Column_sSmiC2KO3"
+    ]
+  },
+  "Row_55u8QFuTxL": {
+    "Id": "Row_55u8QFuTxL",
+    "Kind": "Row",
+    "Column": "Column_LIUHEPKA0H",
+    "Row::Column": [
+      "Column_bjjAEe-uT"
+    ]
+  },
+  "Criteria_1LvUOd87YW": {
+    "Id": "Criteria_1LvUOd87YW",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_LIUHEPKA0H",
+    "Criteria::Condition": [
+      "Condition_oQESBB2aRT"
+    ],
+    "IsOR": false
+  },
+  "Condition_oQESBB2aRT": {
+    "Id": "Condition_oQESBB2aRT",
+    "Kind": "Condition",
+    "Criteria": "Criteria_1LvUOd87YW",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Value",
+    "HasArguments": true,
+    "LHSOwnField": "Dias_para_Garantia",
+    "RHSValue": "Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda"
+  },
+  "Permission_QTolpjLsLW": {
+    "Id": "Permission_QTolpjLsLW",
+    "Kind": "Permission",
+    "Column": "Column_aF_PQeZSg",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Column_QmYvNs9Jjz": {
+    "Id": "Column_QmYvNs9Jjz",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Fecha_Reprogramada"
+    ],
+    "Width": "181px",
+    "Column::Permission": [
+      "Permission_MZUj4ELQy3",
+      "Permission_Q1TCyxykdQ"
+    ]
+  },
+  "Fecha_Reprogramada": {
+    "Id": "Fecha_Reprogramada",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2025-03-11T15:32:25.778Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Fecha Reprogramada",
+    "Column": "Column_QmYvNs9Jjz"
+  },
+  "Resource_UZYRvZvz3e": {
+    "Id": "Resource_UZYRvZvz3e",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Servicios al Cliente",
+    "Value": "Us3AMVPNi4MYb",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Expression_QznI10G11R": {
+    "Id": "Expression_QznI10G11R",
+    "Kind": "Expression",
+    "ExpressionStr": "Contingencia=\"OTROS\"",
+    "Activity": "Activity_Oa_XJIo1k",
+    "Expression::Node": [
+      "Node_Az69OwMIXW"
+    ]
+  },
+  "Node_Az69OwMIXW": {
+    "Id": "Node_Az69OwMIXW",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Expression": "Expression_QznI10G11R",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_5vlLtYqtXv",
+      "Node_-j6_P1SumT"
+    ],
+    "DataType": "Boolean",
+    "Category": "String",
+    "Type": "Function"
+  },
+  "Node_5vlLtYqtXv": {
+    "Id": "Node_5vlLtYqtXv",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Contingencia",
+    "DataType": "String",
+    "Node": "Node_Az69OwMIXW"
+  },
+  "Node_-j6_P1SumT": {
+    "Id": "Node_-j6_P1SumT",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "OTROS",
+    "DataType": "String",
+    "Node": "Node_Az69OwMIXW"
+  },
+  "Expression_ARcPk1yiTU": {
+    "Id": "Expression_ARcPk1yiTU",
+    "Kind": "Expression",
+    "ExpressionStr": "if(Contingencia = \"OTROS\", \"Estimado Cliente, se requiere realizar una inspección de su contingencia, le llegará un correo electrónico para solicitar el agendamiento al finalizar el ingreso de su requerimiento\", \"Estimado Cliente, hemos detectado que su caso requiere atención prioritaria. Le solicitamos que complete el registro de su contingencia en este formulario y, adicionalmente, se comunique de inmediato con nuestro equipo de Servicio al Cliente al 098 874 0000 para brindarle asistencia urgente.\")",
+    "Field": "AlertaAgendamientoInspeccion",
+    "Expression::Node": [
+      "Node__3puVggoyX"
+    ]
+  },
+  "Node__3puVggoyX": {
+    "Id": "Node__3puVggoyX",
+    "Kind": "Node",
+    "Value": "if",
+    "Expression": "Expression_ARcPk1yiTU",
+    "Node::Node": [
+      "Node_VmRZhi1hyQ",
+      "Node_ym3VoWyhEW",
+      "Node_o4J8qdK3cT"
+    ],
+    "DataType": "String",
+    "Category": "IF",
+    "Type": "Function"
+  },
+  "Node_VmRZhi1hyQ": {
+    "Id": "Node_VmRZhi1hyQ",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Node": "Node__3puVggoyX",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_JJQIc_TWFj",
+      "Node_ALMyTObmJ9"
+    ],
+    "DataType": "Boolean",
+    "Category": "String",
+    "Type": "Function"
+  },
+  "Node_JJQIc_TWFj": {
+    "Id": "Node_JJQIc_TWFj",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Contingencia",
+    "DataType": "String",
+    "Node": "Node_VmRZhi1hyQ"
+  },
+  "Node_ALMyTObmJ9": {
+    "Id": "Node_ALMyTObmJ9",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "OTROS",
+    "DataType": "String",
+    "Node": "Node_VmRZhi1hyQ"
+  },
+  "Node_ym3VoWyhEW": {
+    "Id": "Node_ym3VoWyhEW",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "Estimado Cliente, se requiere realizar una inspección de su contingencia, le llegará un correo electrónico para solicitar el agendamiento al finalizar el ingreso de su requerimiento",
+    "DataType": "String",
+    "Node": "Node__3puVggoyX"
+  },
+  "Node_o4J8qdK3cT": {
+    "Id": "Node_o4J8qdK3cT",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "Estimado Cliente, hemos detectado que su caso requiere atención prioritaria. Le solicitamos que complete el registro de su contingencia en este formulario y, adicionalmente, se comunique de inmediato con nuestro equipo de Servicio al Cliente al 098 874 0000 para brindarle asistencia urgente.",
+    "DataType": "String",
+    "Node": "Node__3puVggoyX"
+  },
+  "Row_T7GpJJAue2": {
+    "Id": "Row_T7GpJJAue2",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_dGmPmP3BIv"
+    ]
+  },
+  "Column_dGmPmP3BIv": {
+    "Id": "Column_dGmPmP3BIv",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": "Presupuesto de Contingencia",
+    "Row": "Row_T7GpJJAue2",
+    "Column::Row": [
+      "Row_dDTtudqXWJ"
+    ],
+    "Column::Permission": [
+      "Permission_CZMqZ1FdBQ",
+      "Permission_lVgvK_tG1Q",
+      "Permission_PvrK_PDiZ-",
+      "Permission_PMi0PUvLK7",
+      "Permission_RTNjzIO7yp"
+    ]
+  },
+  "Row_dDTtudqXWJ": {
+    "Id": "Row_dDTtudqXWJ",
+    "Kind": "Row",
+    "Column": "Column_dGmPmP3BIv",
+    "Row::Column": [
+      "Column_KWhd2b8H1x",
+      "Column_a2uFYJb3NP",
+      "Column_v2g8qSfQ5Z"
+    ]
+  },
+  "Column_KWhd2b8H1x": {
+    "Id": "Column_KWhd2b8H1x",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_dDTtudqXWJ",
+    "Column::Field": [
+      "Se_necesita_presupuesto"
+    ]
+  },
+  "Se_necesita_presupuesto": {
+    "Id": "Se_necesita_presupuesto",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2025-03-14T21:46:48.983Z",
+    "Model": "Warranty_Claim",
+    "Name": "Se necesita presupuesto?",
+    "Column": "Column_KWhd2b8H1x"
+  },
+  "Column_a2uFYJb3NP": {
+    "Id": "Column_a2uFYJb3NP",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 4,
+    "Row": "Row_dDTtudqXWJ",
+    "Column::Field": [
+      "Se_necesita_Orden_de_Compra"
+    ]
+  },
+  "Se_necesita_Orden_de_Compra": {
+    "Id": "Se_necesita_Orden_de_Compra",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2025-03-14T21:48:52.531Z",
+    "Model": "Warranty_Claim",
+    "Name": "Se necesita Orden de Compra?",
+    "Column": "Column_a2uFYJb3NP"
+  },
+  "Activity_Mv4_poHwui": {
+    "Id": "Activity_Mv4_poHwui",
+    "Kind": "Activity",
+    "Name": "Presupuestar contingencia",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Activity::Permission": [
+      "Permission_PMi0PUvLK7"
+    ],
+    "IsSuspended": true,
+    "SuspendedAt": "2025-03-20T20:24:59.098Z"
+  },
+  "Column_2afhbrlXO5": {
+    "Id": "Column_2afhbrlXO5",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Vigencia"
+    ],
+    "Width": "100px"
+  },
+  "Vigencia": {
+    "Id": "Vigencia",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-03-17T20:39:18.600Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Column": "Column_2afhbrlXO5",
+    "Name": "Vigencia",
+    "Field::Expression": [
+      "Expression_ZNPxxvK1B5"
+    ],
+    "Field::Node": [
+      "Node_uySFMTzIfU"
+    ]
+  },
+  "Expression_ZNPxxvK1B5": {
+    "Id": "Expression_ZNPxxvK1B5",
+    "Kind": "Expression",
+    "ExpressionStr": "Subcategoria.Untitled_field",
+    "Field": "Vigencia",
+    "Expression::Node": [
+      "Node_PMKyxcLRg0"
+    ]
+  },
+  "Node_PMKyxcLRg0": {
+    "Id": "Node_PMKyxcLRg0",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_ZNPxxvK1B5",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_ywaeRkOfeg",
+      "Node_aqkeWZ2pe2"
+    ],
+    "SourceFlowId": "DS_TIPO_DE_DA_O",
+    "SourceFlowType": "Dataset",
+    "DataType": "Number",
+    "Category": "Reference"
+  },
+  "Node_ywaeRkOfeg": {
+    "Id": "Node_ywaeRkOfeg",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Subcategoria",
+    "DataType": "Reference",
+    "FlowId": "DS_TIPO_DE_DA_O",
+    "FlowType": "Dataset",
+    "Node": "Node_PMKyxcLRg0"
+  },
+  "Node_aqkeWZ2pe2": {
+    "Id": "Node_aqkeWZ2pe2",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Untitled_field",
+    "RefModel": "DS_TIPO_DE_DA_O",
+    "DataType": "Number",
+    "RefFlowType": "Dataset",
+    "Node": "Node_PMKyxcLRg0"
+  },
+  "Permission_CZMqZ1FdBQ": {
+    "Id": "Permission_CZMqZ1FdBQ",
+    "Kind": "Permission",
+    "Column": "Column_dGmPmP3BIv",
+    "Permission": "Hidden",
+    "Activity": "Activity_7w60KztrkN"
+  },
+  "Permission_lVgvK_tG1Q": {
+    "Id": "Permission_lVgvK_tG1Q",
+    "Kind": "Permission",
+    "Column": "Column_dGmPmP3BIv",
+    "Permission": "Hidden",
+    "Activity": "Activity_qNqRTWmEQ"
+  },
+  "Permission_PvrK_PDiZ-": {
+    "Id": "Permission_PvrK_PDiZ-",
+    "Kind": "Permission",
+    "Column": "Column_dGmPmP3BIv",
+    "Permission": "Hidden",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Permission_PMi0PUvLK7": {
+    "Id": "Permission_PMi0PUvLK7",
+    "Kind": "Permission",
+    "Column": "Column_dGmPmP3BIv",
+    "Permission": "Editable",
+    "Activity": "Activity_Mv4_poHwui"
+  },
+  "Activity_om-qSPGCpN": {
+    "Id": "Activity_om-qSPGCpN",
+    "Kind": "Activity",
+    "Name": "Programación de Solución",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "IsSuspended": true,
+    "SuspendedAt": "2025-03-20T20:25:05.425Z"
+  },
+  "Column_OCrq6TEWcY": {
+    "Id": "Column_OCrq6TEWcY",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_2OHD6HcpeS",
+    "Column::Field": [
+      "Analisis_de_Rubros"
+    ]
+  },
+  "Analisis_de_Rubros": {
+    "Id": "Analisis_de_Rubros",
+    "Kind": "Field",
+    "Type": "Attachment",
+    "CreatedAt": "2025-03-18T17:53:12.749Z",
+    "Model": "Warranty_Claim",
+    "Name": "Analisis de Rubros",
+    "Column": "Column_OCrq6TEWcY",
+    "Required": true
+  },
+  "Permission_MZUj4ELQy3": {
+    "Id": "Permission_MZUj4ELQy3",
+    "Kind": "Permission",
+    "Column": "Column_QmYvNs9Jjz",
+    "Permission": "ReadOnly",
+    "Activity": "Activity_qPg1HgLEx"
+  },
+  "Column_2kN0dGpKiI": {
+    "Id": "Column_2kN0dGpKiI",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "FechaEntrega"
+    ],
+    "Width": "100px",
+    "Column::Appearance": [
+      "Appearance_l9aUKSr0w8",
+      "Appearance_6PgYL543Gg",
+      "Appearance_rFYsOt_-GQ"
+    ]
+  },
+  "FechaEntrega": {
+    "Id": "FechaEntrega",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2025-03-18T20:56:18.838Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Column": "Column_2kN0dGpKiI",
+    "Field::Expression": [
+      "Expression_DmNCw8MlGH"
+    ],
+    "Name": "FechaVigencia"
+  },
+  "Expression_DmNCw8MlGH": {
+    "Id": "Expression_DmNCw8MlGH",
+    "Kind": "Expression",
+    "ExpressionStr": "Parent.Ubicacion.Fecha_de_Entrega + (Vigencia*30)",
+    "Field": "FechaEntrega",
+    "Expression::Node": [
+      "Node_vk1ZMuR6de"
+    ]
+  },
+  "Node_vk1ZMuR6de": {
+    "Id": "Node_vk1ZMuR6de",
+    "Kind": "Node",
+    "Value": "+",
+    "Syntax": "Infix",
+    "Expression": "Expression_DmNCw8MlGH",
+    "Node::Node": [
+      "Node_vFsMDUROaH",
+      "Node_GLmO8nEnGG"
+    ],
+    "DataType": "Date",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_vFsMDUROaH": {
+    "Id": "Node_vFsMDUROaH",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Node": "Node_vk1ZMuR6de",
+    "Node::Node": [
+      "Node_WLk1UTL2v9",
+      "Node_z2K8pjzqfV"
+    ],
+    "SourceFlowId": "DS_Documentos_Cliente",
+    "SourceFlowType": "Dataset",
+    "DataType": "Date",
+    "Category": "Reference"
+  },
+  "Node_WLk1UTL2v9": {
+    "Id": "Node_WLk1UTL2v9",
+    "Kind": "Node",
+    "Type": "ParentField",
+    "Field": "Ubicacion",
+    "DataType": "Reference",
+    "FlowId": "DS_Documentos_Cliente",
+    "FlowType": "Dataset",
+    "Node": "Node_vFsMDUROaH"
+  },
+  "Node_z2K8pjzqfV": {
+    "Id": "Node_z2K8pjzqfV",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Fecha_de_Entrega",
+    "RefModel": "DS_Documentos_Cliente",
+    "DataType": "Date",
+    "RefFlowType": "Dataset",
+    "Node": "Node_vFsMDUROaH"
+  },
+  "Node_GLmO8nEnGG": {
+    "Id": "Node_GLmO8nEnGG",
+    "Kind": "Node",
+    "Value": "*",
+    "Syntax": "Infix",
+    "IsParenthesised": true,
+    "Node": "Node_vk1ZMuR6de",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_uySFMTzIfU",
+      "Node_hiornpNVP-"
+    ],
+    "DataType": "Number",
+    "Category": "Number",
+    "Type": "Function"
+  },
+  "Node_uySFMTzIfU": {
+    "Id": "Node_uySFMTzIfU",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Vigencia",
+    "DataType": "Number",
+    "Node": "Node_GLmO8nEnGG"
+  },
+  "Node_hiornpNVP-": {
+    "Id": "Node_hiornpNVP-",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "30",
+    "DataType": "Number",
+    "Node": "Node_GLmO8nEnGG"
+  },
+  "Appearance_l9aUKSr0w8": {
+    "Id": "Appearance_l9aUKSr0w8",
+    "Kind": "Appearance",
+    "Column": "Column_2kN0dGpKiI",
+    "Appearance::Style": [
+      "Style_wf27G7N9hi"
+    ]
+  },
+  "Style_wf27G7N9hi": {
+    "Id": "Style_wf27G7N9hi",
+    "Kind": "Style",
+    "Appearance": "Appearance_l9aUKSr0w8",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Nine.500"
+      }
+    }
+  },
+  "Appearance_6PgYL543Gg": {
+    "Id": "Appearance_6PgYL543Gg",
+    "Kind": "Appearance",
+    "Type": "Conditional",
+    "Column": "Column_2kN0dGpKiI",
+    "Appearance::Condition": [
+      "Condition_4rtu1g1vWE"
+    ],
+    "Appearance::Style": [
+      "Style__LQZ-tBGSO"
+    ]
+  },
+  "Condition_4rtu1g1vWE": {
+    "Id": "Condition_4rtu1g1vWE",
+    "Kind": "Condition",
+    "Operator": "IN_THE_PAST",
+    "Appearance": "Appearance_6PgYL543Gg"
+  },
+  "Style__LQZ-tBGSO": {
+    "Id": "Style__LQZ-tBGSO",
+    "Kind": "Style",
+    "Appearance": "Appearance_6PgYL543Gg",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Four.500"
+      }
+    }
+  },
+  "Appearance_rFYsOt_-GQ": {
+    "Id": "Appearance_rFYsOt_-GQ",
+    "Kind": "Appearance",
+    "Type": "Conditional",
+    "Column": "Column_2kN0dGpKiI",
+    "Appearance::Condition": [
+      "Condition_I6EPIyxOV0"
+    ],
+    "Appearance::Style": [
+      "Style_Y9ig2BfpXC"
+    ]
+  },
+  "Condition_I6EPIyxOV0": {
+    "Id": "Condition_I6EPIyxOV0",
+    "Kind": "Condition",
+    "Operator": "IN_THE_FUTURE",
+    "Appearance": "Appearance_rFYsOt_-GQ"
+  },
+  "Style_Y9ig2BfpXC": {
+    "Id": "Style_Y9ig2BfpXC",
+    "Kind": "Style",
+    "Appearance": "Appearance_rFYsOt_-GQ",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.One.500"
+      }
+    }
+  },
+  "Activity_te7nnWPLOf": {
+    "Id": "Activity_te7nnWPLOf",
+    "Kind": "Activity",
+    "Name": "ParallelActivity5",
+    "NodeType": "Parallel",
+    "ProcessDef": "ProcessDef_s6-4RW3v-7",
+    "Activity::ProcessDef": [
+      "ProcessDef_7CSSVuWdqj",
+      "ProcessDef_AmlJVnGxu6"
+    ]
+  },
+  "ProcessDef_7CSSVuWdqj": {
+    "Id": "ProcessDef_7CSSVuWdqj",
+    "Kind": "ProcessDef",
+    "Name": "Presupuesto",
+    "Activity": "Activity_te7nnWPLOf",
+    "ProcessDef::Activity": [
+      "Activity_3MREIT6k1C"
+    ]
+  },
+  "ProcessDef_AmlJVnGxu6": {
+    "Id": "ProcessDef_AmlJVnGxu6",
+    "Kind": "ProcessDef",
+    "Name": "Obra",
+    "Activity": "Activity_te7nnWPLOf",
+    "ProcessDef::Activity": [
+      "Activity_rVAze4ZeEB"
+    ]
+  },
+  "Activity_3MREIT6k1C": {
+    "Id": "Activity_3MREIT6k1C",
+    "Kind": "Activity",
+    "Name": "Presupuestar contingencia",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_7CSSVuWdqj",
+    "Activity::Resource": [
+      "Resource_9ATRkfiYSl",
+      "Resource_vysvoLRkj1",
+      "Resource_ES7IrJ1749"
+    ],
+    "Activity::Permission": [
+      "Permission_RTNjzIO7yp"
+    ]
+  },
+  "Resource_9ATRkfiYSl": {
+    "Id": "Resource_9ATRkfiYSl",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_3MREIT6k1C"
+  },
+  "Resource_vysvoLRkj1": {
+    "Id": "Resource_vysvoLRkj1",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Maria Luisa Ortega",
+    "Value": "UskYjPYLmTUNj",
+    "Activity": "Activity_3MREIT6k1C"
+  },
+  "Resource_ES7IrJ1749": {
+    "Id": "Resource_ES7IrJ1749",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Carlos Pincay",
+    "Value": "UsraqgPMMwqYs",
+    "Activity": "Activity_3MREIT6k1C"
+  },
+  "Permission_RTNjzIO7yp": {
+    "Id": "Permission_RTNjzIO7yp",
+    "Kind": "Permission",
+    "Column": "Column_dGmPmP3BIv",
+    "Permission": "Editable",
+    "Activity": "Activity_3MREIT6k1C"
+  },
+  "Activity_rVAze4ZeEB": {
+    "Id": "Activity_rVAze4ZeEB",
+    "Kind": "Activity",
+    "Name": "Programación de Solución",
+    "NodeType": "UserTask",
+    "ProcessDef": "ProcessDef_AmlJVnGxu6",
+    "Activity::Resource": [
+      "Resource_bCUX_g6rO_",
+      "Resource_g1AVkFvg78"
+    ],
+    "Activity::Permission": [
+      "Permission_BsG-ol_in-",
+      "Permission_hZ9IdufQyx",
+      "Permission_Q1TCyxykdQ"
+    ]
+  },
+  "Resource_bCUX_g6rO_": {
+    "Id": "Resource_bCUX_g6rO_",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Sistemas",
+    "Value": "UsknBC_RrPXT",
+    "Activity": "Activity_rVAze4ZeEB"
+  },
+  "Row_kqzDIbMSA9": {
+    "Id": "Row_kqzDIbMSA9",
+    "Kind": "Row",
+    "Column": "Column_-d0mvfL2jq",
+    "Row::Column": [
+      "Column_qtwLHXBlU2"
+    ]
+  },
+  "Column_qtwLHXBlU2": {
+    "Id": "Column_qtwLHXBlU2",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_kqzDIbMSA9",
+    "Column::Field": [
+      "Firma_de_conformidad"
+    ]
+  },
+  "Firma_de_conformidad": {
+    "Id": "Firma_de_conformidad",
+    "Kind": "Field",
+    "Type": "Signature",
+    "CreatedAt": "2025-03-20T20:28:40.415Z",
+    "Model": "Warranty_Claim",
+    "Name": "Firma de conformidad",
+    "Column": "Column_qtwLHXBlU2"
+  },
+  "Column_WqopFK8tDQ": {
+    "Id": "Column_WqopFK8tDQ",
+    "Kind": "Column",
+    "Type": "Field",
+    "Row": "Row_8P2MIxDHVC",
+    "Start": 0,
+    "End": 0,
+    "Column::Field": [
+      "Recibido"
+    ]
+  },
+  "Recibido": {
+    "Id": "Recibido",
+    "Kind": "Field",
+    "Type": "Signature",
+    "CreatedAt": "2025-03-20T20:30:22.993Z",
+    "Model": "Detalle_de_Inspeccion",
+    "Name": "Recibido",
+    "Column": "Column_WqopFK8tDQ"
+  },
+  "Expression_fJEBqNt7G-": {
+    "Id": "Expression_fJEBqNt7G-",
+    "Kind": "Expression",
+    "ExpressionStr": "if((Fecha_de_Entrega + 365) - today() \u003E 0, \"Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda\", \"Su Periodo de Garantia ha finalizado. Le sugerimos que continue con los mantenimientos recomendados en el Manual de Uso y Conservación de vivienda\")",
+    "Field": "Dias_para_Garantia",
+    "Expression::Node": [
+      "Node_MOmIq0XxgF"
+    ]
+  },
+  "Node_MOmIq0XxgF": {
+    "Id": "Node_MOmIq0XxgF",
+    "Kind": "Node",
+    "Value": "if",
+    "Expression": "Expression_fJEBqNt7G-",
+    "Node::Node": [
+      "Node_XfaOY7cHkA",
+      "Node_01BnQPi5M9",
+      "Node_MtYHtiFPXg"
+    ],
+    "DataType": "String",
+    "Category": "IF",
+    "Type": "Function"
+  },
+  "Node_XfaOY7cHkA": {
+    "Id": "Node_XfaOY7cHkA",
+    "Kind": "Node",
+    "Value": "\u003E",
+    "Syntax": "Infix",
+    "Node": "Node_MOmIq0XxgF",
+    "Node::Node": [
+      "Node_FVtkY2KLx6",
+      "Node_5CbZOeVja3"
+    ],
+    "DataType": "Boolean",
+    "Category": "Number",
+    "Type": "Function"
+  },
+  "Node_FVtkY2KLx6": {
+    "Id": "Node_FVtkY2KLx6",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Node": "Node_XfaOY7cHkA",
+    "Node::Node": [
+      "Node_W5mKYnJri_",
+      "Node_NEKKMZX-3Y"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_W5mKYnJri_": {
+    "Id": "Node_W5mKYnJri_",
+    "Kind": "Node",
+    "Value": "+",
+    "Syntax": "Infix",
+    "IsParenthesised": true,
+    "Node": "Node_FVtkY2KLx6",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_utiJrN8_q1",
+      "Node_hNlRIqqUVz"
+    ],
+    "DataType": "Date",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_utiJrN8_q1": {
+    "Id": "Node_utiJrN8_q1",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_de_Entrega",
+    "DataType": "Date",
+    "Node": "Node_W5mKYnJri_"
+  },
+  "Node_hNlRIqqUVz": {
+    "Id": "Node_hNlRIqqUVz",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "365",
+    "DataType": "Number",
+    "Node": "Node_W5mKYnJri_"
+  },
+  "Node_NEKKMZX-3Y": {
+    "Id": "Node_NEKKMZX-3Y",
+    "Kind": "Node",
+    "Value": "today",
+    "Node": "Node_FVtkY2KLx6",
+    "DataType": "Date",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_5CbZOeVja3": {
+    "Id": "Node_5CbZOeVja3",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "0",
+    "DataType": "Number",
+    "Node": "Node_XfaOY7cHkA"
+  },
+  "Node_01BnQPi5M9": {
+    "Id": "Node_01BnQPi5M9",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda",
+    "DataType": "String",
+    "Node": "Node_MOmIq0XxgF"
+  },
+  "Node_MtYHtiFPXg": {
+    "Id": "Node_MtYHtiFPXg",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "Su Periodo de Garantia ha finalizado. Le sugerimos que continue con los mantenimientos recomendados en el Manual de Uso y Conservación de vivienda",
+    "DataType": "String",
+    "Node": "Node_MOmIq0XxgF"
+  },
+  "Permission_BsG-ol_in-": {
+    "Id": "Permission_BsG-ol_in-",
+    "Kind": "Permission",
+    "Column": "Column_u17hp5ZAs",
+    "Permission": "Editable",
+    "Activity": "Activity_rVAze4ZeEB"
+  },
+  "Permission_hZ9IdufQyx": {
+    "Id": "Permission_hZ9IdufQyx",
+    "Kind": "Permission",
+    "Column": "Column_aAYo2y3l1",
+    "Permission": "Editable",
+    "Activity": "Activity_rVAze4ZeEB"
+  },
+  "Permission_Q1TCyxykdQ": {
+    "Id": "Permission_Q1TCyxykdQ",
+    "Kind": "Permission",
+    "Column": "Column_QmYvNs9Jjz",
+    "Permission": "Editable",
+    "Activity": "Activity_rVAze4ZeEB"
+  },
+  "Expression_jUtVCJxcFz": {
+    "Id": "Expression_jUtVCJxcFz",
+    "Kind": "Expression",
+    "ExpressionStr": "Requiere_agendamiento_de_inspeccion=true()",
+    "Activity": "Activity_qNqRTWmEQ",
+    "Expression::Node": [
+      "Node_HsW2QbvOGg"
+    ]
+  },
+  "Node_HsW2QbvOGg": {
+    "Id": "Node_HsW2QbvOGg",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Expression": "Expression_jUtVCJxcFz",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_NkuCGC85xE",
+      "Node_xbjyHxw3d8"
+    ],
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Node_NkuCGC85xE": {
+    "Id": "Node_NkuCGC85xE",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Requiere_agendamiento_de_inspeccion",
+    "DataType": "Boolean",
+    "Node": "Node_HsW2QbvOGg"
+  },
+  "Node_xbjyHxw3d8": {
+    "Id": "Node_xbjyHxw3d8",
+    "Kind": "Node",
+    "Value": "true",
+    "Node": "Node_HsW2QbvOGg",
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Column_FuKHNQhrCI": {
+    "Id": "Column_FuKHNQhrCI",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_hObur7gMLI",
+    "Column::Field": [
+      "Atencion_autorizada_por_Gerencia"
+    ],
+    "ColumnVisibility::Criteria": [
+      "Criteria_S-uJAWRbYt"
+    ],
+    "IsHidden": true
+  },
+  "Atencion_autorizada_por_Gerencia": {
+    "Id": "Atencion_autorizada_por_Gerencia",
+    "Kind": "Field",
+    "Type": "Boolean",
+    "CreatedAt": "2025-06-10T14:54:33.554Z",
+    "Model": "Warranty_Claim",
+    "Column": "Column_FuKHNQhrCI",
+    "Name": "Atención autorizada por Gerencia?",
+    "Field::Node": [
+      "Node_q5Ce1MIqUi"
+    ]
+  },
+  "Row_hObur7gMLI": {
+    "Id": "Row_hObur7gMLI",
+    "Kind": "Row",
+    "Column": "Column__aM1yFdz4W",
+    "Row::Column": [
+      "Column_FuKHNQhrCI",
+      "Column_uE5MkPAOcU",
+      "Column_QNFVuveg7k"
+    ]
+  },
+  "Criteria_S-uJAWRbYt": {
+    "Id": "Criteria_S-uJAWRbYt",
+    "Kind": "Criteria",
+    "ColumnVisibility": "Column_FuKHNQhrCI",
+    "Criteria::Condition": [
+      "Condition_m6ORaZLqmM",
+      "Condition_ncaFJoV67z",
+      "Condition_3F6Ylcb0Ce"
+    ],
+    "IsOR": true
+  },
+  "Condition_m6ORaZLqmM": {
+    "Id": "Condition_m6ORaZLqmM",
+    "Kind": "Condition",
+    "Criteria": "Criteria_S-uJAWRbYt",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Value",
+    "HasArguments": true,
+    "LHSOwnField": "Solicitante",
+    "RHSValue": "servicioalcliente@thaliavictoria.com.ec"
+  },
+  "Column_uE5MkPAOcU": {
+    "Id": "Column_uE5MkPAOcU",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 4,
+    "Row": "Row_hObur7gMLI",
+    "Column::Field": [
+      "Solicitante"
+    ],
+    "IsHidden": true
+  },
+  "Solicitante": {
+    "Id": "Solicitante",
+    "Kind": "Field",
+    "Type": "Text",
+    "CreatedAt": "2025-06-10T20:05:00.451Z",
+    "Model": "Warranty_Claim",
+    "Name": "Solicitante",
+    "Column": "Column_uE5MkPAOcU",
+    "Field::Expression": [
+      "Expression_wushq33t4v"
+    ],
+    "LHSOwnField::Condition": [
+      "Condition_m6ORaZLqmM",
+      "Condition_ncaFJoV67z",
+      "Condition_3F6Ylcb0Ce"
+    ]
+  },
+  "Expression_wushq33t4v": {
+    "Id": "Expression_wushq33t4v",
+    "Kind": "Expression",
+    "ExpressionStr": "_created_by.Email",
+    "Field": "Solicitante",
+    "Expression::Node": [
+      "Node_N96J0befPC"
+    ]
+  },
+  "Node_N96J0befPC": {
+    "Id": "Node_N96J0befPC",
+    "Kind": "Node",
+    "Type": "Function",
+    "Value": "GetValue",
+    "Expression": "Expression_wushq33t4v",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_rtYa6hWfEp",
+      "Node_7QnK7caDOv"
+    ],
+    "SourceFlowId": "User",
+    "SourceFlowType": "User",
+    "DataType": "String",
+    "Category": "User"
+  },
+  "Node_rtYa6hWfEp": {
+    "Id": "Node_rtYa6hWfEp",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "_created_by",
+    "DataType": "User",
+    "FlowId": "User",
+    "FlowType": "User",
+    "IsSystemField": true,
+    "FieldModel": "Warranty_Claim",
+    "Node": "Node_N96J0befPC"
+  },
+  "Node_7QnK7caDOv": {
+    "Id": "Node_7QnK7caDOv",
+    "Kind": "Node",
+    "Type": "RefField",
+    "RefField": "Email",
+    "RefModel": "User",
+    "DataType": "String",
+    "RefFlowType": "User",
+    "Node": "Node_N96J0befPC"
+  },
+  "Condition_ncaFJoV67z": {
+    "Id": "Condition_ncaFJoV67z",
+    "Kind": "Condition",
+    "Operator": "EQUAL_TO",
+    "RHSValue": "sistemas@thaliavictoria.com.ec",
+    "RHSType": "Value",
+    "HasArguments": true,
+    "LHSOwnField": "Solicitante",
+    "Criteria": "Criteria_S-uJAWRbYt"
+  },
+  "Condition_3F6Ylcb0Ce": {
+    "Id": "Condition_3F6Ylcb0Ce",
+    "Kind": "Condition",
+    "Criteria": "Criteria_S-uJAWRbYt",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Value",
+    "RHSValue": "controller@thaliavictoria.com.ec",
+    "HasArguments": true,
+    "LHSOwnField": "Solicitante"
+  },
+  "Column_QNFVuveg7k": {
+    "Id": "Column_QNFVuveg7k",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 6,
+    "Row": "Row_hObur7gMLI",
+    "Column::Field": [
+      "Registrable"
+    ],
+    "IsHidden": true
+  },
+  "Registrable": {
+    "Id": "Registrable",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-06-10T20:30:59.895Z",
+    "Model": "Warranty_Claim",
+    "Name": "Registrable",
+    "Column": "Column_QNFVuveg7k",
+    "Field::Expression": [
+      "Expression_ZW6wMTeuN1"
+    ],
+    "LHSOwnField::Condition": [
+      "Condition_xgcJEGeHY6"
+    ]
+  },
+  "Expression_ZW6wMTeuN1": {
+    "Id": "Expression_ZW6wMTeuN1",
+    "Kind": "Expression",
+    "ExpressionStr": "if(Dias_para_Garantia=\"Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda\",1,\r\n  if(Atencion_autorizada_por_Gerencia=true(),1,0)\r\n)",
+    "Field": "Registrable",
+    "Expression::Node": [
+      "Node_9dD8fIcQMb"
+    ]
+  },
+  "Node_9dD8fIcQMb": {
+    "Id": "Node_9dD8fIcQMb",
+    "Kind": "Node",
+    "Value": "if",
+    "Expression": "Expression_ZW6wMTeuN1",
+    "Node::Node": [
+      "Node_tW79alrqaF",
+      "Node_RqE9FOyoYw",
+      "Node_hfhNqSwG7b"
+    ],
+    "DataType": "Number",
+    "Category": "IF",
+    "Type": "Function"
+  },
+  "Node_tW79alrqaF": {
+    "Id": "Node_tW79alrqaF",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Node": "Node_9dD8fIcQMb",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_zrIoJ1B-yU",
+      "Node_p-kRqUuZag"
+    ],
+    "DataType": "Boolean",
+    "Category": "String",
+    "Type": "Function"
+  },
+  "Node_zrIoJ1B-yU": {
+    "Id": "Node_zrIoJ1B-yU",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Dias_para_Garantia",
+    "DataType": "String",
+    "Node": "Node_tW79alrqaF"
+  },
+  "Node_p-kRqUuZag": {
+    "Id": "Node_p-kRqUuZag",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "Dentro del periodo vigente de garantía de acuerdo con el Manual de uso y conservación de la vivienda",
+    "DataType": "String",
+    "Node": "Node_tW79alrqaF"
+  },
+  "Node_RqE9FOyoYw": {
+    "Id": "Node_RqE9FOyoYw",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "1",
+    "DataType": "Number",
+    "Node": "Node_9dD8fIcQMb"
+  },
+  "Node_hfhNqSwG7b": {
+    "Id": "Node_hfhNqSwG7b",
+    "Kind": "Node",
+    "Value": "if",
+    "Node": "Node_9dD8fIcQMb",
+    "Node::Node": [
+      "Node_izXkpMUqrZ",
+      "Node_t1P5sbBmOf",
+      "Node_6UyT5p3a4C"
+    ],
+    "DataType": "Number",
+    "Category": "IF",
+    "Type": "Function"
+  },
+  "Node_izXkpMUqrZ": {
+    "Id": "Node_izXkpMUqrZ",
+    "Kind": "Node",
+    "Value": "=",
+    "Syntax": "Infix",
+    "Node": "Node_hfhNqSwG7b",
+    "FieldRefCount": 1,
+    "Node::Node": [
+      "Node_q5Ce1MIqUi",
+      "Node_j5I4iuH0AK"
+    ],
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Node_q5Ce1MIqUi": {
+    "Id": "Node_q5Ce1MIqUi",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Atencion_autorizada_por_Gerencia",
+    "DataType": "Boolean",
+    "Node": "Node_izXkpMUqrZ"
+  },
+  "Node_j5I4iuH0AK": {
+    "Id": "Node_j5I4iuH0AK",
+    "Kind": "Node",
+    "Value": "true",
+    "Node": "Node_izXkpMUqrZ",
+    "DataType": "Boolean",
+    "Category": "Boolean",
+    "Type": "Function"
+  },
+  "Node_t1P5sbBmOf": {
+    "Id": "Node_t1P5sbBmOf",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "1",
+    "DataType": "Number",
+    "Node": "Node_hfhNqSwG7b"
+  },
+  "Node_6UyT5p3a4C": {
+    "Id": "Node_6UyT5p3a4C",
+    "Kind": "Node",
+    "Type": "Static",
+    "Value": "0",
+    "DataType": "Number",
+    "Node": "Node_hfhNqSwG7b"
+  },
+  "Criteria_fEtg3FtwzR": {
+    "Id": "Criteria_fEtg3FtwzR",
+    "Kind": "Criteria",
+    "Permission": "Permission_OpmE_tvA8h",
+    "Criteria::Condition": [
+      "Condition_xgcJEGeHY6"
+    ]
+  },
+  "Condition_xgcJEGeHY6": {
+    "Id": "Condition_xgcJEGeHY6",
+    "Kind": "Condition",
+    "Criteria": "Criteria_fEtg3FtwzR",
+    "LHSOwnField": "Registrable",
+    "Operator": "EQUAL_TO",
+    "RHSType": "Value",
+    "RHSValue": "1"
+  },
+  "Resource_g1AVkFvg78": {
+    "Id": "Resource_g1AVkFvg78",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Fernando Amaya",
+    "Value": "UsYgfhq37KOYi",
+    "Activity": "Activity_rVAze4ZeEB"
+  },
+  "Resource_9jBHdDlF4e": {
+    "Id": "Resource_9jBHdDlF4e",
+    "Kind": "Resource",
+    "ValueType": "User",
+    "DisplayValue": "Fernando Amaya",
+    "Value": "UsYgfhq37KOYi",
+    "Activity": "Activity_qrPwqIXNt"
+  },
+  "Row_cbv6tZ8BXw": {
+    "Id": "Row_cbv6tZ8BXw",
+    "Kind": "Row",
+    "Column": "Column_LIUHEPKA0H",
+    "Row::Column": [
+      "Column_YMAGTMIp4",
+      "Column_lWzs6mqxO"
+    ]
+  },
+  "Appearance_Chi5XQqetp": {
+    "Id": "Appearance_Chi5XQqetp",
+    "Kind": "Appearance",
+    "Column": "Column_bjjAEe-uT",
+    "Appearance::Style": [
+      "Style_vYjwFzedmK"
+    ]
+  },
+  "Style_vYjwFzedmK": {
+    "Id": "Style_vYjwFzedmK",
+    "Kind": "Style",
+    "Appearance": "Appearance_Chi5XQqetp",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Six.500"
+      }
+    }
+  },
+  "Column_6N9H6at7H9": {
+    "Id": "Column_6N9H6at7H9",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_WdSZSy_LT",
+    "Column::Field": [
+      "Fecha_envio_agendamiento"
+    ],
+    "Column::Appearance": [
+      "Appearance_E3bPQ1PxFh"
+    ]
+  },
+  "Fecha_envio_agendamiento": {
+    "Id": "Fecha_envio_agendamiento",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2025-07-30T19:47:44.049Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha envio agendamiento",
+    "Column": "Column_6N9H6at7H9",
+    "Field::Node": [
+      "Node_J5BXGe9fWp",
+      "Node_T1DSvCHBLy"
+    ]
+  },
+  "Column_v2g8qSfQ5Z": {
+    "Id": "Column_v2g8qSfQ5Z",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_dDTtudqXWJ",
+    "Column::Field": [
+      "Fecha_Presupuesto"
+    ]
+  },
+  "Fecha_Presupuesto": {
+    "Id": "Fecha_Presupuesto",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2025-07-30T19:49:32.819Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha Presupuesto",
+    "Column": "Column_v2g8qSfQ5Z",
+    "Field::Node": [
+      "Node_J2gG6oTyl5"
+    ]
+  },
+  "Column_Tza_qCL0XB": {
+    "Id": "Column_Tza_qCL0XB",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_eEaxu0SQZZ",
+    "Column::Field": [
+      "Fecha_recepcion"
+    ]
+  },
+  "Fecha_recepcion": {
+    "Id": "Fecha_recepcion",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2025-07-30T19:50:15.508Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha recepcion",
+    "Column": "Column_Tza_qCL0XB",
+    "Field::Node": [
+      "Node_72jADNqmRs"
+    ]
+  },
+  "Expression_2k8LbfAWOV": {
+    "Id": "Expression_2k8LbfAWOV",
+    "Kind": "Expression",
+    "ExpressionStr": "today()",
+    "Field": "Request_Date",
+    "Expression::Node": [
+      "Node_dWfcQ1KKqw"
+    ]
+  },
+  "Node_dWfcQ1KKqw": {
+    "Id": "Node_dWfcQ1KKqw",
+    "Kind": "Node",
+    "Value": "today",
+    "Expression": "Expression_2k8LbfAWOV",
+    "DataType": "Date",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Row_q6eLzVcECW": {
+    "Id": "Row_q6eLzVcECW",
+    "Kind": "Row",
+    "Model": "Warranty_Claim",
+    "Row::Column": [
+      "Column_TEP5Qwt1Va"
+    ]
+  },
+  "Column_TEP5Qwt1Va": {
+    "Id": "Column_TEP5Qwt1Va",
+    "Kind": "Column",
+    "Type": "Section",
+    "Start": 0,
+    "End": 6,
+    "Name": "ToTs Contingencia",
+    "Row": "Row_q6eLzVcECW",
+    "Column::Row": [
+      "Row_29Ru7TQXSp",
+      "Row_7nRmvbrPtl"
+    ]
+  },
+  "Row_29Ru7TQXSp": {
+    "Id": "Row_29Ru7TQXSp",
+    "Kind": "Row",
+    "Column": "Column_TEP5Qwt1Va",
+    "Row::Column": [
+      "Column_Bh-HJftw8u",
+      "Column_69yEYFZpkV",
+      "Column_nctEYoVtv6"
+    ]
+  },
+  "Column_Bh-HJftw8u": {
+    "Id": "Column_Bh-HJftw8u",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_29Ru7TQXSp",
+    "Column::Field": [
+      "ToT_envio_de_agendamiento"
+    ]
+  },
+  "ToT_envio_de_agendamiento": {
+    "Id": "ToT_envio_de_agendamiento",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-07-30T20:04:45.730Z",
+    "Model": "Warranty_Claim",
+    "Name": "ToT envio de agendamiento",
+    "Column": "Column_Bh-HJftw8u",
+    "Field::Expression": [
+      "Expression_d-uuO4C4x9"
+    ]
+  },
+  "Column_69yEYFZpkV": {
+    "Id": "Column_69yEYFZpkV",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 4,
+    "Row": "Row_29Ru7TQXSp",
+    "Column::Field": [
+      "ToT_Visita_de_inspeccion"
+    ]
+  },
+  "ToT_Visita_de_inspeccion": {
+    "Id": "ToT_Visita_de_inspeccion",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-07-30T20:09:24.866Z",
+    "Model": "Warranty_Claim",
+    "Name": "ToT Visita de inspeccion",
+    "Column": "Column_69yEYFZpkV",
+    "Field::Expression": [
+      "Expression_DnFRxOHSaT"
+    ]
+  },
+  "Column_nctEYoVtv6": {
+    "Id": "Column_nctEYoVtv6",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 6,
+    "Row": "Row_29Ru7TQXSp",
+    "Column::Field": [
+      "ToT_Ejecucion"
+    ]
+  },
+  "ToT_Ejecucion": {
+    "Id": "ToT_Ejecucion",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-07-30T20:09:41.001Z",
+    "Model": "Warranty_Claim",
+    "Column": "Column_nctEYoVtv6",
+    "Name": "ToT Ejecucion",
+    "Field::Expression": [
+      "Expression_i3m8t5v_U6"
+    ]
+  },
+  "Row_7nRmvbrPtl": {
+    "Id": "Row_7nRmvbrPtl",
+    "Kind": "Row",
+    "Column": "Column_TEP5Qwt1Va",
+    "Row::Column": [
+      "Column_71TOSVrmvy",
+      "Column_ZH78lvAKHw",
+      "Column_1uARsnbcv8"
+    ]
+  },
+  "Column_71TOSVrmvy": {
+    "Id": "Column_71TOSVrmvy",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 0,
+    "End": 2,
+    "Row": "Row_7nRmvbrPtl",
+    "Column::Field": [
+      "ToT_Presupuesto"
+    ]
+  },
+  "ToT_Presupuesto": {
+    "Id": "ToT_Presupuesto",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-07-30T20:10:42.467Z",
+    "Model": "Warranty_Claim",
+    "Name": "ToT Presupuesto",
+    "Column": "Column_71TOSVrmvy",
+    "Field::Expression": [
+      "Expression_wdqQBDsHx7"
+    ]
+  },
+  "Column_1uARsnbcv8": {
+    "Id": "Column_1uARsnbcv8",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 4,
+    "End": 6,
+    "Row": "Row_7nRmvbrPtl",
+    "Column::Field": [
+      "ToT_Recepcion"
+    ]
+  },
+  "ToT_Recepcion": {
+    "Id": "ToT_Recepcion",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-07-30T20:11:13.956Z",
+    "Model": "Warranty_Claim",
+    "Name": "ToT Recepcion",
+    "Column": "Column_1uARsnbcv8",
+    "Field::Expression": [
+      "Expression_3H4SxYdKBf"
+    ]
+  },
+  "Expression_d-uuO4C4x9": {
+    "Id": "Expression_d-uuO4C4x9",
+    "Kind": "Expression",
+    "ExpressionStr": "Fecha_envio_agendamiento-Request_Date",
+    "Field": "ToT_envio_de_agendamiento",
+    "Expression::Node": [
+      "Node_iACKC8s9Ly"
+    ]
+  },
+  "Node_iACKC8s9Ly": {
+    "Id": "Node_iACKC8s9Ly",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Expression": "Expression_d-uuO4C4x9",
+    "FieldRefCount": 2,
+    "Node::Node": [
+      "Node_J5BXGe9fWp",
+      "Node_EALAJbHAFB"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_J5BXGe9fWp": {
+    "Id": "Node_J5BXGe9fWp",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_envio_agendamiento",
+    "DataType": "Date",
+    "Node": "Node_iACKC8s9Ly"
+  },
+  "Node_EALAJbHAFB": {
+    "Id": "Node_EALAJbHAFB",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Request_Date",
+    "DataType": "Date",
+    "Node": "Node_iACKC8s9Ly"
+  },
+  "Expression_DnFRxOHSaT": {
+    "Id": "Expression_DnFRxOHSaT",
+    "Kind": "Expression",
+    "ExpressionStr": "Fecha_de_Inspeccion-Fecha_envio_agendamiento",
+    "Field": "ToT_Visita_de_inspeccion",
+    "Expression::Node": [
+      "Node_uBBjeEdrDV"
+    ]
+  },
+  "Node_uBBjeEdrDV": {
+    "Id": "Node_uBBjeEdrDV",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Expression": "Expression_DnFRxOHSaT",
+    "FieldRefCount": 2,
+    "Node::Node": [
+      "Node_ORLcxOuGmt",
+      "Node_T1DSvCHBLy"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_ORLcxOuGmt": {
+    "Id": "Node_ORLcxOuGmt",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_de_Inspeccion",
+    "DataType": "Date",
+    "Node": "Node_uBBjeEdrDV"
+  },
+  "Node_T1DSvCHBLy": {
+    "Id": "Node_T1DSvCHBLy",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_envio_agendamiento",
+    "DataType": "Date",
+    "Node": "Node_uBBjeEdrDV"
+  },
+  "Appearance_032mKQI5E3": {
+    "Id": "Appearance_032mKQI5E3",
+    "Kind": "Appearance",
+    "Column": "Column_fivEE3bCx",
+    "Appearance::Style": [
+      "Style__UPwJgEEks"
+    ]
+  },
+  "Style__UPwJgEEks": {
+    "Id": "Style__UPwJgEEks",
+    "Kind": "Style",
+    "Appearance": "Appearance_032mKQI5E3",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Six.500"
+      }
+    }
+  },
+  "Appearance_E3bPQ1PxFh": {
+    "Id": "Appearance_E3bPQ1PxFh",
+    "Kind": "Appearance",
+    "Column": "Column_6N9H6at7H9",
+    "Appearance::Style": [
+      "Style_SeN5fAsV58"
+    ]
+  },
+  "Style_SeN5fAsV58": {
+    "Id": "Style_SeN5fAsV58",
+    "Kind": "Style",
+    "Appearance": "Appearance_E3bPQ1PxFh",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Six.500"
+      }
+    }
+  },
+  "Appearance_kRPgZxb9oN": {
+    "Id": "Appearance_kRPgZxb9oN",
+    "Kind": "Appearance",
+    "Column": "Column_4ukBfZQBS",
+    "Appearance::Style": [
+      "Style_FAU9hRLCQj"
+    ]
+  },
+  "Style_FAU9hRLCQj": {
+    "Id": "Style_FAU9hRLCQj",
+    "Kind": "Style",
+    "Appearance": "Appearance_kRPgZxb9oN",
+    "Value": {
+
+    }
+  },
+  "Appearance__R6pEK1OIB": {
+    "Id": "Appearance__R6pEK1OIB",
+    "Kind": "Appearance",
+    "Column": "Column_yYE1TBbCK",
+    "Appearance::Style": [
+      "Style_ULPH-dq1xo"
+    ]
+  },
+  "Style_ULPH-dq1xo": {
+    "Id": "Style_ULPH-dq1xo",
+    "Kind": "Style",
+    "Appearance": "Appearance__R6pEK1OIB",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Six.500"
+      }
+    }
+  },
+  "Column_XOf7173r8r": {
+    "Id": "Column_XOf7173r8r",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 5,
+    "End": 6,
+    "Row": "Row_MxYETyTwU5",
+    "Column::Field": [
+      "Fecha_Ejecucion"
+    ],
+    "Column::Appearance": [
+      "Appearance_Sig5Ud7RkY"
+    ]
+  },
+  "Appearance_Sig5Ud7RkY": {
+    "Id": "Appearance_Sig5Ud7RkY",
+    "Kind": "Appearance",
+    "Column": "Column_XOf7173r8r",
+    "Appearance::Style": [
+      "Style_rZdkrUjviK"
+    ]
+  },
+  "Style_rZdkrUjviK": {
+    "Id": "Style_rZdkrUjviK",
+    "Kind": "Style",
+    "Appearance": "Appearance_Sig5Ud7RkY",
+    "Value": {
+      "Field.Color": {
+        "ref": "Color.Secondary.Six.500"
+      }
+    }
+  },
+  "Fecha_Ejecucion": {
+    "Id": "Fecha_Ejecucion",
+    "Kind": "Field",
+    "Type": "Date",
+    "CreatedAt": "2025-07-30T20:16:40.908Z",
+    "Model": "Warranty_Claim",
+    "Name": "Fecha Ejecucion",
+    "Column": "Column_XOf7173r8r",
+    "Field::Node": [
+      "Node_aJTf1g798Q",
+      "Node_pi-PXXSIZ1"
+    ]
+  },
+  "Expression_i3m8t5v_U6": {
+    "Id": "Expression_i3m8t5v_U6",
+    "Kind": "Expression",
+    "ExpressionStr": "Fecha_Ejecucion-Fecha_de_Inspeccion",
+    "Field": "ToT_Ejecucion",
+    "Expression::Node": [
+      "Node_OBhp6JzDZ0"
+    ]
+  },
+  "Node_OBhp6JzDZ0": {
+    "Id": "Node_OBhp6JzDZ0",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Expression": "Expression_i3m8t5v_U6",
+    "FieldRefCount": 2,
+    "Node::Node": [
+      "Node_aJTf1g798Q",
+      "Node_PJFwIsHsgC"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_aJTf1g798Q": {
+    "Id": "Node_aJTf1g798Q",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_Ejecucion",
+    "DataType": "Date",
+    "Node": "Node_OBhp6JzDZ0"
+  },
+  "Node_PJFwIsHsgC": {
+    "Id": "Node_PJFwIsHsgC",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_de_Inspeccion",
+    "DataType": "Date",
+    "Node": "Node_OBhp6JzDZ0"
+  },
+  "Column_ZH78lvAKHw": {
+    "Id": "Column_ZH78lvAKHw",
+    "Kind": "Column",
+    "Type": "Field",
+    "Start": 2,
+    "End": 4,
+    "Row": "Row_7nRmvbrPtl",
+    "Column::Field": [
+      "ToT_Verificacion"
+    ]
+  },
+  "ToT_Verificacion": {
+    "Id": "ToT_Verificacion",
+    "Kind": "Field",
+    "Type": "Number",
+    "CreatedAt": "2025-07-30T20:19:54.265Z",
+    "Model": "Warranty_Claim",
+    "Name": "ToT Verificacion",
+    "Column": "Column_ZH78lvAKHw",
+    "Field::Expression": [
+      "Expression_vnBt0WWGLv"
+    ]
+  },
+  "Expression_wdqQBDsHx7": {
+    "Id": "Expression_wdqQBDsHx7",
+    "Kind": "Expression",
+    "ExpressionStr": "Fecha_Presupuesto-Fecha_de_Inspeccion",
+    "Field": "ToT_Presupuesto",
+    "Expression::Node": [
+      "Node_iILlGpdm2a"
+    ]
+  },
+  "Node_iILlGpdm2a": {
+    "Id": "Node_iILlGpdm2a",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Expression": "Expression_wdqQBDsHx7",
+    "FieldRefCount": 2,
+    "Node::Node": [
+      "Node_J2gG6oTyl5",
+      "Node_ufSxrbaULN"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_J2gG6oTyl5": {
+    "Id": "Node_J2gG6oTyl5",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_Presupuesto",
+    "DataType": "Date",
+    "Node": "Node_iILlGpdm2a"
+  },
+  "Node_ufSxrbaULN": {
+    "Id": "Node_ufSxrbaULN",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_de_Inspeccion",
+    "DataType": "Date",
+    "Node": "Node_iILlGpdm2a"
+  },
+  "Expression_vnBt0WWGLv": {
+    "Id": "Expression_vnBt0WWGLv",
+    "Kind": "Expression",
+    "ExpressionStr": "Fecha_de_Culminacion_de_trabajos-Fecha_Ejecucion",
+    "Field": "ToT_Verificacion",
+    "Expression::Node": [
+      "Node_yc09b5uYMz"
+    ]
+  },
+  "Node_yc09b5uYMz": {
+    "Id": "Node_yc09b5uYMz",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Expression": "Expression_vnBt0WWGLv",
+    "FieldRefCount": 2,
+    "Node::Node": [
+      "Node_U48u9l2pKR",
+      "Node_pi-PXXSIZ1"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_U48u9l2pKR": {
+    "Id": "Node_U48u9l2pKR",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_de_Culminacion_de_trabajos",
+    "DataType": "Date",
+    "Node": "Node_yc09b5uYMz"
+  },
+  "Node_pi-PXXSIZ1": {
+    "Id": "Node_pi-PXXSIZ1",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_Ejecucion",
+    "DataType": "Date",
+    "Node": "Node_yc09b5uYMz"
+  },
+  "Expression_3H4SxYdKBf": {
+    "Id": "Expression_3H4SxYdKBf",
+    "Kind": "Expression",
+    "ExpressionStr": "Fecha_recepcion-Fecha_de_Culminacion_de_trabajos",
+    "Field": "ToT_Recepcion",
+    "Expression::Node": [
+      "Node_ZN-kOENx25"
+    ]
+  },
+  "Node_ZN-kOENx25": {
+    "Id": "Node_ZN-kOENx25",
+    "Kind": "Node",
+    "Value": "-",
+    "Syntax": "Infix",
+    "Expression": "Expression_3H4SxYdKBf",
+    "FieldRefCount": 2,
+    "Node::Node": [
+      "Node_72jADNqmRs",
+      "Node_RF9jb_cjpc"
+    ],
+    "DataType": "Number",
+    "Category": "Date",
+    "Type": "Function"
+  },
+  "Node_72jADNqmRs": {
+    "Id": "Node_72jADNqmRs",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_recepcion",
+    "DataType": "Date",
+    "Node": "Node_ZN-kOENx25"
+  },
+  "Node_RF9jb_cjpc": {
+    "Id": "Node_RF9jb_cjpc",
+    "Kind": "Node",
+    "Type": "Field",
+    "Field": "Fecha_de_Culminacion_de_trabajos",
+    "DataType": "Date",
+    "Node": "Node_ZN-kOENx25"
+  }
+}
+
+
+
+
+https://thaliavictoria.kissflow.com/flow/2/AcNcc9rydX9F/process/Warranty_Claim
+
+{
+  "_id": "Warranty_Claim",
+  "Type": "Process",
+  "Status": "Live",
+  "Name": "Tickets De Atención de Contingencia",
+  "Description": "Manage and track the customers’ warranty claim requests when they face product malfunction, ensure faster approval flow to handle shipping and deadlines hassle-free.",
+  "_created_at": "2023-06-02T15:20:40Z",
+  "_created_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "Icon": null,
+  "SubmissionLocked": false,
+  "_has_sequence_field": null,
+  "_is_translation_enabled": null,
+  "Languages": null,
+  "SysConfig": null,
+  "FavoritedAt": "2023-11-09T13:18:33Z",
+  "Permissions": [
+    "ViewChild",
+    "Participated",
+    "Admin"
+  ],
+  "Report": [
+    {
+      "_id": "Contingencias_Detalladas",
+      "_created_at": "2023-11-07T20:06:34Z",
+      "_created_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "_modified_at": "2023-11-09T21:09:39Z",
+      "_modified_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "Name": "Contingencias Detalladas",
+      "Description": "",
+      "Type": "Report",
+      "Icon": null,
+      "Status": "Live",
+      "Parent": {
+        "_id": "Warranty_Claim",
+        "Type": "Process",
+        "Name": "Tickets De Atención de Contingencia"
+      },
+      "ViewType": "Tabular",
+      "ReportType": "TabularReport",
+      "ChildTables": [
+        {
+          "_id": "Contingencias_Detalladas",
+          "Name": "Contingencias Detalladas"
+        }
+      ],
+      "SharedWith": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "Role": "Admin",
+          "Permission": [],
+          "InheritedRole": null,
+          "_created_at": "2023-11-07T20:06:34Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:06:34Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Karen Chiluiza",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "Share",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2023-11-07T20:06:34Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:06:34Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        }
+      ],
+      "PageAccess": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-11-07T20:06:34Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:06:34Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "Admin"
+          ]
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Karen Chiluiza",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-11-07T20:06:34Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:06:34Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "View",
+            "ViewForm",
+            "Share"
+          ]
+        }
+      ],
+      "SourceFlow": "Todas_las_Contingencias",
+      "_doc_version": "127640408528480576",
+      "ChildTableCount": 1,
+      "StepCount": 0
+    },
+    {
+      "_id": "ToT_Contingencia",
+      "_created_at": "2025-07-30T20:22:37Z",
+      "_created_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "_modified_at": "2025-07-30T21:59:04Z",
+      "_modified_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "Name": "ToT Contingencia",
+      "Description": "",
+      "Type": "Report",
+      "Icon": null,
+      "Status": "Live",
+      "Parent": {
+        "_id": "Warranty_Claim",
+        "Type": "Process",
+        "Name": "Tickets De Atención de Contingencia"
+      },
+      "ViewType": "Tabular",
+      "ReportType": "TabularReport",
+      "ChildTables": [
+        {
+          "_id": "ToT_Contingencia",
+          "Name": "ToT Contingencia"
+        }
+      ],
+      "SharedWith": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "Role": "Admin",
+          "Permission": [],
+          "InheritedRole": null,
+          "_created_at": "2025-07-30T20:22:37Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T20:22:37Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Servicios al Cliente",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2025-07-30T20:27:30Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T20:28:38Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "Uss2egq0edEP",
+          "Name": "Andrea Calle",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2025-07-30T20:28:44Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T20:28:48Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "UsnGWk11v1T1B",
+          "Name": "Ivan Toledo",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2025-07-30T21:58:59Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T21:59:04Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        }
+      ],
+      "PageAccess": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2025-07-30T20:22:37Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T20:22:37Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "Admin"
+          ]
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Servicios al Cliente",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2025-07-30T20:27:30Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T20:28:38Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "ViewForm",
+            "View"
+          ]
+        },
+        {
+          "_id": "Uss2egq0edEP",
+          "Name": "Andrea Calle",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2025-07-30T20:28:44Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T20:28:48Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "ViewForm",
+            "View"
+          ]
+        },
+        {
+          "_id": "UsnGWk11v1T1B",
+          "Name": "Ivan Toledo",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2025-07-30T21:58:59Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-30T21:59:04Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "ViewForm",
+            "View"
+          ]
+        }
+      ],
+      "_doc_version": "184629009280921920",
+      "_etag": "ae283481b4ef87f5aaf392792b216e50e4a041396d02269583bdb18a6b6895d0",
+      "ChildTableCount": 0,
+      "StepCount": 0
+    },
+    {
+      "_id": "Todas_las_Contingencias",
+      "_created_at": "2023-11-07T20:02:54Z",
+      "_created_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "_modified_at": "2025-07-11T15:14:41Z",
+      "_modified_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "Name": "Todas las Contingencias",
+      "Description": "",
+      "Type": "Report",
+      "Icon": null,
+      "Status": "Live",
+      "Parent": {
+        "_id": "Warranty_Claim",
+        "Type": "Process",
+        "Name": "Tickets De Atención de Contingencia"
+      },
+      "ViewType": "Tabular",
+      "ReportType": "TabularReport",
+      "ChildTables": [
+        {
+          "_id": "Todas_las_Contingencias",
+          "Name": "Todas las Contingencias"
+        }
+      ],
+      "SharedWith": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "Role": "Admin",
+          "Permission": [],
+          "InheritedRole": null,
+          "_created_at": "2023-11-07T20:02:54Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:02:54Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Karen Chiluiza",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "Share",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2023-11-07T20:05:56Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:06:03Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "Uss2egq0edEP",
+          "Name": "Andrea Calle",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2025-07-11T15:14:36Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-11T15:14:41Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        }
+      ],
+      "PageAccess": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-11-07T20:02:54Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:02:54Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "Admin"
+          ]
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Karen Chiluiza",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-11-07T20:05:56Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-11-07T20:06:03Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "Share",
+            "View",
+            "ViewForm"
+          ]
+        },
+        {
+          "_id": "Uss2egq0edEP",
+          "Name": "Andrea Calle",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2025-07-11T15:14:36Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2025-07-11T15:14:41Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "View",
+            "ViewForm"
+          ]
+        }
+      ],
+      "_doc_version": "182882225318830400",
+      "ChildTableCount": 1,
+      "StepCount": 0,
+      "_etag": "83c38cbf21a4a08adec2660904d8aa869a55dada2fbcc18a5ce9532b7db1f19b"
+    },
+    {
+      "_id": "Warranty_Claim_All_Items",
+      "_created_at": "2023-06-02T15:20:40Z",
+      "_created_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "_modified_at": "2023-10-25T18:55:31Z",
+      "_modified_by": {
+        "_id": "UsknBC_RrPXT",
+        "Name": "Sistemas",
+        "Kind": "User"
+      },
+      "Name": "Warranty Claim All Items",
+      "Description": "",
+      "Type": "Report",
+      "Icon": null,
+      "Status": "Live",
+      "Parent": {
+        "_id": "Warranty_Claim",
+        "Type": "Process",
+        "Name": "Tickets De Atención de Contingencia"
+      },
+      "ViewType": "Tabular",
+      "ReportType": "TabularReport",
+      "ChildTables": [
+        {
+          "_id": "Warranty_Claim_All_Items",
+          "Name": "Warranty Claim All Items"
+        }
+      ],
+      "_is_system": true,
+      "SharedWith": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "Role": "Admin",
+          "Permission": [],
+          "InheritedRole": null,
+          "_created_at": "2023-06-02T15:20:40Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-06-02T15:20:40Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "UsWrQWw4CiyHR",
+          "Name": "Irma Perez",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2023-10-12T17:01:36Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-10-12T17:07:10Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Karen Chiluiza",
+          "Kind": "User",
+          "Role": "Member",
+          "Permission": [
+            "View",
+            "ViewForm"
+          ],
+          "InheritedRole": null,
+          "_created_at": "2023-10-12T17:01:36Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-10-12T17:07:14Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          }
+        }
+      ],
+      "PageAccess": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-06-02T15:20:40Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-06-02T15:20:40Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "Admin"
+          ]
+        },
+        {
+          "_id": "UsWrQWw4CiyHR",
+          "Name": "Irma Perez",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-10-12T17:01:36Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-10-12T17:07:10Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "ViewForm",
+            "View"
+          ]
+        },
+        {
+          "_id": "Us3AMVPNi4MYb",
+          "Name": "Karen Chiluiza",
+          "Kind": "User",
+          "PageScore": 0,
+          "_created_at": "2023-10-12T17:01:36Z",
+          "_created_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "_modified_at": "2023-10-12T17:07:14Z",
+          "_modified_by": {
+            "_id": "UsknBC_RrPXT",
+            "Name": "Sistemas",
+            "Kind": "User"
+          },
+          "Permission": [
+            "ViewForm",
+            "View"
+          ]
+        }
+      ],
+      "_doc_version": "126273015383772480",
+      "ChildTableCount": 1,
+      "StepCount": 0
+    }
+  ],
+  "AllowPrint": "",
+  "AllowDownload": ""
+}

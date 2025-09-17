@@ -78,7 +78,7 @@ try{
                    WHERE r.ctg_id = p.id )        AS n_respuestas
         FROM    ctg p
         JOIN    tipo_ctg     tp ON tp.id = p.tipo_id
-        JOIN    subtipo_ctg  sp ON sp.id = p.subtipo_id
+        LEFT JOIN    subtipo_ctg  sp ON sp.id = p.subtipo_id
         JOIN    estado_ctg   ep ON ep.id = p.estado_id
         LEFT JOIN propiedad    pr ON pr.id = p.id_propiedad
         JOIN    urgencia_ctg up ON up.id = p.urgencia_id'; // <-- JOIN a la tabla de urgencia
