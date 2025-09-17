@@ -85,45 +85,34 @@ try {
     $kissflow_cliente_id = $cliente_data[0]['_id'];
 
     // -------------------------------------------------------------------
-    // PASO 2: INICIAR PROCESO Y CREAR BORRADOR (DRAFT)
+    // PASO 2: INICIAR PROCESO Y CREAR BORRADOR CON DATOS
     // -------------------------------------------------------------------
-    // Ahora enviamos el ID del cliente en la petición inicial para que Kiss Flow lo asocie.
-    $init_payload = [
-        'Cliente' => ['_id' => $kissflow_cliente_id]
-    ];
-    $init_url = KISSFLOW_API_HOST . '/process/2/AcNcc9rydX9F/Warranty_Claim';
-    $init_response = call_kissflow_api($init_url, 'POST', $init_payload);
-
-    if (empty($init_response) || !isset($init_response['_id']) || !isset($init_response['_activity_instance_id'])) {
-        throw new Exception('No se pudo iniciar el proceso en Kiss Flow o la respuesta no contiene los IDs necesarios.');
-    }
-    $item_id = $init_response['_id'];
-    $activity_id = $init_response['_activity_instance_id'];
-
-    // -------------------------------------------------------------------
-    // PASO 3: GUARDAR DATOS EN EL BORRADOR
-    // -------------------------------------------------------------------
-    // Quitamos los campos que la API no nos permite actualizar (Cliente, Requestor_Name, Request_Date)
-    $update_payload = [
-        '_id' => $item_id, // <-- Incluir el ID del item en el payload es crucial
+    // Unimos el ID del cliente con el resto de los datos del formulario en un solo payload inicial.
+    $initial_payload = [
+        'Cliente' => ['_id' => $kissflow_cliente_id],
+        'Ubicacion' => ['_id' => $kissflow_cliente_id],
         'Email_1' => $input_data['email'] ?? 'N/A',
         'Phone' => $input_data['telefono'] ?? 'N/A',
         'Descripcion_del_Dano' => $input_data['descripcion_dano'] ?? 'Sin descripción.',
         'Contingencia' => $input_data['contingencia_nombre'] ?? 'OTROS',
-        'Ubicacion' => ['_id' => $kissflow_cliente_id] // Mantenemos Ubicacion por si acaso no está protegido
+        'Requiere_agendamiento_de_inspeccion' => true // <-- Condición para pausar el proceso
     ];
 
-    $update_url = KISSFLOW_API_HOST . "/process/2/AcNcc9rydX9F/Warranty_Claim/{$item_id}/{$activity_id}";
-    $update_response = call_kissflow_api($update_url, 'POST', $update_payload);
+    $init_url = KISSFLOW_API_HOST . '/process/2/AcNcc9rydX9F/Warranty_Claim';
+    $init_response = call_kissflow_api($init_url, 'POST', $initial_payload);
 
-    if ($update_response === null) { // call_kissflow_api devuelve null en error
-        throw new Exception('Falló el guardado de datos en el borrador de Kiss Flow.');
+    if (empty($init_response) || !isset($init_response['_id']) || !isset($init_response['_activity_instance_id'])) {
+        throw new Exception('No se pudo iniciar el proceso en Kiss Flow con los datos iniciales. Verifique los logs de la API.');
     }
+    $item_id = $init_response['_id'];
+    $activity_id = $init_response['_activity_instance_id'];
+
+    // -- PASO INTERMEDIO DE ACTUALIZACIÓN ELIMINADO --
 
     // -------------------------------------------------------------------
-    // PASO 4: ENVIAR EL BORRADOR (SUBMIT)
+    // PASO 3: ENVIAR EL BORRADOR (SUBMIT)
     // -------------------------------------------------------------------
-    $submit_url = $update_url . '/submit'; // La URL de submit es la de update + /submit
+    $submit_url = KISSFLOW_API_HOST . "/process/2/AcNcc9rydX9F/Warranty_Claim/{$item_id}/{$activity_id}/submit";
     $submit_response = call_kissflow_api($submit_url, 'POST', []); // Payload vacío
 
     if ($submit_response === null) {
