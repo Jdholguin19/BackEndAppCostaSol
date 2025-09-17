@@ -68,7 +68,7 @@ gantt.config.layout = {
             cols: [
                 { view: "grid", id: "grid", scrollX: "gridScroll", scrollY: "scrollVer", resize: true },
                 { resizer: true, width: 1 },
-                { view: "timeline", id: "timeline", scrollX: "timelineScroll", scrollY: "scrollVer" },
+                { view: "timeline", id: "timeline", scrollX: "timelineScroll", scrollY: "scrollVer" }, // Added comma
                 { view: "scrollbar", id: "scrollVer" }
             ]
         },
@@ -85,6 +85,12 @@ gantt.config.date_grid = "%Y-%m-%d";
 // Formato para enviar fechas al servidor, compatible con MySQL DATETIME
 gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
 gantt.config.grid_width = 500; // Añadido para forzar un ancho de cuadrícula y ayudar a la renderización del splitter
+gantt.config.min_column_width = 30; // Establece el ancho mínimo de las columnas de la línea de tiempo
+gantt.config.scale_unit = "day"; // Establece la unidad de escala a días
+gantt.config.step = 1; // Establece el paso de la escala a 1 día
+gantt.config.row_height = 25; // Establece la altura de las filas
+gantt.config.task_height = 18; // Establece la altura de las tareas
+gantt.config.autosize = "x"; // Habilita el autoajuste horizontal
 gantt.config.links_editable = true; // Asegurar que los enlaces sean editables
 
 gantt.templates.task_class = function (start, end, task) {

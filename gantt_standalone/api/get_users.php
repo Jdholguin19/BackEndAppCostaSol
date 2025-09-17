@@ -3,8 +3,8 @@
 
 // Configuración de la base de datos principal
 define('MAIN_DB_HOST', 'localhost');
-define('MAIN_DB_USER', 'portalao_gcoello');
-define('MAIN_DB_PASS', 'guiCTV321!');
+define('MAIN_DB_USER', 'root');
+define('MAIN_DB_PASS', '');
 define('MAIN_DB_NAME', 'portalao_appCostaSol'); // Nombre de la base de datos principal
 
 header('Content-Type: application/json');
