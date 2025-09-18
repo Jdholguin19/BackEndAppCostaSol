@@ -1,0 +1,96 @@
+https://thaliavictoria.kissflow.com/process/2/AcNcc9rydX9F/Copia_de_Eleccio_n_de_Acabados_y_Adicion/PkC5siNMy2fN/PkC5siNOEiJ_
+
+
+
+{
+  "_id": "PkC5siNMy2fN",
+  "Name": "PRUEBA  ( Prueba )    ",
+  "_created_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_modified_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_created_at": "2025-09-17T21:23:36Z",
+  "_modified_at": "2025-09-17T21:30:28Z",
+  "_flow_name": "Elección de Acabado y Complementos",
+  "_flow_type": "Process",
+  "_doc_version": "189066461880510752",
+  "_current_step": "Start",
+  "_current_assigned_to": [
+    {
+      "_id": "UsknBC_RrPXT",
+      "Name": "Sistemas",
+      "Kind": "User"
+    }
+  ],
+  "_status": "Draft",
+  "_stage": 0,
+  "_root_process_instance": "PkC5siNOAX7W",
+  "_counter": 342,
+  "_progress": 0,
+  "Nombre_del_Cliente": "PRUEBA",
+  "Mz_Solar": "Prueba",
+  "Paquete_de_Acabado": [],
+  "El_Valor_ya_fue_pagado": false,
+  "Coordino_con_Equipador": false,
+  "Instalacion_de_Cisterna": false,
+  "Adicionales_ingresados_a_tabla_de_cobros": false,
+  "Cisterna_coordinada_con_Contratista": false,
+  "Tabla_de_valores_de_CISTERNA_ingresados_al_sistema_1": false,
+  "El_valor_total_por_CISTERNA_ya_fue_cobrado": false,
+  "Decision_revisada_para_Plano_Arquitectonico": false,
+  "Decision_revisada_para_Plano_Cisterna": false,
+  "Vendida_desde_Junio_2023": false,
+  "Cronologia": "Actual",
+  "Convenio": "1234",
+  "KeyId": "1000000",
+  "Ubicacion": {
+    "Mz_Solar": "Prueba",
+    "Etapa": "Catania",
+    "Modelo": "Bora",
+    "Identificacion": "0912345678",
+    "Nombre_Cliente": "Prueba",
+    "_id": "DS_Documentos_Cliente_82ER77LlIl",
+    "Name": "1000000"
+  },
+  "Modelo_1": "BORA",
+  "Etapa": "CATANIA",
+  "Identificacion": "0912345678",
+  "ModTrim": "BORA",
+  "Paquete_de_Acabados": [],
+  "CostoPaquete": 0,
+  "Incluido_en_Proforma": false,
+  "Total_Adicionales": 0,
+  "mejoraincluida": "NO",
+  "eligecisterna": "NO",
+  "Fecha": "2025-09-17",
+  "El_cliente_desea_modificaciones": false,
+  "Las_modificaciones_tienen_costo": false,
+  "El_Departamento_de_Diseno_elaboro_los_planos_con_las_modific": false,
+  "Se_adjunto_el_Convenio_modificatorio": false,
+  "Otrols_adicionales": false,
+  "_activity_instance_id": "PkC5siNOEiJ_",
+  "_activity_id": "Activity_vpRpKgJG71",
+  "_note": null,
+  "_entity_id": "PkC5siNOEiJ_",
+  "IsSelfPickEnabled": false,
+  "_current_context": [
+    {
+      "_context_assigned_to": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User"
+        }
+      ],
+      "_context_assigned_at": "2025-09-17T21:23:36Z",
+      "_status": "Draft"
+    }
+  ],
+  "_meta_version": "1755292583553483"
+}

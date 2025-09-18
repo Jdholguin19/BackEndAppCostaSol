@@ -100,6 +100,60 @@ try {
 
     $conn->commit();
 
+    // --- INICIO: Lógica de envío a Kiss Flow (Selección de Acabados) ---
+    try {
+        // Obtener datos adicionales del usuario y propiedad para Kiss Flow
+        $stmt_user_details = $conn->prepare('SELECT cedula, correo, telefono, nombres, apellidos FROM usuario WHERE id = :user_id LIMIT 1');
+        $stmt_user_details->execute([':user_id' => $auth_user_id]);
+        $user_details = $stmt_user_details->fetch(PDO::FETCH_ASSOC);
+
+        $stmt_prop_details = $conn->prepare('SELECT manzana, villa, etapa_id, tipo_id FROM propiedad WHERE id = :prop_id LIMIT 1');
+        $stmt_prop_details->execute([':prop_id' => $propiedad_id]);
+        $prop_details = $stmt_prop_details->fetch(PDO::FETCH_ASSOC);
+
+        $stmt_etapa_name = $conn->prepare('SELECT nombre FROM etapa_construccion WHERE id = :etapa_id LIMIT 1');
+        $stmt_etapa_name->execute([':etapa_id' => $prop_details['etapa_id']]);
+        $etapa_name = $stmt_etapa_name->fetchColumn();
+
+        $stmt_modelo_name = $conn->prepare('SELECT nombre FROM tipo_propiedad WHERE id = :tipo_id LIMIT 1');
+        $stmt_modelo_name->execute([':tipo_id' => $prop_details['tipo_id']]);
+        $modelo_name = $stmt_modelo_name->fetchColumn();
+
+        if ($user_details && !empty($user_details['cedula'])) {
+            $sda_kissflow_payload = [
+                'cedula' => $user_details['cedula'],
+                'nombre_cliente' => $user_details['nombres'] . ' ' . $user_details['apellidos'],
+                'propiedad_manzana_solar' => 'Mz ' . $prop_details['manzana'] . ' / Villa ' . $prop_details['villa'],
+                'propiedad_etapa' => $etapa_name,
+                'propiedad_modelo' => $modelo_name,
+                'propiedad_convenio' => 'N/A', // <-- PENDIENTE: ¿De dónde viene este dato?
+            ];
+
+            $handler_url = 'https://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/acabados/kissflow_sda/sda_handler.php';
+            
+            $ch = curl_init($handler_url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($sda_kissflow_payload));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+            $handler_response = curl_exec($ch);
+            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($handler_response === false) {
+                error_log("Error al llamar a sda_handler.php para propiedad $propiedad_id.");
+            } else {
+                error_log("Respuesta de sda_handler.php para propiedad $propiedad_id (HTTP $http_code): " . $handler_response);
+            }
+        } else {
+            error_log("No se pudo enviar a Kiss Flow para Selección de Acabados (propiedad $propiedad_id): falta la cédula del usuario ID " . $auth_user_id);
+        }
+    } catch (Throwable $ke) {
+        error_log("Error durante la llamada a Kiss Flow para Selección de Acabados (propiedad $propiedad_id): " . $ke->getMessage());
+    }
+    // --- FIN: Lógica de envío a Kiss Flow ---
+
     // Obtener nombre del kit para la auditoría
     $stmt_kit_name = $conn->prepare("SELECT nombre FROM acabado_kit WHERE id = :kit_id");
     $stmt_kit_name->execute([':kit_id' => $kit_id]);
