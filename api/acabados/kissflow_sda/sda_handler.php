@@ -58,85 +58,47 @@ function call_kissflow_api(string $url, string $method = 'GET', ?array $payload 
 $response = ['ok' => false, 'mensaje' => 'Ocurrió un error inesperado.'];
 
 try {
-    // Leer los datos de la petición POST
+    // 1. Leer y validar los datos de entrada
     $input_data = json_decode(file_get_contents('php://input'), true);
-
     if (!$input_data) {
         throw new Exception('No se recibieron datos de entrada o el formato es incorrecto.');
     }
 
-    // Extraer la cédula (ajustar el nombre del campo si es necesario)
     $cedula = $input_data['cedula'] ?? null;
     if (!$cedula) {
         throw new Exception('El número de cédula es obligatorio para continuar.');
     }
 
-    // -------------------------------------------------------------------
-    // PASO 1: BUSCAR AL CLIENTE EN EL DATASET (REUTILIZADO DE CTG)
-    // -------------------------------------------------------------------
+    // 2. PASO 1: Buscar al cliente en el Dataset de Kiss Flow
     $encoded_cedula = urlencode($cedula);
     $search_url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/list?q={$encoded_cedula}&search_field=Identificacion";
     $cliente_response = call_kissflow_api($search_url);
-    $cliente_data = $cliente_response['Data'] ?? null;
+    $cliente_data = $cliente_response['Data'][0] ?? null;
 
-    if (empty($cliente_data) || !isset($cliente_data[0]['_id'])) {
+    if (!$cliente_data || !isset($cliente_data['_id'])) {
         throw new Exception("Cliente con cédula {$cedula} no fue encontrado en Kiss Flow. No se puede continuar.");
     }
-    $kissflow_cliente_id = $cliente_data[0]['_id'];
+    
+    $kissflow_cliente_id = $cliente_data['_id'];
+    $convenio_from_kissflow = $cliente_data['Convenio'] ?? 'N/A';
 
-    // -------------------------------------------------------------------
-    // PASO 2: INICIAR PROCESO Y CREAR BORRADOR (DRAFT) PARA SELECCIÓN DE ACABADOS
-    // -------------------------------------------------------------------
+    // 3. PASO 2: Iniciar el proceso en Kiss Flow con los datos iniciales
     $process_name = 'Copia_de_Eleccio_n_de_Acabados_y_Adicion';
     $init_url = KISSFLOW_API_HOST . "/process/2/AcNcc9rydX9F/{$process_name}";
     
-    // Payload inicial vacío, los datos se enviarán en el paso de actualización
-    $init_response = call_kissflow_api($init_url, 'POST', []); 
-
-    if (empty($init_response) || !isset($init_response['_id']) || !isset($init_response['_activity_instance_id'])) {
-        throw new Exception('No se pudo iniciar el proceso en Kiss Flow o la respuesta no contiene los IDs necesarios.');
-    }
-    $item_id = $init_response['_id'];
-    $activity_id = $init_response['_activity_instance_id'];
-
-    // -------------------------------------------------------------------
-    // PASO 1: BUSCAR AL CLIENTE EN EL DATASET (REUTILIZADO DE CTG)
-    // -------------------------------------------------------------------
-    $encoded_cedula = urlencode($cedula);
-    $search_url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/list?q={$encoded_cedula}&search_field=Identificacion";
-    $cliente_response = call_kissflow_api($search_url);
-    $cliente_data = $cliente_response['Data'] ?? null;
-
-    if (empty($cliente_data) || !isset($cliente_data[0]['_id'])) {
-        throw new Exception("Cliente con cédula {$cedula} no fue encontrado en Kiss Flow. No se puede continuar.");
-    }
-    $kissflow_cliente_id = $cliente_data[0]['_id'];
-
-    if (empty($cliente_data) || !isset($cliente_data[0]['_id'])) {
-        throw new Exception("Cliente con cédula {$cedula} no fue encontrado en Kiss Flow. No se puede continuar.");
-    }
-    $kissflow_cliente_id = $cliente_data[0]['_id'];
-    $convenio_from_kissflow = $cliente_data[0]['Convenio'] ?? 'N/A'; // Extraer Convenio del cliente de Kiss Flow
-
-    // -------------------------------------------------------------------
-    // PASO 2: INICIAR PROCESO Y CREAR BORRADOR CON DATOS INICIALES
-    // -------------------------------------------------------------------
-    $process_name = 'Copia_de_Eleccio_n_de_Acabados_y_Adicion';
-    $init_url = KISSFLOW_API_HOST . "/process/2/AcNcc9rydX9F/{$process_name}";
-    
-    // Payload inicial con datos del cliente y propiedad para que se rellenen al crear el borrador
+    // Se utilizan los datos obtenidos del Dataset de Kiss Flow para asegurar consistencia.
     $initial_payload = [
-        'Cliente' => ['_id' => $kissflow_cliente_id],
+        // El campo 'Ubicacion' es el lookup al dataset DS_Documentos_Cliente
         'Ubicacion' => ['_id' => $kissflow_cliente_id],
-        'Identificacion' => $input_data['cedula'] ?? 'N/A',
-        'Nombre_del_Cliente' => $input_data['nombre_cliente'] ?? 'N/A',
-        'Mz_Solar' => $input_data['propiedad_manzana_solar'] ?? 'N/A',
-        'Etapa' => $input_data['propiedad_etapa'] ?? 'N/A',
-        'Modelo_1' => $input_data['propiedad_modelo'] ?? 'N/A',
-        'Convenio' => $convenio_from_kissflow, // Usamos el Convenio obtenido de Kiss Flow
-        'Fecha' => date('Y-m-d'), // Fecha de hoy
-        // TODO: Añadir campos específicos de selección de acabados aquí si se pueden enviar en la creación inicial
-        // Por ejemplo: 'Kit_Seleccionado' => $input_data['kit_seleccionado']
+        
+        // El resto de los campos se rellenan con los datos del dataset encontrado
+        'Identificacion' => $cliente_data['Identificacion'] ?? 'N/A',
+        'Nombre_del_Cliente' => $cliente_data['Nombre_Cliente'] ?? 'N/A', // Mapeado desde el dataset
+        'Convenio' => $convenio_from_kissflow,
+        'Mz_Solar' => $cliente_data['Mz_Solar'] ?? 'N/A',
+        'Etapa' => $cliente_data['Etapa'] ?? 'N/A',
+        'Modelo_1' => $cliente_data['Modelo'] ?? 'N/A', // Mapeado desde el dataset
+        'Fecha' => date('Y-m-d'),
     ];
 
     $init_response = call_kissflow_api($init_url, 'POST', $initial_payload); 
@@ -144,40 +106,22 @@ try {
     if (empty($init_response) || !isset($init_response['_id']) || !isset($init_response['_activity_instance_id'])) {
         throw new Exception('No se pudo iniciar el proceso en Kiss Flow o la respuesta no contiene los IDs necesarios.');
     }
+    
     $item_id = $init_response['_id'];
     $activity_id = $init_response['_activity_instance_id'];
 
-    // --- PASO DE ACTUALIZACIÓN DE DATOS ESPECÍFICOS ELIMINADO (se envían en la creación inicial) ---
-
-    // -------------------------------------------------------------------
-    // PASO 3: ENVIAR EL BORRADOR (SUBMIT)
-    // -------------------------------------------------------------------
+    // 4. PASO 3: Enviar (Submit) el borrador para moverlo a la siguiente etapa
     $submit_url = KISSFLOW_API_HOST . "/process/2/AcNcc9rydX9F/{$process_name}/{$item_id}/{$activity_id}/submit";
     $submit_response = call_kissflow_api($submit_url, 'POST', []); 
 
     if ($submit_response === null) {
-        throw new Exception('Falló el envío final del ticket en Kiss Flow.');
+        throw new Exception('Falló el envío final del ticket en Kiss Flow. El borrador podría haber quedado guardado.');
     }
 
+    // 5. Respuesta de éxito
     $response = [
         'ok' => true, 
-        'mensaje' => 'Proceso de Selección de Acabados registrado en Kiss Flow.',
-        'kissflow_item_id' => $item_id
-    ];
-
-    // -------------------------------------------------------------------
-    // PASO 4: ENVIAR EL BORRADOR (SUBMIT) - Opcional, según el flujo deseado
-    // -------------------------------------------------------------------
-    $submit_url = $update_url . '/submit';
-    $submit_response = call_kissflow_api($submit_url, 'POST', []); 
-
-    if ($submit_response === null) {
-        throw new Exception('Falló el envío final del ticket en Kiss Flow.');
-    }
-
-    $response = [
-        'ok' => true, 
-        'mensaje' => 'Proceso de Selección de Acabados registrado en Kiss Flow.',
+        'mensaje' => 'Proceso de Selección de Acabados registrado y enviado en Kiss Flow.',
         'kissflow_item_id' => $item_id
     ];
 
