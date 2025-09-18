@@ -1,8 +1,0 @@
-15/09/2025, 15:55	usuario (Daniel Alarcon)	CANCEL_CITA	1196	157.100.108.11	Cita cancelada por el usuario/responsable
-15/09/2025, 15:54	usuario (Daniel Alarcon)	DELETE_CITA	1319	157.100.108.11	Recorrido de Obra (Eliminada), Hora 13:00:00, fecha de reunión 2025-09-18, (Andra Gonzales), Tiempo 60 minutos
-15/09/2025, 15:53	usuario (Daniel Alarcon)	CANCEL_CITA	1319	157.100.108.11	Cita cancelada por el usuario/responsable
-15/09/2025, 15:38	usuario (Daniel Alarcon)	CREATE_CITA	1320	157.100.108.11	Consultas con servicio al cliente , Hora 13:00, id_propiedad 5, fecha de reunión 2025-09-18, (Ana María Felix), Tiempo 60 minutos
-15/09/2025, 15:37	usuario (Daniel Alarcon)	DELETE_CITA	1317	157.100.108.11	Recorrido de Obra (Eliminada), Hora 10:00:00, fecha de reunión 2025-09-18, (Andra Gonzales), Tiempo 60 minutos
-15/09/2025, 15:37	usuario (Daniel Alarcon)	CREATE_CITA	1319	157.100.108.11	Recorrido de Obra, Hora 13:00, id_propiedad 5, fecha de reunión 2025-09-18, (Andra Gonzales), Tiempo 60 minutos
-15/09/2025, 11:14	responsable (Andra Gonzales)	CANCEL_CITA	1317	157.100.108.11	Cita cancelada por el usuario/responsable
-15/09/2025, 11:12	usuario (Daniel Alarcon)	CREATE_CITA	1317	157.100.108.11	Recorrido de Obra, Hora 10:00, id_propiedad 5, fecha de reunión 2025-09-18, (Andra Gonzales), Tiempo 60 minutos
