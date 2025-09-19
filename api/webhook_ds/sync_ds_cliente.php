@@ -1,30 +1,58 @@
 <?php
+/**
+ * SCRIPT DE SINCRONIZACIÓN MASIVA UNIDIRECCIONAL (KISS FLOW -> APP)
+ *
+ * Propósito: Este script realiza una sincronización completa desde el dataset 'DS_Documentos_Cliente'
+ * de Kiss Flow hacia la base de datos local de la aplicación (tablas `usuario` y `propiedad`).
+ *
+ * Funcionamiento:
+ * 1. Se conecta a la API de Kiss Flow para obtener todos los registros del dataset.
+ * 2. Itera sobre cada registro y, usando la cédula como clave, busca si el usuario ya existe localmente.
+ * 3. Si el usuario no existe, lo crea junto con su propiedad.
+ * 4. Si el usuario ya existe, actualiza sus datos y los de su propiedad.
+ * 5. Maneja inconsistencias de datos (campos nulos, formatos inesperados, duplicados) para evitar errores fatales.
+ *
+ * Ejecución: Este script está diseñado para ser ejecutado manualmente desde un navegador o terminal
+ * para realizar una carga inicial o una resincronización completa.
+ */
 declare(strict_types=1);
 
 // --- CONFIGURACIÓN Y SETUP INICIAL ---
 
-// Aumentar límites para procesos largos
+// Aumentar límites de tiempo y memoria para procesos que pueden ser largos y consumir recursos.
 set_time_limit(0);
 ini_set('memory_limit', '512M');
 
-// Para ver el output en tiempo real en el navegador
+// Configura la salida para que sea texto plano y se muestre en tiempo real en el navegador.
 header('Content-Type: text/plain; charset=utf-8');
 echo '<pre>';
 ob_implicit_flush(true);
 ob_start();
 
-// Incluir dependencias
+// --- INCLUSIÓN DE DEPENDENCIAS ---
+
+// Carga la configuración de la base de datos.
 require_once __DIR__ . '/../../config/db.php';
-require_once __DIR__ . '/../../kiss_flow/config.php'; // Reutilizamos la configuración de Kiss Flow
+// Carga las credenciales y la URL de la API de Kiss Flow.
+require_once __DIR__ . '/../../kiss_flow/config.php';
 
 // --- FUNCIONES AUXILIARES ---
 
+/**
+ * Imprime un mensaje de log con la fecha y hora actual.
+ * @param string $message El mensaje a mostrar.
+ */
 function log_message(string $message): void {
     echo '[' . date('Y-m-d H:i:s') . '] ' . $message . "\n";
     ob_flush();
     flush();
 }
 
+/**
+ * Realiza una llamada genérica a la API de Kiss Flow usando cURL.
+ * @param string $url La URL completa del endpoint de la API.
+ * @return ?array La respuesta JSON decodificada como un array asociativo, o null si hay un error.
+ */
 function call_kissflow_api(string $url): ?array {
     $ch = curl_init($url);
     $headers = [
@@ -50,6 +78,12 @@ function call_kissflow_api(string $url): ?array {
     return json_decode($response, true);
 }
 
+/**
+ * Parsea una cadena de Mz/Solar (ej: "Mz A / Villa B") en un array asociativo.
+ * Maneja formatos no esperados truncando el valor para que quepa en la columna `manzana`.
+ * @param string $mz_solar_string La cadena a parsear.
+ * @return array Array con las claves 'manzana' y 'villa'.
+ */
 function parse_mz_solar(string $mz_solar_string): array {
     $mz_solar_string = trim($mz_solar_string);
     $result = ['manzana' => null, 'villa' => null];
@@ -63,6 +97,15 @@ function parse_mz_solar(string $mz_solar_string): array {
     return $result;
 }
 
+/**
+ * Obtiene el ID de un registro en una tabla maestra (ej. `etapa_construccion`).
+ * Si el valor no existe en la tabla, lo inserta y devuelve el nuevo ID generado.
+ * @param PDO $conn La conexión a la base de datos.
+ * @param string $table_name El nombre de la tabla maestra (ej. 'etapa_construccion').
+ * @param string $column_name El nombre de la columna a buscar (ej. 'nombre').
+ * @param ?string $value El valor de texto a buscar o crear (ej. 'Catania').
+ * @return ?int El ID del registro correspondiente. Null si el valor de entrada es vacío.
+ */
 function get_or_create_master_id(PDO $conn, string $table_name, string $column_name, ?string $value): ?int {
     if (empty($value)) return null;
     $value = trim($value);
@@ -73,6 +116,7 @@ function get_or_create_master_id(PDO $conn, string $table_name, string $column_n
         return (int)$id;
     } else {
         log_message("Creando nuevo registro en '$table_name' para el valor '$value'...");
+        // Caso especial para la tabla `etapa_construccion` que tiene una columna `porcentaje` no nula.
         if ($table_name === 'etapa_construccion') {
             $stmt_insert = $conn->prepare("INSERT INTO `etapa_construccion` (`nombre`, `porcentaje`) VALUES (:value, 0)");
         } else {
@@ -92,6 +136,7 @@ log_message("INICIO DE LA SINCRONIZACIÓN MASIVA.");
 $conn = DB::getDB();
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// Contadores para el reporte final.
 $processed_count = 0;
 $created_users = 0;
 $updated_users = 0;
@@ -100,8 +145,9 @@ $updated_properties = 0;
 $errors = 0;
 
 $page_number = 1;
-$page_size = 50;
+$page_size = 50; // Se procesan 50 registros por cada llamada a la API para no sobrecargarla.
 
+// Bucle principal para manejar la paginación de la API de Kiss Flow.
 do {
     log_message("Procesando página $page_number...");
     $dataset_id = 'DS_Documentos_Cliente';
@@ -110,28 +156,33 @@ do {
     $response = call_kissflow_api($list_url);
     $records = $response['Data'] ?? [];
 
+    // Si la API no devuelve más registros, se termina el bucle.
     if (empty($records)) {
         log_message("No se encontraron más registros. Fin del proceso.");
         break;
     }
 
+    // Itera sobre cada registro de Kiss Flow obtenido en la página actual.
     foreach ($records as $record) {
         $processed_count++;
         $kissflow_ds_id = $record['_id'] ?? null;
         $cedula = trim($record['Identificacion'] ?? '');
 
+        // Si un registro no tiene cédula, se omite ya que es nuestra clave principal de enlace.
         if (empty($cedula)) {
             log_message("Registro de KF con ID '{$kissflow_ds_id}' omitido: no tiene Identificacion (cédula).");
             $errors++;
             continue;
         }
 
+        // Flags para llevar la cuenta de las acciones realizadas en esta iteración.
         $was_user_created = false;
         $was_property_created = false;
         $was_user_updated = false;
         $was_property_updated = false;
 
         try {
+            // Inicia una transacción. Todos los cambios para este registro se confirman o se revierten juntos.
             $conn->beginTransaction();
 
             // 1. BUSCAR O CREAR USUARIO
@@ -144,7 +195,7 @@ do {
                 $was_user_created = true;
                 $new_user_data = [];
                 $new_user_data['cedula'] = $cedula;
-                $new_user_data['rol_id'] = 1;
+                $new_user_data['rol_id'] = 1; // Rol "Cliente" por defecto.
                 $new_user_data['contrasena_hash'] = password_hash('1234', PASSWORD_DEFAULT);
 
                 if (!empty($record['Nombre_Cliente'])) {
@@ -210,11 +261,6 @@ do {
                     }
                     $set_sql = implode(', ', $set_parts);
                     
-                    // LOG DE DEPURACIÓN
-                    log_message("DEBUG: Preparando UPDATE para usuario ID {$user_id}.");
-                    log_message("DEBUG: SQL: UPDATE usuario SET $set_sql WHERE id = :id");
-                    log_message("DEBUG: Datos: " . json_encode($update_fields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
                     $stmt_update_user = $conn->prepare("UPDATE usuario SET $set_sql WHERE id = :id");
                     $update_fields['id'] = $user_id;
                     $stmt_update_user->execute($update_fields);
@@ -243,10 +289,10 @@ do {
             if (!$prop_id) {
                 $was_property_created = true;
                 $prop_data_to_update['id_usuario'] = $user_id;
-                $prop_data_to_update['estado_id'] = 1;
-                $prop_data_to_update['id_urbanizacion'] = 1;
-                if (empty($prop_data_to_update['etapa_id'])) $prop_data_to_update['etapa_id'] = 1;
-                if (empty($prop_data_to_update['tipo_id'])) $prop_data_to_update['tipo_id'] = 1;
+                $prop_data_to_update['estado_id'] = 1; // Default: DISPONIBLE
+                $prop_data_to_update['id_urbanizacion'] = 1; // Default: Arienzo
+                if (empty($prop_data_to_update['etapa_id'])) $prop_data_to_update['etapa_id'] = 1; // Default
+                if (empty($prop_data_to_update['tipo_id'])) $prop_data_to_update['tipo_id'] = 1; // Default
 
                 $columns = implode(', ', array_map(fn($c) => "`$c`", array_keys($prop_data_to_update)));
                 $placeholders = ':' . implode(', :', array_keys($prop_data_to_update));
@@ -264,14 +310,17 @@ do {
                 }
             }
 
+            // Si todo fue exitoso, se confirman los cambios en la base de datos.
             $conn->commit();
 
+            // Se incrementan los contadores solo después de que el commit fue exitoso.
             if ($was_user_created) $created_users++;
             if ($was_user_updated) $updated_users++;
             if ($was_property_created) $created_properties++;
             if ($was_property_updated) $updated_properties++;
 
         } catch (Exception $e) {
+            // Si ocurre cualquier error, se revierten todos los cambios de este registro.
             if ($conn->inTransaction()) $conn->rollBack();
             log_message("ERROR al procesar registro de KF con ID '{$kissflow_ds_id}' (Cédula: {$cedula}): " . $e->getMessage());
             log_message("DATOS DEL REGISTRO FALLIDO: " . json_encode($record, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
