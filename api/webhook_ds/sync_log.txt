@@ -1,0 +1,76 @@
+[2025-09-19 10:08:29] INICIO DE LA SINCRONIZACIÓN MASIVA.
+[2025-09-19 10:08:29] Procesando página 1...
+[2025-09-19 10:08:29] ADVERTENCIA: El correo jose.villacreses@cuportseguridad.com ya pertenece a otro usuario (Cédula: 0926481235). No se actualizará para la cédula actual (0917236358).
+[2025-09-19 10:08:30] Procesando página 2...
+[2025-09-19 10:08:30] Procesando página 3...
+[2025-09-19 10:08:30] ADVERTENCIA: El correo jcvasquezd@outlook.com ya pertenece a otro usuario (Cédula: 0909039174). No se actualizará para la cédula actual (0906618939).
+[2025-09-19 10:08:30] Procesando página 4...
+[2025-09-19 10:08:30] ADVERTENCIA: El correo davidjiang882@gmail.com ya pertenece a otro usuario (Cédula: 0950479733). No se actualizará para la cédula actual (1202576185).
+[2025-09-19 10:08:30] ADVERTENCIA: El correo dpilpe@gmail.com ya pertenece a otro usuario (Cédula: 0924962046). No se actualizará para la cédula actual (0921734059).
+[2025-09-19 10:08:30] ADVERTENCIA: El correo jcvasquezd@outlook.com ya pertenece a otro usuario (Cédula: 0909039174). No se actualizará para la cédula actual (0926972886).
+[2025-09-19 10:08:30] Procesando página 5...
+[2025-09-19 10:08:31] ADVERTENCIA: El correo michelle.ulloaf@gmail.com ya pertenece a otro usuario (Cédula: 0930888748). No se actualizará para la cédula actual (1702921691).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo jcvasquezd@outlook.com ya pertenece a otro usuario (Cédula: 0909039174). No se actualizará para la cédula actual (0102831088).
+[2025-09-19 10:08:31] ADVERTENCIA: Formato Mz_Solar no esperado: 'Prueba'. Se usará como manzana (truncado).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo mburgos@empacreci.com.ec ya pertenece a otro usuario (Cédula: 0926512393). No se actualizará para la cédula actual (0703934539).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo julio0517@hotmail.com ya pertenece a otro usuario (Cédula: 0906477310). No se actualizará para la cédula actual (0103709481).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo cristhian.t@hotmail.es ya pertenece a otro usuario (Cédula: 0943545988). No se actualizará para la cédula actual (0992667990001).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo kgarcia_arq@hotmail.es ya pertenece a otro usuario (Cédula: 0993295884001). No se actualizará para la cédula actual (0918183385).
+[2025-09-19 10:08:31] Procesando página 6...
+[2025-09-19 10:08:31] ADVERTENCIA: El correo michelle.ulloaf@gmail.com ya pertenece a otro usuario (Cédula: 0930888748). No se actualizará para la cédula actual (1702921691).
+[2025-09-19 10:08:31] Registro de KF con ID 'DS_Documentos_Cliente_8wGE3Oe7No' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:31] ADVERTENCIA: El correo galolenin2@hotmail.com ya pertenece a otro usuario (Cédula: 0919994764). No se actualizará para la cédula actual (0918392374).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo rca516@gmail.com ya pertenece a otro usuario (Cédula: 0913338760). No se actualizará para la cédula actual (0918719873).
+[2025-09-19 10:08:31] ADVERTENCIA: El correo julio0517@hotmail.com ya pertenece a otro usuario (Cédula: 0906477310). No se actualizará para la cédula actual (0910820463).
+[2025-09-19 10:08:31] Procesando página 7...
+[2025-09-19 10:08:31] ADVERTENCIA: El correo facturabluecorp@hotmail.com ya pertenece a otro usuario (Cédula: 0913867792). No se actualizará para la cédula actual (0928004480).
+[2025-09-19 10:08:32] ADVERTENCIA: El correo kelvo763@hotmail.com ya pertenece a otro usuario (Cédula: 0104010905). No se actualizará para la cédula actual (1307953719).
+[2025-09-19 10:08:32] ADVERTENCIA: El correo ameliafernandezz@hotmail.com ya pertenece a otro usuario (Cédula: 0906291414). No se actualizará para la cédula actual (0701799918).
+[2025-09-19 10:08:32] ADVERTENCIA: El correo marisolidrovo@hotmail.com ya pertenece a otro usuario (Cédula: 1723329668). No se actualizará para la cédula actual (0913136883).
+[2025-09-19 10:08:32] ADVERTENCIA: El correo ssantos09@gmail.com ya pertenece a otro usuario (Cédula: 0904485547). No se actualizará para la cédula actual (0909720526).
+[2025-09-19 10:08:32] Registro de KF con ID 'DS_Documentos_Cliente_9Cxxbk44th' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:32] Registro de KF con ID 'DS_Documentos_Cliente_9PW062jFtg' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:32] Procesando página 8...
+[2025-09-19 10:08:32] Procesando página 9...
+[2025-09-19 10:08:32] Procesando página 10...
+[2025-09-19 10:08:32] Procesando página 11...
+[2025-09-19 10:08:33] Procesando página 12...
+[2025-09-19 10:08:33] ADVERTENCIA: El correo juanmendozacelestino@gmail.com ya pertenece a otro usuario (Cédula: 0924191406). No se actualizará para la cédula actual (0915490247).
+[2025-09-19 10:08:33] Procesando página 13...
+[2025-09-19 10:08:33] ADVERTENCIA: Formato Mz_Solar no esperado: 'Departamento'. Se usará como manzana (truncado).
+[2025-09-19 10:08:33] ADVERTENCIA: El correo marito13.jr@gmail.com ya pertenece a otro usuario (Cédula: 0904516838). No se actualizará para la cédula actual (0915799175).
+[2025-09-19 10:08:33] Procesando página 14...
+[2025-09-19 10:08:34] ADVERTENCIA: El correo jose.villacreses@cuportseguridad.com ya pertenece a otro usuario (Cédula: 0926481235). No se actualizará para la cédula actual (0917236358).
+[2025-09-19 10:08:34] Procesando página 15...
+[2025-09-19 10:08:34] Registro de KF con ID 'DS_Documentos_Cliente_9e68btwVw3' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:34] Procesando página 16...
+[2025-09-19 10:08:34] ADVERTENCIA: El correo villegasgj1978@gmail.com ya pertenece a otro usuario (Cédula: 0908591357). No se actualizará para la cédula actual (0917619652).
+[2025-09-19 10:08:34] ADVERTENCIA: El correo tquinonez_8a@hotmail.com ya pertenece a otro usuario (Cédula: 0917616690). No se actualizará para la cédula actual (0930796115).
+[2025-09-19 10:08:34] Registro de KF con ID 'DS_Documentos_Cliente_7hS1gFOEc' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:34] Procesando página 17...
+[2025-09-19 10:08:34] Registro de KF con ID 'DS_Documentos_Cliente_AnTDNQBLSN' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:34] Registro de KF con ID 'DS_Documentos_Cliente_tlwljElvVx' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:34] Procesando página 18...
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_BWHq8aRjvm' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_Bb8WEkWjki' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_Bb9xNnHQbp' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Procesando página 19...
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_BbW29FhXmP' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_s5h4M1PhhZ' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_C0OsIkC_RJ' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Registro de KF con ID 'DS_Documentos_Cliente_C4QHzbJijy' omitido: Identificacion (cédula) vacía o inválida.
+[2025-09-19 10:08:35] Procesando página 20...
+[2025-09-19 10:08:35] No se encontraron más registros. Fin del proceso.
+[2025-09-19 10:08:35] 
+--- REPORTE FINAL ---
+[2025-09-19 10:08:35] Registros de Kiss Flow procesados: 947
+[2025-09-19 10:08:35] Usuarios nuevos creados: 0
+[2025-09-19 10:08:35] Usuarios existentes actualizados: 932
+[2025-09-19 10:08:35] Propiedades nuevas creadas: 0
+[2025-09-19 10:08:35] Propiedades existentes actualizadas: 933
+[2025-09-19 10:08:35] Errores: 14
+[2025-09-19 10:08:35] SINCRONIZACIÓN COMPLETADA.
+[2025-09-19 13:57:59] ERROR DE WEBHOOK: Payload JSON inválido.
+[2025-09-19 14:09:56] ERROR DE WEBHOOK: Payload JSON inválido.
+[2025-09-19 14:21:49] WEBHOOK: Payload crudo recibido: 
+[2025-09-19 14:21:49] ERROR DE WEBHOOK: Payload JSON inválido.

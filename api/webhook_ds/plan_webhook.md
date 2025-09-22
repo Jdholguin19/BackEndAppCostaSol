@@ -19,66 +19,64 @@ La clave de esta implementación es **reutilizar el código existente** para evi
 
 1.  **Lógica de Sincronización Centralizada:**
     *   Se creará un nuevo archivo, `sync_logic.php`, en `api/webhook_ds/`.
-    *   Este archivo contendrá una única función, por ejemplo `process_kissflow_record(array $record, PDO $conn)`, que encapsulará toda la lógica que ya validamos para procesar un solo registro (buscar usuario, crear/actualizar usuario, buscar propiedad, crear/actualizar propiedad).
+    *   Este archivo contendrá una única función, por ejemplo `process_kissflow_record(array $record, PDO $conn)`, que encapsulará toda la lógica que ya validamos para procesar un solo registro.
 
 2.  **Modificación del Script Manual:**
-    *   El script `sync_ds_cliente.php` se modificará ligeramente para que, en lugar de contener la lógica directamente, simplemente llame a la nueva función `process_kissflow_record()` dentro de su bucle `foreach`.
+    *   El script `sync_ds_cliente.php` se modificará para que use la lógica centralizada.
 
 3.  **Nuevo Manejador de Webhooks:**
-    *   Se creará el archivo principal de esta fase: `webhook_ds_handler.php` en `api/webhook_ds/`.
-    *   Este será el **endpoint público** que Kiss Flow llamará.
-    *   Su única responsabilidad será recibir la notificación del webhook, verificarla y pasar los datos del registro a la misma función `process_kissflow_record()`.
+    *   Se creará el archivo `webhook_ds_handler.php` en `api/webhook_ds/`.
+    *   Este será el **endpoint público** que Kiss Flow llamará para notificar cambios en tiempo real.
 
 ![Arquitectura Webhook](https://i.imgur.com/rG3h3zT.png)
 
 ---
 
-### **Flujo de Ejecución del Webhook Handler**
+### **Pasos de Implementación (Código)**
 
-1.  **Recepción del Evento:** Kiss Flow detecta un cambio (ej. un registro actualizado) y envía una petición `POST` a `webhook_ds_handler.php`.
-2.  **Verificación de Seguridad:** El handler verifica que la petición sea legítima, comparando un "secreto" compartido entre Kiss Flow y el script.
-3.  **Extracción de Datos:** El script decodifica el cuerpo de la petición (JSON) para obtener los datos del registro que cambió.
-4.  **Procesamiento:** Llama a la función centralizada `process_kissflow_record()` para aplicar los cambios en la base de datos local.
-5.  **Respuesta a Kiss Flow:** El handler responde inmediatamente a Kiss Flow con un código `200 OK` para confirmar que recibió el evento. Esto es crucial para que Kiss Flow no intente enviarlo de nuevo.
+**Paso 1, 2 y 3: Creación y Refactorización de Scripts**
+
+Estos pasos ya fueron completados. Se creó `sync_logic.php` con la lógica central, se refactorizó `sync_ds_cliente.php` para usarla, y se creó el manejador `webhook_ds_handler.php`.
 
 ---
 
-### **Pasos de Implementación**
+### **Paso 4: Configurar el Webhook en Kiss Flow (Método Actualizado por Integraciones)**
 
-**Paso 1: Crear el Archivo de Lógica Central (`sync_logic.php`)**
+Este es el paso final y se realiza completamente en la plataforma de Kiss Flow, siguiendo el método de "Integraciones".
 
-1.  Crear el archivo `api/webhook_ds/sync_logic.php`.
-2.  Mover toda la lógica de procesamiento que está dentro del bucle `foreach` de `sync_ds_cliente.php` a una nueva función `process_kissflow_record(array $record, PDO $conn)` dentro de este nuevo archivo.
-3.  Esta función contendrá todo lo que ya hemos depurado: transacciones, búsqueda de usuario, creación/actualización de usuario, búsqueda de propiedad y creación/actualización de propiedad.
+1.  **Crear una Nueva Integración**
+    *   En el panel principal de Kiss Flow, ve a la sección de **Integraciones**.
+    *   Haz clic en **"Nueva Integración"** y asígnale un nombre descriptivo (ej. "Sincronización de Clientes a App").
 
-**Paso 2: Modificar el Script Manual (`sync_ds_cliente.php`)**
+2.  **Configurar el Disparador (El "Cuándo")**
+    *   Dentro del editor de la integración, elige un **"Trigger"** (disparador).
+    *   Busca y selecciona el conector **"Kissflow Dataset"**.
+    *   Selecciona el evento que iniciará la automatización. Necesitarás **"When an existing row is updated"** (Cuando una fila es actualizada). Debes crear una segunda integración para el evento **"When a new row is created"** (Cuando se crea una nueva fila).
+    *   Apunta este disparador a tu dataset: `DS_Documentos_Cliente`.
 
-1.  Eliminar la lógica de procesamiento que se movió en el paso anterior.
-2.  Añadir `require_once 'sync_logic.php';` al inicio del script.
-3.  Dentro del bucle `foreach`, simplemente llamar a `process_kissflow_record($record, $conn);`.
+3.  **Configurar la Acción (El "Qué hacer")**
+    *   Después del disparador, haz clic en el botón `+` para añadir una **"Acción"**.
+    *   Busca el conector genérico **"HTTP"** y selecciona la acción **"Make an HTTP call (POST)"**.
 
-**Paso 3: Crear el Manejador de Webhooks (`webhook_ds_handler.php`)**
+4.  **Configurar la Autenticación de la Acción**
+    *   Dentro de la configuración de la acción HTTP, verás una sección de autenticación que te pide "Choose an account".
+    *   Crea una nueva cuenta. Se abrirá una ventana para verificar tu "HTTP account".
+    *   **Connection label:** Dale un nombre (ej. `Auth Webhook CostaSol`).
+    *   **HTTP authentication type:** Selecciona **"API key authentication"**.
+    *   **Credentials:** Te aparecerán dos campos: `Key` y `Value`.
+        *   En el campo **`Key`**: Escribe la palabra `Authorization`. (No es un ID, es el nombre del encabezado HTTP).
+        *   En el campo **`Value`**: Escribe `Bearer ` seguido de tu secreto. Ejemplo: `Bearer TU_SECRETO_AQUI`.
+    *   Guarda la cuenta de autenticación.
 
-1.  Crear el archivo `api/webhook_ds/webhook_ds_handler.php`.
-2.  Añadir `require_once` para `db.php`, `config.php` y el nuevo `sync_logic.php`.
-3.  Implementar la lógica:
-    *   Leer el cuerpo de la petición: `$payload = json_decode(file_get_contents('php://input'), true);`
-    *   Verificar el secreto (token de seguridad).
-    *   Extraer el registro de los datos: `$record = $payload['Data'][0];`
-    *   Llamar a la función `process_kissflow_record($record, DB::getDB());`.
-    *   Asegurarse de responder siempre con `http_response_code(200);`.
+5.  **Completar la Configuración de la Petición POST**
+    *   Después de guardar la autenticación, Kiss Flow te mostrará la pantalla final para configurar la petición.
+    *   **URL:** Pega la URL de nuestro manejador:
+        `https://app.costasol.com.ec/api/webhook_ds/webhook_ds_handler.php`
+    *   **Body parameters:** Aquí es donde se envían los datos. Haz clic en "Select fields to allow mapping" y busca una variable del trigger que represente el **objeto completo del registro**. Mapea esa variable al cuerpo de la petición. Esto asegura que se envíe toda la información del registro que cambió.
+    *   **HTTP headers:** Déjalo vacío. La autenticación ya se configuró en el paso anterior.
+    *   **Query parameters:** Déjalo vacío.
 
-**Paso 4: Configurar el Webhook en Kiss Flow**
-
-Esta es la configuración final que deberás realizar en la plataforma de Kiss Flow:
-
-1.  Ve al dataset `DS_Documentos_Cliente`.
-2.  En el menú, selecciona **Settings -> Webhooks**.
-3.  Haz clic en **"Add new webhook"**.
-4.  **URL del Webhook:** Ingresa la URL pública completa de tu nuevo script. Será algo como: `https://app.costasol.com.ec/api/webhook_ds/webhook_ds_handler.php`.
-5.  **Secreto:** Define una clave secreta (una cadena de texto larga y aleatoria). Deberás copiar esta clave y pegarla dentro del script `webhook_ds_handler.php` para la verificación.
-6.  **Eventos:** Selecciona los eventos que activarán el webhook. Como mínimo, deberías elegir:
-    *   **When a record is created**
-    *   **When a record is updated**
-
-Una vez guardado, Kiss Flow comenzará a notificar a tu aplicación de cada cambio, automatizando completamente la sincronización.
+6.  **Activar y Probar**
+    *   Guarda y activa la integración.
+    *   Para probar, modifica o crea un registro en el dataset `DS_Documentos_Cliente` en Kiss Flow.
+    *   Revisa el archivo `sync_log.txt` en el servidor. Debería aparecer una nueva entrada confirmando la recepción del webhook.

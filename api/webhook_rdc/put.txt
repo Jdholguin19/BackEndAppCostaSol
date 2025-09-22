@@ -1,0 +1,782 @@
+ Esto es cuando se actualiza un dato PUT
+
+ {_id: "PkBbW28JfK9s", Nombre_de_Cliente: "PRUEBA 12345"}
+Nombre_de_Cliente
+: 
+"PRUEBA 12345"
+_id
+: 
+"PkBbW28JfK9s"
+
+Request URL
+https://thaliavictoria.kissflow.com/process/2/AcNcc9rydX9F/admin/Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s
+Request Method
+PUT
+Status Code
+200 OK
+Remote Address
+104.18.9.118:443
+Referrer Policy
+strict-origin-when-cross-origin
+
+
+Payload
+{_id: "PkBbW28JfK9s", Identificacion: "09999"}
+Identificacion
+: 
+"09999"
+_id
+: 
+"PkBbW28JfK9s"
+
+
+
+{
+  "_id": "PkBbW28JfK9s",
+  "Name": "792  ( 7130-05 ) - PRUEBA 12345   ",
+  "_created_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_modified_by": {
+    "_id": "UsknBC_RrPXT",
+    "Name": "Sistemas",
+    "Kind": "User"
+  },
+  "_created_at": "2025-06-26T16:30:44Z",
+  "_modified_at": "2025-09-19T21:32:45Z",
+  "_flow_name": "Registro Documentación de Clientes",
+  "_flow_type": "Process",
+  "_doc_version": "189247798983579936",
+  "_current_step": "Start",
+  "_current_assigned_to": [
+    {
+      "_id": "UsknBC_RrPXT",
+      "Name": "Sistemas",
+      "Kind": "User"
+    }
+  ],
+  "_status": "InProgress",
+  "_stage": 1,
+  "_root_process_instance": "PkBbW28Oj1hh",
+  "_submitted_at": "2025-06-26T16:30:44Z",
+  "_request_number": 792,
+  "_counter": 1101,
+  "_last_completed_step": "PkBbWDkXhaer",
+  "_progress": 0,
+  "Fecha": "2025-06-26T16:30:44Z",
+  "Nombre_de_Cliente": "PRUEBA 12345",
+  "Identificacion": "09999",
+  "Modelo": "Alina",
+  "Proforma_con_Visto_Bueno": [
+    {
+      "uploaded": 100,
+      "name": "lote2.jpg",
+      "id": "Attach-BbW28POxcL",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28POxcL/lote2.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote2.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28POxcL/lote2.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28POxcL/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28POxcL/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:29:24.984Z",
+      "_created_at": "2025-06-26T16:29:24.984Z"
+    }
+  ],
+  "Promesa_de_COMPRAVENTA": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_OM3BNd5d5N",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_OM3BNd5d5N/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_OM3BNd5d5N/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_OM3BNd5d5N/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_OM3BNd5d5N/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:42:46.745Z",
+      "_created_at": "2025-06-26T16:42:46.745Z"
+    }
+  ],
+  "Cedulas_y_Certificados_de_Votacion_Cliente": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach-BbW28PT9oP",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oP/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oP/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oP/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oP/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:29:18.538Z",
+      "_created_at": "2025-06-26T16:29:18.538Z"
+    }
+  ],
+  "Planilla_de_Servicios_Basicos": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_Psv5FmOUzX",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_Psv5FmOUzX/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_Psv5FmOUzX/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_Psv5FmOUzX/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_Psv5FmOUzX/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:35:41.804Z",
+      "_created_at": "2025-06-26T16:35:41.804Z"
+    }
+  ],
+  "Roles_de_PagoHistoria_Laboral_Cliente": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_mX5CXspX7b",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_mX5CXspX7b/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_mX5CXspX7b/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_mX5CXspX7b/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_mX5CXspX7b/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:36:17.915Z",
+      "_created_at": "2025-06-26T16:36:17.915Z"
+    }
+  ],
+  "Referencias_Personales_y_Bancarias": [
+    {
+      "uploaded": 100,
+      "name": "lote2.jpg",
+      "id": "Attach_t-r7Sbb3qY",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_t-r7Sbb3qY/lote2.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote2.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_t-r7Sbb3qY/lote2.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_t-r7Sbb3qY/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_t-r7Sbb3qY/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:36:04.134Z",
+      "_created_at": "2025-06-26T16:36:04.134Z"
+    }
+  ],
+  "PROFORMA_Definitiva_firmada": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_0y11PvZwu4",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_0y11PvZwu4/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_0y11PvZwu4/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_0y11PvZwu4/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_0y11PvZwu4/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:42:51.576Z",
+      "_created_at": "2025-06-26T16:42:51.576Z"
+    }
+  ],
+  "Persona": [
+    "Persona Dependiente"
+  ],
+  "Planos_00": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_b6pBqcYFTQ",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rEzdBe/Attach_b6pBqcYFTQ/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rEzdBe/Attach_b6pBqcYFTQ/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rEzdBe/Attach_b6pBqcYFTQ/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rEzdBe/Attach_b6pBqcYFTQ/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:39:36.552Z",
+      "_created_at": "2025-06-26T16:39:36.552Z"
+    }
+  ],
+  "Formulario_Conozca_a_su_Cliente": [
+    {
+      "uploaded": 100,
+      "name": "v2.jpeg",
+      "id": "Attach_7JvWRQLVqM",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_7JvWRQLVqM/v2.jpeg",
+      "size": 574246,
+      "fileExtension": "jpeg",
+      "photos": [
+        {
+          "name": "v2.jpeg",
+          "fileExtension": "jpeg",
+          "width": 1587,
+          "height": 877,
+          "size": 599143,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_7JvWRQLVqM/v2.jpeg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 1200,
+          "height": 663,
+          "size": 335723,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_7JvWRQLVqM/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 100,
+          "height": 55,
+          "size": 16059,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_7JvWRQLVqM/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:35:17.131Z",
+      "_created_at": "2025-06-26T16:35:17.131Z"
+    }
+  ],
+  "Recibo_provisional_1": [
+    {
+      "uploaded": 100,
+      "name": "v1.jpg",
+      "id": "Attach-BbW28PT9oQ",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oQ/v1.jpg",
+      "size": 318344,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "v1.jpg",
+          "fileExtension": "jpg",
+          "width": 1088,
+          "height": 639,
+          "size": 358240,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oQ/v1.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 1088,
+          "height": 639,
+          "size": 273484,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oQ/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 100,
+          "height": 59,
+          "size": 16730,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PT9oQ/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:29:45.927Z",
+      "_created_at": "2025-06-26T16:29:45.927Z"
+    }
+  ],
+  "Comprobante_de_transaccion_1": [
+    {
+      "uploaded": 100,
+      "name": "lote2.jpg",
+      "id": "Attach-BbW28PXM0T",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PXM0T/lote2.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote2.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PXM0T/lote2.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PXM0T/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PXM0T/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:29:31.459Z",
+      "_created_at": "2025-06-26T16:29:31.459Z"
+    }
+  ],
+  "Carta_Intencion_de_Compra": [
+    {
+      "uploaded": 100,
+      "name": "lote2.jpg",
+      "id": "Attach-BbW28PaYCX",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PaYCX/lote2.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote2.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PaYCX/lote2.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PaYCX/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/Attach-BbW28PaYCX/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:29:55.019Z",
+      "_created_at": "2025-06-26T16:29:55.019Z"
+    }
+  ],
+  "Tiene_Documentacion": true,
+  "Planos_firmados": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_CoijielRar",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_CoijielRar/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_CoijielRar/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_CoijielRar/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_CoijielRar/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:43:04.624Z",
+      "_created_at": "2025-06-26T16:43:04.624Z"
+    }
+  ],
+  "Numero_de_Convenio": "422342",
+  "Start_time": "2025-06-26T16:30:44Z",
+  "key": "792",
+  "Formulario_de_Autocertificacion_de_residencia_fiscal": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_2WlG18wqJ9",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_2WlG18wqJ9/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_2WlG18wqJ9/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_2WlG18wqJ9/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbW5rCP5iD/Attach_2WlG18wqJ9/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:35:34.164Z",
+      "_created_at": "2025-06-26T16:35:34.164Z"
+    }
+  ],
+  "Contrato_de_Adhesion": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_A9LL6Ec-eJ",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_A9LL6Ec-eJ/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_A9LL6Ec-eJ/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_A9LL6Ec-eJ/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWDkXhaer/Attach_A9LL6Ec-eJ/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:42:57.137Z",
+      "_created_at": "2025-06-26T16:42:57.137Z"
+    }
+  ],
+  "Se_entrego_Documentacion_Original_a_Fideicomiso": false,
+  "El_asesor_entrego_los_documentos_originales": true,
+  "Cliente_Calificado": true,
+  "Recibio_el_Fideicomiso_los_Documentos_originales": true,
+  "Se_notifico_al_Cliente_fecha_de_firma_de_Documentos": true,
+  "Requiere_Carta_de_Compromiso": false,
+  "Beneficiario_Principal": true,
+  "Tiempo_Transcurrido": 61,
+  "Tiempo_Transcurrido_Tarea": 0,
+  "Plan_de_Pago_necesita_Nueva_Revision": false,
+  "El_Cliente_ha_desistido": false,
+  "Cambio_de_Inmueble": false,
+  "Cambio": [],
+  "Proforma_Definitiva_firmada_1": [
+    {
+      "uploaded": 100,
+      "name": "lote3.jpg",
+      "id": "Attach_vXG1HtwpG0",
+      "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWBX8zi04/Attach_vXG1HtwpG0/lote3.jpg",
+      "size": 205436,
+      "fileExtension": "jpg",
+      "photos": [
+        {
+          "name": "lote3.jpg",
+          "fileExtension": "jpg",
+          "width": 724,
+          "height": 955,
+          "size": 212071,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWBX8zi04/Attach_vXG1HtwpG0/lote3.jpg"
+        },
+        {
+          "name": "1200x800.jpeg",
+          "fileExtension": "jpeg",
+          "width": 606,
+          "height": 800,
+          "size": 200377,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWBX8zi04/Attach_vXG1HtwpG0/photos/1200x800.jpeg"
+        },
+        {
+          "name": "100x100.jpeg",
+          "fileExtension": "jpeg",
+          "width": 76,
+          "height": 100,
+          "size": 4995,
+          "key": "Registro_Documentacio_n_de_Clientes/PkBbW28JfK9s/PkBbWBX8zi04/Attach_vXG1HtwpG0/photos/100x100.jpeg"
+        }
+      ],
+      "_modified_at": "2025-06-26T16:40:28.565Z",
+      "_created_at": "2025-06-26T16:40:28.565Z"
+    }
+  ],
+  "El_bien_tiene_modificaciones": false,
+  "Tipo_de_Fachada": [],
+  "Parqueo_Cubierto_1": false,
+  "VManzana": {
+    "MZNDESCRIPCION": "7130",
+    "_id": "Etapa_MzSolar_Data_ZhJIryIlT5",
+    "Name": "15"
+  },
+  "VEtapa": {
+    "ETPDescripcion": "Davos",
+    "_id": "DS_Etapas_TsPDmp2EK",
+    "Name": "10"
+  },
+  "ETPCodigo": "ETP-010",
+  "MZNCodigo": "MZN-015",
+  "VSolar": {
+    "SOLDESCRIPCION": "05",
+    "_id": "DS_Solares_8y2xeuZuWBiO",
+    "Name": "314"
+  },
+  "SOLCodigo": "SOL-00314",
+  "Ubicacion": "7130-05",
+  "nometapa": "Davos",
+  "Activo": "1",
+  "Inactivo": "0",
+  "CambioS": "2",
+  "Cliente_desea_Debito_Automatico": false,
+  "LinderosMensurasAreas_del_Solar": "SDFSD",
+  "Ubicacion_Liberada": {
+    "Id_Cliente": "247",
+    "Name": "Desistimiento de Clientes  ( 26  )- JENNIFER ESTEFANIA MOLINA CABANILLA  ",
+    "Ubicacion_Liberada": false,
+    "_id": "Pk4Vit1BbZVGX"
+  },
+  "Proyecto": "Alina 7130-05",
+  "Se_reviso_la_correcta_subida": true,
+  "La_Documentacion_debe_ser_Reaprobada_por_Fideicomiso": false,
+  "Untitled_Field_1": "",
+  "U": "Este proceso fue retornado porque tiene una modificacion, favor revisar úñtima proforma",
+  "Fecha_de_Registro_al_Sistema": "2025-07-23",
+  "Cliente_cerrao": false,
+  "Se_genero_promesa_de_CompraVenta": false,
+  "El_Cliente_ha_traido_referidos": false,
+  "Hay_comisiones_por_cobrar": false,
+  "Solicita_Reubicacion": false,
+  "El_cliente_firmo_promesa": false,
+  "Revisado_por_Fideicomiso": false,
+  "Reservo_con_Tarjeta_de_Credito": false,
+  "Este_proceso_es_para_regularizar": false,
+  "La_ubicacion_ya_fue_liberada": false,
+  "La_ubicacion_ya_fue_liberada_en_el_sistema": false,
+  "El_departamento_financiero_aprueba_la_nueva_propuesta_comerc": false,
+  "Firmo_Promesa_de_Compraventa": false,
+  "Se_autoriza_liberar_ubicacion": false,
+  "Ubicacion_Liberada_1": false,
+  "Los_Cambios_ya_fueron_regularizados_en_el_sistema": false,
+  "La_ubicacion_se_encuentra_liberada_en_el_sistema": false,
+  "_current_context": [
+    {
+      "_context_current_step": "Start",
+      "_context_assigned_to": [
+        {
+          "_id": "UsknBC_RrPXT",
+          "Name": "Sistemas",
+          "Kind": "User"
+        }
+      ],
+      "_context_action_info": [],
+      "NodeType": "SendBackToInitiator",
+      "_context_assigned_at": "2025-07-23T18:51:23Z",
+      "_context_activity_id": "SendBackToInitiator",
+      "_context_activity_instance_id": "PkBlPHpF8i6e",
+      "_context_is_step_reassigned": false,
+      "_context_last_self_picked_by": null,
+      "ExpectedAt": null
+    }
+  ],
+  "_meta_version": "1758298644223361"
+}
+
+
+
+

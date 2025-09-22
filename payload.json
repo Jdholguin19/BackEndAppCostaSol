@@ -1,0 +1,19 @@
+{
+    "_id": "Test-Process-Final",
+    "Identificacion": "0933333333",
+    "Nombre_de_Cliente": "Carlos Final",
+    "Comentario_Gerencia": "carlos.final@email.com",
+    "Tipo_de_Fachada": "0987654324",
+    "Ruc_Actualizado": [
+        {
+            "Content": "https://url.del/ruc4.pdf"
+        }
+    ],
+    "Rev_Gerencia": "Aprobado Final",
+    "Numero_de_Convenio": "CONV-999",
+    "nometapa": "Arienzo",
+    "Modelo": "Bianca",
+    "Ubicacion": "8110-03",
+    "Proyecto": "Proyecto de Carlos Final",
+    "fecha_entrega": "2026-04-30"
+}
