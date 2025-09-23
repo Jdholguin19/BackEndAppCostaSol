@@ -39,35 +39,67 @@ function log_message(string $message): void {
  * @return ?array La respuesta JSON decodificada, o null si hay un error.
  */
 function call_kissflow_upsert_api(string $dataset_id, array $records_data): ?array {
-    // Endpoint para upsert en bulk. Se asume que es un POST a /records/bulk.
-    $url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/{$dataset_id}/records/bulk";
+    // Endpoint para upsert en bulk. Según documentación: /dataset/2/:account_id/:dataset_id/batch
+    $url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/batch";
     
-    $ch = curl_init($url);
-    $headers = [
-        'Content-Type: application/json',
-        'X-Access-Key-ID: ' . KISSFLOW_ACCESS_KEY_ID,
-        'X-Access-Key-Secret: ' . KISSFLOW_ACCESS_KEY_SECRET
-    ];
+    $max_retries = 3;
+    $retry_delay = 2; // Segundos iniciales
+    
+    for ($attempt = 1; $attempt <= $max_retries; $attempt++) {
+        $ch = curl_init($url);
+        $headers = [
+            'Content-Type: multipart/form-data',
+            'Accept: application/json',
+            'X-Access-Key-Id: ' . KISSFLOW_ACCESS_KEY_ID,
+            'X-Access-Key-Secret: ' . KISSFLOW_ACCESS_KEY_SECRET
+        ];
 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($records_data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($records_data));
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
 
-    $response = curl_exec($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $error = curl_error($ch);
-    curl_close($ch);
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
 
-    if ($error) {
-        log_message("ERROR cURL para upsert en Kiss Flow: $error");
-        return null;
+        if ($error) {
+            log_message("ERROR cURL para upsert en Kiss Flow (intento $attempt/$max_retries): $error");
+            if ($attempt < $max_retries) {
+                sleep($retry_delay);
+                $retry_delay *= 2; // Backoff exponencial
+                continue;
+            }
+            return null;
+        }
+        
+        if ($http_code >= 300) {
+            // Si es error 429 (rate limiting), esperar más tiempo
+            if ($http_code == 429) {
+                log_message("Rate limit detectado (429) - esperando $retry_delay segundos antes del reintento $attempt/$max_retries");
+                if ($attempt < $max_retries) {
+                    sleep($retry_delay);
+                    $retry_delay *= 2;
+                    continue;
+                }
+            }
+            log_message("ERROR API para upsert en Kiss Flow. Código: $http_code. Respuesta: " . substr($response, 0, 500) . "...");
+            if ($attempt < $max_retries && $http_code >= 500) {
+                sleep($retry_delay);
+                $retry_delay *= 2;
+                continue;
+            }
+            return null;
+        }
+        
+        // Éxito
+        return json_decode($response, true);
     }
-    if ($http_code >= 300) {
-        log_message("ERROR API para upsert en Kiss Flow. Código: $http_code. Respuesta: $response");
-        return null;
-    }
-    return json_decode($response, true);
+    
+    return null;
 }
 
 // --- LÓGICA PRINCIPAL DE SINCRONIZACIÓN ---
@@ -122,12 +154,24 @@ $modified_records = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 log_message("Se encontraron " . count($modified_records) . " registros modificados desde la última sincronización.");
 
-$dataset_id = 'DS_Documentos_Cliente';
 $upserted_count = 0;
 $errors_count = 0;
 
 foreach ($modified_records as $record) {
     try {
+        // Validar datos esenciales antes de procesar
+        if (empty($record['_id'])) {
+            log_message("Registro omitido: _id vacío (Cédula: {$record['Identificacion']})");
+            $errors_count++;
+            continue;
+        }
+        
+        if (empty($record['Identificacion'])) {
+            log_message("Registro omitido: cédula vacía (_id: {$record['_id']})");
+            $errors_count++;
+            continue;
+        }
+
         // Construir el payload para Kiss Flow
         $kissflow_payload = [
             '_id' => $record['_id'], // ID del registro en Kiss Flow para la actualización
@@ -146,13 +190,14 @@ foreach ($modified_records as $record) {
         // Filtrar campos nulos o vacíos para no sobrescribir datos en Kiss Flow si no hay cambios locales
         $kissflow_payload = array_filter($kissflow_payload, fn($value) => !is_null($value) && $value !== '');
 
-        // Llamar a la API de Kiss Flow para upsert (enviando un array con un solo registro)
-        $response = call_kissflow_upsert_api($dataset_id, [$kissflow_payload]);
+        // Agregar delay entre requests para evitar rate limiting
+        usleep(500000); // 0.5 segundos de delay entre requests
 
-        // Asumiendo que la API de bulk upsert devuelve un array de resultados, y cada resultado tiene un 'status'
-        // O que el 'status' general indica el éxito de la operación.
-        // Esto puede necesitar ajuste si la respuesta real de Kiss Flow es diferente.
-        if ($response && !empty($response['Records ingested'])) { // Asumiendo que 'Records ingested' indica éxito
+        // Llamar a la API de Kiss Flow para upsert (enviando un array con un solo registro)
+        $response = call_kissflow_upsert_api('DS_Documentos_Cliente', [$kissflow_payload]);
+
+        // Validar si la respuesta contiene datos (indica éxito)
+        if ($response && is_array($response) && !empty($response)) {
             log_message("Registro con _id '{$record['_id']}' (Cédula: {$record['Identificacion']}) upserted exitosamente en Kiss Flow.");
             $upserted_count++;
         } else {
