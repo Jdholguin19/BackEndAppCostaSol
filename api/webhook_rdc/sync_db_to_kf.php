@@ -130,7 +130,7 @@ $stmt = $conn->prepare("
         u.correo AS Comentario_Gerencia,
         u.telefono AS Tipo_de_Fachada,
         u.kissflow_convenio AS Convenio,
-        p.kissflow_ds_id AS _id,
+        u.kissflow_key AS _id,
         p.kissflow_proyecto AS Proyecto,
         p.manzana,
         p.villa,
