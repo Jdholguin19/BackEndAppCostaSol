@@ -182,7 +182,7 @@ foreach ($modified_records as $record) {
             'Convenio' => $record['Convenio'],
             'Etapa' => $record['Etapa'],
             'Modelo' => $record['Modelo'],
-            'Mz_Solar' => trim($record['manzana'] . '-' . $record['villa']),
+            'Mz_Solar' => trim($record['manzana'] . ' / ' . $record['villa']),
             'Proyecto' => $record['Proyecto'],
             'Fecha_de_Entrega' => $record['fecha_entrega'],
         ];
