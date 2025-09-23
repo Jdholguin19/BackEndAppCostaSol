@@ -257,3 +257,23 @@
 [2025-09-23 08:16:11] Propiedad CREADA para usuario ID: 1004 | Context: {
     "kissflow_ds_id": "PkC4KvsB7tTQ"
 }
+[2025-09-23 10:08:17] Webhook invocado.
+[2025-09-23 10:08:17] Payload recibido y decodificado. | Context: {
+    "record_id": "PkBhNEdXVM3R"
+}
+[2025-09-23 10:08:17] Usuario ACTUALIZADO con ID: 952 | Context: {
+    "cedula": "0922180948"
+}
+[2025-09-23 10:08:17] Propiedad CREADA para usuario ID: 952 | Context: {
+    "kissflow_ds_id": "PkBhNEdXVM3R"
+}
+[2025-09-23 12:07:24] Webhook invocado.
+[2025-09-23 12:07:24] Payload recibido y decodificado. | Context: {
+    "record_id": "PkC7d5wL9Pzx"
+}
+[2025-09-23 12:07:24] Usuario CREADO con ID: 1014 | Context: {
+    "cedula": "0913645925"
+}
+[2025-09-23 12:07:24] Propiedad CREADA para usuario ID: 1014 | Context: {
+    "kissflow_ds_id": "PkC7d5wL9Pzx"
+}

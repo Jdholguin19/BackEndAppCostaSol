@@ -1,11 +1,23 @@
-[2025-09-23 11:42:09] Registro sin Key o Identificación: {"Name":"836","Nombre_Cliente":"DANILDA ZAMBRANO MARTE ","Identificacion":"0926819293","Fecha":"2025-09-18T22:18:28Z","Etapa":"Estanzza","Mz_Solar":"7148-31","Modelo":"Terreno","Cedula_Votacion":[{"uploaded":100,"name":"CEDULA DANILDA ZAMBRANO20190802_12274880.pdf","id":"Attach_sKwmAJsQuL","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_sKwmAJsQuL\/CEDULA_DANILDA_ZAMBRANO20190802_12274880.pdf","size":156017,"fileExtension":"pdf","_modified_at":"2025-09-18T22:22:22.614Z","_created_at":"2025-09-18T22:22:22.614Z"}],"Proforma":[{"uploaded":100,"name":"COTIZACION DANILDA ZAMBRANO TERRENO 416 MTS 2 ETAPA ESTANZZA.pdf","id":"Attach_cR_54U8l5I","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_cR_54U8l5I\/COTIZACION_DANILDA_ZAMBRANO_TERRENO_416_MTS_2_ETAPA_ESTANZZA.pdf","size":397949,"fileExtension":"pdf","_modified_at":"2025-09-18T22:23:45.942Z","_created_at":"2025-09-18T22:23:45.942Z"}],"CTransaccion":[{"uploaded":100,"name":"COMPROBANTE DE 1.000 DE RESERVA 16 DE SPT.pdf","id":"Attach_J1sev3qxmN","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_J1sev3qxmN\/COMPROBANTE_DE_1.000_DE_RESERVA_16_DE_SPT.pdf","size":108928,"fileExtension":"pdf","_modified_at":"2025-09-18T22:28:07.665Z","_created_at":"2025-09-18T22:28:07.665Z"},{"uploaded":100,"name":"COMPROBANTE DE 1000 DLRS  DE RESRVA 17 DE SPT.pdf","id":"Attach_2WA3gKWSgN","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_2WA3gKWSgN\/COMPROBANTE_DE_1000_DLRS__DE_RESRVA_17_DE_SPT.pdf","size":110767,"fileExtension":"pdf","_modified_at":"2025-09-18T22:28:21.949Z","_created_at":"2025-09-18T22:28:21.949Z"}],"RProvisional":[{"uploaded":100,"name":"RECIBO PROVISIONAL DE RESERVA DE 1.000 DLRS DIA 16 DE SEPT.pdf","id":"Attach_HNf9PYDu3a","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_HNf9PYDu3a\/RECIBO_PROVISIONAL_DE_RESERVA_DE_1.000_DLRS_DIA_16_DE_SEPT.pdf","size":264648,"fileExtension":"pdf","_modified_at":"2025-09-18T22:27:06.174Z","_created_at":"2025-09-18T22:27:06.174Z"},{"uploaded":100,"name":"RECIBO PROVISIONAL DE RESERVA DE 1,000 DLRS DIA 17 DE SPT.pdf","id":"Attach_nLHClH1hlK","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_nLHClH1hlK\/RECIBO_PROVISIONAL_DE_RESERVA_DE_1_000_DLRS_DIA_17_DE_SPT.pdf","size":241029,"fileExtension":"pdf","_modified_at":"2025-09-18T22:27:23.442Z","_created_at":"2025-09-18T22:27:23.442Z"}],"Intencion_C":[{"uploaded":100,"name":"CARTA DE INTENCION DE RESERVA.pdf","id":"Attach_V7DXjGReEa","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_V7DXjGReEa\/CARTA_DE_INTENCION_DE_RESERVA.pdf","size":3755965,"fileExtension":"pdf","_modified_at":"2025-09-18T22:27:46.785Z","_created_at":"2025-09-18T22:27:46.785Z"}],"Varios":[{"uploaded":100,"name":"INFORMACION DE RESERVA.pdf","id":"Attach_rGYn3FlvSR","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_rGYn3FlvSR\/INFORMACION_DE_RESERVA.pdf","size":216731,"fileExtension":"pdf","_modified_at":"2025-09-18T22:28:59.245Z","_created_at":"2025-09-18T22:28:59.245Z"},{"uploaded":100,"name":"FORMULARIO DE AREA LEGAL.pdf","id":"Attach_QzqvSv6UUA","key":"Registro_Documentacio_n_de_Clientes\/PkC6GaaI3Dk9\/PkC6GaaLyd2t\/Attach_QzqvSv6UUA\/FORMULARIO_DE_AREA_LEGAL.pdf","size":225113,"fileExtension":"pdf","_modified_at":"2025-09-18T22:29:07.966Z","_created_at":"2025-09-18T22:29:07.966Z"}],"Untitled_field":false,"comisionesxc":false,"Ubicacion_liberada":false,"Tiene_modificacion":false,"Parqueo":false,"Cambio_de_Diseno":false,"Proyecto":"Terreno 7148-31","_id":"DS_Documentos_Cliente_C6GlW2DkDk"}
+<pre>=== DEBUG: CONSULTANDO REGISTRO EN KISS FLOW ===
+URL de búsqueda: https://thaliavictoria.kissflow.com/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/list?page_number=1&page_size=1000
 
-[2025-09-23 11:42:09] Registro sin Key o Identificación: {"Name":"841","Nombre_Cliente":"PRUEBA PRUEBA KISS","Identificacion":"0955555","Fecha":"2025-09-22T17:19:04Z","Etapa":"Basilea","Mz_Solar":"7108-08","Modelo":"Carolina","Untitled_field":false,"comisionesxc":false,"Ubicacion_liberada":false,"Tiene_modificacion":false,"Parqueo":false,"Cambio_de_Diseno":false,"Proyecto":"Carolina 7108-08","_id":"DS_Documentos_Cliente_C7dp7DhHM4"}
-[2025-09-23 11:42:09] Registro sin Key o Identificación: {"Name":"842","Nombre_Cliente":"PRUEBA PRUEBA PRUEBA","Identificacion":"09864124","Fecha":"2025-09-22T18:07:50Z","Etapa":"Basilea","Mz_Solar":"7107-03","Modelo":"Alexia","Rev_Gerencia":"nOSE","Untitled_field":false,"comisionesxc":false,"Ubicacion_liberada":false,"Tiene_modificacion":false,"Parqueo":false,"Cambio_de_Diseno":false,"Proyecto":"Alexia 7107-03","_id":"DS_Documentos_Cliente_C7easlLIYq"}
-[2025-09-23 11:42:09] Registro sin Key o Identificación: {"Nombre_Cliente":"PRUEBA PRUEBA PRUEBA","Identificacion":"09864124","Etapa":"Basilea","Mz_Solar":"7107-03","Modelo":"Alexia","Untitled_field":false,"comisionesxc":false,"Ubicacion_liberada":false,"Comentario_Gerencia":"09864124@placeholder.costasol.com.ec","Convenio":"ANV-2489","Tiene_modificacion":false,"Parqueo":false,"Cambio_de_Diseno":false,"Proyecto":"Alexia 7107-03","_id":"PkC7eaPw_Qk0"}
-[2025-09-23 11:42:10] Procesando página 20...
-[2025-09-23 11:42:10] No se encontraron más registros.
-[2025-09-23 11:42:10] --- REPORTE FINAL ---
-[2025-09-23 11:42:10] Keys actualizados: 0
-[2025-09-23 11:42:10] SINCRONIZACIÓN DE KEYS COMPLETADA.
+=== BÚSQUEDA MANUAL EN 1000 REGISTROS ===
+
+=== REGISTROS ENCONTRADOS CON CÉDULA 09864124 ===
+Se encontraron 1 registros:
+
+--- REGISTRO 1 ---
+_id: DS_Documentos_Cliente_C7easlLIYq
+Name (Key): 842
+Identificacion: 09864124
+Convenio: NO ENCONTRADO
+Nombre_Cliente: PRUEBA PRUEBA PRUEBA
+
+
+==================================================
+
+=== REGISTROS ENCONTRADOS CON CONVENIO ANV-2888 ===
+Se encontraron 0 registros:
+
+=== FIN DEL DEBUG ===
 </pre>

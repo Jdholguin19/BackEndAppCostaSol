@@ -1,11 +1,12 @@
-[2025-09-23 10:10:02] INICIO DE LA SINCRONIZACIÓN DE DB LOCAL A KISS FLOW.
-[2025-09-23 10:10:02] Se encontraron 3 registros modificados desde la última sincronización.
-[2025-09-23 10:10:03] ERROR al upsertar registro con _id 'DS_Documentos_Cliente_BhO71Ybsge' (Cédula: 0922180948) en Kiss Flow. Respuesta: [{"Comentario_Gerencia":"0922180948@placeholder.costasol.com.ec","Convenio":"CSEE086","Mz_Solar":"7144 \/ 02","_modified_at":"2025-09-23T16:10:02Z","_id":"DS_Documentos_Cliente_BhO71Ybsge","_previous_id":null}]
-[2025-09-23 10:10:03] ERROR al upsertar registro con _id 'PkC7eaPw_Qk0' (Cédula: 09864124) en Kiss Flow. Respuesta: [{"Untitled_field":false,"comisionesxc":false,"Ubicacion_liberada":false,"Tiene_modificacion":false,"Parqueo":false,"Cambio_de_Diseno":false,"_created_at":"2025-09-23T16:10:03Z","_created_by":{"_id":"UsknBC_RrPXT","Name":"Sistemas","Kind":"User"},"_flow_name":"DS Documentos Cliente","_modified_at":"2025-09-23T16:10:03Z","_modified_by":{"_id":"UsknBC_RrPXT","Name":"Sistemas","Kind":"User"},"_flow_type":"Dataset","Identificacion":"09864124","Nombre_Cliente":"PRUEBA PRUEBA PRUEBA","Comentario_Gerencia":"09864124@placeholder.costasol.com.ec","Convenio":"ANV-2451","Etapa":"Basilea","Modelo":"Alexia","Mz_Solar":"7107 \/ 03","Proyecto":"Alexia 7107-03","_id":"PkC7eaPw_Qk0","_previous_id":null}]
-[2025-09-23 10:10:04] ERROR al upsertar registro con _id 'PkBhNEdXVM3R' (Cédula: 0922180948) en Kiss Flow. Respuesta: [{"Untitled_field":false,"comisionesxc":false,"Ubicacion_liberada":false,"Tiene_modificacion":false,"Parqueo":false,"Cambio_de_Diseno":false,"_created_at":"2025-09-23T16:10:04Z","_created_by":{"_id":"UsknBC_RrPXT","Name":"Sistemas","Kind":"User"},"_flow_name":"DS Documentos Cliente","_modified_at":"2025-09-23T16:10:04Z","_modified_by":{"_id":"UsknBC_RrPXT","Name":"Sistemas","Kind":"User"},"_flow_type":"Dataset","Identificacion":"0922180948","Nombre_Cliente":"Hugo German Giacoman Apolinario","Comentario_Gerencia":"0922180948@placeholder.costasol.com.ec","Convenio":"CSEE086","Etapa":"Estanzza","Modelo":"Hana Plus","Mz_Solar":"7144 \/ 02","Proyecto":"Hana Plus 7144-02","_id":"PkBhNEdXVM3R","_previous_id":null}]
-[2025-09-23 10:10:04] 
+[2025-09-23 13:00:06] INICIO DE LA SINCRONIZACIÓN DE DB LOCAL A KISS FLOW.
+[2025-09-23 13:00:06] Se encontraron 1 registros modificados desde la última sincronización.
+[2025-09-23 13:00:06] Creando nuevo registro para cédula: 987654321 (sin kissflow_key)
+[2025-09-23 13:00:07] ERROR API para upsert en Kiss Flow. Código: 400. Respuesta: {"type":"InvalidBatchRequestJson","error_code":"KISSFLOW_ERROR_07010","en_message":"The given JSON is not in the expected format.","message":"The given JSON is not in the expected format.","_id":"6d8812d6-0987-4d73-916e-71aeca01cf43","args":{},"status":"error","request_id":"dataset.batch-update-02251414-423a-483e-9937-17c2aca0b93b"}
+...
+[2025-09-23 13:00:07] ERROR al crear nuevo registro para cédula 987654321 en Kiss Flow. Respuesta: null
+[2025-09-23 13:00:07] 
 --- REPORTE FINAL ---
-[2025-09-23 10:10:04] Registros procesados: 3
-[2025-09-23 10:10:04] Registros upserted en Kiss Flow: 0
-[2025-09-23 10:10:04] Errores: 3
-[2025-09-23 10:10:04] SINCRONIZACIÓN DE DB LOCAL A KISS FLOW COMPLETADA.
+[2025-09-23 13:00:07] Registros procesados: 1
+[2025-09-23 13:00:07] Registros upserted en Kiss Flow: 0
+[2025-09-23 13:00:07] Errores: 1
+[2025-09-23 13:00:07] SINCRONIZACIÓN DE DB LOCAL A KISS FLOW COMPLETADA.

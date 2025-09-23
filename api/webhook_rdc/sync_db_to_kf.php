@@ -33,6 +33,63 @@ function log_message(string $message): void {
 }
 
 /**
+ * Obtiene el _id real de Kiss Flow usando el kissflow_key
+ * @param string $kissflow_key El Key del registro en Kiss Flow
+ * @return ?string El _id real de Kiss Flow, o null si no se encuentra
+ */
+function get_kissflow_real_id(string $kissflow_key): ?string {
+    if (empty($kissflow_key)) {
+        return null;
+    }
+    
+    // Buscar en todos los registros de Kiss Flow
+    $page_number = 1;
+    $page_size = 1000;
+    
+    do {
+        $url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/list?page_number={$page_number}&page_size={$page_size}";
+        
+        $ch = curl_init($url);
+        $headers = [
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'X-Access-Key-Id: ' . KISSFLOW_ACCESS_KEY_ID,
+            'X-Access-Key-Secret: ' . KISSFLOW_ACCESS_KEY_SECRET
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error || $http_code >= 300) {
+            log_message("ERROR al obtener registros de Kiss Flow para buscar _id: $error");
+            return null;
+        }
+        
+        $data = json_decode($response, true);
+        $records = $data['Data'] ?? [];
+        
+        // Buscar el registro con el kissflow_key
+        foreach ($records as $record) {
+            if (isset($record['Name']) && $record['Name'] === $kissflow_key) {
+                return $record['_id'] ?? null;
+            }
+        }
+        
+        $page_number++;
+        
+    } while (!empty($records));
+    
+    return null;
+}
+
+/**
  * Realiza una llamada a la API de Kiss Flow para upsert de registros de dataset en bulk.
  * @param string $dataset_id El ID del dataset de Kiss Flow.
  * @param array $records_data Un array de registros a upsert. Cada registro debe incluir '_id' si es una actualización.
@@ -130,7 +187,7 @@ $stmt = $conn->prepare("
         u.correo AS Comentario_Gerencia,
         u.telefono AS Tipo_de_Fachada,
         u.kissflow_convenio AS Convenio,
-        u.kissflow_key AS _id,
+        u.kissflow_key,
         p.kissflow_proyecto AS Proyecto,
         p.manzana,
         p.villa,
@@ -160,12 +217,6 @@ $errors_count = 0;
 foreach ($modified_records as $record) {
     try {
         // Validar datos esenciales antes de procesar
-        if (empty($record['_id'])) {
-            log_message("Registro omitido: _id vacío (Cédula: {$record['Identificacion']})");
-            $errors_count++;
-            continue;
-        }
-        
         if (empty($record['Identificacion'])) {
             log_message("Registro omitido: cédula vacía (_id: {$record['_id']})");
             $errors_count++;
@@ -174,7 +225,6 @@ foreach ($modified_records as $record) {
 
         // Construir el payload para Kiss Flow
         $kissflow_payload = [
-            '_id' => $record['_id'], // ID del registro en Kiss Flow para la actualización
             'Identificacion' => $record['Identificacion'],
             'Nombre_Cliente' => trim($record['nombres'] . ' ' . $record['apellidos']),
             'Comentario_Gerencia' => $record['Comentario_Gerencia'],
@@ -187,6 +237,20 @@ foreach ($modified_records as $record) {
             'Fecha_de_Entrega' => $record['fecha_entrega'],
         ];
 
+        // Obtener el _id real de Kiss Flow si existe kissflow_key
+        $real_id = null;
+        if (!empty($record['kissflow_key'])) {
+            $real_id = get_kissflow_real_id($record['kissflow_key']);
+            if ($real_id) {
+                $kissflow_payload['_id'] = $real_id;
+                log_message("Actualizando registro existente con _id real '$real_id' (Key: {$record['kissflow_key']}, Cédula: {$record['Identificacion']})");
+            } else {
+                log_message("No se encontró _id real para Key '{$record['kissflow_key']}' (Cédula: {$record['Identificacion']}) - creando nuevo registro");
+            }
+        } else {
+            log_message("Creando nuevo registro para cédula: {$record['Identificacion']} (sin kissflow_key)");
+        }
+
         // Filtrar campos nulos o vacíos para no sobrescribir datos en Kiss Flow si no hay cambios locales
         $kissflow_payload = array_filter($kissflow_payload, fn($value) => !is_null($value) && $value !== '');
 
@@ -198,15 +262,27 @@ foreach ($modified_records as $record) {
 
         // Validar si la respuesta contiene datos (indica éxito)
         if ($response && is_array($response) && !empty($response)) {
-            log_message("Registro con _id '{$record['_id']}' (Cédula: {$record['Identificacion']}) upserted exitosamente en Kiss Flow.");
+            if ($real_id) {
+                log_message("Registro con _id real '$real_id' (Key: {$record['kissflow_key']}, Cédula: {$record['Identificacion']}) actualizado exitosamente en Kiss Flow.");
+            } else {
+                log_message("Nuevo registro creado para cédula {$record['Identificacion']} en Kiss Flow.");
+            }
             $upserted_count++;
         } else {
-            log_message("ERROR al upsertar registro con _id '{$record['_id']}' (Cédula: {$record['Identificacion']}) en Kiss Flow. Respuesta: " . json_encode($response));
+            if ($real_id) {
+                log_message("ERROR al actualizar registro con _id real '$real_id' (Key: {$record['kissflow_key']}, Cédula: {$record['Identificacion']}) en Kiss Flow. Respuesta: " . json_encode($response));
+            } else {
+                log_message("ERROR al crear nuevo registro para cédula {$record['Identificacion']} en Kiss Flow. Respuesta: " . json_encode($response));
+            }
             $errors_count++;
         }
 
     } catch (Exception $e) {
-        log_message("ERROR CRÍTICO al procesar registro con _id '{$record['_id']}' (Cédula: {$record['Identificacion']}): " . $e->getMessage());
+        if (!empty($record['kissflow_key'])) {
+            log_message("ERROR CRÍTICO al procesar registro con Key '{$record['kissflow_key']}' (Cédula: {$record['Identificacion']}): " . $e->getMessage());
+        } else {
+            log_message("ERROR CRÍTICO al procesar registro para cédula {$record['Identificacion']}: " . $e->getMessage());
+        }
         $errors_count++;
     }
 }
