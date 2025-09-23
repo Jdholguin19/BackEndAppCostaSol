@@ -25,6 +25,7 @@ define('LOG_FILE', __DIR__ . '/sync_log.txt');
 
 // --- INCLUSIÓN DE DEPENDENCIAS ---
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/../../kiss_flow/config.php'; // Para KISSFLOW_API_HOST, KISSFLOW_ACCESS_KEY_ID, KISSFLOW_ACCESS_KEY_SECRET
 
 // --- FUNCIONES AUXILIARES ---
 
@@ -40,6 +41,51 @@ function log_message(string $message, array $context = []): void {
     }
     $log_entry .= "\n";
     file_put_contents(LOG_FILE, $log_entry, FILE_APPEND | LOCK_EX);
+}
+
+/**
+ * Obtiene el Key (Name) de un registro en Kiss Flow usando su _id
+ * @param string $record_id El _id del registro en Kiss Flow
+ * @return ?string El Key (Name) del registro, o null si no se encuentra
+ */
+function get_kissflow_key_by_id(string $record_id): ?string {
+    if (empty($record_id)) {
+        return null;
+    }
+    
+    // Obtener el registro específico por ID
+    $url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/record/{$record_id}";
+    
+    $ch = curl_init($url);
+    $headers = [
+        'Content-Type: application/json',
+        'Accept: application/json',
+        'X-Access-Key-Id: ' . KISSFLOW_ACCESS_KEY_ID,
+        'X-Access-Key-Secret: ' . KISSFLOW_ACCESS_KEY_SECRET
+    ];
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+
+    if ($error || $http_code >= 300) {
+        log_message("ERROR al obtener registro de Kiss Flow por ID: $error", ['record_id' => $record_id, 'http_code' => $http_code]);
+        return null;
+    }
+    
+    $data = json_decode($response, true);
+    
+    if (isset($data['Data']['Name'])) {
+        return $data['Data']['Name'];
+    }
+    
+    return null;
 }
 
 /**
@@ -148,8 +194,11 @@ try {
     $stmt_user->execute([':cedula' => $cedula]);
     $user_id = $stmt_user->fetchColumn();
 
+    $user_created = false; // Variable para trackear si se creó un usuario nuevo
+    
     if (!$user_id) {
         // Crear usuario
+        $user_created = true; // Marcar que se está creando un usuario nuevo
         $new_user_data = [
             'cedula' => $cedula,
             'rol_id' => 1,
@@ -224,6 +273,18 @@ try {
         $stmt_insert_prop = $conn->prepare("INSERT INTO propiedad ($columns) VALUES ($placeholders)");
         $stmt_insert_prop->execute($prop_data);
         log_message("Propiedad CREADA para usuario ID: {$user_id}", ['kissflow_ds_id' => $kissflow_ds_id]);
+        
+        // Para usuarios nuevos, obtener el Key de Kiss Flow y actualizarlo
+        if ($user_created) {
+            $kissflow_key = get_kissflow_key_by_id($kissflow_ds_id);
+            if ($kissflow_key) {
+                $stmt_update_key = $conn->prepare("UPDATE usuario SET kissflow_key = :kissflow_key WHERE id = :user_id");
+                $stmt_update_key->execute([':kissflow_key' => $kissflow_key, ':user_id' => $user_id]);
+                log_message("Key de Kiss Flow obtenido y actualizado", ['user_id' => $user_id, 'kissflow_key' => $kissflow_key]);
+            } else {
+                log_message("No se pudo obtener el Key de Kiss Flow para el usuario nuevo", ['user_id' => $user_id, 'kissflow_ds_id' => $kissflow_ds_id]);
+            }
+        }
     } else {
         if (!empty($prop_data)) {
             $set_parts = [];

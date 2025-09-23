@@ -1,0 +1,2 @@
+
+[23-Sep-2025 13:11:09 America/Boise] PHP Warning:  Undefined variable $user_created in /home1/portalao/public_html/website_cc359709/api/webhook_rdc/webhook_handler.php on line 275
