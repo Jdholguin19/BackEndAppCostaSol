@@ -53,7 +53,7 @@ function get_kissflow_key_by_id(string $record_id): ?string {
         return null;
     }
     
-    // Obtener el registro específico por ID
+    // Intentar primero con el endpoint directo
     $url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/record/{$record_id}";
     
     $ch = curl_init($url);
@@ -74,17 +74,45 @@ function get_kissflow_key_by_id(string $record_id): ?string {
     $error = curl_error($ch);
     curl_close($ch);
 
+    if (!$error && $http_code < 300) {
+        $data = json_decode($response, true);
+        if (isset($data['Data']['Name'])) {
+            return $data['Data']['Name'];
+        }
+    }
+    
+    // Si falla el endpoint directo, buscar en la lista
+    log_message("Endpoint directo falló, buscando en lista", ['record_id' => $record_id, 'http_code' => $http_code]);
+    
+    $list_url = KISSFLOW_API_HOST . "/dataset/2/AcNcc9rydX9F/DS_Documentos_Cliente/list?page_number=1&page_size=1000";
+    
+    $ch = curl_init($list_url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+
+    $response = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+
     if ($error || $http_code >= 300) {
-        log_message("ERROR al obtener registro de Kiss Flow por ID: $error", ['record_id' => $record_id, 'http_code' => $http_code]);
+        log_message("ERROR al obtener lista de Kiss Flow: $error", ['record_id' => $record_id, 'http_code' => $http_code]);
         return null;
     }
     
     $data = json_decode($response, true);
+    $records = $data['Data'] ?? [];
     
-    if (isset($data['Data']['Name'])) {
-        return $data['Data']['Name'];
+    // Buscar el registro con el _id específico
+    foreach ($records as $record) {
+        if (isset($record['_id']) && $record['_id'] === $record_id) {
+            return $record['Name'] ?? null;
+        }
     }
     
+    log_message("No se encontró el registro en la lista", ['record_id' => $record_id]);
     return null;
 }
 
@@ -274,16 +302,22 @@ try {
         $stmt_insert_prop->execute($prop_data);
         log_message("Propiedad CREADA para usuario ID: {$user_id}", ['kissflow_ds_id' => $kissflow_ds_id]);
         
-        // Para usuarios nuevos, obtener el Key de Kiss Flow y actualizarlo
+        // Para usuarios nuevos, ejecutar sincronización de keys en background
         if ($user_created) {
-            $kissflow_key = get_kissflow_key_by_id($kissflow_ds_id);
-            if ($kissflow_key) {
-                $stmt_update_key = $conn->prepare("UPDATE usuario SET kissflow_key = :kissflow_key WHERE id = :user_id");
-                $stmt_update_key->execute([':kissflow_key' => $kissflow_key, ':user_id' => $user_id]);
-                log_message("Key de Kiss Flow obtenido y actualizado", ['user_id' => $user_id, 'kissflow_key' => $kissflow_key]);
-            } else {
-                log_message("No se pudo obtener el Key de Kiss Flow para el usuario nuevo", ['user_id' => $user_id, 'kissflow_ds_id' => $kissflow_ds_id]);
-            }
+            log_message("Usuario nuevo creado - ejecutando sincronización de keys", ['user_id' => $user_id, 'kissflow_ds_id' => $kissflow_ds_id]);
+            
+            // Ejecutar sincronización de keys en background (sin esperar respuesta)
+            $sync_url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['REQUEST_URI']) . '/run_sync_keys.php';
+            
+            // Usar cURL en background
+            $ch = curl_init($sync_url);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 1); // Timeout muy corto para no bloquear
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HEADER, false);
+            curl_exec($ch);
+            curl_close($ch);
+            
+            log_message("Sincronización de keys iniciada en background", ['user_id' => $user_id]);
         }
     } else {
         if (!empty($prop_data)) {

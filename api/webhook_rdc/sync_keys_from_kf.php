@@ -97,28 +97,29 @@ do {
 
         log_message("Procesando cédula de KF: $kf_identificacion, Name: $kf_key");
 
-        // Buscar en la DB local por cédula
-        $stmt = $conn->prepare("SELECT id, kissflow_key FROM usuario WHERE cedula = :cedula LIMIT 1");
+        // Buscar en la DB local por cédula - solo usuarios sin kissflow_key
+        $stmt = $conn->prepare("SELECT id FROM usuario WHERE cedula = :cedula AND (kissflow_key IS NULL OR kissflow_key = '') LIMIT 1");
         $stmt->execute([':cedula' => $kf_identificacion]);
-        $user_data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user_id = $stmt->fetchColumn();
 
-        if ($user_data) {
-            $user_id = $user_data['id'];
-            $existing_key = $user_data['kissflow_key'];
-            
-            // Solo actualizar si no tiene key o si el key es diferente
-            if (empty($existing_key) || $existing_key !== $kf_key) {
-                log_message("Actualizando key para cédula $kf_identificacion: $existing_key -> $kf_key");
-                $stmt_update = $conn->prepare("UPDATE usuario SET kissflow_key = :kf_key WHERE id = :user_id");
-                if ($stmt_update->execute([':kf_key' => $kf_key, ':user_id' => $user_id])) {
-                    log_message("Actualizado kissflow_key para cédula $kf_identificacion: $kf_key");
-                    $updated_count++;
-                }
-            } else {
-                log_message("Key ya existe y es correcto para cédula $kf_identificacion: $kf_key");
+        if ($user_id) {
+            log_message("Actualizando key faltante para cédula $kf_identificacion: $kf_key");
+            $stmt_update = $conn->prepare("UPDATE usuario SET kissflow_key = :kf_key WHERE id = :user_id");
+            if ($stmt_update->execute([':kf_key' => $kf_key, ':user_id' => $user_id])) {
+                log_message("Actualizado kissflow_key para cédula $kf_identificacion: $kf_key");
+                $updated_count++;
             }
         } else {
-            log_message("NO encontrado usuario local para cédula: $kf_identificacion");
+            // Verificar si ya tiene key
+            $stmt_check = $conn->prepare("SELECT kissflow_key FROM usuario WHERE cedula = :cedula LIMIT 1");
+            $stmt_check->execute([':cedula' => $kf_identificacion]);
+            $existing_key = $stmt_check->fetchColumn();
+            
+            if ($existing_key) {
+                log_message("Usuario ya tiene key para cédula $kf_identificacion: $existing_key");
+            } else {
+                log_message("NO encontrado usuario local para cédula: $kf_identificacion");
+            }
         }
     }
 
