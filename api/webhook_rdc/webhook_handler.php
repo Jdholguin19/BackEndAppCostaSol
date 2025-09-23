@@ -115,9 +115,10 @@ function send_response(string $status, string $message, int $http_code = 200): v
 
 // --- LÓGICA PRINCIPAL DEL WEBHOOK ---
 
+log_message("Webhook invocado.");
+
 // 1. LEER Y VALIDAR EL PAYLOAD
 $json_payload = file_get_contents('php://input');
-log_message("Webhook invocado. Payload completo recibido:", ['raw_payload' => $json_payload]);
 $record = json_decode($json_payload, true);
 
 if (json_last_error() !== JSON_ERROR_NONE || !is_array($record)) {

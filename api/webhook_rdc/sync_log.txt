@@ -155,3 +155,95 @@
 [2025-09-22 11:19:50] Propiedad CREADA para usuario ID: 1012 | Context: {
     "kissflow_ds_id": "PkC7doLeHuqo"
 }
+[2025-09-22 11:52:29] Webhook invocado. Payload completo recibido: | Context: {
+    "raw_payload": "{\"_id\":\"SampleInstance001\",\"Identificacion\":\"Text data\",\"Nombre_de_Cliente\":\"Text data\",\"Numero_de_Convenio\":\"Text data\",\"nometapa\":\"Text data\",\"Modelo\":\"Modelo A\",\"Ubicacion\":\"Text data\",\"Proyecto\":\"Text data\"}"
+}
+[2025-09-22 11:52:29] Payload recibido y decodificado. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:52:29] Error: El campo 'Identificacion' (cédula) está vacío o es inválido. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:53:07] Webhook invocado. Payload completo recibido: | Context: {
+    "raw_payload": "{\"_id\":\"SampleInstance001\",\"Identificacion\":\"Text data\",\"Nombre_de_Cliente\":\"Text data\",\"Numero_de_Convenio\":\"Text data\",\"nometapa\":\"Text data\",\"Modelo\":\"Modelo A\",\"Ubicacion\":\"Text data\",\"Proyecto\":\"Text data\"}"
+}
+[2025-09-22 11:53:07] Payload recibido y decodificado. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:53:07] Error: El campo 'Identificacion' (cédula) está vacío o es inválido. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:53:42] Webhook invocado. Payload completo recibido: | Context: {
+    "raw_payload": "{\"_id\":\"SampleInstance001\",\"Identificacion\":\"Text data\",\"Nombre_de_Cliente\":\"Text data\",\"Numero_de_Convenio\":\"Text data\",\"nometapa\":\"Text data\",\"Modelo\":\"Modelo A\",\"Ubicacion\":\"Text data\",\"Proyecto\":\"Text data\"}"
+}
+[2025-09-22 11:53:42] Payload recibido y decodificado. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:53:42] Error: El campo 'Identificacion' (cédula) está vacío o es inválido. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:56:51] Webhook invocado.
+[2025-09-22 11:56:51] Payload recibido y decodificado. | Context: {
+    "record_id": "SampleInstance001"
+}
+[2025-09-22 11:56:51] Detectada solicitud de prueba de Kiss Flow (Identificacion vacía). Devolviendo éxito para permitir activación.
+[2025-09-22 11:58:36] Webhook invocado.
+[2025-09-22 11:58:36] Payload recibido y decodificado. | Context: {
+    "record_id": "PkBzgZSBXKK7"
+}
+[2025-09-22 11:58:36] Usuario ACTUALIZADO con ID: 986 | Context: {
+    "cedula": "0923451462"
+}
+[2025-09-22 11:58:36] Propiedad CREADA para usuario ID: 986 | Context: {
+    "kissflow_ds_id": "PkBzgZSBXKK7"
+}
+[2025-09-22 12:08:18] Webhook invocado.
+[2025-09-22 12:08:18] Payload recibido y decodificado. | Context: {
+    "record_id": "PkC7eaPw_Qk0"
+}
+[2025-09-22 12:08:18] Usuario CREADO con ID: 1013 | Context: {
+    "cedula": "09864124"
+}
+[2025-09-22 12:08:18] Propiedad CREADA para usuario ID: 1013 | Context: {
+    "kissflow_ds_id": "PkC7eaPw_Qk0"
+}
+[2025-09-22 14:57:27] Webhook invocado.
+[2025-09-22 14:57:27] Payload recibido y decodificado. | Context: {
+    "record_id": "PkBq8dDulxPs"
+}
+[2025-09-22 14:57:27] Usuario ACTUALIZADO con ID: 966 | Context: {
+    "cedula": "0925576993"
+}
+[2025-09-22 14:57:27] Propiedad CREADA para usuario ID: 966 | Context: {
+    "kissflow_ds_id": "PkBq8dDulxPs"
+}
+[2025-09-22 15:05:52] Webhook invocado.
+[2025-09-22 15:05:52] Payload recibido y decodificado. | Context: {
+    "record_id": "PkBTROg_6wUX"
+}
+[2025-09-22 15:05:52] Usuario ACTUALIZADO con ID: 902 | Context: {
+    "cedula": "0350208989"
+}
+[2025-09-22 15:05:52] Propiedad CREADA para usuario ID: 902 | Context: {
+    "kissflow_ds_id": "PkBTROg_6wUX"
+}
+[2025-09-22 15:34:18] Webhook invocado.
+[2025-09-22 15:34:18] Payload recibido y decodificado. | Context: {
+    "record_id": "PkAkpMlXF7Wl"
+}
+[2025-09-22 15:34:18] Usuario ACTUALIZADO con ID: 820 | Context: {
+    "cedula": "0911613446"
+}
+[2025-09-22 15:34:18] Propiedad CREADA para usuario ID: 820 | Context: {
+    "kissflow_ds_id": "PkAkpMlXF7Wl"
+}
+[2025-09-22 15:51:17] Webhook invocado.
+[2025-09-22 15:51:17] Payload recibido y decodificado. | Context: {
+    "record_id": "PkBQ5I3MJL9t"
+}
+[2025-09-22 15:51:17] Usuario ACTUALIZADO con ID: 884 | Context: {
+    "cedula": "0922354313"
+}
+[2025-09-22 15:51:17] Propiedad CREADA para usuario ID: 884 | Context: {
+    "kissflow_ds_id": "PkBQ5I3MJL9t"
+}
