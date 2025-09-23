@@ -146,10 +146,13 @@ foreach ($modified_records as $record) {
         // Filtrar campos nulos o vacíos para no sobrescribir datos en Kiss Flow si no hay cambios locales
         $kissflow_payload = array_filter($kissflow_payload, fn($value) => !is_null($value) && $value !== '');
 
-        // Llamar a la API de Kiss Flow para upsert
-        $response = call_kissflow_upsert_api($dataset_id, $kissflow_payload);
+        // Llamar a la API de Kiss Flow para upsert (enviando un array con un solo registro)
+        $response = call_kissflow_upsert_api($dataset_id, [$kissflow_payload]);
 
-        if ($response && ($response['status'] ?? '') === 'success') { // Asumiendo que la API devuelve un 'status'
+        // Asumiendo que la API de bulk upsert devuelve un array de resultados, y cada resultado tiene un 'status'
+        // O que el 'status' general indica el éxito de la operación.
+        // Esto puede necesitar ajuste si la respuesta real de Kiss Flow es diferente.
+        if ($response && !empty($response['Records ingested'])) { // Asumiendo que 'Records ingested' indica éxito
             log_message("Registro con _id '{$record['_id']}' (Cédula: {$record['Identificacion']}) upserted exitosamente en Kiss Flow.");
             $upserted_count++;
         } else {

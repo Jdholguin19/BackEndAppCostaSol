@@ -247,3 +247,13 @@
 [2025-09-22 15:51:17] Propiedad CREADA para usuario ID: 884 | Context: {
     "kissflow_ds_id": "PkBQ5I3MJL9t"
 }
+[2025-09-23 08:16:11] Webhook invocado.
+[2025-09-23 08:16:11] Payload recibido y decodificado. | Context: {
+    "record_id": "PkC4KvsB7tTQ"
+}
+[2025-09-23 08:16:11] Usuario ACTUALIZADO con ID: 1004 | Context: {
+    "cedula": "1203953276"
+}
+[2025-09-23 08:16:11] Propiedad CREADA para usuario ID: 1004 | Context: {
+    "kissflow_ds_id": "PkC4KvsB7tTQ"
+}
