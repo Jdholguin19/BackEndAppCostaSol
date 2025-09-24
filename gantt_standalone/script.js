@@ -72,9 +72,8 @@ gantt.config.layout = {
                 { view: "scrollbar", id: "scrollVer" }
             ]
         },
-        {
-            view: "scrollbar", id: "timelineScroll"
-        }
+        { resizer: true, height: 1 },
+        { view: "scrollbar", id: "timelineScroll" }
     ]
 };
 gantt.config.date_grid = "%Y-%m-%d";
@@ -86,7 +85,7 @@ gantt.config.scale_unit = "day"; // Establece la unidad de escala a días
 gantt.config.step = 1; // Establece el paso de la escala a 1 día
 gantt.config.row_height = 25; // Establece la altura de las filas
 gantt.config.task_height = 18; // Establece la altura de las tareas
-gantt.config.autosize = "x"; // Habilita el autoajuste horizontal
+// gantt.config.autosize = "x"; // Habilita el autoajuste horizontal
 gantt.config.links_editable = true; // Asegurar que los enlaces sean editables
 
 gantt.templates.task_class = function (start, end, task) {
