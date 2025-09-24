@@ -66,18 +66,14 @@ gantt.config.layout = {
     rows: [
         {
             cols: [
-                { view: "grid", id: "grid", scrollX: "gridScroll", scrollY: "scrollVer", resize: true },
+                { view: "grid", id: "grid", scrollY: "scrollVer", resize: true },
                 { resizer: true, width: 1 },
-                { view: "timeline", id: "timeline", scrollX: "timelineScroll", scrollY: "scrollVer" }, // Added comma
+                { view: "timeline", id: "timeline", scrollX: "timelineScroll", scrollY: "scrollVer" },
                 { view: "scrollbar", id: "scrollVer" }
             ]
         },
-        { resizer: true, height: 1 },
         {
-            cols: [
-                { view: "scrollbar", id: "gridScroll", group: "horizontal" },
-                { view: "scrollbar", id: "timelineScroll", group: "horizontal" }
-            ]
+            view: "scrollbar", id: "timelineScroll"
         }
     ]
 };
