@@ -2,6 +2,9 @@ console.log("script.js loaded");
 
 let selectedProjectId = null;
 let allUsers = [];
+let allTasksData = [];
+let allLinksData = [];
+let taskTree = [];
 
 
 // --- Funciones de Utilidad para Fechas ---
@@ -253,6 +256,9 @@ function loadGanttData(projectId) {
     if (projectId) {
         gantt.clearAll();
         gantt.load(`api/data.php?project_id=${projectId}`);
+        gantt.attachEvent("onLoadEnd", function() {
+            loadTaskSummaryData(projectId);
+        });
     } else {
         gantt.clearAll();
     }
@@ -596,4 +602,260 @@ gantt.attachEvent("onTaskLoading", function(task) {
 gantt.attachEvent("onAfterTaskDrag", function(id, mode, e){
     const task = gantt.getTask(id);
     dp.sendData(id);
+});
+
+// --- Funciones para la Sección de Resumen de Tareas ---
+
+let myPieChart; // Variable global para la instancia del gráfico
+
+function loadTaskSummaryData(projectId) {
+    allTasksData = [];
+    allLinksData = [];
+    taskTree = [];
+
+    gantt.eachTask(function(task) {
+        allTasksData.push(task);
+    });
+    gantt.getLinks().forEach(function(link) {
+        allLinksData.push(link);
+    });
+
+    taskTree = buildTaskTree(allTasksData);
+    calculateAggregates(taskTree);
+    renderTaskSummary(taskTree, allLinksData);
+}
+
+function buildTaskTree(tasks) {
+    const taskMap = new Map();
+    tasks.forEach(task => {
+        taskMap.set(task.id, { ...task, children: [] });
+    });
+
+    const tree = [];
+    taskMap.forEach(task => {
+        if (task.parent && task.parent !== 0) {
+            const parentTask = taskMap.get(task.parent);
+            if (parentTask) {
+                parentTask.children.push(task);
+            } else {
+                // If parent not found, treat as top-level (or handle as error)
+                tree.push(task);
+            }
+        } else {
+            tree.push(task);
+        }
+    });
+
+    // Sort children by sortorder if available, otherwise by text
+    tree.forEach(task => sortChildren(task));
+
+    return tree;
+}
+
+function sortChildren(task) {
+    if (task.children && task.children.length > 0) {
+        task.children.sort((a, b) => {
+            if (a.sortorder !== undefined && b.sortorder !== undefined) {
+                return a.sortorder - b.sortorder;
+            }
+            return a.text.localeCompare(b.text);
+        });
+        task.children.forEach(child => sortChildren(child));
+    }
+}
+
+
+function calculateAggregates(tasks) {
+    let totalTasksCount = 0;
+    let totalSubtasksCount = 0;
+
+    function traverse(task) {
+        totalTasksCount++; // Count all tasks, including parents
+        let sumProgress = 0;
+        let sumDuration = 0;
+        let childCount = 0;
+        task.totalDescendantSubtasks = 0;
+
+        if (task.children && task.children.length > 0) {
+            task.children.forEach(child => {
+                const childAggregates = traverse(child);
+                sumProgress += childAggregates.sumProgress;
+                sumDuration += childAggregates.sumDuration;
+                childCount++;
+                task.totalDescendantSubtasks += (1 + child.totalDescendantSubtasks); // Count direct child + its descendants
+            });
+
+            task.aggregatedProgress = childCount > 0 ? sumProgress / childCount : task.progress;
+            task.aggregatedDuration = childCount > 0 ? sumDuration / childCount : task.duration;
+        } else {
+            task.aggregatedProgress = task.progress;
+            task.aggregatedDuration = task.duration;
+        }
+        return { sumProgress: task.aggregatedProgress, sumDuration: task.aggregatedDuration };
+    }
+
+    tasks.forEach(task => {
+        traverse(task);
+        totalSubtasksCount += task.totalDescendantSubtasks;
+    });
+
+    document.getElementById('total-tasks-count').textContent = totalTasksCount;
+    document.getElementById('total-subtasks-count').textContent = totalSubtasksCount;
+}
+
+function renderTaskSummary(taskTree, links) {
+    const taskListContainer = document.getElementById('task-list-container');
+    taskListContainer.innerHTML = ''; // Clear previous content
+
+    const linkTypes = {
+        "0": "Fin a Inicio",
+        "1": "Inicio a Inicio",
+        "2": "Fin a Fin",
+        "3": "Inicio a Fin"
+    };
+
+    function renderTaskNode(task, level) {
+        const ul = document.createElement('ul');
+        ul.classList.add('list-unstyled', `level-${level}`);
+
+        const li = document.createElement('li');
+        li.classList.add('mb-3', 'pb-2', 'border-bottom'); // Added mb-3, pb-2, border-bottom for spacing and separation
+
+        const taskHeader = document.createElement('div');
+        taskHeader.classList.add('d-flex', 'align-items-center', 'task-summary-item');
+        taskHeader.style.paddingLeft = `${level * 15}px`; // Indent based on level
+
+        const toggleIcon = document.createElement('span');
+        toggleIcon.classList.add('toggle-icon', 'me-2', 'fw-bold'); // Added fw-bold for bolder icon
+        if (task.children && task.children.length > 0) {
+            toggleIcon.textContent = '►'; // Right arrow for collapsed
+            toggleIcon.style.cursor = 'pointer';
+            toggleIcon.onclick = function() {
+                const childrenList = this.closest('li').querySelector('.task-children-list');
+                if (childrenList) {
+                    childrenList.classList.toggle('d-none');
+                    this.textContent = childrenList.classList.contains('d-none') ? '►' : '▼';
+                }
+            };
+        } else {
+            toggleIcon.textContent = '—'; // Em dash for no children
+        }
+        taskHeader.appendChild(toggleIcon);
+
+        const taskDetails = document.createElement('span');
+        taskDetails.innerHTML = `
+            <strong>${task.text}</strong>
+            (Progreso: ${Math.round(task.aggregatedProgress * 100)}%,
+            Duración: ${Math.round(task.aggregatedDuration)} días,
+            Subtareas: ${task.totalDescendantSubtasks})
+        `;
+        taskHeader.appendChild(taskDetails);
+        li.appendChild(taskHeader);
+
+        if (task.children && task.children.length > 0) {
+            const childrenList = document.createElement('div');
+            childrenList.classList.add('task-children-list', 'd-none'); // Start collapsed
+            task.children.forEach(child => {
+                childrenList.appendChild(renderTaskNode(child, level + 1));
+            });
+            li.appendChild(childrenList);
+        }
+
+        // Display Links
+        const taskLinks = links.filter(link => link.source == task.id || link.target == task.id);
+        if (taskLinks.length > 0) {
+            const linksDiv = document.createElement('div');
+            linksDiv.classList.add('ms-4', 'small', 'text-muted');
+            linksDiv.style.paddingLeft = `${level * 25}px`; // Increased indentation
+            linksDiv.innerHTML = '<strong>Relaciones:</strong><br>';
+            taskLinks.forEach(link => {
+                let linkText = '';
+                if (link.source == task.id) {
+                    const targetTask = gantt.getTask(link.target);
+                    linkText = `Precede a: "${targetTask ? targetTask.text : 'Tarea Desconocida'}" (${linkTypes[link.type]})`;
+                } else {
+                    const sourceTask = gantt.getTask(link.source);
+                    linkText = `Viene después de: "${sourceTask ? sourceTask.text : 'Tarea Desconocida'}" (${linkTypes[link.type]})`;
+                }
+                linksDiv.innerHTML += `<span>- ${linkText}</span><br>`;
+            });
+            li.appendChild(linksDiv);
+        }
+
+        return li;
+    }
+
+    taskTree.forEach(task => {
+        taskListContainer.appendChild(renderTaskNode(task, 0));
+    });
+
+    renderPieChart(taskTree);
+}
+
+function renderPieChart(taskTree) {
+    const ctx = document.getElementById('subtaskPieChart');
+
+    // Destroy existing chart instance if it exists
+    if (myPieChart) {
+        myPieChart.destroy();
+    }
+
+    const labels = [];
+    const data = [];
+    const backgroundColors = [];
+
+    // Collect data for top-level tasks
+    taskTree.forEach(task => {
+        labels.push(task.text);
+        data.push(task.totalDescendantSubtasks + (task.children.length > 0 ? 0 : 1)); // Count task itself if no children, otherwise just descendants
+        backgroundColors.push(task.color || '#3498db'); // Use task color or default
+    });
+
+    myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Distribución de Subtareas por Tarea Principal'
+                }
+            }
+        }
+    });
+}
+
+// --- Eventos para la Sección de Resumen ---
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.querySelector('#task-summary-section .card-header button');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+            const icon = this.querySelector('.toggle-icon');
+            if (icon) {
+                icon.textContent = icon.textContent === '+' ? '−' : '+';
+            }
+        });
+    }
+});
+
+// Hook into DataProcessor events to refresh summary
+dp.attachEvent("onAfterUpdate", function(id, action, tid, response){
+    if(action == "deleted"){
+        gantt.message("Task deleted");
+    }
+    // Refresh summary after any task CRUD operation
+    if (response && response.action !== "error" && (action === "inserted" || action === "updated" || action === "deleted")) {
+        loadTaskSummaryData(selectedProjectId);
+    }
 });

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="codebase/dhtmlxgantt.css">
     <!-- Incluye tu archivo de estilos personalizado -->
     <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
     <div class="gantt-header">
@@ -17,6 +19,46 @@
         <button onclick="addNewTask()">Añadir Tarea</button>
     </div>
     <div id="gantt_here" style="width:100%; height:calc(100vh - 50px);"></div>
+
+    <!-- Nueva Sección de Resumen de Tareas -->
+    <div id="task-summary-section" class="container mt-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">Resumen de Tareas</h2>
+                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#taskSummaryContent" aria-expanded="true" aria-controls="taskSummaryContent">
+                    <span class="toggle-icon">+</span>
+                </button>
+            </div>
+            <div class="collapse show" id="taskSummaryContent">
+                <div class="card-body">
+                    <div class="row mb-4" id="total-tasks-summary">
+                        <div class="col-md-6">
+                            <h5>Tareas Totales: <span id="total-tasks-count">0</span></h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Subtareas Totales: <span id="total-subtasks-count">0</span></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Lista de Tareas</h4>
+                            <div id="task-list-container">
+                                <!-- La lista jerárquica de tareas se renderizará aquí -->
+                                <p>Cargando resumen de tareas...</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Distribución de Subtareas</h4>
+                            <div id="pie-chart-container">
+                                <!-- El gráfico pastel se renderizará aquí -->
+                                <canvas id="subtaskPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Custom Task Edit Modal -->
     <div id="custom-lightbox-modal" class="custom-modal" style="display: none;">
@@ -96,6 +138,8 @@
 
     <!-- Incluye los archivos JavaScript de DHTMLX Gantt -->
     <script src="codebase/dhtmlxgantt.js"></script>
+    <!-- Incluye la librería Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Incluye tu archivo de script principal -->
     <script src="script.js"></script>
 </body>
