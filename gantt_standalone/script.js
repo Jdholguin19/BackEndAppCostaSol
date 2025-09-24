@@ -81,8 +81,20 @@ gantt.config.date_grid = "%Y-%m-%d";
 gantt.config.xml_date = "%Y-%m-%d %H:%i:%s";
 gantt.config.grid_width = 500; // Añadido para forzar un ancho de cuadrícula y ayudar a la renderización del splitter
 gantt.config.min_column_width = 30; // Establece el ancho mínimo de las columnas de la línea de tiempo
-gantt.config.scale_unit = "day"; // Establece la unidad de escala a días
-gantt.config.step = 1; // Establece el paso de la escala a 1 día
+gantt.config.scale_unit = "week";
+gantt.config.step = 1;
+gantt.config.subscales = [
+    { unit: "day", step: 1, template: function(date){
+        var days = ["D", "L", "M", "X", "J", "V", "S"]; // Sunday is 0, Monday is 1...
+        return days[date.getDay()];
+    }}
+];
+
+gantt.templates.date_scale = function(date){
+    var dateToStr = gantt.date.date_to_str("%d %M");
+    var weekEnd = gantt.date.add(date, 6, "day");
+    return "Semana del " + dateToStr(date) + " al " + dateToStr(weekEnd);
+};
 gantt.config.row_height = 25; // Establece la altura de las filas
 gantt.config.task_height = 18; // Establece la altura de las tareas
 // gantt.config.autosize = "x"; // Habilita el autoajuste horizontal
