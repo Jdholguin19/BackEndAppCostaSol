@@ -29,6 +29,24 @@ function limpiarDatos($dato) {
     return trim($dato, '" \t\n\r\0\x0B');
 }
 
+    // Función para preservar el formato de villa (mantener ceros a la izquierda)
+    function preservarFormatoVilla($villa) {
+        // Si la villa es numérica, mantener el formato original
+        if (preg_match('/^\d+$/', $villa)) {
+            return $villa; // Mantener tal como está en el CSV
+        }
+        return $villa;
+    }
+
+    // Función para preservar el formato de manzana (mantener formato original)
+    function preservarFormatoManzana($manzana) {
+        // Si la manzana es numérica, mantener el formato original
+        if (preg_match('/^\d+$/', $manzana)) {
+            return $manzana; // Mantener tal como está en el CSV
+        }
+        return $manzana;
+    }
+
 // Función para truncar texto a un máximo de caracteres
 function truncarTexto($texto, $maximo = 60) {
     if (strlen($texto) <= $maximo) {
@@ -173,8 +191,8 @@ while (($data = fgetcsv($handle)) !== FALSE) {
     // Limpiar datos
     $datos = [
         'urbanizacion' => limpiarDatos($row['urbanizacion']),
-        'mz' => limpiarDatos($row['mz']),
-        'villa' => limpiarDatos($row['villa']),
+        'mz' => preservarFormatoManzana(limpiarDatos($row['mz'])),
+        'villa' => preservarFormatoVilla(limpiarDatos($row['villa'])),
         'cedula' => limpiarDatos($row['cedula']),
         'cliente' => limpiarDatos($row['cliente']),
         'correo' => limpiarDatos($row['correo']),
