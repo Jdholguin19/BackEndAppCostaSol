@@ -109,17 +109,46 @@ try {
         }
     }
 
+    /* ---------- 3. Calcular el porcentaje general basado en la última etapa con foto ---------- */
+    $sql_ultima_etapa_con_foto = 'SELECT pc.id_etapa, ec.porcentaje as porcentaje_etapa, ec.nombre
+                                  FROM progreso_construccion pc
+                                  JOIN etapa_construccion ec ON ec.id = pc.id_etapa
+                                  WHERE pc.mz = :mz 
+                                    AND pc.villa = :vl 
+                                    AND pc.estado = 1
+                                    AND pc.drive_item_id IS NOT NULL
+                                    AND pc.drive_item_id != ""
+                                  ORDER BY pc.id_etapa DESC
+                                  LIMIT 1';
+
+    $stmt_ultima = $db->prepare($sql_ultima_etapa_con_foto);
+    $stmt_ultima->execute([':mz' => $mz, ':vl' => $vl]);
+    $ultima_etapa_con_foto = $stmt_ultima->fetch(PDO::FETCH_ASSOC);
+
+    $porcentaje_general = 0;
+    $etapa_actual = 'Sin progreso';
+    
+    if ($ultima_etapa_con_foto) {
+        $porcentaje_general = (int)$ultima_etapa_con_foto['porcentaje_etapa'];
+        $etapa_actual = $ultima_etapa_con_foto['nombre'];
+    }
+
     // Debug: incluir información de debug en la respuesta
     $response = [
         'ok'      => true,
         'manzana' => $mz,
         'villa'   => $vl,
         'etapas'  => array_values($etapas),
+        'progreso_general' => [
+            'porcentaje' => $porcentaje_general,
+            'etapa_actual' => $etapa_actual
+        ],
         'debug'   => [
             'sql_params' => ['mz' => $mz, 'vl' => $vl],
             'found_records' => count($debug_data),
             'sample_data' => array_slice($debug_data, 0, 3),
             'processed_etapas' => array_keys($processed_etapas),
+            'ultima_etapa_con_foto' => $ultima_etapa_con_foto,
             'sql_query' => $sql
         ]
     ];

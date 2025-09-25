@@ -1,18 +1,19 @@
 <?php
 /**
- *  propiedad_fase.php  –  Devuelve la etapa y porcentaje de una propiedad
+ *  propiedad_fase_corregido.php  –  Devuelve la etapa y porcentaje de una propiedad
+ *  basado en la ÚLTIMA etapa que tiene fotos, no la primera que encuentra
  *
- *  GET /api/propiedad_fase.php?id_propiedad=12
+ *  GET /api/propiedad_fase_corregido.php?id_propiedad=12
  *
  *  Respuesta OK:
  *  {
  *    "ok": true,
  *    "propiedad_id": 12,
  *    "fase": {
- *       "etapa_id": 3,
- *       "etapa": "Estructura",
- *       "descripcion": "Columnas y losa terminadas",
- *       "porcentaje": 45
+ *       "etapa_id": 4,
+ *       "etapa": "Habitabilidad",
+ *       "descripcion": "En esta etapa la vivienda ya cuenta con puerta...",
+ *       "porcentaje": 95
  *    }
  *  }
  */
@@ -98,14 +99,29 @@ try {
         ];
     }
 
+    /* ---------- 6. Debug: información adicional ---------- */
+    $debug_info = [
+        'manzana' => $manzana,
+        'villa' => $villa,
+        'id_urbanizacion' => $id_urbanizacion,
+        'etapa_propiedad' => $propiedad['etapa_id'],
+        'ultima_etapa_con_foto' => $ultima_etapa_con_foto ? [
+            'id_etapa' => $ultima_etapa_con_foto['id_etapa'],
+            'nombre' => $ultima_etapa_con_foto['nombre'],
+            'porcentaje' => $ultima_etapa_con_foto['porcentaje_etapa']
+        ] : null
+    ];
+
     echo json_encode([
         'ok' => true,
         'propiedad_id' => (int)$idProp,
-        'fase' => $fase
+        'fase' => $fase,
+        'debug' => $debug_info
     ]);
 
 } catch (Throwable $e) {
-    error_log('propiedad_fase: '.$e->getMessage());
+    error_log('propiedad_fase_corregido: '.$e->getMessage());
     http_response_code(500);
     exit(json_encode(['ok'=>false,'mensaje'=>'Error interno']));
 }
+?>
