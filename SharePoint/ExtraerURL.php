@@ -12,6 +12,40 @@ $rootPath = '- FEDATARIO/FOTOS DE INSPECCIONES';
 $totalImagenes = 0;
 $db = DB::getDB();
 
+// Cache de urbanizaciones para evitar consultas repetitivas
+$urbanizaciones_cache = null;
+$etapas_cache = null;
+
+function obtenerUrbanizaciones($db) {
+    global $urbanizaciones_cache;
+    
+    if ($urbanizaciones_cache === null) {
+        $stmt = $db->prepare("SELECT id, nombre FROM urbanizacion WHERE estado = 1");
+        $stmt->execute();
+        $urbanizaciones_cache = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $urbanizaciones_cache[strtoupper($row['nombre'])] = $row['id'];
+        }
+    }
+    
+    return $urbanizaciones_cache;
+}
+
+function obtenerEtapas($db) {
+    global $etapas_cache;
+    
+    if ($etapas_cache === null) {
+        $stmt = $db->prepare("SELECT id, porcentaje FROM etapa_construccion WHERE estado = 1");
+        $stmt->execute();
+        $etapas_cache = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $etapas_cache[$row['id']] = $row['porcentaje'];
+        }
+    }
+    
+    return $etapas_cache;
+}
+
 function getAccessToken($tenantId, $clientId, $clientSecret) {
     $url = "https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token";
     $data = http_build_query([
@@ -40,37 +74,25 @@ function detectarEtapa($ruta) {
     return null;
 }
 
-function obtenerPorcentajeEtapa($id_etapa) {
-    // Mapeo de etapas a porcentajes según la tabla etapa_construccion
-    $mapa_porcentajes = [
-        1 => 10,  // Cimentación
-        2 => 20,  // Losa  
-        3 => 45,  // Cubierta terminada
-        4 => 95,  // Habitabilidad
-        5 => 100  // Entrega
-    ];
-    
-    return $mapa_porcentajes[$id_etapa] ?? null;
+function obtenerPorcentajeEtapa($id_etapa, $db) {
+    $etapas = obtenerEtapas($db);
+    return $etapas[$id_etapa] ?? null;
 }
 
-function extraerMzVillaUrbanizacion($ruta) {
+function extraerMzVillaUrbanizacion($ruta, $db) {
     $partes = explode('/', $ruta);
     $id_urbanizacion = null;
     $mz = null;
     $villa = null;
     
+    // Obtener urbanizaciones dinámicamente de la base de datos
+    $urbanizaciones = obtenerUrbanizaciones($db);
+    
     // Primero busca la urbanización y obtiene su ID
     foreach ($partes as $parte) {
         $nombre_urbanizacion = strtoupper($parte);
-        if (in_array($nombre_urbanizacion, ['ARIENZO', 'BASILEA', 'CATANIA', 'DAVOS'])) {
-            // Mapear nombre a ID según la tabla urbanizacion
-            $mapa_urbanizaciones = [
-                'ARIENZO' => 1,
-                'BASILEA' => 2, 
-                'CATANIA' => 3,
-                'DAVOS' => 4
-            ];
-            $id_urbanizacion = $mapa_urbanizaciones[$nombre_urbanizacion] ?? null;
+        if (isset($urbanizaciones[$nombre_urbanizacion])) {
+            $id_urbanizacion = $urbanizaciones[$nombre_urbanizacion];
             break;
         }
     }
@@ -181,9 +203,9 @@ function listarContenido($accessToken, $siteId, $ruta, $nivel = 0, &$contador = 
                 $creadoEmail = $item['createdBy']['user']['email'] ?? '';
                 $modificadoPor = $item['lastModifiedBy']['user']['displayName'] ?? 'Desconocido';
 
-                list($mz, $villa, $id_urbanizacion) = extraerMzVillaUrbanizacion($pathActual);
+                list($mz, $villa, $id_urbanizacion) = extraerMzVillaUrbanizacion($pathActual, $db);
                 $etapa = detectarEtapa($pathActual);
-                $porcentaje = obtenerPorcentajeEtapa($etapa);
+                $porcentaje = obtenerPorcentajeEtapa($etapa, $db);
                 
                 // Debug: mostrar lo que se está extrayendo
                 echo "<div style='color: #666; font-size: 12px; margin-left: 20px;'>
@@ -223,6 +245,24 @@ function listarContenido($accessToken, $siteId, $ruta, $nivel = 0, &$contador = 
 
 $token = getAccessToken($tenantId, $clientId, $clientSecret);
 $siteId = getSiteId($token, $domain, $user);
+
+// Mostrar información de configuración dinámica
+echo "<h2>🔧 Configuración Dinámica</h2>";
+echo "<div style='background: #f0f0f0; padding: 15px; margin-bottom: 20px;'>";
+
+echo "<h3>🏘️ Urbanizaciones disponibles:</h3>";
+$urbanizaciones = obtenerUrbanizaciones($db);
+foreach ($urbanizaciones as $nombre => $id) {
+    echo "• <strong>$nombre</strong> (ID: $id)<br>";
+}
+
+echo "<h3>🏗️ Etapas disponibles:</h3>";
+$etapas = obtenerEtapas($db);
+foreach ($etapas as $id => $porcentaje) {
+    echo "• <strong>Etapa $id</strong> → $porcentaje%<br>";
+}
+
+echo "</div>";
 
 echo "<h2>📂 Explorando: $rootPath</h2>";
 listarContenido($token, $siteId, $rootPath, 0, $totalImagenes, $rootPath);
