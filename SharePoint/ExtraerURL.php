@@ -40,36 +40,95 @@ function detectarEtapa($ruta) {
     return null;
 }
 
-function extraerMzVilla($ruta) {
+function extraerMzVillaUrbanizacion($ruta) {
     $partes = explode('/', $ruta);
+    $id_urbanizacion = null;
+    $mz = null;
+    $villa = null;
+    
+    // Primero busca la urbanización y obtiene su ID
+    foreach ($partes as $parte) {
+        $nombre_urbanizacion = strtoupper($parte);
+        if (in_array($nombre_urbanizacion, ['ARIENZO', 'BASILEA', 'CATANIA', 'DAVOS'])) {
+            // Mapear nombre a ID según la tabla urbanizacion
+            $mapa_urbanizaciones = [
+                'ARIENZO' => 1,
+                'BASILEA' => 2, 
+                'CATANIA' => 3,
+                'DAVOS' => 4
+            ];
+            $id_urbanizacion = $mapa_urbanizaciones[$nombre_urbanizacion] ?? null;
+            break;
+        }
+    }
+    
+    // Luego busca MZ y Villa
     foreach ($partes as $i => $parte) {
+        // Busca un patrón de 4 dígitos (mz)
         if (preg_match('/^\d{4}$/', $parte) && isset($partes[$i + 1])) {
-            $sub = $partes[$i + 1];
-            if (preg_match('/^\d{4}-(.+)$/', $sub, $matches)) {
-                return [$parte, $matches[1]];
+            $mz = $parte;
+            $siguiente = $partes[$i + 1];
+            
+            // ESPECIAL PARA ARIENZO: Formato "7100-18-CLIENTE" o "7100-11-ISABELA"
+            if ($id_urbanizacion == 1 && preg_match('/^\d+-(\d+)-[A-Z]/', $siguiente, $matches)) {
+                $villa = $matches[1]; // Toma solo el número del medio
+                break;
+            }
+            
+            // Caso general: Formato "123-456" - toma la parte después del guion
+            if (preg_match('/^\d+-\d+$/', $siguiente)) {
+                $villa = explode('-', $siguiente)[1];
+                break;
+            }
+            
+            // Caso: Formato "123-" - toma solo la parte antes del guion
+            if (preg_match('/^(\d+)-/', $siguiente, $matches)) {
+                $villa = $matches[1];
+                break;
+            }
+            
+            // Caso: Es puramente numérico
+            if (preg_match('/^\d+$/', $siguiente)) {
+                $villa = $siguiente;
+                break;
             }
         }
     }
-    return [null, null];
+    
+    return [$mz, $villa, $id_urbanizacion];
 }
 
 function guardarEnBD($db, $data) {
     $stmt = $db->prepare("INSERT INTO progreso_construccion (
-        id_etapa, mz, villa, ruta_descarga_sharepoint, ruta_visualizacion_sharepoint, drive_item_id,
+        id_etapa, mz, villa, id_urbanizacion, ruta_descarga_sharepoint, ruta_visualizacion_sharepoint, drive_item_id,
         fecha_creado_sharepoint, usuario_creador, fecha_modificado_sharepoint,
         usuario_modificado_sharepoint, url_imagen
     ) VALUES (
-        :id_etapa, :mz, :villa, :ruta_descarga, :ruta_visual, :drive_item_id, :fecha_creado,
+        :id_etapa, :mz, :villa, :id_urbanizacion, :ruta_descarga, :ruta_visual, :drive_item_id, :fecha_creado,
         :usuario_creador, :fecha_modificado, :usuario_modificado, :url
-    )");
+    ) ON DUPLICATE KEY UPDATE
+        id_etapa = VALUES(id_etapa),
+        mz = VALUES(mz),
+        villa = VALUES(villa),
+        id_urbanizacion = VALUES(id_urbanizacion),
+        ruta_descarga_sharepoint = VALUES(ruta_descarga_sharepoint),
+        ruta_visualizacion_sharepoint = VALUES(ruta_visualizacion_sharepoint),
+        fecha_creado_sharepoint = VALUES(fecha_creado_sharepoint),
+        usuario_creador = VALUES(usuario_creador),
+        fecha_modificado_sharepoint = VALUES(fecha_modificado_sharepoint),
+        usuario_modificado_sharepoint = VALUES(usuario_modificado_sharepoint),
+        url_imagen = VALUES(url_imagen),
+        fecha_registro = CURRENT_TIMESTAMP;
+    ");
 
     $stmt->execute([
         ':id_etapa' => $data['id_etapa'],
         ':mz' => $data['mz'],
         ':villa' => $data['villa'],
+        ':id_urbanizacion' => $data['id_urbanizacion'],
         ':ruta_descarga' => $data['ruta_descarga'],
         ':ruta_visual' => $data['ruta_visual'],
-        ':drive_item_id'      => $data['drive_item_id'], 
+        ':drive_item_id'      => $data['drive_item_id'],
         ':fecha_creado' => $data['fecha_creado'],
         ':usuario_creador' => $data['usuario_creador'],
         ':fecha_modificado' => $data['fecha_modificado'],
@@ -107,8 +166,15 @@ function listarContenido($accessToken, $siteId, $ruta, $nivel = 0, &$contador = 
                 $creadoEmail = $item['createdBy']['user']['email'] ?? '';
                 $modificadoPor = $item['lastModifiedBy']['user']['displayName'] ?? 'Desconocido';
 
-                list($mz, $villa) = extraerMzVilla($pathActual);
+                list($mz, $villa, $id_urbanizacion) = extraerMzVillaUrbanizacion($pathActual);
                 $etapa = detectarEtapa($pathActual);
+                
+                // Debug: mostrar lo que se está extrayendo
+                echo "<div style='color: #666; font-size: 12px; margin-left: 20px;'>
+                    🔍 DEBUG - Ruta: $pathActual<br>
+                    📍 MZ: " . ($mz ?? 'NULL') . " | Villa: " . ($villa ?? 'NULL') . " | ID Urbanización: " . ($id_urbanizacion ?? 'NULL') . "<br>
+                    🏗️ Etapa: " . ($etapa ?? 'NULL') . "
+                </div>";
 
                 echo "<div style='margin-bottom: 15px;'>
                     🖼️ <strong>$pathActual</strong><br>
@@ -123,6 +189,7 @@ function listarContenido($accessToken, $siteId, $ruta, $nivel = 0, &$contador = 
                     'id_etapa' => $etapa,
                     'mz' => $mz,
                     'villa' => $villa,
+                    'id_urbanizacion' => $id_urbanizacion,
                     'ruta_descarga' => $urlDescarga,
                     'ruta_visual' => $urlSharePoint,
                     'drive_item_id' => $item['id'],
