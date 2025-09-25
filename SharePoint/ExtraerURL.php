@@ -40,6 +40,19 @@ function detectarEtapa($ruta) {
     return null;
 }
 
+function obtenerPorcentajeEtapa($id_etapa) {
+    // Mapeo de etapas a porcentajes según la tabla etapa_construccion
+    $mapa_porcentajes = [
+        1 => 10,  // Cimentación
+        2 => 20,  // Losa  
+        3 => 45,  // Cubierta terminada
+        4 => 95,  // Habitabilidad
+        5 => 100  // Entrega
+    ];
+    
+    return $mapa_porcentajes[$id_etapa] ?? null;
+}
+
 function extraerMzVillaUrbanizacion($ruta) {
     $partes = explode('/', $ruta);
     $id_urbanizacion = null;
@@ -100,17 +113,18 @@ function extraerMzVillaUrbanizacion($ruta) {
 
 function guardarEnBD($db, $data) {
     $stmt = $db->prepare("INSERT INTO progreso_construccion (
-        id_etapa, mz, villa, id_urbanizacion, ruta_descarga_sharepoint, ruta_visualizacion_sharepoint, drive_item_id,
+        id_etapa, mz, villa, id_urbanizacion, porcentaje, ruta_descarga_sharepoint, ruta_visualizacion_sharepoint, drive_item_id,
         fecha_creado_sharepoint, usuario_creador, fecha_modificado_sharepoint,
         usuario_modificado_sharepoint, url_imagen
     ) VALUES (
-        :id_etapa, :mz, :villa, :id_urbanizacion, :ruta_descarga, :ruta_visual, :drive_item_id, :fecha_creado,
+        :id_etapa, :mz, :villa, :id_urbanizacion, :porcentaje, :ruta_descarga, :ruta_visual, :drive_item_id, :fecha_creado,
         :usuario_creador, :fecha_modificado, :usuario_modificado, :url
     ) ON DUPLICATE KEY UPDATE
         id_etapa = VALUES(id_etapa),
         mz = VALUES(mz),
         villa = VALUES(villa),
         id_urbanizacion = VALUES(id_urbanizacion),
+        porcentaje = VALUES(porcentaje),
         ruta_descarga_sharepoint = VALUES(ruta_descarga_sharepoint),
         ruta_visualizacion_sharepoint = VALUES(ruta_visualizacion_sharepoint),
         fecha_creado_sharepoint = VALUES(fecha_creado_sharepoint),
@@ -126,6 +140,7 @@ function guardarEnBD($db, $data) {
         ':mz' => $data['mz'],
         ':villa' => $data['villa'],
         ':id_urbanizacion' => $data['id_urbanizacion'],
+        ':porcentaje' => $data['porcentaje'],
         ':ruta_descarga' => $data['ruta_descarga'],
         ':ruta_visual' => $data['ruta_visual'],
         ':drive_item_id'      => $data['drive_item_id'],
@@ -168,12 +183,13 @@ function listarContenido($accessToken, $siteId, $ruta, $nivel = 0, &$contador = 
 
                 list($mz, $villa, $id_urbanizacion) = extraerMzVillaUrbanizacion($pathActual);
                 $etapa = detectarEtapa($pathActual);
+                $porcentaje = obtenerPorcentajeEtapa($etapa);
                 
                 // Debug: mostrar lo que se está extrayendo
                 echo "<div style='color: #666; font-size: 12px; margin-left: 20px;'>
                     🔍 DEBUG - Ruta: $pathActual<br>
                     📍 MZ: " . ($mz ?? 'NULL') . " | Villa: " . ($villa ?? 'NULL') . " | ID Urbanización: " . ($id_urbanizacion ?? 'NULL') . "<br>
-                    🏗️ Etapa: " . ($etapa ?? 'NULL') . "
+                    🏗️ Etapa: " . ($etapa ?? 'NULL') . " | Porcentaje: " . ($porcentaje ?? 'NULL') . "%
                 </div>";
 
                 echo "<div style='margin-bottom: 15px;'>
@@ -190,6 +206,7 @@ function listarContenido($accessToken, $siteId, $ruta, $nivel = 0, &$contador = 
                     'mz' => $mz,
                     'villa' => $villa,
                     'id_urbanizacion' => $id_urbanizacion,
+                    'porcentaje' => $porcentaje,
                     'ruta_descarga' => $urlDescarga,
                     'ruta_visual' => $urlSharePoint,
                     'drive_item_id' => $item['id'],

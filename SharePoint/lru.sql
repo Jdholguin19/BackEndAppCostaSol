@@ -105,6 +105,48 @@ CREATE TABLE `etapa_construccion` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `menu`
+--
+
+DROP TABLE IF EXISTS `menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `menu` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `descripcion` varchar(120) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `url_icono` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT '1',
+  `orden` tinyint(3) unsigned DEFAULT '0',
+  `fecha_creado` datetime DEFAULT CURRENT_TIMESTAMP,
+  `fecha_actualizado` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `usuario_actualizo` bigint(20) unsigned DEFAULT NULL,
+  `menu_bar` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `usuario_actualizo` (`usuario_actualizo`),
+  CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`usuario_actualizo`) REFERENCES `usuario` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `paquetes_adicionales`
+--
+
+DROP TABLE IF EXISTS `paquetes_adicionales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `paquetes_adicionales` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `descripcion` text COLLATE utf8_unicode_ci,
+  `precio` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `fotos` json DEFAULT NULL COMMENT 'Un array de URLs de imágenes. Ej: ["url1.jpg", "url2.jpg"]',
+  `activo` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `progreso_construccion`
 --
 
@@ -129,15 +171,18 @@ CREATE TABLE `progreso_construccion` (
   `estado` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = activo, 0 = inactivo',
   `url_imagen` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fecha_registro` datetime DEFAULT CURRENT_TIMESTAMP,
+  `id_urbanizacion` tinyint(3) unsigned DEFAULT NULL COMMENT 'ID de la urbanización (FK a tabla urbanizacion)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `drive_item_id` (`drive_item_id`),
   KEY `id_propiedad` (`id_propiedad`),
   KEY `id_etapa` (`id_etapa`),
   KEY `idx_estado` (`estado`),
   KEY `idx_fecha_sharepoint` (`fecha_creado_sharepoint`),
+  KEY `idx_progreso_urbanizacion` (`id_urbanizacion`),
+  CONSTRAINT `fk_progreso_urbanizacion` FOREIGN KEY (`id_urbanizacion`) REFERENCES `urbanizacion` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `progreso_construccion_ibfk_1` FOREIGN KEY (`id_propiedad`) REFERENCES `propiedad` (`id`),
   CONSTRAINT `progreso_construccion_ibfk_2` FOREIGN KEY (`id_etapa`) REFERENCES `etapa_construccion` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5899 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2233 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -280,4 +325,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-25  8:28:34
+-- Dump completed on 2025-09-25  9:59:44
