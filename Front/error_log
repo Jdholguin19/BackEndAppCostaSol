@@ -1,0 +1,6 @@
+[25-Sep-2025 15:19:59 America/Boise] obtener_todas_propiedades: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.estado' in 'where clause'
+[25-Sep-2025 15:20:12 America/Boise] obtener_todas_propiedades: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.estado' in 'where clause'
+[25-Sep-2025 15:20:39 America/Boise] obtener_todas_propiedades: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.estado' in 'where clause'
+[25-Sep-2025 15:20:45 America/Boise] obtener_todas_propiedades: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.estado' in 'where clause'
+[25-Sep-2025 15:20:59 America/Boise] obtener_todas_propiedades: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.estado' in 'where clause'
+[25-Sep-2025 15:21:48 America/Boise] obtener_todas_propiedades: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'p.estado' in 'where clause'

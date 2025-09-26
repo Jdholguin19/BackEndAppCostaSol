@@ -9,6 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
+<link href="assets/css/style_filtro.css" rel="stylesheet">
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -391,6 +392,18 @@
   <div class="property-tabs" id="propertyTabs" style="display: none;">
     <!-- Property tabs will be dynamically added here -->
   </div>
+
+  <!-- Filter Button for Responsables -->
+  <div class="filter-section" id="filterSection" style="display: none;">
+    <button class="filter-btn" id="filterBtn">
+      <i class="bi bi-funnel"></i>
+      Filtrar Propiedades
+    </button>
+    <button class="filter-btn" id="showAllBtn" style="display: none; background: #6b7280;">
+      <i class="bi bi-list"></i>
+      Ver Todas
+    </button>
+  </div>
 </div>
 
 <!-- Main Content -->
@@ -445,6 +458,46 @@
   </div>
 </div>
 
+<!-- Ventana emergente de filtro de propiedades -->
+<div id="filterModal" class="filter-modal">
+  <div class="filter-content">
+    <div class="filter-header">
+      <h3 class="filter-title">Filtrar Propiedades</h3>
+      <button class="filter-close" id="filterCloseBtn">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    
+    <div class="filter-body">
+      <div class="filter-group">
+        <label for="filterManzana">Manzana:</label>
+        <input type="text" id="filterManzana" placeholder="Ej: 7100" class="filter-input">
+      </div>
+      
+      <div class="filter-group">
+        <label for="filterVilla">Villa:</label>
+        <input type="text" id="filterVilla" placeholder="Ej: 14" class="filter-input">
+      </div>
+      
+      <div class="filter-group">
+        <label for="filterCliente">Cliente:</label>
+        <input type="text" id="filterCliente" placeholder="Ej: Ana, García" class="filter-input">
+      </div>
+    </div>
+    
+    <div class="filter-footer">
+      <button class="btn-filter-clear" id="clearFiltersBtn">
+        <i class="bi bi-arrow-clockwise"></i>
+        Limpiar
+      </button>
+      <button class="btn-filter-apply" id="applyFiltersBtn">
+        <i class="bi bi-search"></i>
+        Filtrar
+      </button>
+    </div>
+  </div>
+</div>
+
 <?php 
 $active_page = 'inicio';
 include '../api/bottom_nav.php'; 
@@ -485,6 +538,9 @@ include '../api/bottom_nav.php';
   console.log('Valor en localStorage para cs_usuario:', localStorage.getItem('cs_usuario')); // Registro
   const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
   const token = localStorage.getItem('cs_token');
+  // console.log('Usuario parseado:', u);
+  // console.log('is_responsable:', u.is_responsable);
+  
   if (!u.id) {
     location.href = 'login_front.php';
   } else {
@@ -492,6 +548,7 @@ include '../api/bottom_nav.php';
   }
 
   const is_admin_responsable = (u.is_responsable && u.id === 3);
+  const is_responsable = u.is_responsable;
 
   /* ---------- Endpoints ---------- */
   const API_NEWS  = '../api/noticias.php?limit=10';
@@ -671,6 +728,9 @@ include '../api/bottom_nav.php';
   /* ---------- Propiedades ---------- */
   let currentProp=null;
   let currentManzana = '', currentSolar = '';
+  let isResponsable = u.is_responsable;
+  let allProperties = [];
+  let filteredProperties = [];
 
   function pintarAvance(etapa, porcentaje){
     const card = document.getElementById('avanceCard');
@@ -708,20 +768,91 @@ include '../api/bottom_nav.php';
       .catch(()=>pintarAvance('Error al cargar',0));
   }
 
-  fetch(API_PROP, {
-    headers: {
-      'Authorization': `Bearer ${token}`
+  /* ---------- Funciones del Filtro ---------- */
+  function showFilterModal() {
+    const modal = document.getElementById('filterModal');
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+  }
+
+  function hideFilterModal() {
+    const modal = document.getElementById('filterModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 300);
+  }
+
+  function clearFilters() {
+    document.getElementById('filterManzana').value = '';
+    document.getElementById('filterVilla').value = '';
+    document.getElementById('filterCliente').value = '';
+  }
+
+  async function applyFilters() {
+    const manzana = document.getElementById('filterManzana').value.trim();
+    const villa = document.getElementById('filterVilla').value.trim();
+    const cliente = document.getElementById('filterCliente').value.trim();
+
+    const filtros = {};
+    if (manzana) filtros.manzana = manzana;
+    if (villa) filtros.villa = villa;
+    if (cliente) filtros.nombre_cliente = cliente;
+
+    try {
+      const response = await fetch('../api/filtro_propiedad/filtrar_propiedades.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ filtros })
+      });
+
+      const data = await response.json();
+      
+      if (data.ok) {
+        filteredProperties = data.propiedades;
+        renderFilteredProperties();
+        hideFilterModal();
+        
+        // Mostrar mensaje de resultados
+        const total = data.total;
+        const mensaje = total === 0 ? 'No se encontraron propiedades' : 
+                       total === 1 ? 'Se encontró 1 propiedad' : 
+                       `Se encontraron ${total} propiedades`;
+        alert(mensaje);
+      } else {
+        alert('Error al filtrar propiedades: ' + data.mensaje);
+      }
+    } catch (error) {
+      console.error('Error al aplicar filtros:', error);
+      alert('Error al aplicar filtros');
     }
-  }).then(r=>r.json()).then(({ok,propiedades})=>{
-    if(!ok||!propiedades.length) return;
-    
+  }
+
+  function renderFilteredProperties() {
     const tabsContainer = document.getElementById('propertyTabs');
-    tabsContainer.style.display = 'flex';
+    const filterSection = document.getElementById('filterSection');
+    const showAllBtn = document.getElementById('showAllBtn');
     
-    propiedades.forEach((p,i)=>{
+    // Limpiar tabs existentes
+    tabsContainer.innerHTML = '';
+    
+    if (filteredProperties.length === 0) {
+      tabsContainer.style.display = 'none';
+      showAllBtn.style.display = 'none';
+      return;
+    }
+    
+    tabsContainer.style.display = 'flex';
+    showAllBtn.style.display = 'inline-flex';
+    
+    filteredProperties.forEach((p, i) => {
       const tab = document.createElement('button');
-      tab.className = `property-tab${i?'':' active'}`;
-      tab.textContent = `${p.tipo} ${p.urbanizacion}`;
+      tab.className = `property-tab${i === 0 ? ' active' : ''}`;
+      tab.textContent = p.display_name;
+      tab.title = `${p.cliente_completo} - MZ ${p.manzana} Villa ${p.villa}`;
       tab.onclick = () => {
         // Remove active class from all tabs
         document.querySelectorAll('.property-tab').forEach(t => t.classList.remove('active'));
@@ -730,22 +861,156 @@ include '../api/bottom_nav.php';
         
         // Update current property and load fase
         currentProp = p.id;
-        localStorage.setItem('cs_propiedad_id', currentProp); // Save to localStorage
+        localStorage.setItem('cs_propiedad_id', currentProp);
         currentManzana = p.manzana;
-        currentSolar = p.solar;
+        currentSolar = p.villa;
         loadFase(p.id);
       };
       tabsContainer.appendChild(tab);
       
-      if(i===0){
-        currentProp=p.id;  
-        localStorage.setItem('cs_propiedad_id', currentProp); // Save initial property to localStorage
-        currentManzana=p.manzana;
-        currentSolar=p.solar; 
+      if (i === 0) {
+        currentProp = p.id;
+        localStorage.setItem('cs_propiedad_id', currentProp);
+        currentManzana = p.manzana;
+        currentSolar = p.villa;
         loadFase(p.id);
       }
     });
-  });
+  }
+
+  function showAllProperties() {
+    const tabsContainer = document.getElementById('propertyTabs');
+    const filterSection = document.getElementById('filterSection');
+    
+    // Limpiar tabs existentes
+    tabsContainer.innerHTML = '';
+    
+    if (allProperties.length === 0) return;
+    
+    tabsContainer.style.display = 'flex';
+    
+    allProperties.forEach((p, i) => {
+      const tab = document.createElement('button');
+      tab.className = `property-tab${i === 0 ? ' active' : ''}`;
+      tab.textContent = p.display_name;
+      tab.onclick = () => {
+        // Remove active class from all tabs
+        document.querySelectorAll('.property-tab').forEach(t => t.classList.remove('active'));
+        // Add active class to clicked tab
+        tab.classList.add('active');
+        
+        // Update current property and load fase
+        currentProp = p.id;
+        localStorage.setItem('cs_propiedad_id', currentProp);
+        currentManzana = p.manzana;
+        currentSolar = p.villa;
+        loadFase(p.id);
+      };
+      tabsContainer.appendChild(tab);
+      
+      if (i === 0) {
+        currentProp = p.id;
+        localStorage.setItem('cs_propiedad_id', currentProp);
+        currentManzana = p.manzana;
+        currentSolar = p.villa;
+        loadFase(p.id);
+      }
+    });
+  }
+
+  // Cargar propiedades según el tipo de usuario
+  if (is_responsable) {
+    // Para responsables, usar el nuevo API
+    fetch('../api/filtro_propiedad/obtener_todas_propiedades.php', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(r => r.json()).then(({ok, propiedades, mostrar_filtro, is_responsable: es_responsable}) => {
+      if (!ok || !propiedades?.length) return;
+      
+      allProperties = propiedades;
+      const filterSection = document.getElementById('filterSection');
+      
+      if (mostrar_filtro) {
+        // Mostrar solo el botón de filtro
+        filterSection.style.display = 'block';
+        document.getElementById('propertyTabs').style.display = 'none';
+        
+        // Configurar eventos del filtro
+        document.getElementById('filterBtn').onclick = showFilterModal;
+        document.getElementById('showAllBtn').onclick = () => {
+          filteredProperties = [];
+          showAllProperties();
+          document.getElementById('showAllBtn').style.display = 'none';
+          clearFilters();
+        };
+        document.getElementById('filterCloseBtn').onclick = hideFilterModal;
+        document.getElementById('clearFiltersBtn').onclick = clearFilters;
+        document.getElementById('applyFiltersBtn').onclick = applyFilters;
+        
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('filterModal').onclick = (e) => {
+          if (e.target.id === 'filterModal') {
+            hideFilterModal();
+          }
+        };
+        
+        // Permitir Enter en los inputs
+        ['filterManzana', 'filterVilla', 'filterCliente'].forEach(id => {
+          document.getElementById(id).addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+              applyFilters();
+            }
+          });
+        });
+      } else {
+        // Si no necesita filtro, mostrar todas las propiedades
+        showAllProperties();
+      }
+    }).catch(error => {
+      console.error('Error al cargar propiedades para responsable:', error);
+    });
+  } else {
+    // Para usuarios normales, usar el API original
+    fetch(API_PROP, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }).then(r=>r.json()).then(({ok,propiedades})=>{
+      if(!ok||!propiedades.length) return;
+      
+      const tabsContainer = document.getElementById('propertyTabs');
+      tabsContainer.style.display = 'flex';
+      
+      propiedades.forEach((p,i)=>{
+        const tab = document.createElement('button');
+        tab.className = `property-tab${i?'':' active'}`;
+        tab.textContent = `${p.tipo} ${p.urbanizacion}`;
+        tab.onclick = () => {
+          // Remove active class from all tabs
+          document.querySelectorAll('.property-tab').forEach(t => t.classList.remove('active'));
+          // Add active class to clicked tab
+          tab.classList.add('active');
+          
+          // Update current property and load fase
+          currentProp = p.id;
+          localStorage.setItem('cs_propiedad_id', currentProp); // Save to localStorage
+          currentManzana = p.manzana;
+          currentSolar = p.solar;
+          loadFase(p.id);
+        };
+        tabsContainer.appendChild(tab);
+        
+        if(i===0){
+          currentProp=p.id;  
+          localStorage.setItem('cs_propiedad_id', currentProp); // Save initial property to localStorage
+          currentManzana=p.manzana;
+          currentSolar=p.solar; 
+          loadFase(p.id);
+        }
+      });
+    });
+  }
 
   /* ---------- Menú ---------- */
   // Call checkGarantiasStatus before fetching API_MENU
