@@ -45,6 +45,25 @@ if (!$token) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/css/style_audit_dashboard.css" rel="stylesheet">
+  <style>
+    .section-title {
+        position: relative;
+    }
+    .btn-close-detail {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: #6c757d;
+    }
+    .btn-close-detail:hover {
+        color: #343a40;
+    }
+  </style>
 </head>
 <body>
 
@@ -386,8 +405,9 @@ function showModuleDetail(resource) {
     currentModule = resource;
     currentOffset = 0;
     currentFilters = {};
-    
-    // Mostrar la sección de detalle
+
+    // Ocultar auditorías recientes y mostrar detalle
+    document.querySelector('.recent-audits-section').style.display = 'none';
     document.getElementById('moduleDetailSection').style.display = 'block';
     
     // Actualizar el título
@@ -406,6 +426,9 @@ function showModuleDetail(resource) {
     document.getElementById('moduleDetailTitle').innerHTML = `
         <i class="bi ${getModuleIcon(resource)}"></i>
         Detalle del Módulo: ${moduleNames[resource] || resource}
+        <button class="btn-close-detail" onclick="hideModuleDetail()" title="Cerrar detalle">
+            <i class="bi bi-x-lg"></i>
+        </button>
     `;
     
     // Limpiar filtros
@@ -413,6 +436,13 @@ function showModuleDetail(resource) {
     
     // Cargar datos del módulo
     loadModuleAudits();
+}
+
+// Función para ocultar el detalle del módulo y mostrar la vista principal
+function hideModuleDetail() {
+    document.getElementById('moduleDetailSection').style.display = 'none';
+    document.querySelector('.recent-audits-section').style.display = 'block';
+    currentModule = null;
 }
 
 // Función para cargar auditorías de un módulo específico
