@@ -286,6 +286,73 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
     return ['audits' => $audits, 'total' => $total];
 }
 
+// Función para obtener todos los datos de auditoría para el gráfico (sin paginación)
+function getModuleAuditsForChart($db, $resource, $filters = []) {
+    // Construir la consulta base para el gráfico
+    $sql = "SELECT al.action, al.details
+            FROM audit_log al
+            WHERE 1=1";
+    
+    $params = [];
+    
+    // Replicar la lógica de filtros de getModuleAudits
+    if ($resource) {
+        $sql .= " AND (al.target_resource = ?";
+        $params[] = $resource;
+        
+        $moduleActions = getModuleActions($resource);
+        if (!empty($moduleActions)) {
+            $placeholders = str_repeat('?,', count($moduleActions) - 1) . '?';
+            $sql .= " OR al.action IN ($placeholders)";
+            $params = array_merge($params, $moduleActions);
+        }
+        $sql .= ")";
+    }
+    
+    if (!empty($filters['date_from'])) {
+        $sql .= " AND al.timestamp >= ?";
+        $params[] = $filters['date_from'] . ' 00:00:00';
+    }
+    
+    if (!empty($filters['date_to'])) {
+        $sql .= " AND al.timestamp <= ?";
+        $params[] = $filters['date_to'] . ' 23:59:59';
+    }
+    
+    if (!empty($filters['user_type'])) {
+        $sql .= " AND al.user_type = ?";
+        $params[] = $filters['user_type'];
+    }
+    
+    if (!empty($filters['action'])) {
+        $sql .= " AND al.action LIKE ?";
+        $params[] = '%' . $filters['action'] . '%';
+    }
+    
+    if (!empty($filters['target_id'])) {
+        $sql .= " AND al.target_id = ?";
+        $params[] = $filters['target_id'];
+    }
+    
+    if (!empty($filters['search'])) {
+        $sql .= " AND (al.details LIKE ? OR al.action LIKE ?)";
+        $searchTerm = '%' . $filters['search'] . '%';
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
+    }
+    
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $audits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Procesar detalles para que el gráfico funcione correctamente
+    foreach ($audits as &$audit) {
+        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db);
+    }
+    
+    return $audits;
+}
+
 // Función para formatear los detalles de auditoría
 function formatAuditDetails($details, $db = null) {
     if (!$details) return '-';
@@ -567,10 +634,13 @@ try {
             $limit = intval($input['limit'] ?? 20);
             
             $result = getModuleAudits($db, $resource, $filters, $offset, $limit);
+            $chartData = getModuleAuditsForChart($db, $resource, $filters);
+
             echo json_encode([
                 'ok' => true,
                 'audits' => $result['audits'],
-                'total' => $result['total']
+                'total' => $result['total'],
+                'chart_data' => $chartData
             ]);
             break;
             

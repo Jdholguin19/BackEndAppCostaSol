@@ -470,18 +470,26 @@
     
     <div class="filter-body">
       <div class="filter-group">
-        <label for="filterManzana">Manzana:</label>
-        <input type="text" id="filterManzana" placeholder="Ej: 7100" class="filter-input">
-      </div>
-      
-      <div class="filter-group">
-        <label for="filterVilla">Villa:</label>
-        <input type="text" id="filterVilla" placeholder="Ej: 14" class="filter-input">
-      </div>
-      
-      <div class="filter-group">
         <label for="filterCliente">Cliente:</label>
-        <input type="text" id="filterCliente" placeholder="Ej: Ana, García" class="filter-input">
+        <div class="autocomplete-container">
+          <input type="text" id="filterCliente" placeholder="Ej: Daniel, Ana" class="filter-input autocomplete-input">
+          <div id="clienteSuggestions" class="autocomplete-suggestions"></div>
+        </div>
+      </div>
+      
+      <div class="filter-group">
+        <label for="filterUbicacion">Ubicación:</label>
+        <div class="autocomplete-container">
+          <input type="text" id="filterUbicacion" placeholder="Ej: 7100, 7100-01" class="filter-input autocomplete-input">
+          <div id="ubicacionSuggestions" class="autocomplete-suggestions"></div>
+        </div>
+      </div>
+      
+      <div class="filter-group" id="propiedadesClienteGroup" style="display: none;">
+        <label for="propiedadesCliente">Propiedades del Cliente:</label>
+        <select id="propiedadesCliente" class="filter-input">
+          <option value="">Seleccionar propiedad...</option>
+        </select>
       </div>
     </div>
     
@@ -784,19 +792,41 @@ include '../api/bottom_nav.php';
   }
 
   function clearFilters() {
-    document.getElementById('filterManzana').value = '';
-    document.getElementById('filterVilla').value = '';
     document.getElementById('filterCliente').value = '';
+    document.getElementById('filterUbicacion').value = '';
+    document.getElementById('propiedadesCliente').value = '';
+    document.getElementById('propiedadesClienteGroup').style.display = 'none';
+    
+    // Limpiar sugerencias
+    hideSuggestions('clienteSuggestions');
+    hideSuggestions('ubicacionSuggestions');
   }
 
   async function applyFilters() {
-    const manzana = document.getElementById('filterManzana').value.trim();
-    const villa = document.getElementById('filterVilla').value.trim();
     const cliente = document.getElementById('filterCliente').value.trim();
+    const ubicacion = document.getElementById('filterUbicacion').value.trim();
+    const propiedadCliente = document.getElementById('propiedadesCliente').value;
 
     const filtros = {};
-    if (manzana) filtros.manzana = manzana;
-    if (villa) filtros.villa = villa;
+    
+    // Si hay una propiedad específica seleccionada, usar esa
+    if (propiedadCliente) {
+      const propiedad = JSON.parse(propiedadCliente);
+      filtros.manzana = propiedad.manzana;
+      filtros.villa = propiedad.villa;
+    } else {
+      // Si hay ubicación, parsearla
+      if (ubicacion) {
+        if (ubicacion.includes('-')) {
+          const [manzana, villa] = ubicacion.split('-');
+          filtros.manzana = manzana.trim();
+          filtros.villa = villa.trim();
+        } else {
+          filtros.manzana = ubicacion;
+        }
+      }
+    }
+    
     if (cliente) filtros.nombre_cliente = cliente;
 
     try {
@@ -955,14 +985,14 @@ include '../api/bottom_nav.php';
           }
         };
         
-        // Permitir Enter en los inputs
-        ['filterManzana', 'filterVilla', 'filterCliente'].forEach(id => {
-          document.getElementById(id).addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-              applyFilters();
-            }
-          });
-        });
+        // Configurar autocomplete para cliente
+        setupClienteAutocomplete();
+        
+        // Configurar autocomplete para ubicación
+        setupUbicacionAutocomplete();
+        
+        // Configurar eventos del select de propiedades
+        document.getElementById('propiedadesCliente').addEventListener('change', handlePropiedadClienteChange);
       } else {
         // Si no necesita filtro, mostrar todas las propiedades
         showAllProperties();
@@ -1265,6 +1295,234 @@ include '../api/bottom_nav.php';
           }
       }, 5000); // Esperar 5 segundos para asegurar que OneSignal esté completamente inicializado
   });
+
+  // Variables globales para autocomplete
+  let clienteTimeout = null;
+  let ubicacionTimeout = null;
+  let selectedClienteId = null;
+
+  // Función para configurar autocomplete de clientes
+  function setupClienteAutocomplete() {
+    const input = document.getElementById('filterCliente');
+    const suggestions = document.getElementById('clienteSuggestions');
+    
+    input.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      
+      clearTimeout(clienteTimeout);
+      
+      if (query.length < 1) {
+        hideSuggestions('clienteSuggestions');
+        hidePropiedadesCliente();
+        return;
+      }
+      
+      clienteTimeout = setTimeout(() => {
+        searchClientes(query);
+      }, 300);
+    });
+    
+    // Ocultar sugerencias al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+        hideSuggestions('clienteSuggestions');
+      }
+    });
+  }
+
+  // Función para configurar autocomplete de ubicaciones
+  function setupUbicacionAutocomplete() {
+    const input = document.getElementById('filterUbicacion');
+    const suggestions = document.getElementById('ubicacionSuggestions');
+    
+    input.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      
+      clearTimeout(ubicacionTimeout);
+      
+      if (query.length < 1) {
+        hideSuggestions('ubicacionSuggestions');
+        return;
+      }
+      
+      ubicacionTimeout = setTimeout(() => {
+        searchUbicaciones(query);
+      }, 300);
+    });
+    
+    // Ocultar sugerencias al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+        hideSuggestions('ubicacionSuggestions');
+      }
+    });
+  }
+
+  // Función para buscar clientes
+  async function searchClientes(query) {
+    try {
+      const response = await fetch(`../api/filtro_propiedad/buscar_clientes.php?q=${encodeURIComponent(query)}&limit=10`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.ok) {
+        showClienteSuggestions(data.clientes);
+      }
+    } catch (error) {
+      console.error('Error buscando clientes:', error);
+    }
+  }
+
+  // Función para buscar ubicaciones
+  async function searchUbicaciones(query) {
+    try {
+      const response = await fetch(`../api/filtro_propiedad/buscar_ubicaciones.php?q=${encodeURIComponent(query)}&limit=15`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.ok) {
+        showUbicacionSuggestions(data.ubicaciones);
+      }
+    } catch (error) {
+      console.error('Error buscando ubicaciones:', error);
+    }
+  }
+
+  // Función para mostrar sugerencias de clientes
+  function showClienteSuggestions(clientes) {
+    const suggestions = document.getElementById('clienteSuggestions');
+    
+    if (clientes.length === 0) {
+      hideSuggestions('clienteSuggestions');
+      return;
+    }
+    
+    suggestions.innerHTML = clientes.map(cliente => `
+      <div class="autocomplete-suggestion" data-cliente-id="${cliente.id}" data-cliente-nombre="${cliente.nombre_completo}">
+        <div class="suggestion-title">${cliente.nombre_completo}</div>
+        <div class="suggestion-subtitle">${cliente.total_propiedades} propiedad${cliente.total_propiedades !== 1 ? 'es' : ''}</div>
+      </div>
+    `).join('');
+    
+    // Agregar eventos de clic
+    suggestions.querySelectorAll('.autocomplete-suggestion').forEach(suggestion => {
+      suggestion.addEventListener('click', () => {
+        const clienteId = suggestion.dataset.clienteId;
+        const clienteNombre = suggestion.dataset.clienteNombre;
+        
+        document.getElementById('filterCliente').value = clienteNombre;
+        selectedClienteId = clienteId;
+        
+        hideSuggestions('clienteSuggestions');
+        
+        // Si el cliente tiene múltiples propiedades, mostrar el select
+        if (clientes.find(c => c.id == clienteId).total_propiedades > 1) {
+          loadPropiedadesCliente(clienteId);
+        } else {
+          hidePropiedadesCliente();
+        }
+      });
+    });
+    
+    suggestions.classList.add('show');
+  }
+
+  // Función para mostrar sugerencias de ubicaciones
+  function showUbicacionSuggestions(ubicaciones) {
+    const suggestions = document.getElementById('ubicacionSuggestions');
+    
+    if (ubicaciones.length === 0) {
+      hideSuggestions('ubicacionSuggestions');
+      return;
+    }
+    
+    suggestions.innerHTML = ubicaciones.map(ubicacion => `
+      <div class="autocomplete-suggestion" data-ubicacion="${ubicacion.ubicacion_completa}" data-cliente-id="${ubicacion.cliente_id || ''}" data-cliente-nombre="${ubicacion.cliente_completo || ''}">
+        <div class="suggestion-title">${ubicacion.ubicacion_completa}</div>
+        <div class="suggestion-subtitle">${ubicacion.urbanizacion}${ubicacion.cliente_completo ? ' - ' + ubicacion.cliente_completo : ''}</div>
+      </div>
+    `).join('');
+    
+    // Agregar eventos de clic
+    suggestions.querySelectorAll('.autocomplete-suggestion').forEach(suggestion => {
+      suggestion.addEventListener('click', () => {
+        const ubicacion = suggestion.dataset.ubicacion;
+        const clienteId = suggestion.dataset.clienteId;
+        const clienteNombre = suggestion.dataset.clienteNombre;
+        
+        document.getElementById('filterUbicacion').value = ubicacion;
+        
+        // Si hay cliente asociado, completar el campo cliente
+        if (clienteNombre) {
+          document.getElementById('filterCliente').value = clienteNombre;
+          selectedClienteId = clienteId;
+        }
+        
+        hideSuggestions('ubicacionSuggestions');
+      });
+    });
+    
+    suggestions.classList.add('show');
+  }
+
+  // Función para ocultar sugerencias
+  function hideSuggestions(suggestionId) {
+    const suggestions = document.getElementById(suggestionId);
+    suggestions.classList.remove('show');
+    suggestions.innerHTML = '';
+  }
+
+  // Función para cargar propiedades de un cliente
+  async function loadPropiedadesCliente(clienteId) {
+    try {
+      const response = await fetch(`../api/filtro_propiedad/obtener_propiedades_cliente.php?cliente_id=${clienteId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      
+      if (data.ok) {
+        const select = document.getElementById('propiedadesCliente');
+        select.innerHTML = '<option value="">Seleccionar propiedad...</option>';
+        
+        data.propiedades.forEach(propiedad => {
+          const option = document.createElement('option');
+          option.value = JSON.stringify(propiedad);
+          option.textContent = propiedad.display_name;
+          select.appendChild(option);
+        });
+        
+        document.getElementById('propiedadesClienteGroup').style.display = 'block';
+      }
+    } catch (error) {
+      console.error('Error cargando propiedades del cliente:', error);
+    }
+  }
+
+  // Función para ocultar el grupo de propiedades del cliente
+  function hidePropiedadesCliente() {
+    document.getElementById('propiedadesClienteGroup').style.display = 'none';
+    document.getElementById('propiedadesCliente').value = '';
+  }
+
+  // Función para manejar el cambio en el select de propiedades
+  function handlePropiedadClienteChange() {
+    const select = document.getElementById('propiedadesCliente');
+    if (select.value) {
+      const propiedad = JSON.parse(select.value);
+      document.getElementById('filterUbicacion').value = propiedad.ubicacion_completa;
+    }
+  }
 
 </script>
 

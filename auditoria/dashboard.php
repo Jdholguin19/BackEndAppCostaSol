@@ -444,7 +444,7 @@ async function loadModuleAudits() {
         const data = await response.json();
         
         if (data.ok) {
-            renderModuleAudits(data.audits, data.total);
+            renderModuleAudits(data.audits, data.total, data.chart_data);
         } else {
             console.error('Error al cargar auditorías del módulo:', data.mensaje);
             document.getElementById('auditTableContainer').innerHTML = '<div class="no-data">Error al cargar los datos</div>';
@@ -612,7 +612,7 @@ function createChartLegend(labels, data, colors) {
 }
 
 // Función para renderizar auditorías de un módulo
-function renderModuleAudits(audits, total) {
+function renderModuleAudits(audits, total, chartData) {
     const container = document.getElementById('auditTableContainer');
     
     if (audits.length === 0) {
@@ -637,7 +637,7 @@ function renderModuleAudits(audits, total) {
         chartTitle.innerHTML = '<i class="bi bi-pie-chart"></i> Distribución de Auditorías';
     }
     
-    createAuditChart(audits);
+    createAuditChart(chartData);
     
     const auditsHtml = `
         <table class="audit-table">

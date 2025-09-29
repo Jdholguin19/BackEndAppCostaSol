@@ -293,3 +293,83 @@
 #showAllBtn i {
   font-size: 0.9rem;
 }
+
+/* Estilos para autocomplete */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-suggestions.show {
+  display: block;
+}
+
+.autocomplete-suggestion {
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.autocomplete-suggestion:hover {
+  background-color: #f8f9fa;
+}
+
+.autocomplete-suggestion:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-suggestion.selected {
+  background-color: #e7f3ff;
+}
+
+.suggestion-title {
+  font-weight: 600;
+  color: #2d5a3d;
+  margin-bottom: 2px;
+}
+
+.suggestion-subtitle {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.suggestion-count {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  float: right;
+  margin-top: 2px;
+}
+
+/* Estilos para el select de propiedades */
+#propiedadesCliente {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: white;
+  cursor: pointer;
+}
+
+#propiedadesCliente:focus {
+  border-color: #39a452;
+  box-shadow: 0 0 0 3px rgba(57, 164, 82, 0.2);
+  outline: none;
+}
