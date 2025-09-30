@@ -891,13 +891,13 @@ function createAuditChart(audits) {
                 
                 ctx.font = `bold ${fontSize}px Arial`;
                 ctx.fillStyle = '#333';
-                ctx.textAlign = Math.cos(angle) >= 0 ? 'left' : 'right';
+                ctx.textAlign = 'center'; // Centrar el texto en el cuadrito
                 ctx.textBaseline = 'middle';
                 
                 // Fondo de la etiqueta
                 const textMetrics = ctx.measureText(displayLabel);
-                const padding = 10; // Más padding para que el texto no toque los bordes
-                const labelWidth = textMetrics.width + (padding * 2);
+                const padding = 12; // Más padding para textos largos
+                const labelWidth = Math.max(textMetrics.width + (padding * 2), 80); // Ancho mínimo para textos cortos
                 const labelHeight = fontSize + (padding * 2);
                 
                 const labelX = x3 + (Math.cos(angle) >= 0 ? 5 : -labelWidth - 5);
@@ -912,7 +912,7 @@ function createAuditChart(audits) {
                 
                 // Dibujar texto
                 ctx.fillStyle = '#333';
-                ctx.fillText(displayLabel, labelX + padding, labelY);
+                ctx.fillText(displayLabel, labelX + labelWidth/2, labelY);
             });
 
             ctx.restore();
