@@ -81,7 +81,7 @@ if (!$token) {
 <?php else: ?>
 <!-- Header Section -->
 <div class="audit-header">
-    <div style="position: relative; text-align: center;">
+  <div style="position: relative; text-align: center;">
     <button class="back-button" onclick="history.back()" 
             aria-label="Volver a la página anterior" 
             tabindex="0"
@@ -166,7 +166,9 @@ if (!$token) {
           </div>
           <div class="filter-group">
             <label for="filterAction">Acción:</label>
-            <input type="text" id="filterAction" class="form-control" placeholder="Ej: LOGIN_SUCCESS">
+            <select id="filterAction" class="form-control">
+              <option value="">Todas las acciones</option>
+            </select>
           </div>
           <div class="filter-group">
             <label for="filterTargetId">ID Objetivo:</label>
@@ -645,7 +647,10 @@ function showModuleDetail(resource) {
     `;
     
     // Limpiar filtros
-    clearFilters();
+    resetFilters();
+    
+    // Poblar el combo box de acciones según el módulo
+    populateActionFilter(resource);
     
     // Cargar datos del módulo
     loadModuleAudits();
@@ -894,14 +899,14 @@ function createAuditChart(audits) {
                             const percentage = ((value / total) * 100).toFixed(1);
                             return `${label}: ${value} (${percentage}%)`;
                         }
+                        }
                     }
-                }
-            },
+                },
             scales: {
                 x: {
                     beginAtZero: true,
                     title: {
-                        display: true,
+                    display: true,
                         text: 'Número de Auditorías'
                     }
                 },
@@ -1133,6 +1138,76 @@ function updatePaginationInfo(total, newCount) {
     resultsInfo.textContent = `Mostrando ${currentCount} de ${total} resultados`;
 }
 
+// Función para poblar las opciones del combo box de acciones según el módulo
+function populateActionFilter(module) {
+    const actionSelect = document.getElementById('filterAction');
+    
+    // Limpiar opciones existentes excepto la primera
+    actionSelect.innerHTML = '<option value="">Todas las acciones</option>';
+    
+    // Definir acciones específicas por módulo
+    const moduleActions = {
+        'autenticacion': [
+            { value: 'LOGIN_SUCCESS', label: 'Inicio Sesión' },
+            { value: 'LOGIN_FAILURE', label: 'Falló la Sesión' },
+            { value: 'LOGOUT', label: 'Cerró Sesión' }
+        ],
+        'usuario': [
+            { value: 'CREATE_USER', label: 'Crear Usuario' },
+            { value: 'UPDATE_USER', label: 'Actualizar Usuario' },
+            { value: 'DELETE_USER', label: 'Eliminar Usuario' },
+            { value: 'VIEW_USER', label: 'Ver Usuario' }
+        ],
+        'cita': [
+            { value: 'CREATE_CITA', label: 'Crear Cita' },
+            { value: 'UPDATE_CITA', label: 'Actualizar Cita' },
+            { value: 'DELETE_CITA', label: 'Eliminar Cita' },
+            { value: 'CANCEL_CITA', label: 'Cancelar Cita' }
+        ],
+        'ctg': [
+            { value: 'CREATE_CTG', label: 'Crear CTG' },
+            { value: 'UPDATE_CTG', label: 'Actualizar CTG' },
+            { value: 'DELETE_CTG', label: 'Eliminar CTG' },
+            { value: 'VIEW_CTG', label: 'Ver CTG' }
+        ],
+        'pqr': [
+            { value: 'CREATE_PQR', label: 'Crear PQR' },
+            { value: 'UPDATE_PQR', label: 'Actualizar PQR' },
+            { value: 'DELETE_PQR', label: 'Eliminar PQR' },
+            { value: 'RESPOND_PQR', label: 'Responder PQR' }
+        ],
+        'acabados': [
+            { value: 'SELECT_KIT', label: 'Seleccionar Kit' },
+            { value: 'UPDATE_SELECTION', label: 'Actualizar Selección' },
+            { value: 'SAVE_SELECTION', label: 'Guardar Selección' }
+        ],
+        'perfil': [
+            { value: 'UPDATE_PROFILE', label: 'Actualizar Perfil' },
+            { value: 'CHANGE_PASSWORD', label: 'Cambiar Contraseña' },
+            { value: 'UPDATE_PICTURE', label: 'Actualizar Foto' }
+        ],
+        'notificaciones': [
+            { value: 'SEND_NOTIFICATION', label: 'Enviar Notificación' },
+            { value: 'MARK_READ', label: 'Marcar como Leído' },
+            { value: 'DELETE_NOTIFICATION', label: 'Eliminar Notificación' }
+        ],
+        'acceso_modulo': [
+            { value: 'ACCESS_MODULE', label: 'Acceder a Módulo' }
+        ]
+    };
+    
+    // Obtener acciones para el módulo actual
+    const actions = moduleActions[module] || [];
+    
+    // Agregar opciones al select
+    actions.forEach(action => {
+        const option = document.createElement('option');
+        option.value = action.value;
+        option.textContent = action.label;
+        actionSelect.appendChild(option);
+    });
+}
+
 // Función para aplicar filtros
 function applyFilters() {
     currentFilters = {
@@ -1172,16 +1247,34 @@ function clearFilters() {
     }
 }
 
+// Función para limpiar filtros sin recargar datos (usada internamente)
+function resetFilters() {
+    document.getElementById('filterDateFrom').value = '';
+    document.getElementById('filterDateTo').value = '';
+    document.getElementById('filterUserType').value = '';
+    document.getElementById('filterAction').value = '';
+    document.getElementById('filterTargetId').value = '';
+    document.getElementById('filterSearch').value = '';
+    
+    currentFilters = {};
+    currentOffset = 0;
+}
+
 // Función para configurar event listeners
 function setupEventListeners() {
     // Enter key en filtros
-    const filterInputs = document.querySelectorAll('#filterAction, #filterTargetId, #filterSearch');
+    const filterInputs = document.querySelectorAll('#filterTargetId, #filterSearch');
     filterInputs.forEach(input => {
         input.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 applyFilters();
             }
         });
+    });
+    
+    // Change event en el select de acciones
+    document.getElementById('filterAction').addEventListener('change', function() {
+        applyFilters();
     });
 }
 
