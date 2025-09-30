@@ -674,9 +674,9 @@ async function loadModuleAudits() {
     
     const moduleName = moduleNames[currentModule] || currentModule;
     
-    // Verificar cache primero (solo si no hay filtros activos)
+    // Verificar cache primero (solo si no hay filtros activos y no hay paginación)
     const hasActiveFilters = Object.values(currentFilters).some(value => value !== '');
-    if (!hasActiveFilters) {
+    if (!hasActiveFilters && currentOffset === 0) {
         const cachedData = cache.getModuleAudits(currentModule, currentFilters);
         if (cachedData) {
             console.log('Usando datos de módulo desde cache');
@@ -966,9 +966,142 @@ function renderModuleAudits(audits, total, chartData) {
 }
 
 // Función para cargar más auditorías
-function loadMoreAudits() {
+async function loadMoreAudits() {
     currentOffset += 20;
-    loadModuleAudits();
+    
+    const moduleNames = {
+        'autenticacion': 'Autenticación',
+        'usuario': 'Usuarios',
+        'cita': 'Citas',
+        'ctg': 'CTG',
+        'pqr': 'PQR',
+        'acabados': 'Acabados',
+        'perfil': 'Perfil',
+        'notificaciones': 'Notificaciones',
+        'acceso_modulo': 'Acceso a Módulos'
+    };
+    
+    const moduleName = moduleNames[currentModule] || currentModule;
+    
+    // Mostrar indicador de carga en el botón
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const originalText = loadMoreBtn.innerHTML;
+    loadMoreBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Cargando...';
+    loadMoreBtn.disabled = true;
+    
+    try {
+        const requestData = {
+            action: 'get_module_audits',
+            resource: currentModule,
+            offset: currentOffset,
+            limit: 20,
+            date_from: currentFilters.date_from || '',
+            date_to: currentFilters.date_to || '',
+            user_type: currentFilters.user_type || '',
+            action_filter: currentFilters.action || '',
+            target_id: currentFilters.target_id || '',
+            search: currentFilters.search || ''
+        };
+        
+        console.log('Enviando petición:', requestData); // Debug
+        
+        const response = await fetch('api/audit_dashboard_data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        console.log('Respuesta del servidor:', result); // Debug
+        
+        // Manejar la estructura real de la respuesta del servidor
+        if (result.ok || result.success) {
+            // Verificar que los datos existen
+            const audits = result.audits || result.data?.audits;
+            const total = result.total || result.data?.total;
+            const chartData = result.chart_data || result.data?.chart_data;
+            
+            if (!audits) {
+                throw new Error('El servidor no devolvió datos de auditorías válidos');
+            }
+            
+            // Agregar nuevas filas a la tabla existente
+            appendAuditsToTable(audits);
+            
+            // Actualizar información de paginación
+            updatePaginationInfo(total, audits.length);
+            
+            // Si no hay más datos, deshabilitar el botón
+            if (audits.length < 20) {
+                loadMoreBtn.innerHTML = '<i class="bi bi-check-circle"></i> No hay más resultados';
+                loadMoreBtn.disabled = true;
+            } else {
+                loadMoreBtn.innerHTML = originalText;
+                loadMoreBtn.disabled = false;
+            }
+        } else {
+            console.error('Error del servidor:', result);
+            throw new Error(result.message || 'Error del servidor: ' + JSON.stringify(result));
+        }
+    } catch (error) {
+        console.error('Error al cargar más auditorías:', error);
+        showErrorMessage('auditTableContainer', 'Error al cargar más auditorías: ' + error.message);
+        
+        // Restaurar botón
+        loadMoreBtn.innerHTML = originalText;
+        loadMoreBtn.disabled = false;
+        
+        // Revertir offset
+        currentOffset -= 20;
+    }
+}
+
+// Función para agregar nuevas auditorías a la tabla existente
+function appendAuditsToTable(audits) {
+    const tbody = document.querySelector('#auditTableContainer .audit-table tbody');
+    
+    if (!tbody) {
+        console.error('No se encontró el tbody de la tabla');
+        return;
+    }
+    
+    const newRowsHtml = audits.map(audit => `
+        <tr>
+            <td>${formatDateTime(audit.timestamp)}</td>
+            <td>
+                <span class="user-type-badge user-${audit.user_type}">${audit.user_type}</span>
+                ${audit.user_display_name ? ` (${audit.user_display_name})` : ''}
+            </td>
+            <td>
+                <span class="action-badge action-${getActionType(audit.action)}">${getActionType(audit.action)}</span>
+            </td>
+            <td>${audit.target_id || '-'}</td>
+            <td>${audit.ip_address || '-'}</td>
+            <td class="details-cell">
+                <div class="details-content">
+                    ${audit.formatted_details || audit.details || 'Sin detalles'}
+                </div>
+            </td>
+        </tr>
+    `).join('');
+    
+    tbody.insertAdjacentHTML('beforeend', newRowsHtml);
+}
+
+// Función para actualizar la información de paginación
+function updatePaginationInfo(total, newCount) {
+    const resultsInfo = document.getElementById('resultsInfo');
+    const currentCount = document.querySelectorAll('#auditTableContainer .audit-table tbody tr').length;
+    
+    resultsInfo.textContent = `Mostrando ${currentCount} de ${total} resultados`;
 }
 
 // Función para aplicar filtros
@@ -983,6 +1116,8 @@ function applyFilters() {
     };
     
     currentOffset = 0;
+    // Limpiar cache cuando se aplican filtros
+    cache.clearCache();
     loadModuleAudits();
 }
 
@@ -997,6 +1132,8 @@ function clearFilters() {
     
     currentFilters = {};
     currentOffset = 0;
+    // Limpiar cache cuando se limpian filtros
+    cache.clearCache();
     
     if (currentModule) {
         loadModuleAudits();
