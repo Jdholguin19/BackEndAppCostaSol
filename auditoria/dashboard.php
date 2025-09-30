@@ -136,13 +136,12 @@ if (!$token) {
       <!-- Chart Section -->
       <div class="chart-section" id="chartSection" style="display: none;">
         <h4 class="section-title">
-          <i class="bi bi-pie-chart"></i>
+          <i class="bi bi-bar-chart"></i>
           Distribución de Auditorías
         </h4>
         <div class="chart-container">
           <canvas id="auditChart"></canvas>
         </div>
-        <div class="chart-legend" id="chartLegend"></div>
       </div>
       
       <!-- Filters -->
@@ -739,7 +738,7 @@ async function loadModuleAudits() {
     }
 }
 
-// Función para crear el gráfico de pastel
+// Función para crear el gráfico de barras horizontales
 function createAuditChart(audits) {
     // Destruir gráfico anterior si existe
     if (auditChart) {
@@ -773,13 +772,11 @@ function createAuditChart(audits) {
         data = Object.values(kitCounts);
     } else if (currentModule === 'cita') {
         // Para el módulo de citas, mostrar nombres de propósitos o tipos de acción
-        // EXCLUIR DELETE_CITA del gráfico de pastel
         const propositoCounts = {};
         audits.forEach(audit => {
             const detail = audit.formatted_details || audit.details || 'Sin detalles';
             
             // Saltar solo DELETE_CITA (acción de eliminación) para el gráfico
-            // Pero permitir que las citas eliminadas aparezcan si fueron creadas originalmente
             if (audit.action === 'DELETE_CITA') {
                 return;
             }
@@ -838,164 +835,58 @@ function createAuditChart(audits) {
         '#ffc107'  // Amarillo
     ];
     
-    // Crear el gráfico
+    // Crear el gráfico de barras horizontales
     const ctx = document.getElementById('auditChart').getContext('2d');
-
-    // Plugin para dibujar líneas guía y etiquetas manualmente
-    const leaderLinesPlugin = {
-        id: 'leaderLines',
-        afterDatasetsDraw(chart, args, pluginOptions) {
-            const {ctx} = chart;
-            const meta = chart.getDatasetMeta(0);
-            if (!meta || !meta.data) return;
-
-            ctx.save();
-            
-            // Dibujar líneas guía
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = '#6c757d';
-
-            meta.data.forEach((arc, index) => {
-                // Obtener propiedades del arco de forma segura en Chart.js 4
-                const props = arc.getProps(['x','y','startAngle','endAngle','outerRadius'], true);
-                const angle = (props.startAngle + props.endAngle) / 2;
-                const label = chart.data.labels[index];
-                const value = chart.data.datasets[0].data[index];
-                const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                const percentage = (value / total) * 100;
-
-                // Punto inicial en el borde del pastel
-                const r1 = props.outerRadius * 0.98;
-                const x1 = props.x + Math.cos(angle) * r1;
-                const y1 = props.y + Math.sin(angle) * r1;
-
-                // Punto final fuera del pastel
-                const r2 = props.outerRadius + 60;
-                const x2 = props.x + Math.cos(angle) * r2;
-                const y2 = props.y + Math.sin(angle) * r2;
-
-                // Segmento horizontal
-                const horizontal = 25 * (Math.cos(angle) >= 0 ? 1 : -1);
-                const x3 = x2 + horizontal;
-
-                // Dibujar línea guía
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.lineTo(x3, y2);
-                ctx.stroke();
-
-                // Dibujar etiqueta manualmente
-                const displayLabel = percentage < 3 && label.length > 12 ? label.slice(0, 12) + '…' : label;
-                const fontSize = percentage < 4 ? 10 : 11;
-                
-                ctx.font = `bold ${fontSize}px Arial`;
-                ctx.fillStyle = '#333';
-                ctx.textAlign = 'center'; // Centrar el texto en el cuadrito
-                ctx.textBaseline = 'middle';
-                
-                // Fondo de la etiqueta
-                const textMetrics = ctx.measureText(displayLabel);
-                const padding = 12; // Más padding para textos largos
-                const labelWidth = Math.max(textMetrics.width + (padding * 2), 80); // Ancho mínimo para textos cortos
-                const labelHeight = fontSize + (padding * 2);
-                
-                const labelX = x3 + (Math.cos(angle) >= 0 ? 5 : -labelWidth - 5);
-                const labelY = y2;
-                
-                // Dibujar fondo
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-                ctx.strokeStyle = '#ccc';
-                ctx.lineWidth = 1;
-                ctx.fillRect(labelX, labelY - labelHeight/2, labelWidth, labelHeight);
-                ctx.strokeRect(labelX, labelY - labelHeight/2, labelWidth, labelHeight);
-                
-                // Dibujar texto
-                ctx.fillStyle = '#333';
-                ctx.fillText(displayLabel, labelX + labelWidth/2, labelY);
-            });
-
-            ctx.restore();
-        }
-    };
-
     auditChart = new Chart(ctx, {
-        type: 'pie',
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [{
+                label: 'Cantidad',
                 data: data,
                 backgroundColor: colors.slice(0, labels.length),
-                borderColor: '#fff',
-                borderWidth: 2,
-                offset: 0
+                borderColor: colors.slice(0, labels.length),
+                borderWidth: 1
             }]
         },
         options: {
+            indexAxis: 'y', // Hacer el gráfico horizontal
             responsive: true,
             maintainAspectRatio: false,
-            layout: {
-                padding: {
-                    right: 180, // Reducido un poco
-                    left: 200, // Reducido un poco
-                    top: 40,
-                    bottom: 40
-                }
-            },
-            elements: {
-                arc: {
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }
-            },
-            cutout: '0%',
-            radius: '65%', // Un poco más pequeño
             plugins: {
                 legend: {
-                    display: false // Usaremos nuestra propia leyenda
+                    display: false
                 },
                 tooltip: {
                     enabled: true,
                     callbacks: {
                         label: function(context) {
                             const label = context.label || '';
-                            const value = context.parsed;
+                            const value = context.parsed.x;
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
                             const percentage = ((value / total) * 100).toFixed(1);
                             return `${label}: ${value} (${percentage}%)`;
                         }
                     }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Número de Auditorías'
+                    }
                 },
-                datalabels: {
-                    display: false // Desactivar datalabels del plugin
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Categorías'
+                    }
                 }
             }
-        },
-        plugins: [leaderLinesPlugin]
+        }
     });
-    
-    // Crear leyenda personalizada
-    createChartLegend(labels, data, colors.slice(0, labels.length));
-}
-
-// Función para crear la leyenda del gráfico
-function createChartLegend(labels, data, colors) {
-    const legendContainer = document.getElementById('chartLegend');
-    const total = data.reduce((a, b) => a + b, 0);
-    
-    const legendHtml = labels.map((label, index) => {
-        const count = data[index];
-        const percentage = ((count / total) * 100).toFixed(1);
-        return `
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: ${colors[index]}"></div>
-                <span class="legend-text">${label}</span>
-                <span class="legend-count">${count} (${percentage}%)</span>
-            </div>
-        `;
-    }).join('');
-    
-    legendContainer.innerHTML = legendHtml;
 }
 
 // Función para renderizar auditorías de un módulo
@@ -1015,13 +906,13 @@ function renderModuleAudits(audits, total, chartData) {
     // Actualizar título del gráfico según el módulo
     const chartTitle = document.querySelector('#chartSection .section-title');
     if (currentModule === 'acceso_modulo') {
-        chartTitle.innerHTML = '<i class="bi bi-pie-chart"></i> Distribución por Módulos Accedidos';
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Módulos Accedidos';
     } else if (currentModule === 'acabados') {
-        chartTitle.innerHTML = '<i class="bi bi-pie-chart"></i> Distribución por Kits Seleccionados';
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Kits Seleccionados';
     } else if (currentModule === 'cita') {
-        chartTitle.innerHTML = '<i class="bi bi-pie-chart"></i> Distribución por Propósitos de Citas';
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Propósitos de Citas';
     } else {
-        chartTitle.innerHTML = '<i class="bi bi-pie-chart"></i> Distribución de Auditorías';
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución de Auditorías';
     }
     
     createAuditChart(chartData);

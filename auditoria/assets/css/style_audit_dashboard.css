@@ -268,33 +268,21 @@ body {
 .chart-section {
   background: #f8f9fa;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem; /* Reducido padding vertical */
   margin-bottom: 1.5rem;
   overflow: visible;
   min-width: 800px; /* Ancho mínimo para acomodar etiquetas */
 }
 
-/* Estilos para las etiquetas de datos del gráfico */
-.chartjs-datalabel {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  border: 1px solid #ddd !important;
-  border-radius: 4px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  font-weight: bold !important;
-  color: #333 !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-}
-
 .chart-container {
   display: flex;
   justify-content: center;
-  margin: 1rem 0;
+  margin: 0.5rem 0; /* Reducido margen vertical */
   position: relative;
   overflow: visible;
   width: 100%;
-  min-height: 600px; /* Altura balanceada */
-  padding: 30px 50px; /* Más padding horizontal para etiquetas */
+  min-height: 400px; /* Altura adecuada para barras horizontales */
+  padding: 20px; /* Padding suficiente para el gráfico */
 }
 
 .chart-container canvas {
@@ -302,38 +290,6 @@ body {
   height: auto !important;
   position: relative;
   margin: 0 auto; /* Centrar el canvas */
-}
-
-.chart-legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.legend-text {
-  font-weight: 500;
-}
-
-.legend-count {
-  color: #6c757d;
-  font-size: 0.8rem;
 }
 
 .filters-section {
