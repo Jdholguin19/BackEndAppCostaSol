@@ -616,7 +616,7 @@ function renderRecentAudits(audits) {
 }
 
 // Función para mostrar el detalle de un módulo
-function showModuleDetail(resource) {
+async function showModuleDetail(resource) {
     currentModule = resource;
     currentOffset = 0;
     currentFilters = {};
@@ -650,7 +650,7 @@ function showModuleDetail(resource) {
     resetFilters();
     
     // Poblar el combo box de acciones según el módulo
-    populateActionFilter(resource);
+    await populateActionFilter(resource);
     
     // Cargar datos del módulo
     loadModuleAudits();
@@ -693,6 +693,9 @@ async function loadModuleAudits() {
     showLoadingIndicator('auditTableContainer', `Cargando datos de ${moduleName}...`);
     
     try {
+        // Determinar qué tipo de filtro usar según el módulo
+        const isDetailsModule = currentModule === 'acabados' || currentModule === 'acceso_modulo';
+        
         const requestData = {
             action: 'get_module_audits',
             resource: currentModule,
@@ -701,7 +704,8 @@ async function loadModuleAudits() {
             date_from: currentFilters.date_from || '',
             date_to: currentFilters.date_to || '',
             user_type: currentFilters.user_type || '',
-            action_filter: currentFilters.action || '', // Renombrar para evitar conflicto
+            action_filter: isDetailsModule ? '' : (currentFilters.action || ''), // Solo para módulos de acción
+            details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1024,6 +1028,9 @@ async function loadMoreAudits() {
     loadMoreBtn.disabled = true;
     
     try {
+        // Determinar qué tipo de filtro usar según el módulo
+        const isDetailsModule = currentModule === 'acabados' || currentModule === 'acceso_modulo';
+        
         const requestData = {
             action: 'get_module_audits',
             resource: currentModule,
@@ -1032,7 +1039,8 @@ async function loadMoreAudits() {
             date_from: currentFilters.date_from || '',
             date_to: currentFilters.date_to || '',
             user_type: currentFilters.user_type || '',
-            action_filter: currentFilters.action || '',
+            action_filter: isDetailsModule ? '' : (currentFilters.action || ''), // Solo para módulos de acción
+            details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1138,12 +1146,54 @@ function updatePaginationInfo(total, newCount) {
     resultsInfo.textContent = `Mostrando ${currentCount} de ${total} resultados`;
 }
 
+// Función para obtener los nombres de kits de acabados dinámicamente
+async function getAcabadosKits() {
+    try {
+        const response = await fetch('api/audit_dashboard_data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                action: 'get_acabados_kits'
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.ok && result.kits) {
+            return result.kits.map(kit => ({
+                value: kit.nombre,
+                label: kit.nombre
+            }));
+        } else {
+            console.error('Error al obtener kits de acabados:', result);
+            return [];
+        }
+    } catch (error) {
+        console.error('Error al obtener kits de acabados:', error);
+        return [];
+    }
+}
+
 // Función para poblar las opciones del combo box de acciones según el módulo
-function populateActionFilter(module) {
+async function populateActionFilter(module) {
     const actionSelect = document.getElementById('filterAction');
+    const actionLabel = document.querySelector('label[for="filterAction"]');
     
-    // Limpiar opciones existentes excepto la primera
-    actionSelect.innerHTML = '<option value="">Todas las acciones</option>';
+    // Cambiar el label según el módulo
+    if (module === 'acabados' || module === 'acceso_modulo') {
+        actionLabel.textContent = 'Detalles:';
+        actionSelect.innerHTML = '<option value="">Todos los detalles</option>';
+    } else {
+        actionLabel.textContent = 'Acción:';
+        actionSelect.innerHTML = '<option value="">Todas las acciones</option>';
+    }
     
     // Definir acciones específicas por módulo
     const moduleActions = {
@@ -1176,11 +1226,7 @@ function populateActionFilter(module) {
             { value: 'DELETE_PQR', label: 'Eliminar PQR' },
             { value: 'RESPOND_PQR', label: 'Responder PQR' }
         ],
-        'acabados': [
-            { value: 'SELECT_KIT', label: 'Seleccionar Kit' },
-            { value: 'UPDATE_SELECTION', label: 'Actualizar Selección' },
-            { value: 'SAVE_SELECTION', label: 'Guardar Selección' }
-        ],
+        'acabados': [], // Se poblará dinámicamente
         'perfil': [
             { value: 'UPDATE_PROFILE', label: 'Actualizar Perfil' },
             { value: 'CHANGE_PASSWORD', label: 'Cambiar Contraseña' },
@@ -1192,12 +1238,27 @@ function populateActionFilter(module) {
             { value: 'DELETE_NOTIFICATION', label: 'Eliminar Notificación' }
         ],
         'acceso_modulo': [
-            { value: 'ACCESS_MODULE', label: 'Acceder a Módulo' }
+            { value: 'Auditoria', label: 'Auditoria' },
+            { value: 'Ver más', label: 'Ver más' },
+            { value: 'Selección Acabados', label: 'Selección Acabados' },
+            { value: 'Calendario Responsable', label: 'Calendario Responsable' },
+            { value: 'Admin User', label: 'Admin User' },
+            { value: 'PQR', label: 'PQR' },
+            { value: 'CTG', label: 'CTG' },
+            { value: 'Garantias', label: 'Garantias' },
+            { value: 'Paleta Vegetal', label: 'Paleta Vegetal' },
+            { value: 'MCM', label: 'MCM' },
+            { value: 'Crédito Hipotecario', label: 'Crédito Hipotecario' }
         ]
     };
     
     // Obtener acciones para el módulo actual
-    const actions = moduleActions[module] || [];
+    let actions = moduleActions[module] || [];
+    
+    // Si es el módulo de acabados, obtener los nombres de kits dinámicamente
+    if (module === 'acabados') {
+        actions = await getAcabadosKits();
+    }
     
     // Agregar opciones al select
     actions.forEach(action => {

@@ -234,6 +234,11 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         $params[] = '%' . $filters['action'] . '%';
     }
     
+    if (!empty($filters['details'])) {
+        $sql .= " AND al.details LIKE ?";
+        $params[] = '%' . $filters['details'] . '%';
+    }
+    
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
         $params[] = $filters['target_id'];
@@ -357,6 +362,11 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
     if (!empty($filters['action'])) {
         $sql .= " AND al.action LIKE ?";
         $params[] = '%' . $filters['action'] . '%';
+    }
+    
+    if (!empty($filters['details'])) {
+        $sql .= " AND al.details LIKE ?";
+        $params[] = '%' . $filters['details'] . '%';
     }
     
     if (!empty($filters['target_id'])) {
@@ -618,6 +628,19 @@ function getModuleActions($resource) {
     return $moduleActions[$resource] ?? [];
 }
 
+// Función para obtener los nombres de kits de acabados
+function getAcabadosKits($db) {
+    try {
+        $sql = "SELECT DISTINCT nombre FROM acabado_kit ORDER BY nombre";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        error_log("Error al obtener kits de acabados: " . $e->getMessage());
+        return [];
+    }
+}
+
 // Procesar la solicitud
 try {
     // Validar autenticación
@@ -657,6 +680,7 @@ try {
                 'date_to' => $input['date_to'] ?? '',
                 'user_type' => $input['user_type'] ?? '',
                 'action' => $input['action_filter'] ?? '', // Usar action_filter en lugar de action
+                'details' => $input['details_filter'] ?? '', // Nuevo filtro para detalles
                 'target_id' => $input['target_id'] ?? '',
                 'search' => $input['search'] ?? ''
             ];
@@ -671,6 +695,14 @@ try {
                 'audits' => $result['audits'],
                 'total' => $result['total'],
                 'chart_data' => $chartData
+            ]);
+            break;
+            
+        case 'get_acabados_kits':
+            $kits = getAcabadosKits($db);
+            echo json_encode([
+                'ok' => true,
+                'kits' => $kits
             ]);
             break;
             
