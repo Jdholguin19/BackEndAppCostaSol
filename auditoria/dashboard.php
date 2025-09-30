@@ -1166,18 +1166,37 @@ async function getAcabadosKits() {
 
         const result = await response.json();
         
-        if (result.ok && result.kits) {
-            return result.kits.map(kit => ({
+        console.log('Respuesta de kits de acabados:', result); // Debug
+        
+        if (result.ok && result.kits && result.kits.length > 0) {
+            console.log('Kits encontrados:', result.kits); // Debug adicional
+            const mappedKits = result.kits.map(kit => ({
                 value: kit.nombre,
                 label: kit.nombre
             }));
+            console.log('Kits mapeados:', mappedKits); // Debug adicional
+            return mappedKits;
         } else {
-            console.error('Error al obtener kits de acabados:', result);
-            return [];
+            console.log('No se encontraron kits reales, usando opciones básicas');
+            // Fallback: devolver opciones básicas si no hay datos
+            return [
+                { value: 'Full', label: 'Full' },
+                { value: 'Standar', label: 'Standar' },
+                { value: 'Premium', label: 'Premium' },
+                { value: 'Básico', label: 'Básico' },
+                { value: 'Deluxe', label: 'Deluxe' }
+            ];
         }
     } catch (error) {
         console.error('Error al obtener kits de acabados:', error);
-        return [];
+        // Fallback: devolver opciones básicas si hay error
+        return [
+            { value: 'Full', label: 'Full' },
+            { value: 'Standar', label: 'Standar' },
+            { value: 'Premium', label: 'Premium' },
+            { value: 'Básico', label: 'Básico' },
+            { value: 'Deluxe', label: 'Deluxe' }
+        ];
     }
 }
 
@@ -1257,10 +1276,13 @@ async function populateActionFilter(module) {
     
     // Si es el módulo de acabados, obtener los nombres de kits dinámicamente
     if (module === 'acabados') {
+        console.log('Obteniendo kits para módulo acabados...'); // Debug
         actions = await getAcabadosKits();
+        console.log('Actions obtenidas:', actions); // Debug
     }
     
     // Agregar opciones al select
+    console.log('Agregando opciones al select:', actions); // Debug
     actions.forEach(action => {
         const option = document.createElement('option');
         option.value = action.value;

@@ -235,8 +235,16 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
     }
     
     if (!empty($filters['details'])) {
-        $sql .= " AND al.details LIKE ?";
-        $params[] = '%' . $filters['details'] . '%';
+        // Para acabados, buscar por palabra clave en lugar de coincidencia exacta
+        if ($resource === 'acabados') {
+            $sql .= " AND al.details LIKE ?";
+            $detailsFilter = '%' . $filters['details'] . '%';
+            $params[] = $detailsFilter;
+            error_log("Filtro de detalles para acabados: " . $detailsFilter);
+        } else {
+            $sql .= " AND al.details LIKE ?";
+            $params[] = '%' . $filters['details'] . '%';
+        }
     }
     
     if (!empty($filters['target_id'])) {
@@ -309,9 +317,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
     // Ordenar y paginar
     $sql .= " ORDER BY al.timestamp DESC LIMIT " . intval($limit) . " OFFSET " . intval($offset);
     
+    error_log("SQL Query final: " . $sql);
+    error_log("SQL Params final: " . json_encode($params));
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
     $audits = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    error_log("Resultados encontrados: " . count($audits));
     
     // Procesar detalles para mejorar la visualización
     foreach ($audits as &$audit) {
@@ -365,8 +376,16 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
     }
     
     if (!empty($filters['details'])) {
-        $sql .= " AND al.details LIKE ?";
-        $params[] = '%' . $filters['details'] . '%';
+        // Para acabados, buscar por palabra clave en lugar de coincidencia exacta
+        if ($resource === 'acabados') {
+            $sql .= " AND al.details LIKE ?";
+            $detailsFilter = '%' . $filters['details'] . '%';
+            $params[] = $detailsFilter;
+            error_log("Filtro de detalles para acabados: " . $detailsFilter);
+        } else {
+            $sql .= " AND al.details LIKE ?";
+            $params[] = '%' . $filters['details'] . '%';
+        }
     }
     
     if (!empty($filters['target_id'])) {
@@ -628,15 +647,99 @@ function getModuleActions($resource) {
     return $moduleActions[$resource] ?? [];
 }
 
-// Función para obtener los nombres de kits de acabados
+// Función para obtener las palabras clave de acabados desde los detalles de auditorías
 function getAcabadosKits($db) {
     try {
-        $sql = "SELECT DISTINCT nombre FROM acabado_kit ORDER BY nombre";
+        // Obtener todos los detalles de auditorías de acabados (SAVE_ACABADOS)
+        $sql = "SELECT DISTINCT details FROM audit_log 
+                WHERE action = 'SAVE_ACABADOS' 
+                AND details IS NOT NULL 
+                AND details != ''
+                ORDER BY details";
         $stmt = $db->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $details = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        
+        error_log("Detalles encontrados para SAVE_ACABADOS: " . count($details));
+        error_log("Primeros detalles: " . json_encode(array_slice($details, 0, 3)));
+        
+        $keywords = [];
+        
+        foreach ($details as $detail) {
+            // Decodificar JSON si es necesario
+            $decoded = json_decode($detail, true);
+            if ($decoded && isset($decoded['kit_name'])) {
+                $kitName = $decoded['kit_name'];
+            } elseif ($decoded && isset($decoded['kit_id'])) {
+                // Si no tiene kit_name pero tiene kit_id, construir el nombre
+                $kitId = $decoded['kit_id'];
+                $colorNombre = $decoded['color_nombre'] ?? '';
+                
+                // Mapear kit_id a nombre (basado en los datos del audit.sql)
+                if ($kitId == 1) {
+                    $kitName = 'Cocina Standar' . ($colorNombre ? ' ' . $colorNombre : '');
+                } elseif ($kitId == 2) {
+                    $kitName = 'Cocina Full' . ($colorNombre ? ' ' . $colorNombre : '');
+                } else {
+                    $kitName = 'Kit ' . $kitId . ($colorNombre ? ' ' . $colorNombre : '');
+                }
+            } else {
+                $kitName = $detail;
+            }
+            
+            // Extraer palabras clave principales (case insensitive)
+            $kitNameLower = strtolower($kitName);
+            error_log("Procesando kit: '$kitName' -> '$kitNameLower'");
+            
+            if (strpos($kitNameLower, 'full') !== false) {
+                $keywords['Full'] = 'Full';
+                error_log("Agregado keyword: Full");
+            }
+            if (strpos($kitNameLower, 'standar') !== false || strpos($kitNameLower, 'estandar') !== false) {
+                $keywords['Standar'] = 'Standar';
+                error_log("Agregado keyword: Standar");
+            }
+            if (strpos($kitNameLower, 'premium') !== false) {
+                $keywords['Premium'] = 'Premium';
+                error_log("Agregado keyword: Premium");
+            }
+            if (strpos($kitNameLower, 'básico') !== false || strpos($kitNameLower, 'basico') !== false) {
+                $keywords['Básico'] = 'Básico';
+                error_log("Agregado keyword: Básico");
+            }
+            if (strpos($kitNameLower, 'deluxe') !== false) {
+                $keywords['Deluxe'] = 'Deluxe';
+                error_log("Agregado keyword: Deluxe");
+            }
+        }
+        
+        // Si no se encontraron palabras clave, usar los detalles completos como opciones
+        if (empty($keywords)) {
+            foreach ($details as $detail) {
+                $decoded = json_decode($detail, true);
+                if ($decoded && isset($decoded['kit_name'])) {
+                    $kitName = $decoded['kit_name'];
+                } else {
+                    $kitName = $detail;
+                }
+                
+                // Limitar la longitud del nombre para el combo box
+                $shortName = strlen($kitName) > 30 ? substr($kitName, 0, 30) . '...' : $kitName;
+                $keywords[$kitName] = $shortName;
+            }
+        }
+        
+        // Convertir a formato esperado por el frontend
+        $result = [];
+        foreach ($keywords as $key => $value) {
+            $result[] = ['nombre' => $value];
+        }
+        
+        error_log("Keywords generadas: " . json_encode($result));
+        
+        return $result;
     } catch (Exception $e) {
-        error_log("Error al obtener kits de acabados: " . $e->getMessage());
+        error_log("Error al obtener palabras clave de acabados: " . $e->getMessage());
         return [];
     }
 }
@@ -702,7 +805,11 @@ try {
             $kits = getAcabadosKits($db);
             echo json_encode([
                 'ok' => true,
-                'kits' => $kits
+                'kits' => $kits,
+                'debug' => [
+                    'total_kits' => count($kits),
+                    'kits_found' => $kits
+                ]
             ]);
             break;
             
