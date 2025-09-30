@@ -799,6 +799,33 @@ function createAuditChart(audits) {
         
         labels = Object.keys(propositoCounts);
         data = Object.values(propositoCounts);
+    } else if (currentModule === 'autenticacion') {
+        // Para el módulo de autenticación, mostrar acciones específicas con nombres descriptivos
+        const actionCounts = {};
+        audits.forEach(audit => {
+            const action = audit.action;
+            let actionName;
+            
+            // Mapear acciones específicas de autenticación
+            switch (action) {
+                case 'LOGOUT':
+                    actionName = 'Cerró Sesión';
+                    break;
+                case 'LOGIN_SUCCESS':
+                    actionName = 'Inicio Sesión';
+                    break;
+                case 'LOGIN_FAILURE':
+                    actionName = 'Falló la Sesión';
+                    break;
+                default:
+                    actionName = action; // Mantener el nombre original para otras acciones
+            }
+            
+            actionCounts[actionName] = (actionCounts[actionName] || 0) + 1;
+        });
+        
+        labels = Object.keys(actionCounts);
+        data = Object.values(actionCounts);
     } else {
         // Para otros módulos, contar acciones por tipo
         const actionCounts = {};
@@ -911,6 +938,8 @@ function renderModuleAudits(audits, total, chartData) {
         chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Kits Seleccionados';
     } else if (currentModule === 'cita') {
         chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Propósitos de Citas';
+    } else if (currentModule === 'autenticacion') {
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Acciones de Autenticación';
     } else {
         chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución de Auditorías';
     }
