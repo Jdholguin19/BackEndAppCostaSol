@@ -41,7 +41,7 @@ function validateResponsableAuth($db) {
     }
 }
 
-// Función para obtener datos de módulos
+// Función para obtener datos de módulos (optimizada)
 function getModulesData($db) {
     $modules = [
         'autenticacion' => [
@@ -93,23 +93,53 @@ function getModulesData($db) {
     
     $result = [];
     
+    // Optimización: Una sola consulta para obtener todos los conteos
+    $allActions = [];
+    foreach ($modules as $module) {
+        $allActions = array_merge($allActions, $module['actions']);
+    }
+    $allActions = array_unique($allActions);
+    
+    // Consulta optimizada con CASE para contar por módulo
+    $placeholders = str_repeat('?,', count($allActions) - 1) . '?';
+    $sql = "SELECT 
+                CASE 
+                    WHEN target_resource = 'autenticacion' OR action IN ('LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT') THEN 'autenticacion'
+                    WHEN target_resource = 'usuario' OR action IN ('CREATE_USER', 'UPDATE_USER', 'DELETE_USER') THEN 'usuario'
+                    WHEN target_resource = 'cita' OR action IN ('CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA') THEN 'cita'
+                    WHEN target_resource = 'ctg' OR action IN ('CREATE_CTG', 'UPDATE_CTG_STATUS', 'ADD_CTG_RESPONSE', 'UPDATE_CTG_OBSERVATION') THEN 'ctg'
+                    WHEN target_resource = 'pqr' OR action IN ('CREATE_PQR', 'UPDATE_PQR_STATUS', 'ADD_PQR_RESPONSE', 'UPDATE_PQR_OBSERVATION') THEN 'pqr'
+                    WHEN target_resource = 'acabados' OR action = 'SAVE_ACABADOS' THEN 'acabados'
+                    WHEN target_resource = 'perfil' OR action = 'UPDATE_PROFILE_PICTURE' THEN 'perfil'
+                    WHEN target_resource = 'notificaciones' OR action = 'UPDATE_ONESIGNAL_PLAYER_ID' THEN 'notificaciones'
+                    WHEN target_resource = 'acceso_modulo' OR action = 'ACCESS_MODULE' THEN 'acceso_modulo'
+                END as module_resource,
+                COUNT(*) as count
+            FROM audit_log 
+            WHERE target_resource IN ('autenticacion', 'usuario', 'cita', 'ctg', 'pqr', 'acabados', 'perfil', 'notificaciones', 'acceso_modulo')
+               OR action IN ($placeholders)
+            GROUP BY module_resource";
+    
+    $params = $allActions;
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+    $counts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Crear array asociativo para acceso rápido
+    $countMap = [];
+    foreach ($counts as $count) {
+        if ($count['module_resource']) {
+            $countMap[$count['module_resource']] = $count['count'];
+        }
+    }
+    
+    // Construir resultado final
     foreach ($modules as $resource => $module) {
-        // Construir la consulta con parámetros preparados correctamente
-        $placeholders = str_repeat('?,', count($module['actions']) - 1) . '?';
-        $sql = "SELECT COUNT(*) as count FROM audit_log 
-                WHERE target_resource = ? OR action IN ($placeholders)";
-        
-        $params = array_merge([$resource], $module['actions']);
-        
-        $stmt = $db->prepare($sql);
-        $stmt->execute($params);
-        $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
-        
         $result[] = [
             'resource' => $resource,
             'name' => $module['name'],
             'description' => $module['description'],
-            'count' => $count
+            'count' => $countMap[$resource] ?? 0
         ];
     }
     

@@ -64,6 +64,38 @@ body {
   color: white;
 }
 
+.back-button:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
+.refresh-button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.refresh-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.refresh-button:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 2px;
+}
+
 .audit-title {
   font-size: 2rem;
   font-weight: 600;
@@ -76,7 +108,7 @@ body {
 }
 
 .audit-container {
-  max-width: 1200px;
+  max-width: 1400px; /* Más ancho para acomodar etiquetas */
   margin: 0 auto;
 }
 
@@ -101,6 +133,17 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-color: #2d5a3d;
+}
+
+.module-card:focus {
+  outline: 3px solid #2d5a3d;
+  outline-offset: 2px;
+  border-color: #2d5a3d;
+}
+
+.module-card:focus-visible {
+  outline: 3px solid #2d5a3d;
+  outline-offset: 2px;
 }
 
 .module-icon {
@@ -227,12 +270,38 @@ body {
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  overflow: visible;
+  min-width: 800px; /* Ancho mínimo para acomodar etiquetas */
+}
+
+/* Estilos para las etiquetas de datos del gráfico */
+.chartjs-datalabel {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  color: #333 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
 }
 
 .chart-container {
   display: flex;
   justify-content: center;
   margin: 1rem 0;
+  position: relative;
+  overflow: visible;
+  width: 100%;
+  min-height: 600px; /* Altura balanceada */
+  padding: 30px 50px; /* Más padding horizontal para etiquetas */
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: auto !important;
+  position: relative;
+  margin: 0 auto; /* Centrar el canvas */
 }
 
 .chart-legend {
@@ -371,6 +440,42 @@ body {
   font-style: italic;
 }
 
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  color: #721c24;
+}
+
+.error-message i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #dc3545;
+}
+
+.error-message p {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.error-message .btn {
+  margin-top: 0.5rem;
+}
+
+.progress {
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background-color: #2d5a3d;
+  transition: width 0.3s ease;
+}
+
 @media (max-width: 768px) {
   .modules-grid {
     grid-template-columns: 1fr;
@@ -394,8 +499,19 @@ body {
     height: auto;
   }
   
+  .chart-container {
+    overflow-x: auto;
+    padding: 0 20px;
+  }
+  
   .chart-legend {
     flex-direction: column;
     align-items: center;
+  }
+  
+  /* Ajustes para etiquetas en móviles */
+  .chartjs-datalabel {
+    font-size: 10px !important;
+    padding: 2px 4px !important;
   }
 }

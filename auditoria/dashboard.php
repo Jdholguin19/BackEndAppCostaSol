@@ -81,13 +81,22 @@ if (!$token) {
 <?php else: ?>
 <!-- Header Section -->
 <div class="audit-header">
-  <div style="position: relative; text-align: center;">
-    <button class="back-button" onclick="history.back()">
-      <i class="bi bi-arrow-left"></i>
+    <div style="position: relative; text-align: center;">
+    <button class="back-button" onclick="history.back()" 
+            aria-label="Volver a la página anterior" 
+            tabindex="0"
+            onkeydown="handleKeyDown(event, () => history.back())">
+      <i class="bi bi-arrow-left" aria-hidden="true"></i>
     </button>
     <div>
       <h2 class="audit-title">Dashboard de Auditoría</h2>
     </div>
+    <button class="refresh-button" onclick="refreshData()" 
+            aria-label="Actualizar todos los datos del dashboard" 
+            tabindex="0"
+            onkeydown="handleKeyDown(event, refreshData)">
+      <i class="bi bi-arrow-clockwise" aria-hidden="true"></i>
+    </button>
   </div>
 </div>
 
@@ -96,9 +105,9 @@ if (!$token) {
   <div class="audit-container">
     
     <!-- Modules Grid -->
-    <div class="modules-grid" id="modulesGrid">
-      <div class="loading">
-        <i class="bi bi-hourglass-split"></i>
+    <div class="modules-grid" id="modulesGrid" role="grid" aria-label="Módulos de auditoría disponibles">
+      <div class="loading" role="status" aria-live="polite">
+        <i class="bi bi-hourglass-split" aria-hidden="true"></i>
         <p>Cargando módulos...</p>
       </div>
     </div>
@@ -106,12 +115,12 @@ if (!$token) {
     <!-- Recent Audits Section -->
     <div class="recent-audits-section">
       <h3 class="section-title">
-        <i class="bi bi-clock-history"></i>
+        <i class="bi bi-clock-history" aria-hidden="true"></i>
         Últimas 10 Auditorías
       </h3>
-      <div id="recentAudits">
-        <div class="loading">
-          <i class="bi bi-hourglass-split"></i>
+      <div id="recentAudits" role="region" aria-label="Auditorías recientes">
+        <div class="loading" role="status" aria-live="polite">
+          <i class="bi bi-hourglass-split" aria-hidden="true"></i>
           <p>Cargando auditorías recientes...</p>
         </div>
       </div>
@@ -131,7 +140,7 @@ if (!$token) {
           Distribución de Auditorías
         </h4>
         <div class="chart-container">
-          <canvas id="auditChart" width="400" height="400"></canvas>
+          <canvas id="auditChart"></canvas>
         </div>
         <div class="chart-legend" id="chartLegend"></div>
       </div>
@@ -204,8 +213,14 @@ if (!$token) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script>
 console.log('Script cargado - Iniciando verificación de autenticación');
+
+// Registrar plugins de Chart.js inmediatamente
+if (typeof ChartDataLabels !== 'undefined') {
+    Chart.register(ChartDataLabels);
+}
 
 // Verificar autenticación inmediatamente
 const token = localStorage.getItem('cs_token');
@@ -258,6 +273,153 @@ let currentOffset = 0;
 let currentFilters = {};
 let auditChart = null;
 
+// Sistema de cache simple
+const cache = {
+    modules: null,
+    modulesTimestamp: null,
+    recentAudits: null,
+    recentAuditsTimestamp: null,
+    moduleAudits: {},
+    moduleAuditsTimestamp: {},
+    
+    // Cache válido por 5 minutos para módulos y auditorías recientes
+    CACHE_DURATION: 5 * 60 * 1000,
+    
+    // Cache válido por 2 minutos para auditorías de módulos específicos
+    MODULE_CACHE_DURATION: 2 * 60 * 1000,
+    
+    isExpired(timestamp, duration) {
+        return !timestamp || (Date.now() - timestamp) > duration;
+    },
+    
+    getModules() {
+        if (this.modules && !this.isExpired(this.modulesTimestamp, this.CACHE_DURATION)) {
+            return this.modules;
+        }
+        return null;
+    },
+    
+    setModules(data) {
+        this.modules = data;
+        this.modulesTimestamp = Date.now();
+    },
+    
+    getRecentAudits() {
+        if (this.recentAudits && !this.isExpired(this.recentAuditsTimestamp, this.CACHE_DURATION)) {
+            return this.recentAudits;
+        }
+        return null;
+    },
+    
+    setRecentAudits(data) {
+        this.recentAudits = data;
+        this.recentAuditsTimestamp = Date.now();
+    },
+    
+    getModuleAudits(module, filters) {
+        const key = `${module}_${JSON.stringify(filters)}`;
+        if (this.moduleAudits[key] && !this.isExpired(this.moduleAuditsTimestamp[key], this.MODULE_CACHE_DURATION)) {
+            return this.moduleAudits[key];
+        }
+        return null;
+    },
+    
+    setModuleAudits(module, filters, data) {
+        const key = `${module}_${JSON.stringify(filters)}`;
+        this.moduleAudits[key] = data;
+        this.moduleAuditsTimestamp[key] = Date.now();
+    },
+    
+    clearCache() {
+        this.modules = null;
+        this.modulesTimestamp = null;
+        this.recentAudits = null;
+        this.recentAuditsTimestamp = null;
+        this.moduleAudits = {};
+        this.moduleAuditsTimestamp = {};
+    }
+};
+
+// Función helper para mostrar mensajes de error
+function showErrorMessage(elementId, message) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                <p>${message}</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="retryLastAction()">
+                    <i class="bi bi-arrow-clockwise"></i> Reintentar
+                </button>
+            </div>
+        `;
+    }
+}
+
+// Función para reintentar la última acción
+function retryLastAction() {
+    if (currentModule) {
+        loadModuleAudits();
+    } else {
+        loadModulesData();
+        loadRecentAudits();
+    }
+}
+
+// Función para actualizar todos los datos (limpiar cache y recargar)
+function refreshData() {
+    cache.clearCache();
+    console.log('Cache limpiado, recargando datos...');
+    
+    if (currentModule) {
+        loadModuleAudits();
+    } else {
+        loadModulesData();
+        loadRecentAudits();
+    }
+}
+
+// Función helper para manejar navegación por teclado
+function handleKeyDown(event, callback) {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        callback();
+    }
+}
+
+// Función para mostrar indicador de carga específico
+function showLoadingIndicator(elementId, message = 'Cargando...') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.innerHTML = `
+            <div class="loading">
+                <i class="bi bi-hourglass-split"></i>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+// Función para mostrar progreso de carga
+function showProgressIndicator(elementId, current, total, message = 'Procesando...') {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const percentage = Math.round((current / total) * 100);
+        element.innerHTML = `
+            <div class="loading">
+                <i class="bi bi-hourglass-split"></i>
+                <p>${message}</p>
+                <div class="progress mt-2" style="width: 200px; margin: 0 auto;">
+                    <div class="progress-bar" role="progressbar" style="width: ${percentage}%" 
+                         aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">
+                        ${percentage}%
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
 // Función para inicializar el dashboard de auditoría
 function initializeAuditDashboard() {
     console.log('Inicializando dashboard de auditoría');
@@ -272,6 +434,16 @@ function initializeAuditDashboard() {
 
 // Función para cargar los datos de los módulos
 async function loadModulesData() {
+    // Verificar cache primero
+    const cachedData = cache.getModules();
+    if (cachedData) {
+        console.log('Usando datos de módulos desde cache');
+        renderModulesGrid(cachedData);
+        return;
+    }
+    
+    showLoadingIndicator('modulesGrid', 'Cargando módulos de auditoría...');
+    
     try {
         const response = await fetch('api/audit_dashboard_data.php', {
             method: 'POST',
@@ -284,17 +456,28 @@ async function loadModulesData() {
             })
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
         
         if (data.ok) {
+            cache.setModules(data.modules);
             renderModulesGrid(data.modules);
         } else {
             console.error('Error al cargar módulos:', data.mensaje);
-            document.getElementById('modulesGrid').innerHTML = '<div class="no-data">Error al cargar los módulos</div>';
+            showErrorMessage('modulesGrid', 'Error al cargar los módulos: ' + data.mensaje);
         }
     } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('modulesGrid').innerHTML = '<div class="no-data">Error de conexión</div>';
+        console.error('Error en loadModulesData:', error);
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showErrorMessage('modulesGrid', 'Error de conexión. Verifica tu conexión a internet.');
+        } else if (error.name === 'SyntaxError') {
+            showErrorMessage('modulesGrid', 'Error al procesar la respuesta del servidor.');
+        } else {
+            showErrorMessage('modulesGrid', 'Error inesperado: ' + error.message);
+        }
     }
 }
 
@@ -302,13 +485,19 @@ async function loadModulesData() {
 function renderModulesGrid(modules) {
     const modulesGrid = document.getElementById('modulesGrid');
     
-    const modulesHtml = modules.map(module => `
-        <div class="module-card" onclick="showModuleDetail('${module.resource}')">
-            <div class="module-icon">
+    const modulesHtml = modules.map((module, index) => `
+        <div class="module-card" 
+             onclick="showModuleDetail('${module.resource}')"
+             onkeydown="handleKeyDown(event, () => showModuleDetail('${module.resource}'))"
+             role="gridcell"
+             tabindex="0"
+             aria-label="Módulo ${module.name} con ${module.count} auditorías"
+             data-module="${module.resource}">
+            <div class="module-icon" aria-hidden="true">
                 <i class="bi ${getModuleIcon(module.resource)}"></i>
             </div>
             <div class="module-title">${module.name}</div>
-            <div class="module-count">${module.count}</div>
+            <div class="module-count" aria-label="${module.count} auditorías">${module.count}</div>
             <div class="module-description">${module.description}</div>
         </div>
     `).join('');
@@ -334,6 +523,16 @@ function getModuleIcon(resource) {
 
 // Función para cargar auditorías recientes
 async function loadRecentAudits() {
+    // Verificar cache primero
+    const cachedData = cache.getRecentAudits();
+    if (cachedData) {
+        console.log('Usando auditorías recientes desde cache');
+        renderRecentAudits(cachedData);
+        return;
+    }
+    
+    showLoadingIndicator('recentAudits', 'Cargando auditorías recientes...');
+    
     try {
         const response = await fetch('api/audit_dashboard_data.php', {
             method: 'POST',
@@ -346,17 +545,28 @@ async function loadRecentAudits() {
             })
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
         
         if (data.ok) {
+            cache.setRecentAudits(data.audits);
             renderRecentAudits(data.audits);
         } else {
             console.error('Error al cargar auditorías recientes:', data.mensaje);
-            document.getElementById('recentAudits').innerHTML = '<div class="no-data">Error al cargar las auditorías recientes</div>';
+            showErrorMessage('recentAudits', 'Error al cargar las auditorías recientes: ' + data.mensaje);
         }
     } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('recentAudits').innerHTML = '<div class="no-data">Error de conexión</div>';
+        console.error('Error en loadRecentAudits:', error);
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showErrorMessage('recentAudits', 'Error de conexión. Verifica tu conexión a internet.');
+        } else if (error.name === 'SyntaxError') {
+            showErrorMessage('recentAudits', 'Error al procesar la respuesta del servidor.');
+        } else {
+            showErrorMessage('recentAudits', 'Error inesperado: ' + error.message);
+        }
     }
 }
 
@@ -370,27 +580,31 @@ function renderRecentAudits(audits) {
     }
     
     const auditsHtml = `
-        <table class="audit-table">
+        <table class="audit-table" role="table" aria-label="Tabla de auditorías recientes">
             <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Usuario</th>
-                    <th>Acción</th>
-                    <th>Recurso</th>
-                    <th>IP</th>
+                <tr role="row">
+                    <th role="columnheader" scope="col">Fecha</th>
+                    <th role="columnheader" scope="col">Usuario</th>
+                    <th role="columnheader" scope="col">Acción</th>
+                    <th role="columnheader" scope="col">Recurso</th>
+                    <th role="columnheader" scope="col">IP</th>
                 </tr>
             </thead>
             <tbody>
                 ${audits.map(audit => `
-                    <tr>
-                        <td>${formatDateTime(audit.timestamp)}</td>
-                        <td>
-                            <span class="user-type-badge user-${audit.user_type}">${audit.user_type}</span>
+                    <tr role="row">
+                        <td role="cell">${formatDateTime(audit.timestamp)}</td>
+                        <td role="cell">
+                            <span class="user-type-badge user-${audit.user_type}" 
+                                  aria-label="Tipo de usuario: ${audit.user_type}">${audit.user_type}</span>
                             ${audit.user_display_name ? ` (${audit.user_display_name})` : ''}
                         </td>
-                        <td><span class="action-badge action-${getActionType(audit.action)}">${audit.action}</span></td>
-                        <td>${audit.target_resource || '-'}</td>
-                        <td>${audit.ip_address}</td>
+                        <td role="cell">
+                            <span class="action-badge action-${getActionType(audit.action)}" 
+                                  aria-label="Acción: ${audit.action}">${audit.action}</span>
+                        </td>
+                        <td role="cell">${audit.target_resource || '-'}</td>
+                        <td role="cell">${audit.ip_address}</td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -447,6 +661,33 @@ function hideModuleDetail() {
 
 // Función para cargar auditorías de un módulo específico
 async function loadModuleAudits() {
+    const moduleNames = {
+        'autenticacion': 'Autenticación',
+        'usuario': 'Usuarios',
+        'cita': 'Citas',
+        'ctg': 'CTG',
+        'pqr': 'PQR',
+        'acabados': 'Acabados',
+        'perfil': 'Perfil',
+        'notificaciones': 'Notificaciones',
+        'acceso_modulo': 'Acceso a Módulos'
+    };
+    
+    const moduleName = moduleNames[currentModule] || currentModule;
+    
+    // Verificar cache primero (solo si no hay filtros activos)
+    const hasActiveFilters = Object.values(currentFilters).some(value => value !== '');
+    if (!hasActiveFilters) {
+        const cachedData = cache.getModuleAudits(currentModule, currentFilters);
+        if (cachedData) {
+            console.log('Usando datos de módulo desde cache');
+            renderModuleAudits(cachedData.audits, cachedData.total, cachedData.chart_data);
+            return;
+        }
+    }
+    
+    showLoadingIndicator('auditTableContainer', `Cargando datos de ${moduleName}...`);
+    
     try {
         const requestData = {
             action: 'get_module_audits',
@@ -461,7 +702,6 @@ async function loadModuleAudits() {
             search: currentFilters.search || ''
         };
         
-        
         const response = await fetch('api/audit_dashboard_data.php', {
             method: 'POST',
             headers: {
@@ -471,17 +711,31 @@ async function loadModuleAudits() {
             body: JSON.stringify(requestData)
         });
         
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
         
         if (data.ok) {
+            // Guardar en cache solo si no hay filtros activos
+            if (!hasActiveFilters) {
+                cache.setModuleAudits(currentModule, currentFilters, data);
+            }
             renderModuleAudits(data.audits, data.total, data.chart_data);
         } else {
             console.error('Error al cargar auditorías del módulo:', data.mensaje);
-            document.getElementById('auditTableContainer').innerHTML = '<div class="no-data">Error al cargar los datos</div>';
+            showErrorMessage('auditTableContainer', 'Error al cargar los datos del módulo: ' + data.mensaje);
         }
     } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('auditTableContainer').innerHTML = '<div class="no-data">Error de conexión</div>';
+        console.error('Error en loadModuleAudits:', error);
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            showErrorMessage('auditTableContainer', 'Error de conexión. Verifica tu conexión a internet.');
+        } else if (error.name === 'SyntaxError') {
+            showErrorMessage('auditTableContainer', 'Error al procesar la respuesta del servidor.');
+        } else {
+            showErrorMessage('auditTableContainer', 'Error inesperado: ' + error.message);
+        }
     }
 }
 
@@ -586,6 +840,85 @@ function createAuditChart(audits) {
     
     // Crear el gráfico
     const ctx = document.getElementById('auditChart').getContext('2d');
+
+    // Plugin para dibujar líneas guía y etiquetas manualmente
+    const leaderLinesPlugin = {
+        id: 'leaderLines',
+        afterDatasetsDraw(chart, args, pluginOptions) {
+            const {ctx} = chart;
+            const meta = chart.getDatasetMeta(0);
+            if (!meta || !meta.data) return;
+
+            ctx.save();
+            
+            // Dibujar líneas guía
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#6c757d';
+
+            meta.data.forEach((arc, index) => {
+                // Obtener propiedades del arco de forma segura en Chart.js 4
+                const props = arc.getProps(['x','y','startAngle','endAngle','outerRadius'], true);
+                const angle = (props.startAngle + props.endAngle) / 2;
+                const label = chart.data.labels[index];
+                const value = chart.data.datasets[0].data[index];
+                const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                const percentage = (value / total) * 100;
+
+                // Punto inicial en el borde del pastel
+                const r1 = props.outerRadius * 0.98;
+                const x1 = props.x + Math.cos(angle) * r1;
+                const y1 = props.y + Math.sin(angle) * r1;
+
+                // Punto final fuera del pastel
+                const r2 = props.outerRadius + 60;
+                const x2 = props.x + Math.cos(angle) * r2;
+                const y2 = props.y + Math.sin(angle) * r2;
+
+                // Segmento horizontal
+                const horizontal = 25 * (Math.cos(angle) >= 0 ? 1 : -1);
+                const x3 = x2 + horizontal;
+
+                // Dibujar línea guía
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.lineTo(x3, y2);
+                ctx.stroke();
+
+                // Dibujar etiqueta manualmente
+                const displayLabel = percentage < 3 && label.length > 12 ? label.slice(0, 12) + '…' : label;
+                const fontSize = percentage < 4 ? 10 : 11;
+                
+                ctx.font = `bold ${fontSize}px Arial`;
+                ctx.fillStyle = '#333';
+                ctx.textAlign = Math.cos(angle) >= 0 ? 'left' : 'right';
+                ctx.textBaseline = 'middle';
+                
+                // Fondo de la etiqueta
+                const textMetrics = ctx.measureText(displayLabel);
+                const padding = 10; // Más padding para que el texto no toque los bordes
+                const labelWidth = textMetrics.width + (padding * 2);
+                const labelHeight = fontSize + (padding * 2);
+                
+                const labelX = x3 + (Math.cos(angle) >= 0 ? 5 : -labelWidth - 5);
+                const labelY = y2;
+                
+                // Dibujar fondo
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.strokeStyle = '#ccc';
+                ctx.lineWidth = 1;
+                ctx.fillRect(labelX, labelY - labelHeight/2, labelWidth, labelHeight);
+                ctx.strokeRect(labelX, labelY - labelHeight/2, labelWidth, labelHeight);
+                
+                // Dibujar texto
+                ctx.fillStyle = '#333';
+                ctx.fillText(displayLabel, labelX + padding, labelY);
+            });
+
+            ctx.restore();
+        }
+    };
+
     auditChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -594,27 +927,51 @@ function createAuditChart(audits) {
                 data: data,
                 backgroundColor: colors.slice(0, labels.length),
                 borderColor: '#fff',
-                borderWidth: 2
+                borderWidth: 2,
+                offset: 0
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    right: 180, // Reducido un poco
+                    left: 200, // Reducido un poco
+                    top: 40,
+                    bottom: 40
+                }
+            },
+            elements: {
+                arc: {
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }
+            },
+            cutout: '0%',
+            radius: '65%', // Un poco más pequeño
             plugins: {
                 legend: {
                     display: false // Usaremos nuestra propia leyenda
                 },
                 tooltip: {
+                    enabled: true,
                     callbacks: {
                         label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((context.parsed / total) * 100).toFixed(1);
-                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} (${percentage}%)`;
                         }
                     }
+                },
+                datalabels: {
+                    display: false // Desactivar datalabels del plugin
                 }
             }
-        }
+        },
+        plugins: [leaderLinesPlugin]
     });
     
     // Crear leyenda personalizada
