@@ -247,6 +247,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         }
     }
     
+    if (!empty($filters['tipo_ctg'])) {
+        // Para CTG, filtrar por tipo_id en el JSON de detalles
+        $sql .= " AND al.details LIKE ?";
+        $params[] = '%"tipo_id":' . $filters['tipo_ctg'] . '%';
+    }
+    
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
         $params[] = $filters['target_id'];
@@ -388,6 +394,12 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
         }
     }
     
+    if (!empty($filters['tipo_ctg'])) {
+        // Para CTG, filtrar por tipo_id en el JSON de detalles
+        $sql .= " AND al.details LIKE ?";
+        $params[] = '%"tipo_id":' . $filters['tipo_ctg'] . '%';
+    }
+    
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
         $params[] = $filters['target_id'];
@@ -430,6 +442,40 @@ function formatAuditDetails($details, $db = null) {
         
         if (isset($parsed['kit_name'])) {
             return $parsed['kit_name'];
+        }
+        
+        // Si tenemos tipo_id (para CTG), obtener información completa
+        if (isset($parsed['tipo_id']) && $db) {
+            try {
+                $result = '';
+                
+                // Obtener nombre del tipo
+                $stmt = $db->prepare("SELECT nombre FROM tipo_ctg WHERE id = ?");
+                $stmt->execute([$parsed['tipo_id']]);
+                $tipo_name = $stmt->fetchColumn();
+                
+                if ($tipo_name) {
+                    $result .= "Tipo: " . $tipo_name;
+                }
+                
+                // Agregar descripción si existe
+                if (isset($parsed['descripcion'])) {
+                    if ($result) $result .= ", ";
+                    $result .= "Descripción: " . $parsed['descripcion'];
+                }
+                
+                // Agregar número de solicitud si existe
+                if (isset($parsed['numero_solicitud'])) {
+                    if ($result) $result .= ", ";
+                    $result .= "N°: " . $parsed['numero_solicitud'];
+                }
+                
+                if ($result) {
+                    return $result;
+                }
+            } catch (Exception $e) {
+                // Si hay error, continuar con el procesamiento normal
+            }
         }
         
         // Si tenemos kit_id (para acabados), obtener información completa
@@ -647,6 +693,21 @@ function getModuleActions($resource) {
     return $moduleActions[$resource] ?? [];
 }
 
+// Función para obtener los tipos de CTG desde la base de datos
+function getCTGTipos($db) {
+    try {
+        $sql = "SELECT id, nombre FROM tipo_ctg ORDER BY nombre";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $tipos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $tipos;
+    } catch (Exception $e) {
+        error_log("Error al obtener tipos de CTG: " . $e->getMessage());
+        return [];
+    }
+}
+
 // Función para obtener las palabras clave de acabados desde los detalles de auditorías
 function getAcabadosKits($db) {
     try {
@@ -784,6 +845,7 @@ try {
                 'user_type' => $input['user_type'] ?? '',
                 'action' => $input['action_filter'] ?? '', // Usar action_filter en lugar de action
                 'details' => $input['details_filter'] ?? '', // Nuevo filtro para detalles
+                'tipo_ctg' => $input['tipo_ctg_filter'] ?? '', // Nuevo filtro para tipo de CTG
                 'target_id' => $input['target_id'] ?? '',
                 'search' => $input['search'] ?? ''
             ];
@@ -810,6 +872,14 @@ try {
                     'total_kits' => count($kits),
                     'kits_found' => $kits
                 ]
+            ]);
+            break;
+        
+        case 'get_ctg_tipos':
+            $tipos = getCTGTipos($db);
+            echo json_encode([
+                'ok' => true,
+                'tipos' => $tipos
             ]);
             break;
             

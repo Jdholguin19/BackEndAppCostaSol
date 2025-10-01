@@ -170,6 +170,12 @@ if (!$token) {
               <option value="">Todas las acciones</option>
             </select>
           </div>
+          <div class="filter-group" id="filterTipoCtgGroup" style="display: none;">
+            <label for="filterTipoCtg">Tipo CTG:</label>
+            <select id="filterTipoCtg" class="form-control">
+              <option value="">Todos los tipos</option>
+            </select>
+          </div>
           <div class="filter-group">
             <label for="filterTargetId">ID Objetivo:</label>
             <input type="number" id="filterTargetId" class="form-control" placeholder="Ej: 123">
@@ -706,6 +712,7 @@ async function loadModuleAudits() {
             user_type: currentFilters.user_type || '',
             action_filter: isDetailsModule ? '' : (currentFilters.action || ''), // Solo para módulos de acción
             details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
+            tipo_ctg_filter: currentFilters.tipo_ctg || '', // Filtro de tipo de CTG
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1041,6 +1048,7 @@ async function loadMoreAudits() {
             user_type: currentFilters.user_type || '',
             action_filter: isDetailsModule ? '' : (currentFilters.action || ''), // Solo para módulos de acción
             details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
+            tipo_ctg_filter: currentFilters.tipo_ctg || '', // Filtro de tipo de CTG
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1147,6 +1155,38 @@ function updatePaginationInfo(total, newCount) {
 }
 
 // Función para obtener los nombres de kits de acabados dinámicamente
+// Función para obtener los tipos de CTG desde el backend
+async function getCTGTipos() {
+    try {
+        const response = await fetch('api/audit_dashboard_data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                action: 'get_ctg_tipos'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Respuesta de tipos de CTG:', result);
+        
+        if (result.ok && result.tipos) {
+            return result.tipos;
+        }
+        
+        return [];
+    } catch (error) {
+        console.error('Error al obtener tipos de CTG:', error);
+        return [];
+    }
+}
+
 async function getAcabadosKits() {
     try {
         const response = await fetch('api/audit_dashboard_data.php', {
@@ -1204,6 +1244,25 @@ async function getAcabadosKits() {
 async function populateActionFilter(module) {
     const actionSelect = document.getElementById('filterAction');
     const actionLabel = document.querySelector('label[for="filterAction"]');
+    const tipoCtgGroup = document.getElementById('filterTipoCtgGroup');
+    const tipoCtgSelect = document.getElementById('filterTipoCtg');
+    
+    // Mostrar/ocultar el filtro de Tipo CTG según el módulo
+    if (module === 'ctg') {
+        tipoCtgGroup.style.display = 'block';
+        // Poblar el combo box de Tipo CTG
+        tipoCtgSelect.innerHTML = '<option value="">Todos los tipos</option>';
+        const tipos = await getCTGTipos();
+        tipos.forEach(tipo => {
+            const option = document.createElement('option');
+            option.value = tipo.id;
+            option.textContent = tipo.nombre;
+            tipoCtgSelect.appendChild(option);
+        });
+    } else {
+        tipoCtgGroup.style.display = 'none';
+        tipoCtgSelect.value = '';
+    }
     
     // Cambiar el label según el módulo
     if (module === 'acabados' || module === 'acceso_modulo') {
@@ -1298,6 +1357,7 @@ function applyFilters() {
         date_to: document.getElementById('filterDateTo').value,
         user_type: document.getElementById('filterUserType').value,
         action: document.getElementById('filterAction').value,
+        tipo_ctg: document.getElementById('filterTipoCtg').value,
         target_id: document.getElementById('filterTargetId').value,
         search: document.getElementById('filterSearch').value
     };
@@ -1314,6 +1374,7 @@ function clearFilters() {
     document.getElementById('filterDateTo').value = '';
     document.getElementById('filterUserType').value = '';
     document.getElementById('filterAction').value = '';
+    document.getElementById('filterTipoCtg').value = '';
     document.getElementById('filterTargetId').value = '';
     document.getElementById('filterSearch').value = '';
     
@@ -1336,6 +1397,7 @@ function resetFilters() {
     document.getElementById('filterDateTo').value = '';
     document.getElementById('filterUserType').value = '';
     document.getElementById('filterAction').value = '';
+    document.getElementById('filterTipoCtg').value = '';
     document.getElementById('filterTargetId').value = '';
     document.getElementById('filterSearch').value = '';
     
@@ -1357,6 +1419,11 @@ function setupEventListeners() {
     
     // Change event en el select de acciones
     document.getElementById('filterAction').addEventListener('change', function() {
+        applyFilters();
+    });
+    
+    // Change event en el select de tipo de CTG
+    document.getElementById('filterTipoCtg').addEventListener('change', function() {
         applyFilters();
     });
 }
