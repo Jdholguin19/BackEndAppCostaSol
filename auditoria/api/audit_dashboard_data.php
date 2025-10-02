@@ -708,6 +708,7 @@ function getCTGTipos($db) {
     }
 }
 
+
 // Función para obtener las palabras clave de acabados desde los detalles de auditorías
 function getAcabadosKits($db) {
     try {
@@ -883,13 +884,14 @@ try {
             ]);
             break;
             
+            
         default:
             http_response_code(400);
             echo json_encode([
                 'ok' => false, 
                 'mensaje' => 'Acción no válida: ' . $action,
                 'received_action' => $action,
-                'available_actions' => ['get_modules_data', 'get_recent_audits', 'get_module_audits']
+                'available_actions' => ['get_modules_data', 'get_recent_audits', 'get_module_audits', 'get_comparison_data']
             ]);
             break;
     }

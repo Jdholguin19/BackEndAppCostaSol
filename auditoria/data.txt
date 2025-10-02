@@ -3,10 +3,14 @@ dashboard.php:56 Token encontrado: SÍ
 dashboard.php:63 Enviando token al servidor...
 dashboard.php:74 Respuesta del servidor recibida
 dashboard.php:78 Reemplazando contenido del body
-dashboard.php:254 Inicializando dashboard de auditoría
-dashboard.php:1107 Obteniendo kits para módulo acabados...
-dashboard.php:997 Respuesta de kits de acabados: {ok: true, kits: Array(2), debug: {…}}debug: kits_found: (2) [{…}, {…}]total_kits: 2[[Prototype]]: Objectkits: Array(2)0: {nombre: 'Standar'}1: {nombre: 'Full'}length: 2[[Prototype]]: Array(0)ok: true[[Prototype]]: Object
-dashboard.php:1000 Kits encontrados: (2) [{…}, {…}]0: nombre: "Standar"[[Prototype]]: Object1: nombre: "Full"[[Prototype]]: Objectlength: 2[[Prototype]]: Array(0)
-dashboard.php:1005 Kits mapeados: (2) [{…}, {…}]0: label: "Standar"value: "Standar"[[Prototype]]: Object1: label: "Full"value: "Full"[[Prototype]]: Objectlength: 2[[Prototype]]: Array(0)
-dashboard.php:1109 Actions obtenidas: (2) [{…}, {…}]0: label: "Standar"value: "Standar"[[Prototype]]: Objectconstructor: ƒ Object()hasOwnProperty: ƒ hasOwnProperty()isPrototypeOf: ƒ isPrototypeOf()propertyIsEnumerable: ƒ propertyIsEnumerable()toLocaleString: ƒ toLocaleString()toString: ƒ toString()valueOf: ƒ valueOf()__defineGetter__: ƒ __defineGetter__()__defineSetter__: ƒ __defineSetter__()__lookupGetter__: ƒ __lookupGetter__()__lookupSetter__: ƒ __lookupSetter__()__proto__: (...)get __proto__: ƒ __proto__()set __proto__: ƒ __proto__()1: {value: 'Full', label: 'Full'}length: 2[[Prototype]]: Array(0)
-dashboard.php:1113 Agregando opciones al select: (2) [{…}, {…}]0: label: "Standar"value: "Standar"[[Prototype]]: Object1: label: "Full"value: "Full"[[Prototype]]: Objectlength: 2[[Prototype]]: Array(0)
+dashboard.php:256 Inicializando dashboard de auditoría
+dashboard.php:1193 Agregando opciones al select: Array(11)0: {value: 'Auditoria', label: 'Auditoria'}1: {value: 'Ver más', label: 'Ver más'}2: {value: 'Selección Acabados', label: 'Selección Acabados'}3: {value: 'Calendario Responsable', label: 'Calendario Responsable'}4: {value: 'Admin User', label: 'Admin User'}5: {value: 'PQR', label: 'PQR'}6: {value: 'CTG', label: 'CTG'}7: {value: 'Garantias', label: 'Garantias'}8: {value: 'Paleta Vegetal', label: 'Paleta Vegetal'}9: {value: 'MCM', label: 'MCM'}10: {value: 'Crédito Hipotecario', label: 'Crédito Hipotecario'}length: 11[[Prototype]]: Array(0)
+dashboard.php:1328 Enviando datos de comparación: Objectaction: "get_comparison_data"filters: action: "Ver más"date_from: ""date_to: ""search: ""target_id: ""tipo_ctg: ""user_type: ""[[Prototype]]: Objectmodules: Array(2)0: "acceso_modulo"1: "acabados"length: 2[[Prototype]]: Array(0)[[Prototype]]: Object
+dashboard.php:1344 Respuesta de comparación: Objectdata: acabados: SAVE_ACABADOS: 6[[Prototype]]: Objectacceso_modulo: [][[Prototype]]: Objectdebug: filters: {date_from: '', date_to: '', user_type: '', action: 'Ver más', tipo_ctg: '', …}filters_count: 7modules: (2) ['acceso_modulo', 'acabados']modules_count: 2raw_input: {action: 'get_comparison_data', modules: Array(2), filters: {…}}[[Prototype]]: Objectok: true[[Prototype]]: Object
+dashboard.php:1348 === DEBUG INFO ===
+dashboard.php:1349 Módulos: Array(2)0: "acceso_modulo"1: "acabados"length: 2[[Prototype]]: Array(0)
+dashboard.php:1350 Filtros: Objectaction: "Ver más"date_from: ""date_to: ""search: ""target_id: ""tipo_ctg: ""user_type: ""[[Prototype]]: Object
+dashboard.php:1351 Total ACCESS_MODULE: undefined
+dashboard.php:1352 Query de prueba: undefined
+dashboard.php:1353 ==================
+dashboard.php:1357 Datos de comparación: Objectacabados: SAVE_ACABADOS: 6[[Prototype]]: Objectacceso_modulo: Array(0)length: 0[[Prototype]]: Array(0)[[Prototype]]: Object

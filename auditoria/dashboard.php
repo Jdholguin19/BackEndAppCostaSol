@@ -910,9 +910,22 @@ function createAuditChart(audits) {
                             const percentage = ((value / total) * 100).toFixed(1);
                             return `${label}: ${value} (${percentage}%)`;
                         }
-                        }
                     }
                 },
+                datalabels: {
+                    color: '#ffffff',
+                    font: {
+                        size: 12,
+                        weight: 'bold'
+                    },
+                    formatter: function(value, context) {
+                        return value;
+                    },
+                    anchor: 'end',
+                    align: 'right',
+                    offset: 4
+                }
+            },
             scales: {
                 x: {
                     beginAtZero: true,
@@ -1264,6 +1277,7 @@ async function populateActionFilter(module) {
         tipoCtgSelect.value = '';
     }
     
+    
     // Cambiar el label según el módulo
     if (module === 'acabados' || module === 'acceso_modulo') {
         actionLabel.textContent = 'Detalles:';
@@ -1426,7 +1440,11 @@ function setupEventListeners() {
     document.getElementById('filterTipoCtg').addEventListener('change', function() {
         applyFilters();
     });
+    
 }
+
+
+
 
 // Funciones de utilidad
 function formatDateTime(timestamp) {
