@@ -171,7 +171,7 @@ function getRecentAudits($db, $limit = 10) {
     
     // Procesar detalles para mejorar la visualización
     foreach ($audits as &$audit) {
-        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db);
+        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db, $audit);
     }
     
     return $audits;
@@ -248,9 +248,9 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
     }
     
     if (!empty($filters['tipo_ctg'])) {
-        // Para CTG, filtrar por tipo_id en el JSON de detalles
-        $sql .= " AND al.details LIKE ?";
-        $params[] = '%"tipo_id":' . $filters['tipo_ctg'] . '%';
+        // Para CTG, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
+        $sql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
+        $params[] = $filters['tipo_ctg'];
     }
     
     if (!empty($filters['target_id'])) {
@@ -302,6 +302,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         $countSql .= " AND al.action LIKE ?";
         $countParams[] = '%' . $filters['action'] . '%';
     }
+
+    if (!empty($filters['tipo_ctg'])) {
+        // Para CTG, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
+        $countSql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
+        $countParams[] = $filters['tipo_ctg'];
+    }
     
     if (!empty($filters['target_id'])) {
         $countSql .= " AND al.target_id = ?";
@@ -332,7 +338,7 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
     
     // Procesar detalles para mejorar la visualización
     foreach ($audits as &$audit) {
-        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db);
+        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db, $audit);
     }
     
     return ['audits' => $audits, 'total' => $total];
@@ -395,9 +401,9 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
     }
     
     if (!empty($filters['tipo_ctg'])) {
-        // Para CTG, filtrar por tipo_id en el JSON de detalles
-        $sql .= " AND al.details LIKE ?";
-        $params[] = '%"tipo_id":' . $filters['tipo_ctg'] . '%';
+        // Para CTG, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
+        $sql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
+        $params[] = $filters['tipo_ctg'];
     }
     
     if (!empty($filters['target_id'])) {
@@ -418,14 +424,14 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
     
     // Procesar detalles para que el gráfico funcione correctamente
     foreach ($audits as &$audit) {
-        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db);
+        $audit['formatted_details'] = formatAuditDetails($audit['details'], $db, $audit);
     }
     
     return $audits;
 }
 
 // Función para formatear los detalles de auditoría
-function formatAuditDetails($details, $db = null) {
+function formatAuditDetails($details, $db = null, $audit = null) {
     if (!$details) return '-';
     
     try {
@@ -444,37 +450,46 @@ function formatAuditDetails($details, $db = null) {
             return $parsed['kit_name'];
         }
         
-        // Si tenemos tipo_id (para CTG), obtener información completa
-        if (isset($parsed['tipo_id']) && $db) {
-            try {
-                $result = '';
-                
-                // Obtener nombre del tipo
-                $stmt = $db->prepare("SELECT nombre FROM tipo_ctg WHERE id = ?");
-                $stmt->execute([$parsed['tipo_id']]);
-                $tipo_name = $stmt->fetchColumn();
-                
-                if ($tipo_name) {
-                    $result .= "Tipo: " . $tipo_name;
+        // Si tenemos tipo_id, obtener información completa según el recurso
+        if (isset($parsed['tipo_id']) && $db && $audit) {
+            $resource = $audit['target_resource'] ?? null;
+            $action = $audit['action'] ?? null;
+            $isCtg = ($resource === 'ctg' || strpos($action, 'CTG') !== false);
+            $isPqr = ($resource === 'pqr' || strpos($action, 'PQR') !== false);
+
+            if ($isCtg || $isPqr) {
+                try {
+                    $result = '';
+                    $tableName = $isCtg ? 'tipo_ctg' : 'tipo_pqr';
+                    
+                    // Obtener nombre del tipo
+                    $stmt = $db->prepare("SELECT nombre FROM $tableName WHERE id = ?");
+                    $stmt->execute([$parsed['tipo_id']]);
+                    $tipo_name = $stmt->fetchColumn();
+                    
+                    if ($tipo_name) {
+                        $result .= "Tipo: " . $tipo_name;
+                    }
+                    
+                    // Agregar descripción si existe
+                    if (isset($parsed['descripcion'])) {
+                        if ($result) $result .= ", ";
+                        $result .= "Descripción: " . $parsed['descripcion'];
+                    }
+                    
+                    // Agregar número de solicitud si existe
+                    if (isset($parsed['numero_solicitud'])) {
+                        if ($result) $result .= ", ";
+                        $result .= "N°: " . $parsed['numero_solicitud'];
+                    }
+                    
+                    if ($result) {
+                        return $result;
+                    }
+                } catch (Exception $e) {
+                    // Si hay error, continuar con el procesamiento normal
+                    error_log("Error formatting details for tipo_id: " . $e->getMessage());
                 }
-                
-                // Agregar descripción si existe
-                if (isset($parsed['descripcion'])) {
-                    if ($result) $result .= ", ";
-                    $result .= "Descripción: " . $parsed['descripcion'];
-                }
-                
-                // Agregar número de solicitud si existe
-                if (isset($parsed['numero_solicitud'])) {
-                    if ($result) $result .= ", ";
-                    $result .= "N°: " . $parsed['numero_solicitud'];
-                }
-                
-                if ($result) {
-                    return $result;
-                }
-            } catch (Exception $e) {
-                // Si hay error, continuar con el procesamiento normal
             }
         }
         
