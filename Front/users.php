@@ -98,9 +98,43 @@ if (!$token) {
     
     <!-- Action Bar -->
     <div class="action-bar">
-      <h3 style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #2d5a3d;">
-        Lista de Usuarios
-      </h3>
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <h3 style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #2d5a3d;">
+          Lista de Usuarios
+        </h3>
+        <div class="filter-container" style="position: relative; display: inline-block;">
+          <input 
+            type="text" 
+            id="userFilter" 
+            placeholder="Filtrar por nombre, apellido o correo..."
+            style="
+              padding: 8px 12px;
+              border: 2px solid #e5e7eb;
+              border-radius: 8px;
+              font-size: 14px;
+              width: 300px;
+              transition: border-color 0.2s;
+            "
+            onfocus="this.style.borderColor='#2d5a3d'"
+            onblur="this.style.borderColor='#e5e7eb'"
+          >
+          <div id="filterDropdown" class="filter-dropdown" style="
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+          ">
+          </div>
+        </div>
+      </div>
       <button class="add-user-btn" data-bs-toggle="modal" data-bs-target="#modalUsuario" onclick="nuevoUsuario()">
         <i class="bi bi-plus"></i> Nuevo Usuario
       </button>
@@ -212,6 +246,11 @@ if (!token) {
     console.log('Enviando token al servidor...');
     console.log('URL actual:', window.location.href);
     
+    // Inicializar el filtro inmediatamente si ya hay contenido
+    setTimeout(() => {
+        initializeUserFilter();
+    }, 100);
+    
     // Enviar token al servidor para validación
     const formData = new FormData();
     formData.append('token', token);
@@ -248,6 +287,7 @@ if (!token) {
         
         // Inicializar funcionalidades después de cargar el contenido
         initializeUserFunctions();
+        initializeUserFilter();
     })
     .catch(error => {
         console.error('Error en fetch:', error);
@@ -332,6 +372,150 @@ async function borrarUsuario(id) {
     } catch (error) {
         console.error('Error:', error);
         alert('Error al borrar el usuario');
+    }
+}
+
+// Variables globales para el filtro
+let allUsers = [];
+let filteredUsers = [];
+
+// Función para inicializar el filtro de usuarios
+function initializeUserFilter() {
+    const filterInput = document.getElementById('userFilter');
+    const dropdown = document.getElementById('filterDropdown');
+    
+    if (!filterInput || !dropdown) return;
+    
+    // Obtener todos los usuarios de la tabla
+    allUsers = Array.from(document.querySelectorAll('#tbody tr')).map(row => {
+        const cells = row.querySelectorAll('td');
+        return {
+            id: cells[0].textContent.trim(),
+            nombres: cells[2].textContent.trim(),
+            apellidos: cells[3].textContent.trim(),
+            correo: cells[4].textContent.trim(),
+            rol: cells[5].textContent.trim(),
+            element: row
+        };
+    });
+    
+    // Event listener para el filtro
+    filterInput.addEventListener('input', handleFilterInput);
+    filterInput.addEventListener('focus', showDropdown);
+    
+    // Ocultar dropdown al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.filter-container')) {
+            hideDropdown();
+        }
+    });
+}
+
+// Función para manejar la entrada del filtro
+function handleFilterInput(e) {
+    const searchTerm = e.target.value.toLowerCase().trim();
+    
+    if (searchTerm.length === 0) {
+        hideDropdown();
+        showAllUsers();
+        return;
+    }
+    
+    // Filtrar usuarios que coincidan con el término de búsqueda
+    filteredUsers = allUsers.filter(user => {
+        const nombres = user.nombres.toLowerCase();
+        const apellidos = user.apellidos.toLowerCase();
+        const correo = user.correo.toLowerCase();
+        const searchLower = searchTerm.toLowerCase();
+        
+        return nombres.includes(searchLower) || 
+               apellidos.includes(searchLower) || 
+               correo.includes(searchLower);
+    });
+    
+    // Mostrar resultados en el dropdown
+    showFilterResults(filteredUsers);
+    
+    // Mostrar solo usuarios filtrados en la tabla
+    showFilteredUsers(filteredUsers);
+}
+
+// Función para mostrar resultados en el dropdown
+function showFilterResults(users) {
+    const dropdown = document.getElementById('filterDropdown');
+    
+    if (users.length === 0) {
+        dropdown.innerHTML = '<div style="padding: 12px; color: #6b7280; text-align: center;">No se encontraron usuarios</div>';
+    } else {
+        dropdown.innerHTML = users.map(user => `
+            <div class="filter-item" style="
+                padding: 10px 12px;
+                cursor: pointer;
+                border-bottom: 1px solid #f3f4f6;
+                transition: background-color 0.2s;
+            " 
+            onmouseover="this.style.backgroundColor='#f9fafb'"
+            onmouseout="this.style.backgroundColor='white'"
+            onclick="selectUser('${user.id}')">
+                <div style="font-weight: 500; color: #1f2937;">${user.nombres} ${user.apellidos}</div>
+                <div style="font-size: 12px; color: #6b7280;">${user.correo}</div>
+            </div>
+        `).join('');
+    }
+    
+    dropdown.style.display = 'block';
+}
+
+// Función para seleccionar un usuario del dropdown
+function selectUser(userId) {
+    const user = allUsers.find(u => u.id === userId);
+    if (user) {
+        // Hacer scroll hacia el usuario seleccionado
+        user.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Resaltar temporalmente la fila
+        user.element.style.backgroundColor = '#fef3c7';
+        setTimeout(() => {
+            user.element.style.backgroundColor = '';
+        }, 2000);
+    }
+    
+    hideDropdown();
+    document.getElementById('userFilter').value = '';
+    showAllUsers();
+}
+
+// Función para mostrar solo usuarios filtrados en la tabla
+function showFilteredUsers(users) {
+    allUsers.forEach(user => {
+        user.element.style.display = 'none';
+    });
+    
+    users.forEach(user => {
+        user.element.style.display = '';
+    });
+}
+
+// Función para mostrar todos los usuarios
+function showAllUsers() {
+    allUsers.forEach(user => {
+        user.element.style.display = '';
+    });
+}
+
+// Función para mostrar el dropdown
+function showDropdown() {
+    const dropdown = document.getElementById('filterDropdown');
+    if (dropdown) {
+        dropdown.style.display = 'block';
+    }
+}
+
+// Función para ocultar el dropdown
+function hideDropdown() {
+    const dropdown = document.getElementById('filterDropdown');
+    if (dropdown) {
+        dropdown.style.display = 'none';
     }
 }
 </script>

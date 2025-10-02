@@ -177,7 +177,6 @@ function getRecentAudits($db, $limit = 10) {
     return $audits;
 }
 
-// Función para obtener auditorías de un módulo específico
 function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20) {
     // Construir la consulta base
     $sql = "SELECT al.*, 
@@ -252,6 +251,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         $sql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
         $params[] = $filters['tipo_ctg'];
     }
+
+    if (!empty($filters['tipo_pqr'])) {
+        // Para PQR, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
+        $sql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
+        $params[] = $filters['tipo_pqr'];
+    }
     
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
@@ -307,6 +312,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         // Para CTG, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
         $countSql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
         $countParams[] = $filters['tipo_ctg'];
+    }
+
+    if (!empty($filters['tipo_pqr'])) {
+        // Para PQR, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
+        $countSql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
+        $countParams[] = $filters['tipo_pqr'];
     }
     
     if (!empty($filters['target_id'])) {
@@ -405,6 +416,12 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
         $sql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
         $params[] = $filters['tipo_ctg'];
     }
+
+    if (!empty($filters['tipo_pqr'])) {
+        // Para PQR, filtrar por tipo_id en el JSON de detalles usando JSON_UNQUOTE y JSON_EXTRACT
+        $sql .= " AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.tipo_id')) = ?";
+        $params[] = $filters['tipo_pqr'];
+    }
     
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
@@ -439,6 +456,65 @@ function formatAuditDetails($details, $db = null, $audit = null) {
         
         if (!$parsed || !is_array($parsed)) {
             return $details;
+        }
+
+        $action = $audit['action'] ?? null;
+
+        // Formato para ADD_PQR_RESPONSE y ADD_CTG_RESPONSE
+        if ($action === 'ADD_PQR_RESPONSE' || $action === 'ADD_CTG_RESPONSE') {
+            $result = '';
+            if (isset($parsed['mensaje'])) {
+                $result .= 'Mensaje: ' . htmlspecialchars($parsed['mensaje']);
+            }
+            if (!empty($parsed['url_adjunto'])) {
+                if ($result) $result .= ', ';
+                $url = htmlspecialchars($parsed['url_adjunto']);
+                $result .= 'Url: <a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $url . '</a>';
+            }
+            if ($result) return $result;
+        }
+
+        // Formato para UPDATE_PQR_STATUS y UPDATE_CTG_STATUS
+        if (($action === 'UPDATE_PQR_STATUS' || $action === 'UPDATE_CTG_STATUS') && isset($parsed['new_estado_id'])) {
+            try {
+                $result = '';
+                $table = ($action === 'UPDATE_PQR_STATUS') ? 'estado_pqr' : 'estado_ctg';
+                
+                // Get new status name
+                $stmt_new = $db->prepare("SELECT nombre FROM $table WHERE id = ?");
+                $stmt_new->execute([$parsed['new_estado_id']]);
+                $new_status_name = $stmt_new->fetchColumn();
+                if ($new_status_name) {
+                    $result .= 'Estado Actualizado: ' . $new_status_name;
+                }
+
+                // Get old status name
+                if (isset($parsed['old_estado_id'])) {
+                    $stmt_old = $db->prepare("SELECT nombre FROM $table WHERE id = ?");
+                    $stmt_old->execute([$parsed['old_estado_id']]);
+                    $old_status_name = $stmt_old->fetchColumn();
+                    if ($old_status_name) {
+                        if ($result) $result .= ', ';
+                        $result .= 'Estado Anterior: ' . $old_status_name;
+                    }
+                }
+                if ($result) return $result;
+            } catch (Exception $e) {
+                error_log("Error formatting status update: " . $e->getMessage());
+            }
+        }
+
+        // Formato para UPDATE_PQR_OBSERVATION y UPDATE_CTG_OBSERVATION
+        if ($action === 'UPDATE_PQR_OBSERVATION' || $action === 'UPDATE_CTG_OBSERVATION') {
+            $result = '';
+            if (isset($parsed['new_observaciones'])) {
+                $result .= 'Nueva Observacion: ' . htmlspecialchars($parsed['new_observaciones']);
+            }
+            if (!empty($parsed['old_observaciones'])) {
+                if ($result) $result .= ', ';
+                $result .= 'Antigua Observacion: ' . htmlspecialchars($parsed['old_observaciones']);
+            }
+            if ($result) return $result;
         }
         
         // Casos especiales para mejorar la visualización
@@ -527,7 +603,8 @@ function formatAuditDetails($details, $db = null, $audit = null) {
                     
                     return $result;
                 }
-            } catch (Exception $e) {
+            }
+            catch (Exception $e) {
                 // Si hay error, continuar con el procesamiento normal
             }
         }
@@ -708,6 +785,21 @@ function getModuleActions($resource) {
     return $moduleActions[$resource] ?? [];
 }
 
+// Función para obtener los tipos de PQR desde la base de datos
+function getPQRTipos($db) {
+    try {
+        $sql = "SELECT id, nombre FROM tipo_pqr ORDER BY nombre";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $tipos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        return $tipos;
+    } catch (Exception $e) {
+        error_log("Error al obtener tipos de PQR: " . $e->getMessage());
+        return [];
+    }
+}
+
 // Función para obtener los tipos de CTG desde la base de datos
 function getCTGTipos($db) {
     try {
@@ -717,7 +809,8 @@ function getCTGTipos($db) {
         $tipos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         return $tipos;
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         error_log("Error al obtener tipos de CTG: " . $e->getMessage());
         return [];
     }
@@ -861,7 +954,8 @@ try {
                 'user_type' => $input['user_type'] ?? '',
                 'action' => $input['action_filter'] ?? '', // Usar action_filter en lugar de action
                 'details' => $input['details_filter'] ?? '', // Nuevo filtro para detalles
-                'tipo_ctg' => $input['tipo_ctg_filter'] ?? '', // Nuevo filtro para tipo de CTG
+                'tipo_ctg' => $input['tipo_ctg_filter'] ?? '',
+                'tipo_pqr' => $input['tipo_pqr_filter'] ?? '',
                 'target_id' => $input['target_id'] ?? '',
                 'search' => $input['search'] ?? ''
             ];
@@ -893,6 +987,14 @@ try {
         
         case 'get_ctg_tipos':
             $tipos = getCTGTipos($db);
+            echo json_encode([
+                'ok' => true,
+                'tipos' => $tipos
+            ]);
+            break;
+
+        case 'get_pqr_tipos':
+            $tipos = getPQRTipos($db);
             echo json_encode([
                 'ok' => true,
                 'tipos' => $tipos

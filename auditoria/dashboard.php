@@ -176,6 +176,12 @@ if (!$token) {
               <option value="">Todos los tipos</option>
             </select>
           </div>
+          <div class="filter-group" id="filterTipoPqrGroup" style="display: none;">
+            <label for="filterTipoPqr">Tipo PQR:</label>
+            <select id="filterTipoPqr" class="form-control">
+              <option value="">Todos los tipos</option>
+            </select>
+          </div>
           <div class="filter-group">
             <label for="filterTargetId">ID Objetivo:</label>
             <input type="number" id="filterTargetId" class="form-control" placeholder="Ej: 123">
@@ -712,7 +718,8 @@ async function loadModuleAudits() {
             user_type: currentFilters.user_type || '',
             action_filter: isDetailsModule ? '' : (currentFilters.action || ''), // Solo para módulos de acción
             details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
-            tipo_ctg_filter: currentFilters.tipo_ctg || '', // Filtro de tipo de CTG
+            tipo_ctg_filter: currentFilters.tipo_ctg || '',
+            tipo_pqr_filter: currentFilters.tipo_pqr || '',
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1061,7 +1068,8 @@ async function loadMoreAudits() {
             user_type: currentFilters.user_type || '',
             action_filter: isDetailsModule ? '' : (currentFilters.action || ''), // Solo para módulos de acción
             details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
-            tipo_ctg_filter: currentFilters.tipo_ctg || '', // Filtro de tipo de CTG
+            tipo_ctg_filter: currentFilters.tipo_ctg || '',
+            tipo_pqr_filter: currentFilters.tipo_pqr || '',
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1200,6 +1208,37 @@ async function getCTGTipos() {
     }
 }
 
+async function getPQRTipos() {
+    try {
+        const response = await fetch('api/audit_dashboard_data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                action: 'get_pqr_tipos'
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Respuesta de tipos de PQR:', result);
+        
+        if (result.ok && result.tipos) {
+            return result.tipos;
+        }
+        
+        return [];
+    } catch (error) {
+        console.error('Error al obtener tipos de PQR:', error);
+        return [];
+    }
+}
+
 async function getAcabadosKits() {
     try {
         const response = await fetch('api/audit_dashboard_data.php', {
@@ -1259,11 +1298,18 @@ async function populateActionFilter(module) {
     const actionLabel = document.querySelector('label[for="filterAction"]');
     const tipoCtgGroup = document.getElementById('filterTipoCtgGroup');
     const tipoCtgSelect = document.getElementById('filterTipoCtg');
+    const tipoPqrGroup = document.getElementById('filterTipoPqrGroup');
+    const tipoPqrSelect = document.getElementById('filterTipoPqr');
+
+    // Reset and hide module-specific filters
+    tipoCtgGroup.style.display = 'none';
+    tipoCtgSelect.value = '';
+    tipoPqrGroup.style.display = 'none';
+    tipoPqrSelect.value = '';
     
-    // Mostrar/ocultar el filtro de Tipo CTG según el módulo
+    // Populate and show filter for CTG module
     if (module === 'ctg') {
         tipoCtgGroup.style.display = 'block';
-        // Poblar el combo box de Tipo CTG
         tipoCtgSelect.innerHTML = '<option value="">Todos los tipos</option>';
         const tipos = await getCTGTipos();
         tipos.forEach(tipo => {
@@ -1272,9 +1318,18 @@ async function populateActionFilter(module) {
             option.textContent = tipo.nombre;
             tipoCtgSelect.appendChild(option);
         });
-    } else {
-        tipoCtgGroup.style.display = 'none';
-        tipoCtgSelect.value = '';
+    } 
+    // Populate and show filter for PQR module
+    else if (module === 'pqr') {
+        tipoPqrGroup.style.display = 'block';
+        tipoPqrSelect.innerHTML = '<option value="">Todos los tipos</option>';
+        const tipos = await getPQRTipos();
+        tipos.forEach(tipo => {
+            const option = document.createElement('option');
+            option.value = tipo.id;
+            option.textContent = tipo.nombre;
+            tipoPqrSelect.appendChild(option);
+        });
     }
     
     
@@ -1372,6 +1427,7 @@ function applyFilters() {
         user_type: document.getElementById('filterUserType').value,
         action: document.getElementById('filterAction').value,
         tipo_ctg: document.getElementById('filterTipoCtg').value,
+        tipo_pqr: document.getElementById('filterTipoPqr').value,
         target_id: document.getElementById('filterTargetId').value,
         search: document.getElementById('filterSearch').value
     };
@@ -1389,6 +1445,7 @@ function clearFilters() {
     document.getElementById('filterUserType').value = '';
     document.getElementById('filterAction').value = '';
     document.getElementById('filterTipoCtg').value = '';
+    document.getElementById('filterTipoPqr').value = '';
     document.getElementById('filterTargetId').value = '';
     document.getElementById('filterSearch').value = '';
     
@@ -1412,6 +1469,7 @@ function resetFilters() {
     document.getElementById('filterUserType').value = '';
     document.getElementById('filterAction').value = '';
     document.getElementById('filterTipoCtg').value = '';
+    document.getElementById('filterTipoPqr').value = '';
     document.getElementById('filterTargetId').value = '';
     document.getElementById('filterSearch').value = '';
     
