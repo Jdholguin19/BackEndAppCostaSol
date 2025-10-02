@@ -168,10 +168,13 @@ if (!$token) {
               <td><?= htmlspecialchars($u['correo']) ?></td>
               <td><?= htmlspecialchars($u['rol']) ?></td>
               <td class="action-buttons">
-                <button class="edit-btn" data-bs-toggle="modal" data-bs-target="#modalUsuario" onclick='editarUsuario(<?= json_encode($u) ?>)'>
+                <button class="edit-btn" data-bs-toggle="modal" data-bs-target="#modalUsuario" onclick='editarUsuario(<?= json_encode($u) ?>)' title="Editar Usuario">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="delete-btn" onclick="borrarUsuario(<?= $u['id'] ?>)">
+                <button class="report-btn" onclick="verReporteUsuario(<?= $u['id'] ?>)" title="Ver Reporte">
+                  <i class="bi bi-graph-up"></i>
+                </button>
+                <button class="delete-btn" onclick="borrarUsuario(<?= $u['id'] ?>)" title="Eliminar Usuario">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -517,6 +520,11 @@ function hideDropdown() {
     if (dropdown) {
         dropdown.style.display = 'none';
     }
+}
+
+// Función para ver reporte de usuario
+function verReporteUsuario(userId) {
+    window.open(`reportes_usuario.php?user_id=${userId}`, '_blank');
 }
 </script>
 

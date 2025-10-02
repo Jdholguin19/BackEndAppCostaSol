@@ -287,6 +287,16 @@ body {
   transform: scale(1.05);
 }
 
+.report-btn {
+  background: var(--success-color);
+  color: white;
+}
+
+.report-btn:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
 .delete-btn {
   background: var(--danger-color);
   color: white;
