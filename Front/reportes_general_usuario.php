@@ -101,63 +101,6 @@ if (!$token) {
             <!-- Main Content -->
             <div id="mainContent" style="display: none;">
                 
-                <!-- Métricas Principales -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h3 class="section-title">
-                            <i class="bi bi-speedometer2"></i>
-                            Métricas Principales del Sistema
-                        </h3>
-                    </div>
-                    
-                    <!-- Total Usuarios -->
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="metric-card">
-                            <div class="metric-icon">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <div class="metric-number" id="totalUsuarios">-</div>
-                            <div class="metric-label">Total Usuarios</div>
-                            <div class="metric-detail" id="usuariosDetalle">-</div>
-                        </div>
-                    </div>
-
-                    <!-- Total Propiedades -->
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="metric-card">
-                            <div class="metric-icon">
-                                <i class="bi bi-house-door"></i>
-                            </div>
-                            <div class="metric-number" id="totalPropiedades">-</div>
-                            <div class="metric-label">Total Propiedades</div>
-                            <div class="metric-detail" id="propiedadesDetalle">-</div>
-                        </div>
-                    </div>
-
-                    <!-- Total CTG -->
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="metric-card">
-                            <div class="metric-icon">
-                                <i class="bi bi-tools"></i>
-                            </div>
-                            <div class="metric-number" id="totalCTG">-</div>
-                            <div class="metric-label">Total CTG</div>
-                            <div class="metric-detail" id="ctgDetalle">-</div>
-                        </div>
-                    </div>
-
-                    <!-- Total PQR -->
-                    <div class="col-lg-3 col-md-6 mb-4">
-                        <div class="metric-card">
-                            <div class="metric-icon">
-                                <i class="bi bi-question-circle"></i>
-                            </div>
-                            <div class="metric-number" id="totalPQR">-</div>
-                            <div class="metric-label">Total PQR</div>
-                            <div class="metric-detail" id="pqrDetalle">-</div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Gráficos Principales -->
                 <div class="row mb-4">
@@ -166,7 +109,7 @@ if (!$token) {
                         <div class="chart-card">
                             <h5 class="chart-title">
                                 <i class="bi bi-pie-chart"></i>
-                                Distribución de Usuarios por Rol
+                                Distribución de Usuarios por Rol - <span id="usuariosRolTotal">-</span>
                             </h5>
                             <canvas id="usuariosRolChart"></canvas>
                         </div>
@@ -177,7 +120,7 @@ if (!$token) {
                         <div class="chart-card">
                             <h5 class="chart-title">
                                 <i class="bi bi-bar-chart"></i>
-                                Propiedades por Estado
+                                Propiedades por Estado - <span id="propiedadesEstadoTotal">-</span>
                             </h5>
                             <canvas id="propiedadesEstadoChart"></canvas>
                         </div>
@@ -188,7 +131,7 @@ if (!$token) {
                         <div class="chart-card">
                             <h5 class="chart-title">
                                 <i class="bi bi-stack"></i>
-                                CTG por Tipo de Solicitud
+                                CTG por Tipo de Solicitud - <span id="ctgTipoTotal">-</span>
                             </h5>
                             <canvas id="ctgTipoChart"></canvas>
                         </div>
@@ -199,7 +142,7 @@ if (!$token) {
                         <div class="chart-card">
                             <h5 class="chart-title">
                                 <i class="bi bi-stack"></i>
-                                PQR por Tipo de Solicitud
+                                PQR por Tipo de Solicitud - <span id="pqrTipoTotal">-</span>
                             </h5>
                             <canvas id="pqrTipoChart"></canvas>
                         </div>
@@ -553,27 +496,17 @@ if (!$token) {
         function populateMainMetrics() {
             const metricas = reportData.metricas_generales;
 
-            // Total usuarios
+            // Calcular totales para los títulos de gráficos
             const totalUsuarios = metricas.usuarios_por_rol.reduce((sum, rol) => sum + rol.total, 0);
-            document.getElementById('totalUsuarios').textContent = totalUsuarios;
-            document.getElementById('usuariosDetalle').innerHTML = 
-                metricas.usuarios_por_rol.map(rol => `${rol.rol}: ${rol.total}`).join('<br>');
-
-            // Total propiedades
             const totalPropiedades = metricas.propiedades_por_estado.reduce((sum, estado) => sum + estado.total, 0);
-            document.getElementById('totalPropiedades').textContent = totalPropiedades;
-            document.getElementById('propiedadesDetalle').innerHTML = 
-                metricas.propiedades_por_estado.map(estado => `${estado.estado}: ${estado.total}`).join('<br>');
+            const totalCTG = metricas.ctg.total_ctg;
+            const totalPQR = metricas.pqr.total_pqr;
 
-            // CTG
-            document.getElementById('totalCTG').textContent = metricas.ctg.total_ctg;
-            document.getElementById('ctgDetalle').innerHTML = 
-                `Pendientes: ${metricas.ctg.pendientes}<br>Resueltas: ${metricas.ctg.resueltas}`;
-
-            // PQR
-            document.getElementById('totalPQR').textContent = metricas.pqr.total_pqr;
-            document.getElementById('pqrDetalle').innerHTML = 
-                `Pendientes: ${metricas.pqr.pendientes}<br>Resueltas: ${metricas.pqr.resueltas}`;
+            // Actualizar totales en los títulos de gráficos
+            document.getElementById('usuariosRolTotal').textContent = `Usuarios totales: ${totalUsuarios}`;
+            document.getElementById('propiedadesEstadoTotal').textContent = `Propiedades: ${totalPropiedades}`;
+            document.getElementById('ctgTipoTotal').textContent = `CTG totales: ${totalCTG}`;
+            document.getElementById('pqrTipoTotal').textContent = `PQR totales: ${totalPQR}`;
 
             // Tiempos de resolución
             const tiempoCTG = metricas.tiempos_resolucion.find(t => t.tipo === 'CTG');
