@@ -37,163 +37,7 @@ if (!$token) {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/css/style_users.css" rel="stylesheet">
-  <style>
-    /* Estilos específicos para reportes */
-    .report-container {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-      min-height: 100vh;
-      padding: 2rem 0;
-    }
-    
-    .report-card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      margin-bottom: 2rem;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .report-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    }
-    
-    .report-header {
-      background: linear-gradient(135deg, #2d5a3d 0%, #4a7c59 100%);
-      color: white;
-      padding: 2rem;
-      text-align: center;
-    }
-    
-    .metric-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      border-left: 4px solid #2d5a3d;
-      transition: all 0.3s ease;
-    }
-    
-    .metric-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .metric-number {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #2d5a3d;
-      margin-bottom: 0.5rem;
-    }
-    
-    .metric-label {
-      color: #6b7280;
-      font-weight: 500;
-      font-size: 0.9rem;
-    }
-    
-    .metric-icon {
-      font-size: 2rem;
-      color: #4a7c59;
-      margin-bottom: 1rem;
-    }
-    
-    .section-title {
-      color: #2d5a3d;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .activity-item {
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 0.75rem;
-      border-left: 3px solid #4a7c59;
-      transition: all 0.2s ease;
-    }
-    
-    .activity-item:hover {
-      background: #f0f9ff;
-      transform: translateX(5px);
-    }
-    
-    .activity-type {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    
-    .activity-type.ctg {
-      background: #fef3c7;
-      color: #d97706;
-    }
-    
-    .activity-type.pqr {
-      background: #fce7f3;
-      color: #be185d;
-    }
-    
-    .activity-type.cita {
-      background: #dbeafe;
-      color: #2563eb;
-    }
-    
-    .loading-spinner {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 200px;
-    }
-    
-    .error-message {
-      background: #fee2e2;
-      color: #dc2626;
-      padding: 1rem;
-      border-radius: 8px;
-      text-align: center;
-      margin: 2rem 0;
-    }
-    
-    .progress-ring {
-      width: 80px;
-      height: 80px;
-    }
-    
-    .progress-ring-circle {
-      fill: transparent;
-      stroke: #2d5a3d;
-      stroke-width: 6;
-      stroke-linecap: round;
-      transform: rotate(-90deg);
-      transform-origin: 50% 50%;
-    }
-    
-    .progress-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-weight: 600;
-      color: #2d5a3d;
-    }
-    
-    .chart-container {
-      position: relative;
-      height: 300px;
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 1rem;
-    }
-  </style>
+  <link href="assets/css/style_report_user.css" rel="stylesheet">
 </head>
 <body>
 
@@ -295,10 +139,11 @@ if (!$token) {
           <div class="row mb-4">
             <!-- Propiedades -->
             <div class="col-lg-3 col-md-6 mb-3">
-              <div class="metric-card">
+              <div class="metric-card clickable" onclick="togglePropiedadesAccordion()" style="cursor: pointer;">
                 <i class="bi bi-house metric-icon"></i>
                 <div id="totalPropiedades" class="metric-number">-</div>
                 <div class="metric-label">Propiedades Totales</div>
+                <small class="text-muted" id="propiedadesToggleText">Click para ver detalles</small>
               </div>
             </div>
             
@@ -326,6 +171,23 @@ if (!$token) {
                 <i class="bi bi-calendar-check metric-icon"></i>
                 <div id="totalCitas" class="metric-number">-</div>
                 <div class="metric-label">Citas Programadas</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Acordeón de Propiedades Detalladas -->
+          <div class="row mb-4" id="propiedadesAccordion" style="display: none;">
+            <div class="col-12">
+              <div class="report-card">
+                <div class="p-4">
+                  <h4 class="section-title">
+                    <i class="bi bi-house-door"></i>
+                    Detalles de Propiedades - 
+                  </h4>
+                  <div id="propiedadesDetalle">
+                    <!-- Se llena dinámicamente -->
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -399,6 +261,62 @@ if (!$token) {
             </div>
           </div>
           
+
+                  <!-- Información de Login -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="report-card">
+                <div class="p-4">
+                  <h4 class="section-title">
+                    <i class="bi bi-person-check"></i>
+                    Historial de Acceso
+                  </h4>
+                  <div class="row text-center">
+                    <div class="col-md-4 mb-3">
+                      <div class="metric-number" style="font-size: 1.8rem;" id="totalLogins">-</div>
+                      <div class="metric-label">Total de Logins</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="metric-number" style="font-size: 1.8rem;" id="loginsExitosos">-</div>
+                      <div class="metric-label">Logins Exitosos</div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="metric-number" style="font-size: 1.8rem;" id="ultimoLogin">-</div>
+                      <div class="metric-label">Último Login</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Estadísticas de Tiempo -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="report-card">
+                <div class="p-4">
+                  <h4 class="section-title">
+                    <i class="bi bi-speedometer2"></i>
+                    Tiempos de Respuesta
+                  </h4>
+                  <div class="row text-center">
+                    <div class="col-md-6 mb-3">
+                      <div class="metric-number" style="font-size: 2rem;" id="tiempoPromedioCTG">-</div>
+                      <div class="metric-label">Tiempo Promedio CTG (horas)</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="metric-number" style="font-size: 2rem;" id="tiempoPromedioPQR">-</div>
+                      <div class="metric-label">Tiempo Promedio PQR (horas)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
           <!-- Actividad Reciente -->
           <div class="row mb-4">
             <div class="col-12">
@@ -440,33 +358,6 @@ if (!$token) {
             </div>
           </div>
           
-          <!-- Información de Login -->
-          <div class="row mb-4">
-            <div class="col-12">
-              <div class="report-card">
-                <div class="p-4">
-                  <h4 class="section-title">
-                    <i class="bi bi-person-check"></i>
-                    Historial de Acceso
-                  </h4>
-                  <div class="row text-center">
-                    <div class="col-md-4 mb-3">
-                      <div class="metric-number" style="font-size: 1.8rem;" id="totalLogins">-</div>
-                      <div class="metric-label">Total de Logins</div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                      <div class="metric-number" style="font-size: 1.8rem;" id="loginsExitosos">-</div>
-                      <div class="metric-label">Logins Exitosos</div>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                      <div class="metric-number" style="font-size: 1.8rem;" id="ultimoLogin">-</div>
-                      <div class="metric-label">Último Login</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           
           <!-- Pie de página -->
           <div class="text-center text-muted mb-4">
@@ -653,6 +544,206 @@ function displayRecentActivity(activities) {
                         <small class="text-muted"><i class="bi bi-clock me-1"></i>${fecha}</small>
                     </div>
                 </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Variables globales para el acordeón
+let propiedadesAccordionOpen = false;
+let propiedadesData = null;
+
+function togglePropiedadesAccordion() {
+    const accordion = document.getElementById('propiedadesAccordion');
+    const toggleText = document.getElementById('propiedadesToggleText');
+    
+    if (propiedadesAccordionOpen) {
+        accordion.style.display = 'none';
+        toggleText.textContent = 'Click para ver detalles';
+        propiedadesAccordionOpen = false;
+    } else {
+        accordion.style.display = 'block';
+        toggleText.textContent = 'Click para ocultar';
+        propiedadesAccordionOpen = true;
+        
+        // Cargar datos de propiedades si no están cargados
+        if (!propiedadesData) {
+            loadPropiedadesDetalle();
+        }
+    }
+}
+
+function loadPropiedadesDetalle() {
+    const token = localStorage.getItem('cs_token');
+    const userId = new URLSearchParams(window.location.search).get('user_id');
+    
+    fetch(`../api/user_report_data.php?user_id=${userId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok && data.propiedades_detalle) {
+            propiedadesData = data.propiedades_detalle;
+            displayPropiedadesDetalle(data.propiedades_detalle);
+        }
+    })
+    .catch(error => {
+        console.error('Error al cargar propiedades:', error);
+    });
+}
+
+function displayPropiedadesDetalle(propiedades) {
+    const container = document.getElementById('propiedadesDetalle');
+    
+    if (!propiedades || propiedades.length === 0) {
+        container.innerHTML = '<p class="text-muted text-center">No se encontraron propiedades</p>';
+        return;
+    }
+    
+    container.innerHTML = propiedades.map(propiedad => {
+        const fechaCompra = propiedad.fecha_compra ? new Date(propiedad.fecha_compra).toLocaleDateString('es-ES') : 'No especificada';
+        const fechaEntrega = propiedad.fecha_entrega ? new Date(propiedad.fecha_entrega).toLocaleDateString('es-ES') : 'No especificada';
+        const fechaHipotecario = propiedad.fecha_hipotecario ? new Date(propiedad.fecha_hipotecario).toLocaleDateString('es-ES') : 'No especificada';
+        
+        const ubicacion = `${propiedad.manzana ? `Mz ${propiedad.manzana}` : ''} ${propiedad.villa ? `Villa ${propiedad.villa}` : ''} ${propiedad.solar ? `Solar ${propiedad.solar}` : ''}`.trim();
+        
+        return `
+            <div class="propiedad-card">
+                <div class="propiedad-header">
+                    <h5 class="propiedad-title">
+                        <i class="bi bi-house me-2"></i>
+                        ${propiedad.tipo_propiedad || 'Propiedad'} - ${ubicacion || 'Ubicación no especificada'}
+                    </h5>
+                    <span class="propiedad-badge">${propiedad.estado_propiedad || 'Estado no especificado'}</span>
+                </div>
+                
+                <div class="propiedad-info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Urbanización</div>
+                        <div class="info-value">${propiedad.urbanizacion || 'No especificada'}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Tipo de Propiedad</div>
+                        <div class="info-value">${propiedad.tipo_propiedad || 'No especificado'}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Estado Actual</div>
+                        <div class="info-value">${propiedad.estado_propiedad || 'No especificado'}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Etapa de Construcción</div>
+                        <div class="info-value">${propiedad.etapa_construccion || 'No especificada'}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Fecha de Compra</div>
+                        <div class="info-value">${fechaCompra}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Fecha de Entrega</div>
+                        <div class="info-value">${fechaEntrega}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Fecha Hipotecario</div>
+                        <div class="info-value">${fechaHipotecario}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Ubicación</div>
+                        <div class="info-value">${ubicacion || 'No especificada'}</div>
+                    </div>
+                </div>
+                
+                ${propiedad.etapa_construccion && propiedad.porcentaje_etapa ? `
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="info-label">Progreso de Construcción</span>
+                            <span class="info-value">${propiedad.porcentaje_etapa}%</span>
+                        </div>
+                        <div class="progress-bar-custom">
+                            <div class="progress-fill" style="width: ${propiedad.porcentaje_etapa}%"></div>
+                        </div>
+                    </div>
+                ` : ''}
+                
+                ${propiedad.acabado_kit_nombre ? `
+                    <div class="mb-3">
+                        <div class="section-subtitle">
+                            <i class="bi bi-palette"></i>
+                            Kit de Acabados Seleccionado
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Kit de Acabados</div>
+                            <div class="info-value">${propiedad.acabado_kit_nombre}</div>
+                        </div>
+                        ${propiedad.acabado_kit_costo ? `
+                            <div class="info-item">
+                                <div class="info-label">Costo del Kit</div>
+                                <div class="info-value">$${Number(propiedad.acabado_kit_costo).toLocaleString('es-ES')}</div>
+                            </div>
+                        ` : ''}
+                        ${propiedad.acabado_color_seleccionado ? `
+                            <div class="info-item">
+                                <div class="info-label">Color Seleccionado</div>
+                                <div class="info-value">${propiedad.acabado_color_seleccionado}</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                ` : ''}
+                
+                ${propiedad.paquetes_adicionales && propiedad.paquetes_adicionales.length > 0 ? `
+                    <div class="mb-3">
+                        <div class="section-subtitle">
+                            <i class="bi bi-plus-square"></i>
+                            Paquetes Adicionales
+                        </div>
+                        ${propiedad.paquetes_adicionales.map(paquete => `
+                            <div class="paquete-item">
+                                <div class="paquete-info">
+                                    <h6>${paquete.nombre}</h6>
+                                    ${paquete.descripcion ? `<small class="text-muted">${paquete.descripcion}</small>` : ''}
+                                </div>
+                                <div class="paquete-precio">$${Number(paquete.precio).toLocaleString('es-ES')}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+                
+                ${propiedad.progreso_construccion && propiedad.progreso_construccion.length > 0 ? `
+                    <div class="mb-3">
+                        <div class="section-subtitle">
+                            <i class="bi bi-camera"></i>
+                            Progreso de Construcción
+                        </div>
+                        ${propiedad.progreso_construccion.map(progreso => `
+                            <div class="progreso-item">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">${progreso.etapa_nombre}</h6>
+                                    <span class="badge bg-success">${progreso.porcentaje}%</span>
+                                </div>
+                                ${progreso.descripcion ? `<p class="mb-2">${progreso.descripcion}</p>` : ''}
+                                <div class="progreso-fecha">
+                                    <i class="bi bi-calendar me-1"></i>
+                                    ${new Date(progreso.fecha_registro).toLocaleDateString('es-ES')}
+                                </div>
+                                ${progreso.url_imagen ? `
+                                    <img src="${progreso.url_imagen}" alt="Progreso" class="progreso-imagen" 
+                                         style="max-width: 200px; height: auto; cursor: pointer;" 
+                                         onclick="window.open('${progreso.url_imagen}', '_blank')">
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
             </div>
         `;
     }).join('');

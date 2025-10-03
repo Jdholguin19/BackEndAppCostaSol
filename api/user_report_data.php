@@ -175,6 +175,73 @@ try {
         $stmt_tiempo_promedio->execute([$user_id, $user_id]);
         $tiempo_stats = $stmt_tiempo_promedio->fetch(PDO::FETCH_ASSOC);
 
+        // === INFORMACIÓN DETALLADA DE PROPIEDADES ===
+        $stmt_propiedades_detalle = $db->prepare('
+            SELECT 
+                p.id,
+                p.fecha_compra,
+                p.fecha_hipotecario,
+                p.fecha_entrega,
+                p.manzana,
+                p.solar,
+                p.villa,
+                tp.nombre AS tipo_propiedad,
+                u.nombre AS urbanizacion,
+                ep.nombre AS estado_propiedad,
+                ec.nombre AS etapa_construccion,
+                ec.porcentaje AS porcentaje_etapa,
+                ak.nombre AS acabado_kit_nombre,
+                ak.costo AS acabado_kit_costo,
+                p.acabado_color_seleccionado
+            FROM propiedad p
+            LEFT JOIN tipo_propiedad tp ON p.tipo_id = tp.id
+            LEFT JOIN urbanizacion u ON p.id_urbanizacion = u.id
+            LEFT JOIN estado_propiedad ep ON p.estado_id = ep.id
+            LEFT JOIN etapa_construccion ec ON p.etapa_id = ec.id
+            LEFT JOIN acabado_kit ak ON p.acabado_kit_seleccionado_id = ak.id
+            WHERE p.id_usuario = ?
+            ORDER BY p.fecha_compra DESC
+        ');
+        $stmt_propiedades_detalle->execute([$user_id]);
+        $propiedades_detalle = $stmt_propiedades_detalle->fetchAll(PDO::FETCH_ASSOC);
+
+        // === PAQUETES ADICIONALES POR PROPIEDAD ===
+        $paquetes_adicionales = [];
+        foreach ($propiedades_detalle as $propiedad) {
+            $stmt_paquetes = $db->prepare('
+                SELECT pa.nombre, pa.descripcion, pa.precio, pa.fotos
+                FROM propiedad_paquetes_adicionales ppa
+                JOIN paquetes_adicionales pa ON ppa.paquete_id = pa.id
+                WHERE ppa.propiedad_id = ? AND pa.activo = 1
+            ');
+            $stmt_paquetes->execute([$propiedad['id']]);
+            $paquetes_adicionales[$propiedad['id']] = $stmt_paquetes->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // === PROGRESO DE CONSTRUCCIÓN POR PROPIEDAD ===
+        $progreso_construccion = [];
+        foreach ($propiedades_detalle as $propiedad) {
+            $stmt_progreso = $db->prepare('
+                SELECT 
+                    pc.porcentaje,
+                    pc.descripcion,
+                    pc.url_imagen,
+                    pc.fecha_registro,
+                    ec.nombre AS etapa_nombre,
+                    ec.descripcion AS etapa_descripcion
+                FROM progreso_construccion pc
+                JOIN etapa_construccion ec ON pc.id_etapa = ec.id
+                WHERE pc.mz = ? AND pc.villa = ? AND pc.id_urbanizacion = ? AND pc.estado = 1
+                ORDER BY pc.fecha_registro DESC
+            ');
+            $stmt_progreso->execute([
+                $propiedad['manzana'], 
+                $propiedad['villa'], 
+                $propiedad['id_urbanizacion']
+            ]);
+            $progreso_construccion[$propiedad['id']] = $stmt_progreso->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         // === COMPILAR RESULTADO ===
         $reporte = [
             'ok' => true,
@@ -192,6 +259,12 @@ try {
                 'login' => $login_stats,
                 'tiempo_promedio' => $tiempo_stats
             ],
+            'propiedades_detalle' => array_map(function($prop) use ($paquetes_adicionales, $progreso_construccion) {
+                return array_merge($prop, [
+                    'paquetes_adicionales' => $paquetes_adicionales[$prop['id']] ?? [],
+                    'progreso_construccion' => $progreso_construccion[$prop['id']] ?? []
+                ]);
+            }, $propiedades_detalle),
             'actividad_reciente' => $actividad_reciente,
             'fecha_generacion' => date('Y-m-d H:i:s')
         ];

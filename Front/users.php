@@ -98,10 +98,32 @@ if (!$token) {
     
     <!-- Action Bar -->
     <div class="action-bar">
-      <div style="display: flex; align-items: center; gap: 20px;">
+      <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
         <h3 style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #2d5a3d;">
           Lista de Usuarios
         </h3>
+        <button 
+          onclick="verReporteGeneral()" 
+          class="btn btn-success"
+          style="
+            background: #2d5a3d;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.background='#4a7c59'"
+          onmouseout="this.style.background='#2d5a3d'"
+        >
+          <i class="bi bi-graph-up-arrow"></i>
+          Reporte General
+        </button>
         <div class="filter-container" style="position: relative; display: inline-block;">
           <input 
             type="text" 
@@ -525,6 +547,11 @@ function hideDropdown() {
 // Función para ver reporte de usuario
 function verReporteUsuario(userId) {
     window.open(`reportes_usuario.php?user_id=${userId}`, '_blank');
+}
+
+// Función para ver reporte general
+function verReporteGeneral() {
+    window.open(`reportes_general_usuario.php`, '_blank');
 }
 </script>
 

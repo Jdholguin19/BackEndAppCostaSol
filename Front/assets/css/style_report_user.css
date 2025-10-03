@@ -1,0 +1,297 @@
+
+/* Estilos específicos para reportes */
+.report-container {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.report-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.report-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.report-header {
+  background: linear-gradient(135deg, #2d5a3d 0%, #4a7c59 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.metric-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #2d5a3d;
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.metric-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d5a3d;
+  margin-bottom: 0.5rem;
+}
+
+.metric-label {
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.metric-icon {
+  font-size: 2rem;
+  color: #4a7c59;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  color: #2d5a3d;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.activity-item {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid #4a7c59;
+  transition: all 0.2s ease;
+}
+
+.activity-item:hover {
+  background: #f0f9ff;
+  transform: translateX(5px);
+}
+
+.activity-type {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.activity-type.ctg {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.activity-type.pqr {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.activity-type.cita {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.progress-ring {
+  width: 80px;
+  height: 80px;
+}
+
+.progress-ring-circle {
+  fill: transparent;
+  stroke: #2d5a3d;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 600;
+  color: #2d5a3d;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Estilos para acordeón de propiedades */
+.clickable {
+  transition: all 0.3s ease;
+}
+
+.clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.propiedad-card {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #4a7c59;
+  transition: all 0.3s ease;
+}
+
+.propiedad-card:hover {
+  background: #f0f9ff;
+  transform: translateX(5px);
+}
+
+.propiedad-header {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.propiedad-title {
+  color: #2d5a3d;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.propiedad-badge {
+  background: #2d5a3d;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.propiedad-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #4a7c59;
+}
+
+.info-label {
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.progress-bar-custom {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2d5a3d 0%, #4a7c59 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.paquete-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.paquete-info h6 {
+  color: #2d5a3d;
+  margin: 0;
+  font-weight: 600;
+}
+
+.paquete-precio {
+  color: #059669;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.progreso-item {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid #2d5a3d;
+}
+
+.progreso-fecha {
+  color: #6b7280;
+  font-size: 0.875rem
+}
+
+.progreso-imagen {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.section-subtitle {
+  color: #4a7c59;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
