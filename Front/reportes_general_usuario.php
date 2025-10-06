@@ -149,86 +149,6 @@ if (!$token) {
                     </div>
                 </div>
 
-                <!-- Análisis de Actividad -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h3 class="section-title">
-                            <i class="bi bi-activity"></i>
-                            Análisis de Actividad del Sistema
-                        </h3>
-                    </div>
-
-                    <!-- Actividad Diaria -->
-                    <div class="col-lg-8 mb-4">
-                        <div class="chart-card">
-                            <h5 class="chart-title">
-                                <i class="bi bi-graph-up"></i>
-                                Actividad Diaria (Últimos 30 días)
-                            </h5>
-                            <canvas id="actividadDiariaChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Actividad por Hora -->
-                    <div class="col-lg-4 mb-4">
-                        <div class="chart-card">
-                            <h5 class="chart-title">
-                                <i class="bi bi-clock"></i>
-                                Actividad por Hora del Día
-                            </h5>
-                            <canvas id="actividadHorariaChart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Usuarios Más Activos -->
-                    <div class="col-lg-6 mb-4">
-                        <div class="chart-card">
-                            <h5 class="chart-title">
-                                <i class="bi bi-person-star"></i>
-                                Usuarios Más Activos
-                            </h5>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Usuario</th>
-                                            <th>Tipo</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="usuariosActivosTable">
-                                        <!-- Se llena dinámicamente -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Módulos Más Accedidos -->
-                    <div class="col-lg-6 mb-4">
-                        <div class="chart-card">
-                            <h5 class="chart-title">
-                                <i class="bi bi-grid-3x3-gap"></i>
-                                Módulos Más Accedidos
-                            </h5>
-                            <div class="table-responsive">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Módulo</th>
-                                            <th>Accesos</th>
-                                            <th>Usuarios</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="modulosAccesoTable">
-                                        <!-- Se llena dinámicamente -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Métricas Financieras -->
                 <div class="row mb-4">
                     <div class="col-12">
@@ -336,6 +256,86 @@ if (!$token) {
                                     <div class="metric-number" style="font-size: 1.5rem;" id="usuariosUnicos">-</div>
                                     <div class="metric-label">Usuarios Únicos</div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Análisis de Actividad -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h3 class="section-title">
+                            <i class="bi bi-activity"></i>
+                            Análisis de Actividad del Sistema
+                        </h3>
+                    </div>
+
+                    <!-- Actividad Diaria -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="chart-card">
+                            <h5 class="chart-title">
+                                <i class="bi bi-graph-up"></i>
+                                Actividad Diaria (Últimos 30 días)
+                            </h5>
+                            <canvas id="actividadDiariaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Actividad por Hora -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="chart-card">
+                            <h5 class="chart-title">
+                                <i class="bi bi-clock"></i>
+                                Actividad por Hora del Día
+                            </h5>
+                            <canvas id="actividadHorariaChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Usuarios Más Activos -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="chart-card">
+                            <h5 class="chart-title">
+                                <i class="bi bi-person-star"></i>
+                                Usuarios Más Activos
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Tipo</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usuariosActivosTable">
+                                        <!-- Se llena dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Módulos Más Accedidos -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="chart-card">
+                            <h5 class="chart-title">
+                                <i class="bi bi-grid-3x3-gap"></i>
+                                Módulos Más Accedidos
+                            </h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Módulo</th>
+                                            <th>Accesos</th>
+                                            <th>Usuarios</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="modulosAccesoTable">
+                                        <!-- Se llena dinámicamente -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
