@@ -282,6 +282,25 @@
     </div>
 </div>
 
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmation-modal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmar Pre-Orden</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Seguro que quieres Pre-Ordenar?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirm-pre-order-btn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <?php 
 $active_page = 'inicio';
@@ -703,6 +722,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Show confirmation modal
+        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmation-modal'));
+        confirmationModal.show();
+    });
+
+    // Event listener for confirm button in modal
+    document.getElementById('confirm-pre-order-btn').addEventListener('click', () => {
+        // Hide modal
+        const confirmationModal = bootstrap.Modal.getInstance(document.getElementById('confirmation-modal'));
+        confirmationModal.hide();
+
+        // Perform the pre-order
+        performPreOrder();
+    });
+
+    function performPreOrder() {
         const finalSelection = {
             propiedad_id: parseInt(propiedadId),
             kit_id: selection.kit.id,
@@ -746,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnPreOrderFinal.textContent = 'Pre-Ordenar';
             btnBackToStep4.disabled = false;
         });
-    });
+    }
 
     // --- INITIAL LOAD --- //
     function initialLoad() {
