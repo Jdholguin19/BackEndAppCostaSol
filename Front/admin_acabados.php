@@ -160,6 +160,10 @@
         padding: 6px 12px;
         font-weight: 500;
     }
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
     @media (max-width: 768px) {
         .admin-header h1 {
             font-size: 1.5rem;
@@ -183,6 +187,11 @@
         }
         .modal-body {
             padding: 20px;
+        }
+    }
+    @media (min-width: 768px) {
+        body {
+            padding-bottom: 80px;
         }
     }
 </style>
@@ -918,7 +927,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data.ok) {
                 renderComponentesTable(data.componentes);
                 populateComponentes(data.componentes); // For acabado detail modal
-                populateKitsForColorOption(data.componentes); // Wait, no, for kits
             } else {
                 alert('Error al cargar componentes: ' + data.mensaje);
             }
