@@ -202,7 +202,7 @@
 <div class="admin-header">
     <div class="container d-flex align-items-center">
         <a href="admin_menu.php" class="btn btn-link text-white me-3">
-            <i class="bi bi-arrow-left"></i> Volver
+            <i class="bi bi-arrow-left"></i>
         </a>
         <h1><i class="bi bi-gear-fill me-2"></i>Administración de Acabados</h1>
     </div>
@@ -630,6 +630,45 @@
     </div>
 </div>
 
+<!-- Edit Client Selection Modal -->
+<div class="modal fade" id="editClientSelectionModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Selección de Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editClientSelectionForm">
+                    <input type="hidden" id="editSelectionId" name="selectionId">
+                    <div class="mb-3">
+                        <label for="editSelectionKit" class="form-label">Kit Seleccionado</label>
+                        <select class="form-control" id="editSelectionKit" name="kitId" required>
+                            <option value="">Seleccionar kit</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSelectionColor" class="form-label">Color Seleccionado</label>
+                        <select class="form-control" id="editSelectionColor" name="color" required>
+                            <option value="">Seleccionar color</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Paquetes Adicionales</label>
+                        <div id="editSelectionPackages">
+                            <!-- Packages will be loaded here -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveClientSelectionBtn">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php 
 $active_page = 'inicio';
 include '../api/bottom_nav.php'; 
@@ -868,6 +907,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveComponenteBtn = document.getElementById('saveComponenteBtn');
     if (saveComponenteBtn) saveComponenteBtn.addEventListener('click', saveComponente);
 
+    const saveClientSelectionBtn = document.getElementById('saveClientSelectionBtn');
+    if (saveClientSelectionBtn) saveClientSelectionBtn.addEventListener('click', saveClientSelection);
+
     // Reset functions
     window.resetKitForm = () => {
         document.getElementById('kitForm').reset();
@@ -998,6 +1040,47 @@ document.addEventListener('DOMContentLoaded', () => {
         select.innerHTML = '<option value="">Seleccionar kit</option>';
         kits.forEach(kit => {
             select.insertAdjacentHTML('beforeend', `<option value="${kit.id}">${kit.nombre}</option>`);
+        });
+    }
+
+    function populateKitsForEdit(kits) {
+        const select = document.getElementById('editSelectionKit');
+        select.innerHTML = '<option value="">Seleccionar kit</option>';
+        kits.forEach(kit => {
+            select.insertAdjacentHTML('beforeend', `<option value="${kit.id}">${kit.nombre}</option>`);
+        });
+    }
+
+    function populateColorsForEdit(colors) {
+        const select = document.getElementById('editSelectionColor');
+        select.innerHTML = '<option value="">Seleccionar color</option>';
+        colors.forEach(color => {
+            select.insertAdjacentHTML('beforeend', `<option value="${color}">${color}</option>`);
+        });
+    }
+
+    function loadPackagesForEdit(selectedPackages) {
+        fetch('/api/admin_acabados.php?action=get_packages', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                const container = document.getElementById('editSelectionPackages');
+                container.innerHTML = '';
+                data.packages.forEach(pkg => {
+                    const isChecked = selectedPackages.includes(pkg.id);
+                    const checkbox = `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="${pkg.id}" id="pkg_${pkg.id}" ${isChecked ? 'checked' : ''}>
+                            <label class="form-check-label" for="pkg_${pkg.id}">
+                                ${pkg.nombre} - $${pkg.precio}
+                            </label>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', checkbox);
+                });
+            }
         });
     }
 
@@ -1620,6 +1703,31 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
     }
 
+    function saveClientSelection() {
+        const formData = new FormData(document.getElementById('editClientSelectionForm'));
+        const paquetes = [];
+        document.querySelectorAll('#editSelectionPackages input[type="checkbox"]:checked').forEach(cb => {
+            paquetes.push(cb.value);
+        });
+        formData.append('paquetes_adicionales', JSON.stringify(paquetes));
+
+        fetch('/api/admin_acabados.php', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                bootstrap.Modal.getInstance(document.getElementById('editClientSelectionModal')).hide();
+                loadClientSelections();
+            } else {
+                alert('Error: ' + data.mensaje);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
     // Global variables for current kit and color
     let currentKitId = null;
     let currentColor = null;
@@ -1821,8 +1929,41 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.editClientSelection = (id) => {
-        // Placeholder for editing client selection
-        alert('Funcionalidad de editar selección de cliente próximamente disponible. ID: ' + id);
+        // Load kits and colors first
+        Promise.all([
+            fetch('/api/admin_acabados.php?action=get_kits', { headers: { 'Authorization': `Bearer ${token}` } }).then(r => r.json()),
+            fetch('/api/admin_acabados.php?action=get_color_names', { headers: { 'Authorization': `Bearer ${token}` } }).then(r => r.json()),
+            fetch('/api/admin_acabados.php?action=get_packages', { headers: { 'Authorization': `Bearer ${token}` } }).then(r => r.json())
+        ])
+        .then(([kitsData, colorsData, packagesData]) => {
+            if (kitsData.ok && colorsData.ok && packagesData.ok) {
+                populateKitsForEdit(kitsData.kits);
+                populateColorsForEdit(colorsData.colors);
+                // Now load selection data
+                return fetch(`/api/admin_acabados.php?action=get_client_selection&id=${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(r => r.json());
+            } else {
+                throw new Error('Error loading options');
+            }
+        })
+        .then(data => {
+            if (data.ok) {
+                const selection = data.selection;
+                document.getElementById('editSelectionId').value = selection.id;
+                document.getElementById('editSelectionKit').value = selection.kit_id;
+                document.getElementById('editSelectionColor').value = selection.color;
+                // Load packages checkboxes
+                loadPackagesForEdit(selection.packages || []);
+                new bootstrap.Modal(document.getElementById('editClientSelectionModal')).show();
+            } else {
+                alert('Error al cargar selección: ' + data.mensaje);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar datos');
+        });
     };
 
     window.deleteClientSelection = (id) => {

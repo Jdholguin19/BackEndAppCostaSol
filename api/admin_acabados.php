@@ -103,6 +103,9 @@ function handleGet($conn, $action) {
         case 'get_client_selections':
             getClientSelections($conn);
             break;
+        case 'get_client_selection':
+            getClientSelection($conn);
+            break;
         default:
             http_response_code(400);
             echo json_encode(['ok' => false, 'mensaje' => 'Acción no válida']);
@@ -143,6 +146,9 @@ function handlePost($conn, $action) {
             break;
         case 'delete_client_selection':
             deleteClientSelection($conn);
+            break;
+        case 'save_client_selection':
+            saveClientSelection($conn);
             break;
         default:
             http_response_code(400);
@@ -631,6 +637,38 @@ function getClientSelections($conn) {
     echo json_encode(['ok' => true, 'selections' => $selections]);
 }
 
+function getClientSelection($conn) {
+    $id = filter_var($_GET['id'] ?? null, FILTER_VALIDATE_INT);
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'mensaje' => 'ID requerido']);
+        return;
+    }
+    
+    $stmt = $conn->prepare("
+        SELECT p.id, p.acabado_kit_seleccionado_id AS kit_id, p.acabado_color_seleccionado AS color
+        FROM propiedad p
+        WHERE p.id = :id
+    ");
+    $stmt->execute([':id' => $id]);
+    $selection = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$selection) {
+        http_response_code(404);
+        echo json_encode(['ok' => false, 'mensaje' => 'Selección no encontrada']);
+        return;
+    }
+    
+    // Get selected packages
+    $stmt_packages = $conn->prepare("SELECT paquete_id FROM propiedad_paquetes_adicionales WHERE propiedad_id = :id");
+    $stmt_packages->execute([':id' => $id]);
+    $packages = $stmt_packages->fetchAll(PDO::FETCH_COLUMN);
+    
+    $selection['packages'] = $packages;
+    
+    echo json_encode(['ok' => true, 'selection' => $selection]);
+}
+
 function getColorNames($conn) {
     $stmt = $conn->prepare("SELECT DISTINCT color_nombre FROM kit_color_opcion ORDER BY color_nombre ASC");
     $stmt->execute();
@@ -715,6 +753,50 @@ function deleteClientSelection($conn) {
         $conn->rollBack();
         http_response_code(500);
         echo json_encode(['ok' => false, 'mensaje' => 'Error al eliminar selección']);
+    }
+}
+
+function saveClientSelection($conn) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $id = filter_var($input['selectionId'] ?? null, FILTER_VALIDATE_INT);
+    $kit_id = filter_var($input['kitId'] ?? null, FILTER_VALIDATE_INT);
+    $color = filter_var($input['color'] ?? null, FILTER_SANITIZE_STRING);
+    $paquetes = $input['paquetes_adicionales'] ?? [];
+    
+    if (!$id || !$kit_id || !$color) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'mensaje' => 'Datos incompletos']);
+        return;
+    }
+    
+    try {
+        $conn->beginTransaction();
+        
+        // Update propiedad
+        $stmt_update = $conn->prepare("UPDATE propiedad SET acabado_kit_seleccionado_id = :kit_id, acabado_color_seleccionado = :color WHERE id = :id");
+        $stmt_update->execute([':kit_id' => $kit_id, ':color' => $color, ':id' => $id]);
+        
+        // Delete existing packages
+        $stmt_delete_paquetes = $conn->prepare("DELETE FROM propiedad_paquetes_adicionales WHERE propiedad_id = :id");
+        $stmt_delete_paquetes->execute([':id' => $id]);
+        
+        // Insert new packages
+        if (!empty($paquetes)) {
+            $stmt_insert_paquete = $conn->prepare("INSERT INTO propiedad_paquetes_adicionales (propiedad_id, paquete_id) VALUES (:propiedad_id, :paquete_id)");
+            foreach ($paquetes as $paquete_id) {
+                $paquete_id_clean = filter_var($paquete_id, FILTER_VALIDATE_INT);
+                if ($paquete_id_clean) {
+                    $stmt_insert_paquete->execute([':propiedad_id' => $id, ':paquete_id' => $paquete_id_clean]);
+                }
+            }
+        }
+        
+        $conn->commit();
+        echo json_encode(['ok' => true, 'mensaje' => 'Selección actualizada exitosamente']);
+    } catch (Exception $e) {
+        $conn->rollBack();
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'mensaje' => 'Error al actualizar selección']);
     }
 }
 ?>
