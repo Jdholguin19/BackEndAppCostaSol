@@ -100,6 +100,9 @@ function handleGet($conn, $action) {
         case 'get_all_acabado_details':
             getAllAcabadoDetails($conn);
             break;
+        case 'get_client_selections':
+            getClientSelections($conn);
+            break;
         default:
             http_response_code(400);
             echo json_encode(['ok' => false, 'mensaje' => 'Acción no válida']);
@@ -137,6 +140,9 @@ function handlePost($conn, $action) {
             break;
         case 'delete_componente':
             deleteComponente($conn);
+            break;
+        case 'delete_client_selection':
+            deleteClientSelection($conn);
             break;
         default:
             http_response_code(400);
@@ -598,6 +604,33 @@ function getAllColorOptions($conn) {
     echo json_encode(['ok' => true, 'options' => $options]);
 }
 
+function getClientSelections($conn) {
+    $stmt = $conn->prepare("
+        SELECT p.id, u.nombres, u.apellidos, ak.nombre AS kit_nombre, 
+               p.acabado_color_seleccionado AS opciones_color,
+               GROUP_CONCAT(pa.nombre SEPARATOR ', ') AS detalles_acabado,
+               p.fecha_insertado AS fecha_seleccion
+        FROM propiedad p
+        JOIN usuario u ON p.id_usuario = u.id
+        JOIN acabado_kit ak ON p.acabado_kit_seleccionado_id = ak.id
+        LEFT JOIN propiedad_paquetes_adicionales ppa ON p.id = ppa.propiedad_id
+        LEFT JOIN paquetes_adicionales pa ON ppa.paquete_id = pa.id
+        WHERE p.acabado_kit_seleccionado_id IS NOT NULL
+        GROUP BY p.id
+        ORDER BY p.fecha_insertado DESC
+    ");
+    $stmt->execute();
+    $selections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Format cliente_nombre
+    foreach ($selections as &$selection) {
+        $selection['cliente_nombre'] = $selection['nombres'] . ' ' . $selection['apellidos'];
+        unset($selection['nombres'], $selection['apellidos']);
+    }
+    
+    echo json_encode(['ok' => true, 'selections' => $selections]);
+}
+
 function getColorNames($conn) {
     $stmt = $conn->prepare("SELECT DISTINCT color_nombre FROM kit_color_opcion ORDER BY color_nombre ASC");
     $stmt->execute();
@@ -653,5 +686,35 @@ function uploadImage($file, $subdir) {
 
     error_log('Error al mover archivo subido para ' . $subdir . ': ' . $file['name'] . ' to ' . $upload_path);
     return false;
+}
+
+function deleteClientSelection($conn) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $id = filter_var($input['id'] ?? null, FILTER_VALIDATE_INT);
+    
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['ok' => false, 'mensaje' => 'ID de selección requerido']);
+        return;
+    }
+    
+    try {
+        $conn->beginTransaction();
+        
+        // Delete paquetes adicionales
+        $stmt_delete_paquetes = $conn->prepare("DELETE FROM propiedad_paquetes_adicionales WHERE propiedad_id = :id");
+        $stmt_delete_paquetes->execute([':id' => $id]);
+        
+        // Reset kit and color in propiedad
+        $stmt_update_propiedad = $conn->prepare("UPDATE propiedad SET acabado_kit_seleccionado_id = NULL, acabado_color_seleccionado = NULL WHERE id = :id");
+        $stmt_update_propiedad->execute([':id' => $id]);
+        
+        $conn->commit();
+        echo json_encode(['ok' => true, 'mensaje' => 'Selección eliminada exitosamente']);
+    } catch (Exception $e) {
+        $conn->rollBack();
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'mensaje' => 'Error al eliminar selección']);
+    }
 }
 ?>

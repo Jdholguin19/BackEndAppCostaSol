@@ -200,7 +200,10 @@
 
 <!-- Header -->
 <div class="admin-header">
-    <div class="container">
+    <div class="container d-flex align-items-center">
+        <a href="admin_menu.php" class="btn btn-link text-white me-3">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
         <h1><i class="bi bi-gear-fill me-2"></i>Administración de Acabados</h1>
     </div>
 </div>
@@ -223,6 +226,9 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="acabado-details-tab" data-bs-toggle="tab" data-bs-target="#acabado-details" type="button" role="tab">Acabado Detalles</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="client-selections-tab" data-bs-toggle="tab" data-bs-target="#client-selections" type="button" role="tab">Selección de Clientes</button>
             </li>
         </ul>
     </div>
@@ -384,8 +390,36 @@
                 </div>
             </div>
         </div>
+
+        <!-- Client Selections Tab -->
+        <div class="tab-pane fade" id="client-selections" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Selección de Clientes</h3>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="clientSelectionsTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Kit Seleccionado</th>
+                                    <th>Opciones de Color</th>
+                                    <th>Detalles de Acabado</th>
+                                    <th>Fecha de Selección</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientSelectionsTableBody">
+                                <!-- Client Selections will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
 <!-- Add/Edit Kit Modal -->
 <div class="modal fade" id="addKitModal" tabindex="-1">
@@ -815,6 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadComponentes();
     loadColorOptions();
     loadAcabadoDetails();
+    loadClientSelections();
     loadColors();
 
     // Event listeners
@@ -996,6 +1031,21 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
     }
 
+    function loadClientSelections() {
+        fetch('/api/admin_acabados.php?action=get_client_selections', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                renderClientSelectionsTable(data.selections);
+            } else {
+                alert('Error al cargar selecciones de clientes: ' + data.mensaje);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
     function loadColors() {
         fetch('/api/admin_acabados.php?action=get_color_names', {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -1148,6 +1198,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteAcabadoDetail(${detail.id})">
                             <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function renderClientSelectionsTable(selections) {
+        const tbody = document.getElementById('clientSelectionsTableBody');
+        tbody.innerHTML = '';
+        selections.forEach(selection => {
+            const row = `
+                <tr>
+                    <td>${selection.id}</td>
+                    <td>${selection.cliente_nombre}</td>
+                    <td>${selection.kit_nombre}</td>
+                    <td>${selection.opciones_color || 'N/A'}</td>
+                    <td>${selection.detalles_acabado || 'N/A'}</td>
+                    <td>${selection.fecha_seleccion}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick="editClientSelection(${selection.id})">
+                            <i class="bi bi-pencil"></i> Actualizar
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteClientSelection(${selection.id})">
+                            <i class="bi bi-trash"></i> Eliminar
                         </button>
                     </td>
                 </tr>
@@ -1737,6 +1813,32 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 if (data.ok) {
                     loadColorOptions();
+                } else {
+                    alert('Error: ' + data.mensaje);
+                }
+            });
+        }
+    };
+
+    window.editClientSelection = (id) => {
+        // Placeholder for editing client selection
+        alert('Funcionalidad de editar selección de cliente próximamente disponible. ID: ' + id);
+    };
+
+    window.deleteClientSelection = (id) => {
+        if (confirm('¿Estás seguro de eliminar esta selección de cliente?')) {
+            fetch('/api/admin_acabados.php', {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action: 'delete_client_selection', id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    loadClientSelections();
                 } else {
                     alert('Error: ' + data.mensaje);
                 }
