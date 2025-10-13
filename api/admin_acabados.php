@@ -291,6 +291,8 @@ function deleteKit($conn) {
 }
 
 function savePackage($conn) {
+    error_log('savePackage called, FILES: ' . print_r($_FILES, true));
+    error_log('POST: ' . print_r($_POST, true));
     $id = $_POST['packageId'] ?? null;
     $nombre = trim($_POST['nombre'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
@@ -305,18 +307,33 @@ function savePackage($conn) {
 
     $fotos_json = null;
     $fotos = [];
-    if (isset($_FILES['fotos']) && !empty($_FILES['fotos']['tmp_name'][0])) {
-        foreach ($_FILES['fotos']['tmp_name'] as $key => $tmp_name) {
-            if ($_FILES['fotos']['error'][$key] === UPLOAD_ERR_OK) {
-                $uploaded = uploadImage([
-                    'tmp_name' => $tmp_name,
-                    'name' => $_FILES['fotos']['name'][$key],
-                    'type' => $_FILES['fotos']['type'][$key],
-                    'size' => $_FILES['fotos']['size'][$key]
-                ], 'packages');
-                if ($uploaded) {
-                    $fotos[] = $uploaded;
+    if (isset($_FILES['fotos'])) {
+        // Normalize to array of files
+        $files = [];
+        if (!is_array($_FILES['fotos']['tmp_name'])) {
+            // Single file
+            if ($_FILES['fotos']['error'] === UPLOAD_ERR_OK) {
+                $files[] = $_FILES['fotos'];
+            }
+        } else {
+            // Multiple files
+            foreach ($_FILES['fotos']['tmp_name'] as $key => $tmp_name) {
+                if ($_FILES['fotos']['error'][$key] === UPLOAD_ERR_OK) {
+                    $files[] = [
+                        'tmp_name' => $_FILES['fotos']['tmp_name'][$key],
+                        'name' => $_FILES['fotos']['name'][$key],
+                        'type' => $_FILES['fotos']['type'][$key],
+                        'size' => $_FILES['fotos']['size'][$key],
+                        'error' => $_FILES['fotos']['error'][$key]
+                    ];
                 }
+            }
+        }
+        // Upload each file
+        foreach ($files as $file) {
+            $uploaded = uploadImage($file, 'paquetes');
+            if ($uploaded) {
+                $fotos[] = $uploaded;
             }
         }
     }
