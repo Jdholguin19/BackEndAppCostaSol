@@ -4,11 +4,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menú principal</title>
+<title>Menú Administrativo | CostaSol</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link href="assets/css/style_main2.css" rel="stylesheet">
+<link href="../assets/css/style_main2.css" rel="stylesheet">
 
 </head>
 <body>
@@ -32,7 +32,7 @@
 <!-- Main Content -->
 <div class="main-content">
   <div class="Titulo">
-    <p><button class="back-button" id="btnBack"><i class="bi bi-arrow-left"></i></button> Volver</p>
+    <p><button class="back-button" id="btnBack"><i class="bi bi-arrow-left"></i></button> Menú Administrativo</p>
   </div>
 
   <!-- Module Grid -->
@@ -58,7 +58,7 @@
 
 <?php 
 $active_page = 'inicio';
-include '../api/bottom_nav.php'; 
+include '../../api/bottom_nav.php'; 
 ?>
 
 
@@ -67,14 +67,15 @@ include '../api/bottom_nav.php';
   console.log('Valor en localStorage para cs_usuario:', localStorage.getItem('cs_usuario')); // Registro
   const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
   if (!u.id) location.href = 'login_front.php';
+  if (!u.is_responsable) location.href = '../menu2.php'; // Redirigir si no es responsable
 
   const is_admin_responsible = u.is_responsable; // Modificado: es verdadero para cualquier responsable
 
   /* ---------- Endpoints ---------- */
-  const API_NEWS  = '../api/noticias.php?limit=10';
-  const API_MENU  = is_admin_responsible ? '../api/menu.php' : '../api/menu.php?role_id=' + u.rol_id;
-  const API_PROP  = '../api/obtener_propiedades.php?id_usuario=' + u.id;
-  const API_FASE  = '../api/propiedad_fase.php?id_propiedad=';
+  const API_NEWS  = '../../api/noticias.php?limit=10';
+  const API_MENU  = '../../api/menu.php';
+  const API_PROP  = '../../api/obtener_propiedades.php?id_usuario=' + u.id;
+  const API_FASE  = '../../api/propiedad_fase.php?id_propiedad=';
 
   /* ---------- Welcome ---------- */
   document.getElementById('welcomeName').textContent = `Hola, ${u.nombres || u.nombre}`;
@@ -107,7 +108,7 @@ include '../api/bottom_nav.php';
 
   async function logModuleAccess(menuId, menuName, token) {
     try {
-      await fetch('../api/log_module_access.php', {
+      await fetch('../../api/log_module_access.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,29 +140,7 @@ include '../api/bottom_nav.php';
         location.href = 'garantias.php';              
         return;
     }*/
-
-    if ((menu.nombre || '').toUpperCase().includes('ACABADOS')) {
-        const propiedadId = localStorage.getItem('cs_propiedad_id');
-        if (!propiedadId) {
-            alert('Por favor, regrese al menú principal y seleccione una propiedad primero.');
-            return;
-        }
-        location.href = `seleccion_acabados.php?propiedad_id=${propiedadId}`;
-        return;
-    }
-
-    if ( menu.id === 3 ||
-        (menu.nombre || '').toUpperCase().includes('VISITA') ){
-        location.href = 'citas.php';          // <<<<<<
-        return;
-    }
-
-
-    if ( menu.id === 6 ||
-        (menu.nombre || '').toUpperCase().includes('GARANTIAS') ){
-        location.href = 'garantias.php';          // <<<<<<
-        return;
-    }    
+ 
 
       if ( menu.id === 7 ||
         (menu.nombre || '').toUpperCase().includes('CALENDARIO') ){
@@ -169,125 +148,62 @@ include '../api/bottom_nav.php';
         return;
     }
 
-      if ( menu.id === 8 ||
-        (menu.nombre || '').toUpperCase().includes('NOTIFICACIONES') ){
-        location.href = 'notificaciones.php';          // <<<<<<
-        return;
-    }  
-
-
-      if ( menu.id === 9 ||
-        (menu.nombre || '').toUpperCase().includes('PQR') ){
-        location.href = 'pqr/pqr.php';          // <<<<<<
-        return;
-    }  
-
 
     if ( menu.id === 10 ||
         (menu.nombre || '').toUpperCase().includes('USER') ){
-        location.href = 'users.php';          // <<<<<<
+        location.href = '../users.php';          // <<<<<<
         return;
     }
 
-    if ( menu.id === 11 ||
-        (menu.nombre || '').toUpperCase().includes('MCM') ){
-        location.href = '../api/mcm.php';          // <<<<<<
-        return;
-    }
-
-
-    if ( menu.id === 12 ||
-        (menu.nombre || '').toUpperCase().includes('VEGETAL') ){
-        location.href = '../api/paletavegetal.php';          // <<<<<<
-        return;
-    }
 
 
     if ( menu.id === 13 ||
         (menu.nombre || '').toUpperCase().includes('NOTICIA') ){
-        location.href = 'noticia.php';          // <<<<<<
+        location.href = '../noticia.php';          // <<<<<<
         return;
     }
 
 
     if ( menu.id === 14 ||
         (menu.nombre || '').toUpperCase().includes('AUDITORIA') ){
-        location.href = '../auditoria/dashboard.php';          // <<<<<<
+        location.href = '../../auditoria/dashboard.php';          // <<<<<<
         return;
     }
 
     if ( menu.id === 16 ||
-        (menu.nombre || '').toUpperCase().includes('ADMIN ACABADOS') ){
-        location.href = 'admin_acabados.php';          // <<<<<<
+        (menu.nombre || '').toUpperCase().includes('ACABADOS') ){
+        location.href = '../admin_acabados.php';          // <<<<<<
         return;
     }
 
-    if ( menu.id === 17 ||
-        (menu.nombre || '').toUpperCase().includes('ADMIN MENU') ){
-        location.href = 'admin/admin_menu.php';          // <<<<<<
-        return;
-    }
+
 
     // …aquí podrías despachar otros módulos por nombre o id
     alert('Abrir módulo '+menu.id);
   }
 
   /* ---------- Menú ---------- */
-  checkGarantiasStatus().then(hasActiveGarantias => {
-    const token = localStorage.getItem('cs_token');
-    fetch(API_MENU, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    }).then(r=>r.json()).then(({ok,menus})=>{
+  // No necesitamos check de garantías para admin
+  const token = localStorage.getItem('cs_token');
+  fetch(API_MENU, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then(r=>r.json()).then(({ok,menus})=>{
       const grid=document.getElementById('menuGrid');
       document.getElementById('menuSpinner').remove();
       if(!ok){grid.textContent='Error menú';return;}
       
       grid.innerHTML = ''; // Clear spinner
 
-      // Filtramos el menú con id 15 (Ver más). Se convierte el ID a número para asegurar la comparación.
-      const menusFiltrados = menus.filter(menu => Number(menu.id) !== 15);
+      // Filtrar solo menús de responsables: IDs 10,13,14,16,17
+      const adminMenuIds = [10, 13, 14, 16];
+      const menusFiltrados = menus.filter(menu => adminMenuIds.includes(Number(menu.id)));
       
       menusFiltrados.forEach(m=>{
-        // Condición para ocultar el módulo a los residentes
-        const isAcabadosModule = m.id === 1;
-        const isResidente = u.rol_id === 2;
-        if (isAcabadosModule && isResidente) {
-            return; // No renderizar este módulo
-        }
-
-        // Mostrar menús de admin solo para responsables
-        const isAdminMenu = [10, 13, 14, 16].includes(Number(m.id));
-        if (isAdminMenu && is_admin_responsible) {
-            return; // No mostrar menús admin en menu2.php, solo en admin_menu.php
-        }
-
-        // Mostrar Admin Menu solo para responsables
-        const isAdminMenuLink = Number(m.id) === 17;
-        if (isAdminMenuLink && !is_admin_responsible) {
-            return; // Solo responsables ven Admin Menu
-        }
-
-        const isGarantiasModule = (Number(m.id) === 6);
-        const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
-        const shouldDisableGarantias = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
-
         const card = document.createElement('div');
         card.className='menu-card';
-
-        if (shouldDisableGarantias) {
-            card.classList.add('disabled-card');
-            card.onclick = () => {
-                if (isGarantiasModule) {
-                    alert('Todas tus garantías han expirado.');
-                } else if (isCtgModule) {
-                    alert('El módulo CTG está desactivado porque su garantía ha expirado.');
-                }
-            };
-        } else {
-            card.onclick = () => openModule(m);
-        }
+        card.onclick = () => openModule(m);
         
         const iconElement = icon(m.url_icono);
         card.appendChild(iconElement);
@@ -305,45 +221,6 @@ include '../api/bottom_nav.php';
         grid.appendChild(card);
       });
     });
-  });
-
-  async function checkGarantiasStatus() {
-    const token = localStorage.getItem('cs_token');
-    if (!token) return false; // No token, assume no active warranties for safety
-
-    try {
-        const response = await fetch('../api/garantias.php', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        if (!data.ok || !data.garantias || data.garantias.length === 0) {
-            return false; // No data or no warranties, so no active warranties
-        }
-
-        const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0); // Normalize to start of day for comparison
-
-        for (const garantia of data.garantias) {
-            // Parse vigencia string "dd/mm/yyyy" to Date object
-            const parts = garantia.vigencia.split('/');
-            const vigenciaDate = new Date(parts[2], parts[1] - 1, parts[0]); // Year, Month (0-indexed), Day
-            vigenciaDate.setHours(0, 0, 0, 0); // Normalize
-
-            if (vigenciaDate >= currentDate) {
-                return true; // Found at least one active warranty
-            }
-        }
-        return false; // All warranties have expired
-    } catch (error) {
-        console.error('Error checking garantias status:', error);
-        return false; // On error, assume no active warranties
-    }
-  }
 
   /* ---------- Logout ---------- */
 
@@ -355,7 +232,7 @@ include '../api/bottom_nav.php';
       return;
     } 
     try { 
-      const response = await fetch('../api/logout.php', {
+      const response = await fetch('../../api/logout.php', {
         method: 'POST', 
         headers: { 
           'Content-Type': 'application/json'
@@ -378,7 +255,7 @@ include '../api/bottom_nav.php';
   }
 
 /* ---------- navegación ---------- */
-  document.getElementById('btnBack').onclick  = () => location.href='menu_front.php';
+  document.getElementById('btnBack').onclick  = () => location.href='../menu2.php';
 
 
   // Función para cerrar sesión (puedes llamarla desde un botón)
