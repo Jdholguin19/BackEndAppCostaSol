@@ -762,11 +762,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Hide the button container
                 btnPreOrderFinal.parentElement.style.display = 'none';
 
-                // Display a success message on the page
-                const successMessage = document.createElement('div');
-                successMessage.className = 'alert alert-success text-center mt-4';
-                successMessage.innerHTML = '<strong>¡Éxito!</strong> Tu selección ha sido guardada.';
-                finalSummaryContainer.insertAdjacentElement('afterend', successMessage);
+                // Display the final message
+                const finalMessage = document.createElement('div');
+                finalMessage.className = 'alert alert-info text-center mt-4';
+                finalMessage.textContent = 'Dentro de poco te contactaremos para confirmar tu selección y continuar con el proceso. Si tienes alguna pregunta, no dudes en contactarnos. ¡Gracias!';
+                finalSummaryContainer.insertAdjacentElement('afterend', finalMessage);
             } else {
                 alert(`Error al guardar: ${data.mensaje || 'Error desconocido.'}`);
                 btnPreOrderFinal.disabled = false;

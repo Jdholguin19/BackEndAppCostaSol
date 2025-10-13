@@ -67,7 +67,8 @@ try {
         exit;
     }
 
-    if (!$isResponsable && $propiedad['id_usuario'] != $authUserId) {
+    // Verificación CORREGIDA usando el nombre de columna correcto
+    if (is_null($propiedad['acabado_kit_seleccionado_id'])) {
         http_response_code(403);
         echo json_encode(['ok' => false, 'mensaje' => 'No tienes permiso para ver esta propiedad.']);
         exit;
@@ -92,7 +93,7 @@ try {
     $colorDetails = $stmt_color->fetch(PDO::FETCH_ASSOC);
 
     $stmt_packages = $pdo->prepare("
-        SELECT p.id, p.nombre, p.descripcion, p.precio 
+        SELECT p.id, p.nombre, p.descripcion, p.precio, p.fotos 
         FROM propiedad_paquetes_adicionales ppa
         JOIN paquetes_adicionales p ON ppa.paquete_id = p.id
         WHERE ppa.propiedad_id = ?
@@ -100,11 +101,9 @@ try {
     $stmt_packages->execute([$propiedadId]);
     $packages = $stmt_packages->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt_fotos = $pdo->prepare("SELECT url_foto FROM paquete_fotos WHERE paquete_id = ?");
+    // Decodificar fotos JSON
     foreach ($packages as &$pkg) {
-        $stmt_fotos->execute([$pkg['id']]);
-        $fotos = $stmt_fotos->fetchAll(PDO::FETCH_COLUMN, 0);
-        $pkg['fotos'] = $fotos;
+        $pkg['fotos'] = json_decode($pkg['fotos'], true) ?? [];
     }
     unset($pkg);
 

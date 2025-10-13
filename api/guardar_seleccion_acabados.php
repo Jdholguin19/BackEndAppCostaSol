@@ -8,6 +8,7 @@ require_once __DIR__ . '/../correos/EnviarCorreoNotificacionResponsable.php';
 
 // --- Lógica de Autenticación por Token ---
 $auth_user_id = null;
+$auth_is_responsable = false;
 $headers = getallheaders();
 $authHeader = $headers['Authorization'] ?? '';
 
@@ -15,11 +16,12 @@ if (strpos($authHeader, 'Bearer ') === 0) {
     $token = substr($authHeader, 7);
     try {
         $conn_auth = DB::getDB();
-        $stmt = $conn_auth->prepare('SELECT id FROM usuario WHERE token = :token AND rol_id IN (1, 2)');
+        $stmt = $conn_auth->prepare("SELECT id, 'usuario' as tipo FROM usuario WHERE token = :token AND rol_id IN (1, 2) UNION SELECT id, 'responsable' as tipo FROM responsable WHERE token = :token");
         $stmt->execute([':token' => $token]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($user) {
             $auth_user_id = (int)$user['id'];
+            $auth_is_responsable = $user['tipo'] === 'responsable';
         }
     } catch (Exception $e) {
         // Silencio en caso de error
@@ -60,25 +62,34 @@ if (!is_array($paquetes_adicionales_ids)) {
 $conn = DB::getDB();
 
 try {
-    $stmt_verify = $conn->prepare("SELECT id FROM propiedad WHERE id = :propiedad_id AND id_usuario = :user_id");
-    $stmt_verify->execute([':propiedad_id' => $propiedad_id, ':user_id' => $auth_user_id]);
-    if ($stmt_verify->fetch() === false) {
-        http_response_code(403);
-        echo json_encode(['ok' => false, 'mensaje' => 'No tiene permiso para modificar esta propiedad.']);
-        exit;
+    if (!$auth_is_responsable) {
+        $stmt_verify = $conn->prepare("SELECT id FROM propiedad WHERE id = :propiedad_id AND id_usuario = :user_id");
+        $stmt_verify->execute([':propiedad_id' => $propiedad_id, ':user_id' => $auth_user_id]);
+        if ($stmt_verify->fetch() === false) {
+            http_response_code(403);
+            echo json_encode(['ok' => false, 'mensaje' => 'No tiene permiso para modificar esta propiedad.']);
+            exit;
+        }
     }
 
     $conn->beginTransaction();
 
+    $update_where = "WHERE id = :propiedad_id";
+    if (!$auth_is_responsable) {
+        $update_where .= " AND id_usuario = :user_id";
+    }
     $stmt_update = $conn->prepare(
-        "UPDATE propiedad SET acabado_kit_seleccionado_id = :kit_id, acabado_color_seleccionado = :color WHERE id = :propiedad_id AND id_usuario = :user_id"
+        "UPDATE propiedad SET acabado_kit_seleccionado_id = :kit_id, acabado_color_seleccionado = :color $update_where"
     );
-    $stmt_update->execute([
+    $params = [
         ':kit_id' => $kit_id,
         ':color' => $color_nombre,
-        ':propiedad_id' => $propiedad_id,
-        ':user_id' => $auth_user_id
-    ]);
+        ':propiedad_id' => $propiedad_id
+    ];
+    if (!$auth_is_responsable) {
+        $params[':user_id'] = $auth_user_id;
+    }
+    $stmt_update->execute($params);
 
     $stmt_delete_paquetes = $conn->prepare("DELETE FROM propiedad_paquetes_adicionales WHERE propiedad_id = :propiedad_id");
     $stmt_delete_paquetes->execute([':propiedad_id' => $propiedad_id]);
