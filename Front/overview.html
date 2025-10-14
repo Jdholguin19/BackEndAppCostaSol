@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Overview de la Aplicación</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc; --fg: #0f172a; --card: #ffffff; --border: #e5e7eb; --hover: #f1f5f9; --badge-bg: #e5e7eb; --badge-fg: #0f172a; --chip-bg: #f8fafc; --chip-border: #e5e7eb;
+    }
+    body[data-theme="dark"] {
+      --bg: #0f172a; --fg: #e5e7eb; --card: #111827; --border: #1f2937; --hover: #0b1220; --badge-bg: #1f2937; --badge-fg: #93c5fd; --chip-bg: #0b1220; --chip-border: #1f2937;
+    }
+    body { background: var(--bg); color: var(--fg); }
+    .page { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+    .card-header { padding: 14px 16px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .card-header:hover { background: var(--hover); }
+    .card-body { padding: 16px; border-top: 1px solid var(--border); display: none; }
+    .card.open .card-body { display: block; }
+    pre { background: var(--hover); padding: 12px; border-radius: 8px; overflow: auto; }
+    .badge { background: var(--badge-bg); color: var(--badge-fg); }
+    .endpoint { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .chip { display: inline-block; padding: 6px 10px; border-radius: 16px; background: var(--chip-bg); border: 1px solid var(--chip-border); margin: 2px 6px 8px 0; font-size: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    @media (max-width: 992px){ .grid { grid-template-columns: 1fr; } }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    // Evitar render en contenedores ocultos y manejar errores de forma segura
+    let currentTheme = (localStorage.getItem('overview_theme') || 'light');
+    mermaid.initialize({ startOnLoad: false, theme: currentTheme === 'dark' ? 'dark' : 'default' });
+
+    async function safeRender(el){
+      const code = (el.dataset.src || '').trim();
+      if (!code) return;
+      try {
+        // Validar primero para evitar UnknownDiagramError por contenido no-Mermaid
+        mermaid.parse(code);
+        const id = 'mmd-' + Math.random().toString(36).slice(2);
+        const out = await mermaid.render(id, code);
+        el.innerHTML = out.svg;
+        el.setAttribute('data-processed', 'true');
+      } catch (err) {
+        console.error('Mermaid parse/render falló', err);
+        // Fallback: mostrar el código original para depuración
+        const safe = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        el.innerHTML = '<pre class="mermaid-error">'+ safe +'</pre>';
+      }
+    }
+
+    async function renderVisibleDiagrams(container){
+      const diagrams = Array.from(container.querySelectorAll('.mermaid'));
+      const toRender = diagrams.filter(el => !el.hasAttribute('data-processed') && el.offsetParent !== null);
+      await Promise.allSettled(toRender.map(el => safeRender(el)));
+    }
+
+    async function toggleCard(id){
+      const card = document.getElementById(id);
+      const willOpen = !card.classList.contains('open');
+      card.classList.toggle('open');
+      if (willOpen) {
+        // Renderizar al abrir para evitar NaN por display:none
+        await renderVisibleDiagrams(card);
+      }
+    }
+
+    async function applyTheme(theme){
+      currentTheme = theme;
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem('overview_theme', theme);
+      mermaid.initialize({ startOnLoad: false, theme: theme === 'dark' ? 'dark' : 'default' });
+      // Forzar re-render
+      document.querySelectorAll('.mermaid').forEach(el => {
+        if (!el.dataset.src) el.dataset.src = (el.textContent || '').trim();
+        el.innerHTML = el.dataset.src;
+        el.removeAttribute('data-processed');
+      });
+      const openCards = document.querySelectorAll('.card.open');
+      for (const card of openCards) { await renderVisibleDiagrams(card); }
+      const icon = document.querySelector('#themeToggle i');
+      if (icon) icon.className = theme === 'dark' ? 'bi bi-moon' : 'bi bi-sun';
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Guardar el código original para el fallback ANTES de aplicar tema
+      document.querySelectorAll('.mermaid').forEach(el => {
+        el.dataset.src = (el.textContent || '').trim();
+      });
+      // Configurar tema inicial
+      await applyTheme(currentTheme);
+      // Renderizar solo los diagramas visibles inicialmente
+      const openCards = document.querySelectorAll('.card.open');
+      for (const card of openCards) {
+        await renderVisibleDiagrams(card);
+      }
+      // Toggle de tema
+      const toggle = document.getElementById('themeToggle');
+      toggle?.addEventListener('click', () => applyTheme(currentTheme === 'dark' ? 'light' : 'dark'));
+    });
+  </script>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <button class="btn btn-outline-light" onclick="history.back()"><i class="bi bi-arrow-left"></i></button>
+      <h2 class="m-0">Overview de la Aplicación</h2>
+      <span class="badge ms-2">Interactivo • Diagramas</span>
+      <div class="ms-auto d-flex align-items-center gap-2">
+        <button id="themeToggle" class="btn btn-outline-secondary btn-sm" title="Cambiar tema"><i class="bi bi-sun"></i></button>
+      </div>
+    </div>
+
+    <!-- Resumen General -->
+    <div id="card-overview" class="card open">
+      <div class="card-header" onclick="toggleCard('card-overview')">
+        <i class="bi bi-diagram-3"></i>
+        <strong>Arquitectura y Módulos</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+graph TD
+  A[Front/menu_front.php] --> B[Menu dinamico api/menu.php]
+  A --> C[CTG Front]
+  A --> D[PQR Front]
+  A --> E[Citas y Calendario]
+  A --> F[Notificaciones]
+  A --> G[Perfil]
+  A --> H[Usuarios responsables]
+  A --> I[Noticias]
+
+  subgraph CTG
+    C1[ctg.php] --> C2[ctg_detalle.php]
+    C1 --> C3[ctg_nuevo.php]
+    C2 --> C4[api/ctg/*]
+  end
+
+  subgraph PQR
+    D1[pqr.php] --> D2[pqr_detalle.php]
+    D1 --> D3[pqr_nuevo.php]
+    D2 --> D4[api/pqr/*]
+  end
+
+  subgraph Citas
+    E1[citas.php] --> E2[cita_nueva.php]
+    E1 --> E3[cita_responsable.php]
+    E1 --> E4[panel_calendario.php]
+    E2 --> E5[api/cita/*]
+    E4 --> E6[api/calendario_responsable.php]
+    E6 -.-> E7[Outlook Graph]
+  end
+
+  subgraph Notificaciones
+    F1[Front/notificaciones.php] --> F2[api/notificaciones.php]
+    A --> F3[api/notificaciones_count.php]
+    C2 --> F4[api/notificaciones_mark_read.php]
+    A --> F5[api/update_player_id.php]
+  end
+
+  subgraph Integraciones
+    K1[Kiss Flow webhooks] --> K2[api/webhook_rdc/webhook_handler.php]
+    K2 --> K3[usuario/propiedad]
+    E7[Outlook Graph] --> E8[api/outlook_webhook.php]
+  end
+        </div>
+
+        <div class="mt-3">
+          <span class="chip">Autenticación: <span class="endpoint">api/login.php</span>, <span class="endpoint">api/logout.php</span></span>
+          <span class="chip">Menú: <span class="endpoint">api/menu.php</span></span>
+          <span class="chip">Audit: <span class="endpoint">api/log_module_access.php</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Autenticación -->
+    <div id="card-auth" class="card">
+      <div class="card-header" onclick="toggleCard('card-auth')">
+        <i class="bi bi-shield-lock"></i>
+        <strong>Autenticación y Sesiones</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+sequenceDiagram
+  participant Front as Front (localStorage)
+  participant API as API
+  participant DB as DB
+
+  Front->>API: POST api/login.php (credenciales)
+  API->>DB: Valida usuario/responsable
+  API-->>Front: Token (Bearer) + datos usuario
+  Front->>Front: Guarda cs_token + cs_usuario
+  Front->>API: Authorization: Bearer token modulos
+  Front->>API: POST api/logout.php (token)
+  API->>DB: Invalida token
+  API-->>Front: OK
+        </div>
+        <div class="grid mt-3">
+          <div>
+            <h6>Endpoints</h6>
+            <ul>
+              <li class="endpoint">api/login.php</li>
+              <li class="endpoint">api/logout.php</li>
+              <li class="endpoint">api/perfil.php</li>
+            </ul>
+          </div>
+          <div>
+            <h6>Notas</h6>
+            <ul>
+              <li>Validación de token en tablas <code>usuario</code> y <code>responsable</code>.</li>
+              <li>Redirección a <code>Front/login_front.php</code> si no existe <code>cs_usuario</code>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="card-notif" class="card">
+      <div class="card-header" onclick="toggleCard('card-notif')">
+        <i class="bi bi-bell"></i>
+        <strong>Notificaciones</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+sequenceDiagram
+  participant Front as Front/menu_front.php
+  participant API as API
+  participant DB as DB
+  participant OneS as OneSignal
+
+  Front->>API: GET api/notificaciones_count.php
+  API->>DB: Cuenta respuestas no leídas (CTG/PQR)
+  API-->>Front: {count}
+  Front->>API: GET api/notificaciones.php
+  API-->>Front: Lista de notificaciones
+  Front->>API: POST api/notificaciones_mark_read.php (type,id)
+  API->>DB: Marca leídas
+  Front->>OneS: Suscripción y envío player_id
+  OneS-->>Front: id de suscripción
+  Front->>API: POST api/update_player_id.php
+        </div>
+        <div class="mt-3">
+          <span class="chip">Listado: <span class="endpoint">api/notificaciones.php</span></span>
+          <span class="chip">Conteo: <span class="endpoint">api/notificaciones_count.php</span></span>
+          <span class="chip">Marcar leído: <span class="endpoint">api/notificaciones_mark_read.php</span></span>
+          <span class="chip">Push: <span class="endpoint">api/helpers/notificaciones.php</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTG -->
+    <div id="card-ctg" class="card">
+      <div class="card-header" onclick="toggleCard('card-ctg')">
+        <i class="bi bi-tools"></i>
+        <strong>Flujo CTG</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+sequenceDiagram
+  participant List as Front/ctg/ctg.php
+  participant New as Front/ctg/ctg_nuevo.php
+  participant Det as Front/ctg/ctg_detalle.php
+  participant API as API CTG
+
+  New->>API: POST api/ctg/ctg_create.php
+  API-->>New: OK (id)
+  List->>API: GET api/ctg/ctg_list.php
+  List-->>List: Render tarjetas + filtros
+  Det->>API: GET api/ctg/ctg_respuestas.php
+  Det->>API: POST api/ctg/ctg_insert_form.php
+  Det->>API: POST api/ctg/ctg_update_estado.php (responsable)
+  Det->>API: GET/POST api/ctg/ctg_observaciones.php
+  Det->>API: POST api/notificaciones_mark_read.php
+        </div>
+      </div>
+    </div>
+
+    <!-- PQR -->
+    <div id="card-pqr" class="card">
+      <div class="card-header" onclick="toggleCard('card-pqr')">
+        <i class="bi bi-chat-dots"></i>
+        <strong>Flujo PQR</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+sequenceDiagram
+  participant List as Front/pqr/pqr.php
+  participant New as Front/pqr/pqr_nuevo.php
+  participant Det as Front/pqr/pqr_detalle.php
+  participant API as API PQR
+
+  New->>API: POST api/pqr/pqr_create.php
+  API-->>New: OK (id)
+  List->>API: GET api/pqr/pqr_list.php
+  Det->>API: GET api/pqr/pqr_respuestas.php
+  Det->>API: POST api/pqr/pqr_insert_form.php
+  Det->>API: POST api/pqr/pqr_update_estado.php (responsable)
+  Det->>API: GET/POST api/pqr/pqr_observaciones.php
+  Det->>API: POST api/notificaciones_mark_read.php
+        </div>
+      </div>
+    </div>
+
+    <!-- Citas -->
+    <div id="card-citas" class="card">
+      <div class="card-header" onclick="toggleCard('card-citas')">
+        <i class="bi bi-calendar-event"></i>
+        <strong>Flujo de Citas y Calendario</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+sequenceDiagram
+  participant List as Front/citas.php
+  participant NewU as Front/cita_nueva.php
+  participant NewR as Front/cita_responsable.php
+  participant Cal as Front/panel_calendario.php
+  participant API as API Cita
+  participant Graph as Microsoft Graph
+
+  NewU->>API: GET api/cita/horas_disponibles.php
+  NewU->>API: POST api/cita/cita_create.php
+  NewR->>API: GET api/cita/horas_disponibles.php
+  NewR->>API: POST api/cita/cita_create.php
+  List->>API: GET api/cita/citas_list.php
+  List->>API: POST api/cita/cita_cancelar.php / cita_eliminar.php
+  Cal->>API: GET api/calendario_responsable.php
+  Graph-->>API: POST api/outlook_webhook.php (cambios)
+  API->>DB: Sincroniza agendamiento_visitas
+        </div>
+        <div class="mt-3">
+          <span class="chip">Disponibilidad: <span class="endpoint">api/cita/dias_disponibles.php</span></span>
+          <span class="chip">Horas: <span class="endpoint">api/cita/horas_disponibles.php</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perfil y Usuarios -->
+    <div id="card-perfil" class="card">
+      <div class="card-header" onclick="toggleCard('card-perfil')">
+        <i class="bi bi-person-badge"></i>
+        <strong>Perfil y Gestión de Usuarios</strong>
+      </div>
+      <div class="card-body">
+        <div class="grid">
+          <div>
+            <h6>Perfil</h6>
+            <ul>
+              <li class="endpoint">api/perfil.php</li>
+              <li>Front/perfil.php muestra datos del usuario/responsable.</li>
+            </ul>
+          </div>
+          <div>
+            <h6>Usuarios (Responsables)</h6>
+            <ul>
+              <li class="endpoint">Front/users.php</li>
+              <li class="endpoint">api/user_crud.php</li>
+              <li>Roles, filtros, alta/edición, borrado.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integraciones externas -->
+    <div id="card-integraciones" class="card">
+      <div class="card-header" onclick="toggleCard('card-integraciones')">
+        <i class="bi bi-plug"></i>
+        <strong>Integraciones Externas</strong>
+      </div>
+      <div class="card-body">
+        <div class="mermaid">
+flowchart LR
+  KF[Kiss Flow] -->|webhooks| WH[api/webhook_rdc/webhook_handler.php]
+  WH --> DB[(DB local)]
+  KF -. batch .-> SYNC[api/webhook_rdc/sync_ds_cliente.php]
+  Graph[Microsoft Graph] -->|webhook| OW[api/outlook_webhook.php]
+  OW --> DB
+  OneS[OneSignal] --> Push[api/helpers/notificaciones.php]
+        </div>
+        <ul class="mt-3">
+          <li>Kiss Flow: <span class="endpoint">api/webhook_rdc/webhook_handler.php</span>, <span class="endpoint">sync_ds_cliente.php</span>, <span class="endpoint">sync_keys_from_kf.php</span></li>
+          <li>Outlook: <span class="endpoint">api/helpers/outlook_sync_helper.php</span>, <span class="endpoint">api/outlook_webhook.php</span></li>
+          <li>OneSignal: uso de <code>player_id</code> y envío directo por API.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Recursos útiles -->
+    <div id="card-links" class="card">
+      <div class="card-header" onclick="toggleCard('card-links')">
+        <i class="bi bi-link-45deg"></i>
+        <strong>Recursos y Endpoints</strong>
+      </div>
+      <div class="card-body">
+        <div class="grid">
+          <div>
+            <h6>Front</h6>
+            <ul>
+              <li><a href="/Front/menu_front.php" target="_blank">menu_front.php</a></li>
+              <li><a href="/Front/notificaciones.php" target="_blank">notificaciones.php</a></li>
+              <li><a href="/Front/ctg/ctg.php" target="_blank">CTG</a>, <a href="/Front/pqr/pqr.php" target="_blank">PQR</a>, <a href="/Front/citas.php" target="_blank">Citas</a></li>
+            </ul>
+          </div>
+          <div>
+            <h6>API</h6>
+            <ul>
+              <li><a href="/api/menu.php" target="_blank">api/menu.php</a></li>
+              <li><a href="/api/notificaciones.php" target="_blank">api/notificaciones.php</a></li>
+              <li><a href="/api/calendario_responsable.php?responsable_id=1&start=2024-01-01&end=2025-01-01" target="_blank">api/calendario_responsable.php</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

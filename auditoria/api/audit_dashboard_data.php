@@ -116,8 +116,9 @@ function getModulesData($db) {
                 END as module_resource,
                 COUNT(*) as count
             FROM audit_log 
-            WHERE target_resource IN ('autenticacion', 'usuario', 'cita', 'ctg', 'pqr', 'acabados', 'perfil', 'notificaciones', 'acceso_modulo')
-               OR action IN ($placeholders)
+            WHERE (target_resource IN ('autenticacion', 'usuario', 'cita', 'ctg', 'pqr', 'acabados', 'perfil', 'notificaciones', 'acceso_modulo')
+               OR action IN ($placeholders))
+               AND NOT (target_resource = 'menu' AND target_id = 15)
             GROUP BY module_resource";
     
     $params = $allActions;
@@ -212,6 +213,11 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         $sql .= ")";
     }
     
+    // Excluir ID Objetivo 15 para acceso a módulos
+    if ($resource === 'acceso_modulo') {
+        $sql .= " AND NOT (al.target_resource = 'menu' AND al.target_id = 15)";
+    }
+    
     // Aplicar filtros adicionales
     if (!empty($filters['date_from'])) {
         $sql .= " AND al.timestamp >= ?";
@@ -285,6 +291,11 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
             $countParams = array_merge($countParams, $moduleActions);
         }
         $countSql .= ")";
+    }
+    
+    // Excluir ID Objetivo 15 para acceso a módulos
+    if ($resource === 'acceso_modulo') {
+        $countSql .= " AND NOT (al.target_resource = 'menu' AND al.target_id = 15)";
     }
     
     // Aplicar los mismos filtros al count
@@ -376,6 +387,11 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
             $params = array_merge($params, $moduleActions);
         }
         $sql .= ")";
+    }
+    
+    // Excluir ID Objetivo 15 para acceso a módulos
+    if ($resource === 'acceso_modulo') {
+        $sql .= " AND NOT (al.target_resource = 'menu' AND al.target_id = 15)";
     }
     
     if (!empty($filters['date_from'])) {
