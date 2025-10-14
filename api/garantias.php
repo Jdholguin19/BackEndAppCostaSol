@@ -55,35 +55,57 @@ try {
         exit;
     }
 
-    // 2. OBTENER FECHA DE ENTREGA (si es un usuario normal)
-    $fecha_entrega_str = null;
+    // 2. OBTENER TIPO DE PROPIEDAD DEL USUARIO (si es usuario normal)
+    $tipo_propiedad_id = null;
+    $fecha_entrega_str = null; // Inicializar variable
     if (!$is_responsable) {
-        $sql_propiedad = "SELECT fecha_entrega FROM propiedad WHERE id_usuario = :id_usuario AND fecha_entrega IS NOT NULL ORDER BY fecha_entrega DESC LIMIT 1";
+        $sql_propiedad = "SELECT tp.id as tipo_propiedad_id, p.fecha_entrega
+                         FROM propiedad p
+                         JOIN tipo_propiedad tp ON p.tipo_id = tp.id
+                         WHERE p.id_usuario = :id_usuario AND p.fecha_entrega IS NOT NULL
+                         ORDER BY p.fecha_entrega DESC LIMIT 1";
         $stmt_propiedad = $db->prepare($sql_propiedad);
         $stmt_propiedad->execute([':id_usuario' => $auth_id]);
         $propiedad = $stmt_propiedad->fetch(PDO::FETCH_ASSOC);
         if ($propiedad) {
+            $tipo_propiedad_id = $propiedad['tipo_propiedad_id'];
             $fecha_entrega_str = $propiedad['fecha_entrega'];
         }
     }
 
-    // 3. OBTENER LISTA DE GARANTÍAS
-    $sql = 'SELECT id, nombre, tiempo_garantia_min, tiempo_garantia_max FROM tipo_ctg WHERE tiempo_garantia_max IS NOT NULL ORDER BY nombre';
+    // 3. OBTENER LISTA DE GARANTÍAS ACTIVAS
+    $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses
+            FROM garantias
+            WHERE estado = 1
+            AND (tipo_propiedad_id IS NULL OR tipo_propiedad_id = :tipo_propiedad_id)
+            ORDER BY orden ASC, nombre ASC';
+
     $stmt = $db->prepare($sql);
-    $stmt->execute();
+    $params = [];
+    if ($tipo_propiedad_id !== null) {
+        $params['tipo_propiedad_id'] = $tipo_propiedad_id;
+    } else {
+        // Si no hay tipo_propiedad_id, usar NULL para que solo tome garantías generales
+        $params['tipo_propiedad_id'] = null;
+    }
+    $stmt->execute($params);
     $garantias = $stmt->fetchAll();
     
     // 4. PROCESAR GARANTÍAS Y CALCULAR VIGENCIA
     $garantias_procesadas = [];
     foreach ($garantias as $garantia) {
         // Formatear duración
-        $max = floatval($garantia['tiempo_garantia_max']);
+        $tiempo_meses = intval($garantia['tiempo_garantia_meses']);
         $duracion_texto = '';
-        if ($max >= 1) {
-            $duracion_texto = ($max == 1) ? '1 año' : $max . ' años';
+        if ($tiempo_meses >= 12) {
+            $anios = floor($tiempo_meses / 12);
+            $meses_restantes = $tiempo_meses % 12;
+            $duracion_texto = $anios == 1 ? '1 año' : $anios . ' años';
+            if ($meses_restantes > 0) {
+                $duracion_texto .= ' y ' . ($meses_restantes == 1 ? '1 mes' : $meses_restantes . ' meses');
+            }
         } else {
-            $meses = intval($max * 12);
-            $duracion_texto = ($meses == 1) ? '1 mes' : $meses . ' meses';
+            $duracion_texto = ($tiempo_meses == 1) ? '1 mes' : $tiempo_meses . ' meses';
         }
 
         // Calcular vigencia y estado
@@ -93,23 +115,16 @@ try {
         if ($fecha_entrega_str) {
             try {
                 $fecha_vencimiento = new DateTime($fecha_entrega_str);
-                
-                // Sumar el intervalo de la garantía. Nota: Se asumen valores fijos como 1.0 para 1 año, 0.5 para 6 meses, etc.
-                if ($max >= 1) {
-                    $years = floor($max);
-                    $months = round(($max - $years) * 12);
-                    if ($years > 0) $fecha_vencimiento->add(new DateInterval("P{$years}Y"));
-                    if ($months > 0) $fecha_vencimiento->add(new DateInterval("P{$months}M"));
-                } else {
-                    $months = round($max * 12);
-                    if ($months > 0) $fecha_vencimiento->add(new DateInterval("P{$months}M"));
+
+                // Sumar el tiempo de garantía en meses
+                if ($tiempo_meses > 0) {
+                    $fecha_vencimiento->add(new DateInterval("P{$tiempo_meses}M"));
                 }
-                
+
                 $vigencia_texto = $fecha_vencimiento->format('d/m/Y');
-                
+
                 // Comparar con la fecha actual para determinar si está activa
                 $hoy = new DateTime();
-                // Se considera activa si la fecha de vencimiento es hoy o en el futuro.
                 $activa = ($fecha_vencimiento >= $hoy->setTime(0, 0, 0));
 
             } catch (Exception $e) {
@@ -117,14 +132,15 @@ try {
                 $activa = false;
             }
         }
-        
+
         $garantias_procesadas[] = [
             'id' => $garantia['id'],
             'categoria' => $garantia['nombre'],
             'elemento' => $garantia['nombre'],
+            'descripcion' => $garantia['descripcion'] ?: $garantia['nombre'],
             'duracion' => $duracion_texto,
             'vigencia' => $vigencia_texto,
-            'activa' => $activa, // Nuevo campo para indicar si la garantía está activa
+            'activa' => $activa,
             'responsable' => 'Thalia Victoria Constructora'
         ];
     }

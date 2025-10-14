@@ -23,6 +23,9 @@
       <h1 class="garantias-title">Garantías</h1>
       <p class="garantias-subtitle">Información detallada de garantías</p>
     </div>
+    <button class="admin-button" id="adminButton" style="display: none;" onclick="location.href='admin/admin_garantias.php'">
+      <i class="bi bi-gear"></i> Administrar
+    </button>
   </div>
 </div>
 
@@ -69,21 +72,31 @@ include '../api/bottom_nav.php';
 const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
 if (!u.id) location.href = 'login_front.php';
 
+// Mostrar botón de administración solo para responsables
+if (u.is_responsable) {
+    document.getElementById('adminButton').style.display = 'block';
+}
+
 const API_GARANTIAS = '../api/garantias.php';
 
 
 // Función para crear tarjeta de garantía
 function createGarantiaCard(garantia) {
     const cardClass = garantia.activa ? '' : 'garantia-expirada';
-    const statusIcon = garantia.activa 
-        ? '<span class="status-badge status-active">Activa</span>' 
+    const statusIcon = garantia.activa
+        ? '<span class="status-badge status-active">Activa</span>'
         : '<span class="status-badge status-expired">Expirada</span>';
+
+    const descripcion = garantia.descripcion && garantia.descripcion !== garantia.categoria
+        ? `<p class="garantia-description">${garantia.descripcion}</p>`
+        : '';
 
     return `
         <div class="garantia-card ${cardClass}">
             <div class="garantia-header">
                 <div class="garantia-info">
                     <h3 class="garantia-categoria">${garantia.categoria}</h3>
+                    ${descripcion}
                 </div>
                 ${statusIcon}
             </div>
@@ -99,7 +112,7 @@ function createGarantiaCard(garantia) {
                     <p class="garantia-detail-text">
                         Vigencia hasta: <span class="garantia-detail-value">${garantia.vigencia}</span>
                     </p>
-                </div>                                
+                </div>
             </div>
         </div>
     `;

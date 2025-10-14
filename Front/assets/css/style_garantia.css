@@ -35,8 +35,27 @@
     transition: background-color 0.2s ease;
 }
 
-.back-button:hover {
-    background-color: #f3f4f6;
+.admin-button {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #2d5a3d;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-button:hover {
+    background: #1f4229;
 }
 
 .garantias-container {
@@ -89,6 +108,13 @@
     font-weight: 600;
     color: #1a1a1a;
     margin: 0 0 0.25rem 0;
+}
+
+.garantia-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.4;
 }
 
 .garantia-elemento {
