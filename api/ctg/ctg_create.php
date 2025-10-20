@@ -46,14 +46,27 @@ if ($tokenType === 'Bearer' && $token) {
     }
 }
 
-if (!$authenticated_user || $is_responsable) {
-    // Solo permitir la creación de CTGs a usuarios regulares, no a responsables
-    http_response_code(403); // Prohibido
-    exit(json_encode(['ok' => false, 'mensaje' => 'No autorizado para crear CTGs']));
+if (!$authenticated_user) {
+    http_response_code(401);
+    exit(json_encode(['ok' => false, 'mensaje' => 'Token inválido']));
 }
 
-// Si llegamos aquí, es un usuario regular autenticado.
-$authenticated_user_id = $authenticated_user['id'];
+// Determinar si es responsable o usuario regular
+$user_id = null;
+$creator_type = $is_responsable ? 'responsable' : 'usuario';
+$creator_id = $authenticated_user['id'];
+
+// Si es responsable, el id_usuario debe venir en el POST
+if ($is_responsable) {
+    $user_id = (int)($_POST['id_usuario'] ?? 0);
+    if (!$user_id) {
+        http_response_code(400);
+        exit(json_encode(['ok' => false, 'mensaje' => 'ID de usuario requerido para responsables']));
+    }
+} else {
+    // Si es usuario regular, usa su propio ID
+    $user_id = $authenticated_user['id'];
+}
 
 // --- Fin Lógica de Autenticación --- //
 
@@ -113,7 +126,7 @@ try{
              :des,:urgencia_id,:url,:resp,DATE_ADD(NOW(),INTERVAL 5 DAY))';
     $db->prepare($sql)->execute([
         ':num'=>$numero,
-        ':uid'=>$authenticated_user_id,
+        ':uid'=>$user_id,
         ':pid'=>$pid,
         ':tipo'=>$tipo,
         ':des'=>$desc,
@@ -136,7 +149,7 @@ try{
     // Obtener nombre del cliente
     $sql_cliente_nombre = 'SELECT nombres, apellidos FROM usuario WHERE id = :user_id LIMIT 1';
     $stmt_cliente_nombre = $db->prepare($sql_cliente_nombre);
-    $stmt_cliente_nombre->execute([':user_id' => $authenticated_user_id]);
+    $stmt_cliente_nombre->execute([':user_id' => $user_id]);
     $cliente_data = $stmt_cliente_nombre->fetch(PDO::FETCH_ASSOC);
     $nombreCliente = trim($cliente_data['nombres'] . ' ' . $cliente_data['apellidos']);
 
@@ -171,7 +184,7 @@ try{
         // Obtener datos adicionales del usuario para Kiss Flow (cédula, correo y teléfono)
         $sql_user_details = 'SELECT cedula, correo, telefono FROM usuario WHERE id = :user_id LIMIT 1';
         $stmt_user_details = $db->prepare($sql_user_details);
-        $stmt_user_details->execute([':user_id' => $authenticated_user_id]);
+        $stmt_user_details->execute([':user_id' => $user_id]);
         $user_details = $stmt_user_details->fetch(PDO::FETCH_ASSOC);
 
         if ($user_details && !empty($user_details['cedula'])) {
@@ -205,7 +218,7 @@ try{
                 error_log("Respuesta de ctg_handler.php para CTG $numero (HTTP $http_code): " . $handler_response);
             }
         } else {
-            error_log("No se pudo enviar a Kiss Flow para el CTG $numero: falta la cédula del usuario ID " . $authenticated_user_id);
+            error_log("No se pudo enviar a Kiss Flow para el CTG $numero: falta la cédula del usuario ID " . $user_id);
         }
     } catch (Throwable $ke) {
         error_log("Error durante la llamada a Kiss Flow para el CTG $numero: " . $ke->getMessage());
@@ -213,7 +226,7 @@ try{
     // --- FIN: Lógica de creación en Kiss Flow ---
 
     echo json_encode(['ok'=>true,'id'=>$new_ctg_id,'numero'=>$numero]);
-    log_audit_action($db, 'CREATE_CTG', $authenticated_user_id, 'usuario', 'ctg', $new_ctg_id, ['numero_solicitud' => $numero, 'id_propiedad' => $pid, 'tipo_id' => $tipo, 'subtipo_id' => null, 'descripcion' => $desc, 'urgencia_id' => $urgencia_id, 'responsable_id' => $respId]);
+    log_audit_action($db, 'CREATE_CTG', $creator_id, $creator_type, 'ctg', $new_ctg_id, ['numero_solicitud' => $numero, 'id_propiedad' => $pid, 'tipo_id' => $tipo, 'subtipo_id' => null, 'descripcion' => $desc, 'urgencia_id' => $urgencia_id, 'responsable_id' => $respId, 'created_for_user_id' => $user_id]);
 
 }catch(Throwable $e){
     error_log('ctg_create: '.$e->getMessage());

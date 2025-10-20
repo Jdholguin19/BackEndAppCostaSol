@@ -93,7 +93,7 @@ if (!token) {
     fetch('../../api/ctg/tipo_ctg.php').then(r=>r.json()).then(d=>{
       if(d.ok){
         const sel=document.getElementById('selTipo');
-        d.tipos.forEach(t=>sel.insertAdjacentHTML('beforeend',
+        d.items.forEach(t=>sel.insertAdjacentHTML('beforeend',
             `<option value="${t.id}">${t.nombre}</option>`));
       }
     });

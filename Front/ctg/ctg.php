@@ -213,7 +213,27 @@ if (!token) {
 
     // Botón nuevo
     btnNuevo.addEventListener('click', () => {
-        window.location.href = 'ctg_nuevo.php';
+        // Determinar si es responsable o usuario regular
+        fetch('../../api/perfil.php', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.ok && d.usuario && d.usuario.tipo === 'usuario') {
+                // Es usuario regular, va a ctg_nuevo.php
+                window.location.href = 'ctg_nuevo.php';
+            } else if (d.ok && d.usuario && d.usuario.tipo === 'responsable') {
+                // Es responsable, va a ctg_responsable.php
+                window.location.href = 'ctg_responsable.php';
+            } else {
+                // Error o tipo desconocido, asumir usuario regular
+                window.location.href = 'ctg_nuevo.php';
+            }
+        })
+        .catch(() => {
+            // En caso de error, asumir usuario regular
+            window.location.href = 'ctg_nuevo.php';
+        });
     });
 
     /* ---------- funciones auxiliares ---------- */
