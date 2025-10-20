@@ -233,7 +233,7 @@ include '../api/bottom_nav.php';
   }
 
   /* ---------- Menú ---------- */
-  checkGarantiasStatus().then(hasActiveGarantias => {
+  checkDeliveryDateStatus().then(hasDeliveryDateReached => {
     const token = localStorage.getItem('cs_token');
     fetch(API_MENU, {
       headers: {
@@ -271,18 +271,19 @@ include '../api/bottom_nav.php';
 
         const isGarantiasModule = (Number(m.id) === 6);
         const isCtgModule = (m.nombre || '').trim().toUpperCase() === 'CTG';
-        const shouldDisableGarantias = (isGarantiasModule || isCtgModule) && !hasActiveGarantias && !u.is_responsable;
+        const shouldDisableGarantias = isGarantiasModule && !hasDeliveryDateReached && !u.is_responsable;
+        const shouldDisableCtg = isCtgModule && !hasDeliveryDateReached && !u.is_responsable;
 
         const card = document.createElement('div');
         card.className='menu-card';
 
-        if (shouldDisableGarantias) {
+        if (shouldDisableGarantias || shouldDisableCtg) {
             card.classList.add('disabled-card');
             card.onclick = () => {
                 if (isGarantiasModule) {
-                    alert('Todas tus garantías han expirado.');
+                    alert('El módulo de Garantías estará disponible a partir de la fecha de entrega de tu propiedad.');
                 } else if (isCtgModule) {
-                    alert('El módulo CTG está desactivado porque su garantía ha expirado.');
+                    alert('El módulo CTG estará disponible a partir de la fecha de entrega de tu propiedad.');
                 }
             };
         } else {
@@ -342,6 +343,46 @@ include '../api/bottom_nav.php';
     } catch (error) {
         console.error('Error checking garantias status:', error);
         return false; // On error, assume no active warranties
+    }
+  }
+
+  async function checkDeliveryDateStatus() {
+    const token = localStorage.getItem('cs_token');
+    if (!token) return false; // No token, assume delivery date not reached
+
+    try {
+        const response = await fetch(API_PROP, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (!data.ok || !data.propiedades || data.propiedades.length === 0) {
+            return false; // No properties, CTG disabled
+        }
+
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Normalize to start of day for comparison
+
+        for (const propiedad of data.propiedades) {
+            if (propiedad.fecha_entrega) {
+                // Parse fecha_entrega string "YYYY-MM-DD" to Date object
+                const deliveryDate = new Date(propiedad.fecha_entrega);
+                deliveryDate.setHours(0, 0, 0, 0); // Normalize
+
+                // Check if delivery date has been reached (today or past)
+                if (deliveryDate <= currentDate) {
+                    return true; // Found at least one property with delivery date reached
+                }
+            }
+        }
+        return false; // No properties with delivery date reached
+    } catch (error) {
+        console.error('Error checking delivery date status:', error);
+        return false; // On error, assume delivery date not reached
     }
   }
 
