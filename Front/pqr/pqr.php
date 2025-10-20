@@ -210,9 +210,27 @@ if (!token) {
         cargarPQRs(estado, orderBy);
     });
 
-    // Botón nuevo
-    btnNuevo.addEventListener('click', () => {
-        window.location.href = 'pqr_nuevo.php';
+    // Verificar tipo de usuario y configurar botón nuevo
+    fetch('../../api/perfil.php', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(r => r.json())
+    .then(d => {
+        if (d.ok && d.usuario && d.usuario.tipo === 'responsable') {
+            // Es responsable, ocultar el botón
+            btnNuevo.style.display = 'none';
+        } else {
+            // Es usuario regular, configurar el click
+            btnNuevo.addEventListener('click', () => {
+                window.location.href = 'pqr_nuevo.php';
+            });
+        }
+    })
+    .catch(() => {
+        // En caso de error, asumir usuario regular
+        btnNuevo.addEventListener('click', () => {
+            window.location.href = 'pqr_nuevo.php';
+        });
     });
 
     /* ---------- funciones auxiliares ---------- */
