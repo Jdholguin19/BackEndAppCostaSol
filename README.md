@@ -1,6 +1,6 @@
 # CostaSol App – Backend y Frontend
 
-Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/calendario, notificaciones, perfil de usuario, reportes y noticias, con integraciones externas (OneSignal, Kiss Flow, Microsoft Graph/Outlook).
+Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/calendario, notificaciones, perfil de usuario, reportes, noticias y **garantías**, con integraciones externas (OneSignal, Kiss Flow, Microsoft Graph/Outlook).
 
 ---
 
@@ -20,6 +20,7 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
   - Perfil y gestión de usuarios
   - Reportes y recursos
   - Avance de obra / construcción
+  - Garantías
   - Noticias
   - Auditoría y logs
   - Integraciones externas (Kiss Flow, Outlook, OneSignal)
@@ -34,7 +35,7 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
 
 ## Descripción general
 
-- Backend: API en PHP bajo `api/` con endpoints para autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, integraciones y auditoría.
+- Backend: API en PHP bajo `api/` con endpoints para autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, **garantías**, integraciones y auditoría.
 - Frontend: páginas PHP/HTML bajo `Front/` con vistas para login, menú principal, módulos (CTG, PQR, Citas), notificaciones, perfil/usuarios, overview interactivo y recursos.
 - Integraciones: OneSignal (notificaciones push), Kiss Flow (webhooks y sincronización de datos), Outlook/Microsoft Graph (webhooks y sincronización de calendario).
 
@@ -48,7 +49,9 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
   - `OneSignalSDKWorker.js`: service worker requerido por OneSignal para push.
   - Registrar/actualizar `player_id` vía `api/update_player_id.php`.
 - Rutas públicas principales:
-  - `index.php`, `Front/menu_front.php`, `Front/login_front.php`.
+  - `index.php`, `Front/menu_front.php`, `Front/login_front.php`, `Front/garantias.php`.
+- Rutas administrativas:
+  - `Front/admin/admin_garantias.php` (requiere rol responsable).
 - Archivos útiles:
   - `Manual_de_uso.pdf`, `paleta_vegetal.pdf` (recursos estáticos).
   - `logs/csrf_debug.log`, `error_log` (diagnóstico).
@@ -140,6 +143,47 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
 - Front: `Front/fase_detalle.php` (detalle de etapas por manzana/villa).
 - API: `api/etapas_manzana_villa.php`, `api/propiedad_fase.php`.
 
+### Garantías
+
+Sistema completo de gestión de garantías con filtrado inteligente por tipo de propiedad y roles de usuario.
+
+#### Funcionalidades principales:
+- **Vista pública**: `Front/garantias.php` - Muestra garantías aplicables según tipo de propiedad del usuario
+- **Administración**: `Front/admin/admin_garantias.php` - Dashboard completo para gestión CRUD
+- **Filtrado inteligente**:
+  - **Responsables**: Ven todas las garantías del sistema
+  - **Usuarios**: Ven garantías generales + específicas de su tipo de propiedad
+- **Tiempo en meses**: Cálculo preciso de vigencia (no años)
+- **Responsive design**: Optimizado para móviles y desktop
+
+#### Base de datos:
+- Tabla `garantias`: `id`, `nombre`, `descripcion`, `tiempo_garantia_meses`, `tipo_propiedad_id`, `estado`, `orden`
+- Relaciones: FK a `tipo_propiedad.id`
+- Script: `garantias_structure.sql`
+
+#### API Endpoints:
+- **Pública**: `api/garantias.php` - Lista garantías filtradas con cálculo de vigencia
+- **Administrativa**: `api/admin_garantias.php` - CRUD completo con autenticación de responsable
+  - `GET /`: Listar todas las garantías
+  - `GET /?action=get_tipo_propiedad`: Obtener tipos de propiedad
+  - `POST /`: Crear nueva garantía
+  - `PUT /`: Actualizar garantía existente
+  - `DELETE /?id={id}`: Eliminar garantía
+
+#### Características técnicas:
+- **Autenticación**: Token Bearer requerido
+- **Roles**: Diferenciación entre responsables (acceso total) y usuarios (filtrado)
+- **Cálculo de vigencia**: Basado en fecha de entrega de propiedad
+- **Ordenamiento**: Campo `orden` para control manual del orden de display
+- **Estados**: Activo/Inactivo para control de visibilidad
+- **Responsive**: Media queries para móviles, tablas scrollables, botones adaptativos
+
+#### Flujo de usuario:
+1. **Usuario normal**: Ve garantías aplicables a su propiedad con cálculo de vigencia
+2. **Responsable**: Accede a dashboard administrativo desde botón "Administrar"
+3. **Administración**: CRUD completo con filtros por tipo de propiedad
+4. **Orden automático**: Al crear garantías, se asigna el orden máximo + 1
+
 ### Noticias
 
 - Front: `Front/noticia.php`.
@@ -165,11 +209,11 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
 ## Flujos de usuario
 
 - Cliente:
-  - Login → menú dinámico → CTG/PQR → citas → notificaciones → perfil.
-  - Visualiza noticias y reportes propios.
+  - Login → menú dinámico → CTG/PQR → citas → **garantías** → notificaciones → perfil.
+  - Visualiza noticias, reportes propios y garantías aplicables a su propiedad.
 - Responsable:
-  - Login → menú con módulos operativos → gestión CTG/PQR → calendario responsable → notificaciones y perfil.
-  - Puede ver reportes y recursos según rol.
+  - Login → menú con módulos operativos → gestión CTG/PQR → calendario responsable → **administrar garantías** → notificaciones y perfil.
+  - Puede ver reportes, recursos y gestionar todas las garantías del sistema según rol.
 
 ---
 
@@ -206,16 +250,24 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
   - Revise `OneSignalSDKWorker.js` y permisos de notificación del navegador; confirme envío de `player_id` mediante `api/update_player_id.php`.
 - Calendario no sincroniza:
   - Confirme `config/config_outlook.php` y la suscripción de webhooks; verifique `api/outlook_webhook.php`.
+- **Garantías no se muestran correctamente**:
+  - Verifique que la tabla `garantias` existe y tiene datos; confirme permisos de token.
+  - Para usuarios: asegure que tienen una propiedad con `fecha_entrega`; responsables ven todas las garantías.
+  - Revise `api/garantias.php` y `api/admin_garantias.php` por errores en logs.
 - Base de datos:
-  - Revise `config/db.php`; asegure disponibilidad de tablas referenciadas (usuarios, responsables, ctg, pqr, agendamiento_visitas, etc.).
+  - Revise `config/db.php`; asegure disponibilidad de tablas referenciadas (usuarios, responsables, ctg, pqr, agendamiento_visitas, **garantias**, etc.).
 
 ---
 
 ## Estructura de directorios (parcial)
 
-- `Front/`: vistas del frontend, overview, módulos (CTG, PQR, Citas, Perfil, Noticias, Reportes).
-- `api/`: endpoints PHP (autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, integraciones).
+- `Front/`: vistas del frontend, overview, módulos (CTG, PQR, Citas, Perfil, Noticias, Reportes, **Garantías**).
+- `Front/admin/`: vistas administrativas (**admin_garantias.php** para gestión de garantías).
+- `api/`: endpoints PHP (autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, **garantías**, integraciones).
+- `api/admin/`: endpoints administrativos (**admin_garantias.php** para CRUD de garantías).
 - `config/`: configuración de base de datos y Outlook.
+- `garantias_structure.sql`: script de creación de tabla de garantías.
+- `assets/css/style_garantia.css`: estilos específicos para el módulo de garantías.
 - `kiss_flow/`, `api/webhook_rdc/`, `api/webhook_ds/`: integraciones y sincronización.
 - `logs/`, `error_log`: diagnóstico y auditoría.
 - `uploads/`: almacenamiento de imágenes y archivos.

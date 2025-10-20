@@ -17,6 +17,12 @@
     padding-bottom: 5rem;
 }
 
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 0.75rem 1rem;
+    }
+}
+
 .admin-header {
     display: flex;
     justify-content: space-between;
@@ -26,11 +32,25 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+}
+
 .admin-title {
     font-size: 1.75rem;
     font-weight: 600;
     color: #2d5a3d;
     margin: 0;
+}
+
+@media (max-width: 768px) {
+    .admin-title {
+        font-size: 1.5rem;
+    }
 }
 
 .btn-add {
@@ -51,6 +71,13 @@
     color: white;
 }
 
+@media (max-width: 768px) {
+    .btn-add {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+    }
+}
+
 .garantias-table {
     background: white;
     border-radius: 12px;
@@ -62,6 +89,17 @@
     background: #f8fafc;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
 }
 
 .table-title {
@@ -69,6 +107,33 @@
     font-weight: 600;
     color: #1f2937;
     margin: 0;
+}
+
+.filter-section {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.filter-select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    min-width: 200px;
+}
+
+@media (max-width: 768px) {
+    .filter-select {
+        min-width: auto;
+    }
 }
 
 .garantias-table table {
@@ -81,6 +146,22 @@
     padding: 1rem 1.5rem;
     text-align: left;
     border-bottom: 1px solid #f1f5f9;
+}
+
+@media (max-width: 768px) {
+    .garantias-table th,
+    .garantias-table td {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .garantias-table {
+        overflow-x: auto;
+    }
+
+    .garantias-table table {
+        min-width: 800px;
+    }
 }
 
 .garantias-table th {
@@ -119,6 +200,18 @@
     gap: 0.5rem;
 }
 
+@media (max-width: 768px) {
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .btn-action {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+    }
+}
+
 .btn-action {
     padding: 0.375rem 0.75rem;
     border: none;
@@ -152,10 +245,27 @@
     border: none;
 }
 
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-content {
+        border-radius: 8px;
+    }
+}
+
 .modal-header {
     background: #f8fafc;
     border-bottom: 1px solid #e5e7eb;
     border-radius: 12px 12px 0 0;
+}
+
+@media (max-width: 576px) {
+    .modal-header {
+        border-radius: 8px 8px 0 0;
+        padding: 1rem;
+    }
 }
 
 .modal-title {
@@ -256,6 +366,11 @@
     <div class="garantias-table">
       <div class="table-header">
         <h2 class="table-title">Lista de Garantías</h2>
+        <div class="filter-section">
+          <select class="filter-select" id="tipoPropiedadFilter" onchange="filterGarantias()">
+            <option value="">Todos los tipos</option>
+          </select>
+        </div>
       </div>
 
       <div id="garantiasTableContainer">
@@ -357,6 +472,7 @@ if (!u.id || !u.is_responsable) location.href = '../login_front.php';
 // Variables globales
 let currentGarantiaId = null;
 let tipoPropiedadOptions = [];
+let allGarantias = []; // Almacenar todas las garantías para filtrado
 
 // APIs
 const API_GARANTIAS = '../../api/admin_garantias.php';
@@ -391,7 +507,8 @@ async function loadGarantias() {
             throw new Error(data.error || 'Error al cargar garantías');
         }
 
-        renderGarantiasTable(data.garantias);
+        allGarantias = data.garantias;
+        renderGarantiasTable(allGarantias);
     } catch (error) {
         console.error('Error:', error);
         showError('Error al cargar garantías: ' + error.message);
@@ -421,15 +538,41 @@ async function loadTipoPropiedad() {
 
 // Poblar select de tipos de propiedad
 function populateTipoPropiedadSelect() {
-    const select = document.getElementById('tipoPropiedadId');
-    select.innerHTML = '<option value="">Todos los tipos</option>';
+    const filterSelect = document.getElementById('tipoPropiedadFilter');
+    const modalSelect = document.getElementById('tipoPropiedadId');
+
+    // Limpiar opciones existentes
+    filterSelect.innerHTML = '<option value="">Todos los tipos</option>';
+    modalSelect.innerHTML = '<option value="">Todos los tipos</option>';
 
     tipoPropiedadOptions.forEach(tipo => {
-        const option = document.createElement('option');
-        option.value = tipo.id;
-        option.textContent = tipo.nombre;
-        select.appendChild(option);
+        // Para el filtro
+        const filterOption = document.createElement('option');
+        filterOption.value = tipo.id;
+        filterOption.textContent = tipo.nombre;
+        filterSelect.appendChild(filterOption);
+
+        // Para el modal
+        const modalOption = document.createElement('option');
+        modalOption.value = tipo.id;
+        modalOption.textContent = tipo.nombre;
+        modalSelect.appendChild(modalOption);
     });
+}
+
+// Filtrar garantías
+function filterGarantias() {
+    const tipoFilter = document.getElementById('tipoPropiedadFilter').value;
+
+    let filteredGarantias = allGarantias;
+
+    if (tipoFilter) {
+        filteredGarantias = allGarantias.filter(garantia => {
+            return !garantia.tipo_propiedad_id || garantia.tipo_propiedad_id == tipoFilter;
+        });
+    }
+
+    renderGarantiasTable(filteredGarantias);
 }
 
 // Renderizar tabla de garantías
@@ -497,6 +640,10 @@ function openCreateModal() {
     document.getElementById('modalTitle').textContent = 'Nueva Garantía';
     document.getElementById('garantiaForm').reset();
     document.getElementById('estado').checked = true;
+
+    // Establecer orden automáticamente (máximo + 1)
+    const maxOrden = allGarantias.length > 0 ? Math.max(...allGarantias.map(g => g.orden || 0)) : 0;
+    document.getElementById('orden').value = maxOrden + 1;
 
     const modal = new bootstrap.Modal(document.getElementById('garantiaModal'));
     modal.show();

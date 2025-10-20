@@ -74,21 +74,36 @@ try {
     }
 
     // 3. OBTENER LISTA DE GARANTÍAS ACTIVAS
-    $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses
-            FROM garantias
-            WHERE estado = 1
-            AND (tipo_propiedad_id IS NULL OR tipo_propiedad_id = :tipo_propiedad_id)
-            ORDER BY orden ASC, nombre ASC';
-
-    $stmt = $db->prepare($sql);
-    $params = [];
-    if ($tipo_propiedad_id !== null) {
-        $params['tipo_propiedad_id'] = $tipo_propiedad_id;
+    if ($is_responsable) {
+        // Responsables ven todas las garantías
+        $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id
+                FROM garantias
+                WHERE estado = 1
+                ORDER BY orden ASC, nombre ASC';
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
     } else {
-        // Si no hay tipo_propiedad_id, usar NULL para que solo tome garantías generales
-        $params['tipo_propiedad_id'] = null;
+        // Usuarios normales ven garantías generales + específicas de su tipo
+        $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id
+                FROM garantias
+                WHERE estado = 1
+                AND (tipo_propiedad_id IS NULL OR tipo_propiedad_id = :tipo_propiedad_id)
+                ORDER BY orden ASC, nombre ASC';
+        $stmt = $db->prepare($sql);
+        $params = [];
+        if ($tipo_propiedad_id !== null) {
+            $params['tipo_propiedad_id'] = $tipo_propiedad_id;
+        } else {
+            // Si no hay tipo_propiedad_id, solo mostrar garantías generales
+            $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id
+                    FROM garantias
+                    WHERE estado = 1 AND tipo_propiedad_id IS NULL
+                    ORDER BY orden ASC, nombre ASC';
+            $stmt = $db->prepare($sql);
+        }
+        $stmt->execute($params);
     }
-    $stmt->execute($params);
+
     $garantias = $stmt->fetchAll();
     
     // 4. PROCESAR GARANTÍAS Y CALCULAR VIGENCIA

@@ -5,6 +5,31 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
+@media (max-width: 768px) {
+    .garantias-header {
+        padding: 0.75rem 1rem 0.5rem;
+    }
+
+    .garantias-header > div {
+        position: relative !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .garantias-title {
+        font-size: 1.25rem !important;
+        text-align: left !important;
+        margin: 0 !important;
+        flex: 1;
+    }
+
+    .garantias-subtitle {
+        display: none;
+    }
+}
+
 .garantias-title {
     font-size: 1.5rem;
     font-weight: 600;
@@ -35,6 +60,16 @@
     transition: background-color 0.2s ease;
 }
 
+@media (max-width: 768px) {
+    .back-button {
+        position: static !important;
+        transform: none;
+        left: auto;
+        top: auto;
+        order: -1;
+    }
+}
+
 .admin-button {
     position: absolute;
     right: 1rem;
@@ -52,6 +87,18 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .admin-button {
+        position: static !important;
+        transform: none;
+        right: auto;
+        top: auto;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+        border-radius: 6px;
+    }
 }
 
 .admin-button:hover {
@@ -215,8 +262,6 @@
         display: flex;
         align-items: flex-start; /* Align icon and text at the top */
         /* Remove gap here as we will manage spacing between flex items manually */
-    }
-    .info-card-warning .flex-container {
     }
 
     .info-card-warning .info-icon-warning {
