@@ -58,8 +58,11 @@ $id = (int)($_GET['id'] ?? 0);
 
   <!-- Área de observaciones (solo visible para responsables) -->
   <div id="observacionesContainer" class="observaciones-container">
+    <button id="btnCloseObservaciones" class="observaciones-close-btn" type="button" title="Cerrar">
+      <i class="bi bi-x-lg"></i>
+    </button>
     <label for="txtObservaciones" class="observaciones-label">
-      <i class="bi bi-journal-text"></i> Observaciones del cliente
+      <i class="bi bi-journal-text"></i> Notas del cliente
     </label>
     <textarea 
       id="txtObservaciones" 
@@ -70,7 +73,7 @@ $id = (int)($_GET['id'] ?? 0);
     <div class="observaciones-actions">
       <button id="btnSaveObservaciones" class="observaciones-save-btn" type="button">
         <i class="bi bi-check-circle"></i>
-        Guardar observaciones
+        Guardar
       </button>
     </div>
   </div>
@@ -353,7 +356,16 @@ if(!u.id) {
           })
           .then(d => {
             if (d.ok) {
-              showNotification('Observaciones guardadas correctamente!');
+              // Cerrar el contenedor de observaciones automáticamente
+              if (observacionesContainer) {
+                observacionesContainer.classList.remove('show');
+                const backdrop = document.getElementById('modalBackdrop');
+                if (backdrop) {
+                  backdrop.classList.remove('show');
+                  setTimeout(() => backdrop.remove(), 300);
+                }
+                document.body.style.overflow = '';
+              }
             } else {
               throw new Error(d.mensaje || 'Error desconocido');
             }
@@ -430,8 +442,8 @@ if(!u.id) {
           if (isResponsable) {
               addEstadoDropdown(p.estado_id); // p.estado_id debería venir en la respuesta de pqr_list.php
               
-              // Mostrar área de observaciones para responsables
-              observacionesContainer.classList.add('show');
+              // Las observaciones ahora se abren manualmente, no por defecto
+              // observacionesContainer.classList.add('show');
               loadObservaciones();
           }
           // --- FIN: Lógica para Responsables ---
@@ -534,7 +546,6 @@ if(!u.id) {
             })
             .then(d => {
                 if (d.ok) {
-                    showNotification('Estado del PQR actualizado correctamente.');
                     // Actualizar el estado actual global
                     currentPqrEstadoId = newEstadoId;
                      // Actualizar la visualización del badge de estado
@@ -657,7 +668,6 @@ if(!u.id) {
 
                 frmRespuesta.classList.remove('was-validated');
                 loadAndDisplayResponses();
-                showNotification('Respuesta enviada correctamente!');
               }else throw d.msg || ''; })
             .catch(errMsg => {
                  console.error(errMsg);
@@ -692,6 +702,20 @@ if(!u.id) {
             e.preventDefault();
             saveObservaciones();
         });
+
+        /* ------- Event listener para cerrar observaciones con X ------- */
+        const btnCloseObservaciones = document.getElementById('btnCloseObservaciones');
+        if (btnCloseObservaciones) {
+            btnCloseObservaciones.addEventListener('click', function() {
+                observacionesContainer.classList.remove('show');
+                const backdrop = document.getElementById('modalBackdrop');
+                if (backdrop) {
+                    backdrop.classList.remove('show');
+                    setTimeout(() => backdrop.remove(), 300);
+                }
+                document.body.style.overflow = '';
+            });
+        }
 
         /* ------- Event listener para alternar observaciones ------- */
         if (btnToggleObservaciones) {

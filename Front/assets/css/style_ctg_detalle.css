@@ -528,6 +528,31 @@ body {
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
+/* Botón X para cerrar observaciones */
+.observaciones-close-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    transition: all 0.2s ease;
+    z-index: 1;
+}
+
+.observaciones-close-btn:hover {
+    color: #bb2d3b;
+    transform: scale(1.1);
+}
+
+.observaciones-close-btn:active {
+    transform: scale(0.95);
+}
+
 .observaciones-container.show {
     opacity: 1;
     visibility: visible;
