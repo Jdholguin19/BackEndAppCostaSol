@@ -104,27 +104,54 @@ require_once __DIR__ . '/../helpers/notificaciones.php';
 // Obtener el ID de la cita recién creada
 $lastInsertId = $db->lastInsertId();
 
-// Obtener el Player ID del responsable
-$sql_get_player_id = 'SELECT onesignal_player_id FROM responsable WHERE id = :resp_id LIMIT 1';
-$stmt_get_player_id = $db->prepare($sql_get_player_id);
-$stmt_get_player_id->execute([':resp_id' => $respId]);
-$oneSignalPlayerId = $stmt_get_player_id->fetchColumn();
-
 // Obtener el nombre del propósito para el cuerpo de la notificación
 $sql_proposito_nombre_push = 'SELECT proposito FROM proposito_agendamiento WHERE id = :proposito_id LIMIT 1';
 $stmt_proposito_nombre_push = $db->prepare($sql_proposito_nombre_push);
 $stmt_proposito_nombre_push->execute([':proposito_id' => $proposito]);
 $nombreProposito = $stmt_proposito_nombre_push->fetchColumn();
 
-if ($oneSignalPlayerId) {
+// Notificar al responsable
+$sql_get_resp_player_id = 'SELECT onesignal_player_id FROM responsable WHERE id = :resp_id LIMIT 1';
+$stmt_get_resp_player_id = $db->prepare($sql_get_resp_player_id);
+$stmt_get_resp_player_id->execute([':resp_id' => $respId]);
+$respOneSignalPlayerId = $stmt_get_resp_player_id->fetchColumn();
+
+if ($respOneSignalPlayerId) {
     $message_title = "Tienes una nueva cita";
     $message_body = "Tipo: " . ($nombreProposito ?: 'No especificado');
-    send_one_signal_notification($message_title, $message_body, $oneSignalPlayerId, ['cita_id' => $lastInsertId]);
+    send_one_signal_notification($message_title, $message_body, $respOneSignalPlayerId, ['cita_id' => $lastInsertId]);
+}
+
+// Si es Crédito y Finanzas (proposito_id = 4), notificar también al responsable ID 5
+if ($proposito == 4) {
+    $sql_get_resp5_player_id = 'SELECT onesignal_player_id FROM responsable WHERE id = 5 LIMIT 1';
+    $stmt_get_resp5_player_id = $db->prepare($sql_get_resp5_player_id);
+    $stmt_get_resp5_player_id->execute();
+    $resp5OneSignalPlayerId = $stmt_get_resp5_player_id->fetchColumn();
+
+    if ($resp5OneSignalPlayerId) {
+        $message_title = "Tienes una nueva cita";
+        $message_body = "Tipo: " . ($nombreProposito ?: 'No especificado');
+        send_one_signal_notification($message_title, $message_body, $resp5OneSignalPlayerId, ['cita_id' => $lastInsertId]);
+    }
+}
+
+// Notificar al cliente
+$sql_get_client_player_id = 'SELECT onesignal_player_id FROM usuario WHERE id = :user_id LIMIT 1';
+$stmt_get_client_player_id = $db->prepare($sql_get_client_player_id);
+$stmt_get_client_player_id->execute([':user_id' => $uid]);
+$clientOneSignalPlayerId = $stmt_get_client_player_id->fetchColumn();
+
+if ($clientOneSignalPlayerId) {
+    $message_title = "Se ha programado una nueva cita para ti";
+    $message_body = "Tipo: " . ($nombreProposito ?: 'No especificado');
+    send_one_signal_notification($message_title, $message_body, $clientOneSignalPlayerId, ['cita_id' => $lastInsertId]);
 }
 // --- FIN: Lógica para enviar Notificación Push ---
 
-// --- INICIO: Lógica de envío de correo a responsable para citas ---
+// --- INICIO: Lógica de envío de correo a responsable y cliente para citas ---
 require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
+require_once __DIR__ . '/../../correos/EnviarCorreoClienteCita.php';
 
 // Obtener correo del responsable
 $sql_resp_email = 'SELECT correo FROM responsable WHERE id = :resp_id LIMIT 1';
@@ -132,12 +159,13 @@ $stmt_resp_email = $db->prepare($sql_resp_email);
 $stmt_resp_email->execute([':resp_id' => $respId]);
 $correoResponsable = $stmt_resp_email->fetchColumn();
 
-// Obtener nombre del cliente
-$sql_cliente_nombre = 'SELECT nombres, apellidos FROM usuario WHERE id = :user_id LIMIT 1';
-$stmt_cliente_nombre = $db->prepare($sql_cliente_nombre);
-$stmt_cliente_nombre->execute([':user_id' => $uid]);
-$cliente_data = $stmt_cliente_nombre->fetch(PDO::FETCH_ASSOC);
+// Obtener correo y nombre del cliente
+$sql_cliente_data = 'SELECT nombres, apellidos, correo FROM usuario WHERE id = :user_id LIMIT 1';
+$stmt_cliente_data = $db->prepare($sql_cliente_data);
+$stmt_cliente_data->execute([':user_id' => $uid]);
+$cliente_data = $stmt_cliente_data->fetch(PDO::FETCH_ASSOC);
 $nombreCliente = trim($cliente_data['nombres'] . ' ' . $cliente_data['apellidos']);
+$correoCliente = $cliente_data['correo'];
 
 // Obtener nombre del propósito de la cita
 $sql_proposito_nombre = 'SELECT proposito FROM proposito_agendamiento WHERE id = :proposito_id LIMIT 1';
@@ -151,7 +179,7 @@ $stmt_propiedad_nombre = $db->prepare($sql_propiedad_nombre);
 $stmt_propiedad_nombre->execute([':prop_id' => $propiedad]);
 $nombrePropiedad = $stmt_propiedad_nombre->fetchColumn();
 
-// Enviar correo si se obtuvo el correo del responsable
+// Enviar correo al responsable si se obtuvo el correo
 if ($correoResponsable) {
     enviarNotificacionResponsable(
         $correoResponsable,
@@ -165,7 +193,43 @@ if ($correoResponsable) {
 } else {
     error_log("No se pudo obtener el correo del responsable con ID: " . $respId);
 }
-// --- FIN: Lógica de envío de correo a responsable para citas ---
+
+// Si es Crédito y Finanzas (proposito_id = 4), enviar también al responsable ID 5
+if ($proposito == 4) {
+    $sql_resp5_email = 'SELECT correo FROM responsable WHERE id = 5 LIMIT 1';
+    $stmt_resp5_email = $db->prepare($sql_resp5_email);
+    $stmt_resp5_email->execute();
+    $correoResponsable5 = $stmt_resp5_email->fetchColumn();
+
+    if ($correoResponsable5) {
+        enviarNotificacionResponsable(
+            $correoResponsable5,
+            $nombreCliente,
+            "Cita", // Tipo de solicitud
+            $tipoTicket, // Propósito de la cita
+            $nombrePropiedad,
+            $fecha,
+            $hora
+        );
+    } else {
+        error_log("No se pudo obtener el correo del responsable con ID: 5");
+    }
+}
+
+// Enviar correo al cliente si se obtuvo el correo
+if ($correoCliente) {
+    enviarCorreoClienteCita(
+        $correoCliente,
+        $nombreCliente,
+        $tipoTicket,
+        $nombrePropiedad,
+        $fecha,
+        $hora
+    );
+} else {
+    error_log("No se pudo obtener el correo del cliente con ID: " . $uid);
+}
+// --- FIN: Lógica de envío de correo a responsable y cliente para citas ---
 
 
 // --- INICIO: Sincronización con Outlook Calendar ---
