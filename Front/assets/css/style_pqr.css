@@ -1,12 +1,12 @@
 /* Specific styles for PQR */
 .pqr-header {
     background: #ffffff;
-    padding: 1rem 1.5rem 0.5rem;
+    padding: 0.75rem 1rem 0.4rem;
     border-bottom: 1px solid #f0f0f0;
 }
 
 .pqr-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 600;
     color: #2d5a3d;
     margin: 0;
@@ -15,7 +15,7 @@
 
 
 .pqr-subtitle {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: #454545;
     margin: 0;
@@ -24,15 +24,15 @@
 
 .back-button {
     position: absolute;
-    left: 1rem;
+    left: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     color: #2d5a3d;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 0.4rem;
     border-radius: 50%;
     transition: background-color 0.2s ease;
 }
@@ -42,36 +42,38 @@
 }
 
 .pqr-container {
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1rem;
     padding-bottom: 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .pqr-controls {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     gap: 0.5rem;
 }
 
 .order-select {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 0.5rem;
-    font-size: 0.875rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
     background: #ffffff;
     color: #1a1a1a;
     flex: 1;
-    max-width: 200px;
+    max-width: 180px;
 }
 
 .new-pqr-btn {
     background: #39a452;
     border: none;
     border-radius: 8px;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.85rem;
     color: #ffffff;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -88,17 +90,17 @@
 .pqr-tabs {
     display: flex;
     gap: 0.25rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     overflow-x: auto;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.4rem;
 }
 
 .pqr-tab {
     background: #f9fafb;
     border: 1px solid #e5e7eb;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    border-radius: 16px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
     font-weight: 500;
     color: #6b7280;
     white-space: nowrap;
@@ -115,9 +117,9 @@
 
 .pqr-card {
     background: #ffffff;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 1rem;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     border: 1px solid #f0f0f0;
     transition: all 0.2s ease;
@@ -133,32 +135,33 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .pqr-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #1a1a1a;
     margin: 0;
 }
 
 .pqr-date {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: #6b7280;
     margin: 0;
 }
 
 .pqr-badges {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .pqr-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
     font-weight: 500;
 }
 
@@ -183,46 +186,48 @@
 }
 
 .pqr-description {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     color: #6b7280;
-    line-height: 1.5;
-    margin: 0 0 1rem 0;
+    line-height: 1.4;
+    margin: 0 0 0.75rem 0;
 }
 
 .pqr-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1rem;
+    padding-top: 0.75rem;
     border-top: 1px solid #f3f4f6;
 }
 
 .pqr-meta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
+    gap: 0.4rem;
+    font-size: 0.7rem;
     color: #6b7280;
 }
 
 .pqr-responses {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #6b7280;
 }
 
 /* Loading states */
 .spinner-border {
     color: #2d5a3d;
+    width: 2rem;
+    height: 2rem;
 }
 
 .loading-state {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .error-state {
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .alert {
@@ -230,18 +235,234 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
     border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem 0;
+    padding: 0.85rem;
+    margin: 0.75rem 0;
+    font-size: 0.85rem;
 }
 
-/* Responsive adjustments */
+/* ============================================
+   RESPONSIVE: PANTALLAS MEDIANAS Y GRANDES
+   ============================================ */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .pqr-container {
+        padding: 1rem 1.5rem;
+        max-width: 900px;
+    }
+
+    .pqr-header {
+        padding: 0.85rem 1.5rem 0.5rem;
+    }
+
+    .pqr-title {
+        font-size: 1.4rem;
+    }
+
+    .pqr-card {
+        padding: 1.25rem;
+    }
+
+    .order-select {
+        max-width: 200px;
+        font-size: 0.875rem;
+    }
+
+    .new-pqr-btn {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Laptops y Monitores (≥1024px) */
+@media (min-width: 1024px) {
+    .pqr-container {
+        padding: 1.25rem 2rem;
+        max-width: 1000px;
+    }
+
+    .pqr-header {
+        padding: 1rem 2rem 0.6rem;
+    }
+
+    .pqr-title {
+        font-size: 1.6rem;
+    }
+
+    .back-button {
+        font-size: 1.3rem;
+        left: 1.5rem;
+    }
+
+    .pqr-card {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .pqr-header-card .pqr-title {
+        font-size: 1.05rem;
+    }
+
+    .pqr-date {
+        font-size: 0.85rem;
+    }
+
+    .pqr-description {
+        font-size: 0.9rem;
+    }
+
+    .pqr-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.6rem;
+    }
+
+    .pqr-meta,
+    .pqr-responses {
+        font-size: 0.75rem;
+    }
+
+    .order-select {
+        max-width: 220px;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .new-pqr-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1.1rem;
+    }
+
+    .pqr-tabs {
+        margin-bottom: 1rem;
+    }
+
+    .pqr-tab {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE: PANTALLAS PEQUEÑAS
+   ============================================ */
+
+/* Móviles (≤480px) */
 @media (max-width: 480px) {
+    .pqr-header {
+        padding: 0.6rem 0.75rem 0.35rem;
+    }
+
+    .pqr-title {
+        font-size: 1.15rem;
+        margin: 0 40px;
+    }
+
+    .back-button {
+        font-size: 1rem;
+        padding: 0.35rem;
+        left: 0.5rem;
+    }
+
+    .pqr-container {
+        padding: 0.6rem 0.75rem;
+        padding-bottom: 5rem;
+    }
+
     .pqr-controls {
         flex-direction: column;
         align-items: stretch;
+        gap: 0.4rem;
+        margin-bottom: 0.6rem;
     }
     
     .order-select {
         max-width: none;
+        font-size: 0.75rem;
+        padding: 0.4rem 0.5rem;
+    }
+
+    .new-pqr-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.75rem;
+        padding: 0.45rem;
+    }
+
+    .pqr-tabs {
+        gap: 0.2rem;
+        margin-bottom: 0.6rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .pqr-tab {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.7rem;
+        border-radius: 14px;
+    }
+
+    .pqr-card {
+        padding: 0.85rem;
+        margin-bottom: 0.6rem;
+        border-radius: 8px;
+    }
+
+    .pqr-header-card {
+        margin-bottom: 0.6rem;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+    }
+
+    .pqr-header-card .pqr-title {
+        font-size: 0.875rem;
+        flex: 1;
+    }
+
+    .pqr-date {
+        font-size: 0.7rem;
+    }
+
+    .pqr-badges {
+        gap: 0.3rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .pqr-badge {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.45rem;
+        border-radius: 8px;
+    }
+
+    .pqr-description {
+        font-size: 0.75rem;
+        line-height: 1.35;
+        margin-bottom: 0.6rem;
+    }
+
+    .pqr-footer {
+        padding-top: 0.6rem;
+    }
+
+    .pqr-meta,
+    .pqr-responses {
+        font-size: 0.65rem;
+    }
+
+    .pqr-meta {
+        gap: 0.3rem;
+    }
+
+    .loading-state,
+    .error-state {
+        padding: 1rem;
+    }
+
+    .spinner-border {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .alert {
+        padding: 0.7rem;
+        font-size: 0.8rem;
     }
 }

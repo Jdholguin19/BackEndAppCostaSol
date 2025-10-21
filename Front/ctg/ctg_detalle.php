@@ -937,5 +937,42 @@ if(!u.id) {
 
     } // FIN del bloque else si hay token
 } // FIN del bloque else si hay usuario autenticado
+
+/* ------- FIX: Ajustar formulario cuando aparece el teclado en móviles ------- */
+if (frmRespuesta) {
+    // Detectar cuando el textarea recibe el foco (aparece el teclado)
+    txtMensaje.addEventListener('focus', function() {
+        // Pequeño delay para que el teclado se muestre primero
+        setTimeout(() => {
+            // Hacer scroll hacia el textarea para asegurar que sea visible
+            txtMensaje.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    });
+
+    // Usar Visual Viewport API para ajustar el formulario cuando cambia el tamaño del viewport
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            const viewportHeight = window.visualViewport.height;
+            // Ajustar el bottom del formulario basado en el nuevo height del viewport
+            frmRespuesta.style.bottom = '0px';
+        });
+
+        window.visualViewport.addEventListener('scroll', () => {
+            // Mantener el formulario en la posición correcta durante el scroll
+            frmRespuesta.style.bottom = '0px';
+        });
+    }
+
+    // Alternativa: listener para el resize de la ventana (fallback)
+    let initialHeight = window.innerHeight;
+    window.addEventListener('resize', () => {
+        const currentHeight = window.innerHeight;
+        // Si la altura disminuyó significativamente, probablemente es el teclado
+        if (initialHeight - currentHeight > 150) {
+            // El teclado está visible
+            txtMensaje.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+}
 </script>
 </body></html>
