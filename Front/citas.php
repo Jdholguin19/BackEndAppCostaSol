@@ -69,7 +69,15 @@ function fechaLarga(sqlDate){
 
 /* plantilla */
 function card(c){
-  const badge = `<span class="badge badge-estado ${c.estado}" data-cita-id="${c.id}" data-responsable-id="${c.responsable_id}">${c.estado}</span>`;
+  // Determinar el badge según la asistencia
+  let badge = '';
+  if (c.asistencia === 'ASISTIO') {
+    badge = `<span class="badge badge-asistencia asistio" data-cita-id="${c.id}" data-responsable-id="${c.responsable_id}">Asistió</span>`;
+  } else if (c.asistencia === 'NO_ASISTIO') {
+    badge = `<span class="badge badge-asistencia no-asistio" data-cita-id="${c.id}" data-responsable-id="${c.responsable_id}">No asistió</span>`;
+  } else {
+    badge = `<span class="badge badge-asistencia no-registrado" data-cita-id="${c.id}" data-responsable-id="${c.responsable_id}">Registrar asistencia</span>`;
+  }
 
   let horaMostrada = c.hora;
   if (c.intervalo_minutos) {
@@ -236,27 +244,31 @@ async function eliminarCita(idCita){
   }
 }
 
-// --- Lógica de actualización de estado ---
+// --- Lógica de actualización de asistencia ---
 const wrap = document.getElementById('citasWrap');
 
-function showStatusMenu(target, citaId, responsableId) {
+function showAsistenciaMenu(target, citaId, responsableId) {
   // Verificar si el usuario es el responsable asignado
   if (!u.is_responsable || u.id != responsableId) {
     return;
   }
 
   // Eliminar cualquier popup existente
-  document.querySelectorAll('.status-popup').forEach(p => p.remove());
+  document.querySelectorAll('.asistencia-popup').forEach(p => p.remove());
 
   const popup = document.createElement('div');
-  popup.className = 'status-popup';
+  popup.className = 'asistencia-popup';
 
-  const statuses = ['PROGRAMADO', 'REALIZADO', 'CANCELADO'];
-  statuses.forEach(status => {
+  const asistencias = [
+    { label: 'Asistió', value: 'ASISTIO' },
+    { label: 'No asistió', value: 'NO_ASISTIO' }
+  ];
+  
+  asistencias.forEach(opt => {
     const option = document.createElement('button');
-    option.className = 'status-option';
-    option.textContent = status;
-    option.onclick = () => updateStatus(citaId, status);
+    option.className = 'asistencia-option';
+    option.textContent = opt.label;
+    option.onclick = () => updateAsistencia(citaId, opt.value);
     popup.appendChild(option);
   });
 
@@ -278,12 +290,12 @@ function showStatusMenu(target, citaId, responsableId) {
   }, 0);
 }
 
-async function updateStatus(citaId, newStatus) {
+async function updateAsistencia(citaId, asistencia) {
   const token = localStorage.getItem('cs_token');
   if (!token) return;
 
   try {
-    const response = await fetch('../api/cita/cita_update_estado.php', {
+    const response = await fetch('../api/cita/cita_registrar_asistencia.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -291,32 +303,33 @@ async function updateStatus(citaId, newStatus) {
       },
       body: JSON.stringify({
         cita_id: citaId,
-        estado: newStatus
+        asistencia: asistencia
       })
     });
 
     const data = await response.json();
 
     if (data.ok) {
-      alert('Estado actualizado correctamente.');
+      alert('Asistencia registrada correctamente.');
       location.reload(); // Recargar para ver el cambio
     } else {
-      alert('Error al actualizar el estado: ' + (data.mensaje || 'Error desconocido.'));
+      alert('Error al registrar asistencia: ' + (data.mensaje || 'Error desconocido.'));
     }
   } catch (error) {
-    console.error('Error en la solicitud de actualización de estado:', error);
-    alert('Error de conexión al intentar actualizar el estado.');
+    console.error('Error en la solicitud de asistencia:', error);
+    alert('Error de conexión al intentar registrar asistencia.');
   }
 }
 
 wrap.addEventListener('click', (e) => {
-  const badge = e.target.closest('.badge-estado');
+  const badge = e.target.closest('.badge-asistencia');
   if (badge) {
     const citaId = badge.dataset.citaId;
     const responsableId = badge.dataset.responsableId;
-    showStatusMenu(badge, citaId, responsableId);
+    showAsistenciaMenu(badge, citaId, responsableId);
   }
 });
+
 </script>
 </body>
 </html>

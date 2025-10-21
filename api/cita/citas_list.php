@@ -61,6 +61,7 @@ try {
             -- Usar la duración específica si existe, si no, la del responsable, con un fallback de 30
             COALESCE(v.duracion_minutos, rd.intervalo_minutos, 30) AS intervalo_minutos,
             v.estado,
+            v.asistencia,
             r.nombre                     AS responsable,
             r.url_foto_perfil            AS url_foto,
             CONCAT('Proyecto ', u.nombre,

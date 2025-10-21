@@ -199,8 +199,8 @@ body {
     overflow-wrap: break-word;
 }
 
-/* Badge Styles */
-.badge-estado {
+/* Badge Styles - Asistencia */
+.badge-asistencia {
     font-size: 0.75rem;
     font-weight: 600;
     padding: 0.375rem 0.75rem;
@@ -209,21 +209,59 @@ body {
     letter-spacing: 0.5px;
     flex-shrink: 0;
     white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.badge-estado.PROGRAMADO {
-    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-    color: #000000;
-}
-
-.badge-estado.CONFIRMADO {
+.badge-asistencia.asistio {
     background: linear-gradient(135deg, #198754 0%, #146c43 100%);
     color: #ffffff;
 }
 
-.badge-estado.CANCELADO {
+.badge-asistencia.no-asistio {
     background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
     color: #ffffff;
+}
+
+.badge-asistencia.no-registrado {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #000000;
+}
+
+/* Popup para seleccionar asistencia */
+.asistencia-popup {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    min-width: 180px;
+}
+
+.asistencia-option {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.asistencia-option:hover {
+    background-color: #f0f0f0;
+}
+
+.asistencia-option:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.asistencia-option:last-child {
+    border-radius: 0 0 8px 8px;
 }
 
 /* Cancel Button */
