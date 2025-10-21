@@ -11,6 +11,56 @@
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_cita_nueva.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    .search-container {
+        position: relative;
+    }
+    .cita-form-input {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 16px;
+        background-color: #fff;
+    }
+    .cita-form-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+    .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ced4da;
+        border-top: none;
+        border-radius: 0 0 5px 5px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 1000;
+        display: none;
+    }
+    .search-result-item {
+        padding: 10px 15px;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .search-result-item:hover {
+        background-color: #f8f9fa;
+    }
+    .search-result-item:last-child {
+        border-bottom: none;
+    }
+    .search-result-name {
+        font-weight: 500;
+    }
+    .search-result-info {
+        font-size: 12px;
+        color: #6c757d;
+    }
+</style>
 </head>
 <body>
 
@@ -36,7 +86,11 @@
       <i class="bi bi-person-check"></i>
       Cliente
     </label>
-    <select id="selUsuario" class="form-select"><option value="">-- Seleccione un cliente --</option></select>
+    <div class="search-container">
+        <input type="text" id="userSearch" class="cita-form-input" placeholder="Escriba el nombre del cliente..." autocomplete="off" required>
+        <input type="hidden" id="userSel" required>
+        <div id="userResults" class="search-results"></div>
+    </div>
   </div>
 
   <!-- Propiedad Section -->
@@ -112,7 +166,9 @@ const responsable = JSON.parse(localStorage.getItem('cs_usuario')||'{}');
 if(!responsable.is_responsable) location.href='login_front.php';
 
 /* ---------- refs ---------- */
-const userSel = document.getElementById('selUsuario');
+const userSearch = document.getElementById('userSearch');
+const userSel = document.getElementById('userSel');
+const userResults = document.getElementById('userResults');
 const propSel  = document.getElementById('selProp');
 const propGrid = document.getElementById('propGrid');
 const calendarContainer = document.getElementById('calendar-container');
@@ -127,9 +183,118 @@ const horasSection = document.getElementById('horas-section');
 
 /* ---------- estado local ---------- */
 let selectedUserId = 0;
+let searchTimeout = null;
 let propositoId = 0, fechaSel='', horaSel='', citaDuracion = 0;
 let fp; // flatpickr instance
 let hourObserver; // IntersectionObserver for hours
+
+/* ---------- Función para buscar clientes ---------- */
+function searchClients(query) {
+    if (query.length < 2) {
+        userResults.style.display = 'none';
+        return;
+    }
+
+    fetch(`../api/filtro_propiedad/buscar_clientes.php?q=${encodeURIComponent(query)}&limit=10`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(r => r.json())
+    .then(d => {
+        userResults.innerHTML = '';
+        if (d.ok && d.clientes && d.clientes.length > 0) {
+            d.clientes.forEach(client => {
+                const div = document.createElement('div');
+                div.className = 'search-result-item';
+                div.innerHTML = `
+                    <div class="search-result-name">${client.nombres} ${client.apellidos}</div>
+                    <div class="search-result-info">Propiedades: ${client.total_propiedades}</div>
+                `;
+                div.addEventListener('click', () => {
+                    selectClient(client);
+                });
+                userResults.appendChild(div);
+            });
+            userResults.style.display = 'block';
+        } else {
+            userResults.style.display = 'none';
+        }
+    })
+    .catch(() => {
+        userResults.style.display = 'none';
+    });
+}
+
+/* ---------- Función para seleccionar cliente ---------- */
+function selectClient(client) {
+    selectedUserId = client.id;
+    userSel.value = client.id;
+    userSearch.value = `${client.nombres} ${client.apellidos}`;
+    userSearch.dataset.selectedText = userSearch.value;
+    userResults.style.display = 'none';
+
+    // Limpiar propiedades anteriores
+    propSel.innerHTML = '<option value="">Seleccione una propiedad...</option>';
+    reset(0);
+
+    // Cargar propiedades del usuario seleccionado
+    fetch(`../api/obtener_propiedades.php?id_usuario=${selectedUserId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(r => r.json())
+    .then(d => {
+        if (!d.ok || !d.propiedades.length) {
+            alert('Este cliente no tiene propiedades asignadas.');
+            propiedadSection.style.display = 'none';
+            propositoSection.style.display = 'none';
+            return;
+        }
+        d.propiedades.forEach(p => {
+            propSel.insertAdjacentHTML('beforeend',
+                `<option value="${p.id}">${p.urbanizacion} — Mz ${p.manzana} / Villa ${p.solar}</option>`);
+        });
+        propiedadSection.style.display = 'block';
+        propositoSection.style.display = 'block';
+    });
+}
+
+/* ---------- Evento input en el campo de búsqueda ---------- */
+userSearch.addEventListener('input', (e) => {
+    const query = e.target.value.trim();
+
+    // Limpiar selección anterior si el usuario está escribiendo
+    if (query !== userSearch.dataset.selectedText) {
+        selectedUserId = null;
+        userSel.value = '';
+        propSel.innerHTML = '<option value="">Seleccione una propiedad...</option>';
+        propiedadSection.style.display = 'none';
+        propositoSection.style.display = 'none';
+        reset(0);
+    }
+
+    // Limpiar timeout anterior
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+
+    // Establecer nuevo timeout para búsqueda
+    searchTimeout = setTimeout(() => {
+        searchClients(query);
+    }, 300);
+});
+
+/* ---------- Cerrar resultados al hacer click fuera ---------- */
+document.addEventListener('click', (e) => {
+    if (!userSearch.contains(e.target) && !userResults.contains(e.target)) {
+        userResults.style.display = 'none';
+    }
+});
+
+/* ---------- Prevenir envío del formulario al presionar Enter en el campo de búsqueda ---------- */
+userSearch.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+    }
+});
 
 /* ---------- helpers ---------- */
 function reset(lvl){
@@ -153,59 +318,8 @@ function reset(lvl){
   btnOk.disabled = !(selectedUserId && propSel.value && propositoId && fechaSel && horaSel);
 }
 
-/* ---------- Cargar Usuarios ---------- */
+/* ---------- Cargar token ---------- */
 const token = localStorage.getItem('cs_token');
-fetch('../api/user_list.php', {
-    headers: {
-        'Authorization': `Bearer ${token}`
-    }
-})
-.then(r => r.json()).then(d => {
-    if (!d.ok) {
-        alert('No se pudo cargar la lista de clientes.');
-        return;
-    }
-    d.data.forEach(u => {
-        userSel.insertAdjacentHTML('beforeend',
-            `<option value="${u.id_usuario}">${u.nombre} ${u.apellido}</option>`);
-    });
-});
-
-/* ---------- Evento: seleccionar usuario ---------- */
-userSel.addEventListener('change', () => {
-    selectedUserId = userSel.value;
-    propSel.innerHTML = ''; // Limpiar propiedades anteriores
-    reset(0);
-
-    if (!selectedUserId) {
-        propiedadSection.style.display = 'none';
-        propositoSection.style.display = 'none';
-        return;
-    }
-
-    // Cargar propiedades del usuario seleccionado
-    fetch(`../api/obtener_propiedades.php?id_usuario=${selectedUserId}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
-    .then(r => r.json()).then(d => {
-        if (!d.ok || d.propiedades.length === 0) {
-            alert('Este cliente no tiene propiedades asignadas.');
-            propiedadSection.style.display = 'none';
-            propositoSection.style.display = 'none';
-            return;
-        }
-        d.propiedades.forEach(p => {
-            propSel.insertAdjacentHTML('beforeend',
-                `<option value="${p.id}">${p.urbanizacion} — Mz ${p.manzana} / Villa ${p.solar}</option>`);
-        });
-        propiedadSection.style.display = 'block';
-        propositoSection.style.display = 'block';
-    });
-});
-
-/* ---------- cargar propósitos ---------- */
 fetch('../api/propositos.php').then(r=>r.json()).then(d=>{
   if(!d.ok) return;
   d.items.forEach(p=>{
