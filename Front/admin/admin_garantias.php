@@ -364,14 +364,15 @@
     </div>
 
     <div class="garantias-table">
-      <div class="table-header">
-        <h2 class="table-title">Lista de Garantías</h2>
-        <div class="filter-section">
-          <select class="filter-select" id="tipoPropiedadFilter" onchange="filterGarantias()">
-            <option value="">Todos los tipos</option>
-          </select>
-        </div>
-      </div>
+            <div class="table-header">
+                <h2 class="table-title">Lista de Garantías</h2>
+                <div class="filter-section">
+                    <input type="search" id="searchInput" class="form-control" placeholder="Buscar garantías..." oninput="searchGarantiasRealtime(event)">
+                    <select class="filter-select" id="tipoPropiedadFilter" onchange="filterGarantias()">
+                        <option value="">Todos los tipos</option>
+                    </select>
+                </div>
+            </div>
 
       <div id="garantiasTableContainer">
         <div class="loading">
@@ -569,18 +570,34 @@ function populateTipoPropiedadSelect() {
 }
 
 // Filtrar garantías
+// Filtrar garantías (considera filtro por tipo y texto de búsqueda)
 function filterGarantias() {
     const tipoFilter = document.getElementById('tipoPropiedadFilter').value;
+    const searchValue = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
 
     let filteredGarantias = allGarantias;
 
     if (tipoFilter) {
-        filteredGarantias = allGarantias.filter(garantia => {
+        filteredGarantias = filteredGarantias.filter(garantia => {
             return !garantia.tipo_propiedad_id || garantia.tipo_propiedad_id == tipoFilter;
         });
     }
 
+    if (searchValue) {
+        filteredGarantias = filteredGarantias.filter(garantia => {
+            const nombre = (garantia.nombre || '').toString().toLowerCase();
+            const descripcion = (garantia.descripcion || '').toString().toLowerCase();
+            return nombre.includes(searchValue) || descripcion.includes(searchValue);
+        });
+    }
+
     renderGarantiasTable(filteredGarantias);
+}
+
+// Búsqueda en tiempo real: enlazado al input oninput
+function searchGarantiasRealtime(e) {
+    // Usamos filterGarantias que ya aplica el searchInput
+    filterGarantias();
 }
 
 // Renderizar tabla de garantías
@@ -613,28 +630,39 @@ function renderGarantiasTable(garantias) {
             <tbody>
                 ${garantias.map(garantia => `
                     <tr>
-                        <td>${garantia.nombre}</td>
-                        <td>${garantia.descripcion || '-'}</td>
-                        <td>
+                        <td data-label="Nombre">${garantia.nombre}</td>
+                        <td data-label="Descripción">${garantia.descripcion || '-'}</td>
+                        <td data-label="Tipo Garantía">
                             <span class="status-badge ${garantia.valida_hasta_entrega ? 'status-active' : 'status-inactive'}">
                                 ${garantia.valida_hasta_entrega ? 'Hasta entrega' : garantia.tiempo_garantia_meses + ' meses'}
                             </span>
                         </td>
-                        <td>${garantia.tipo_propiedad_nombre || 'Todos'}</td>
-                        <td>
+                        <td data-label="Tipo Propiedad">${garantia.tipo_propiedad_nombre || 'Todos'}</td>
+                        <td data-label="Estado">
                             <span class="status-badge ${garantia.estado ? 'status-active' : 'status-inactive'}">
                                 ${garantia.estado ? 'Activo' : 'Inactivo'}
                             </span>
                         </td>
-                        <td>${garantia.orden}</td>
-                        <td>
-                            <div class="action-buttons">
+                        <td data-label="Orden">${garantia.orden}</td>
+                        <td data-label="Acciones">
+                            <div class="action-buttons desktop-actions">
                                 <button class="btn-action btn-edit" onclick="editGarantia(${garantia.id})">
                                     <i class="bi bi-pencil"></i>
                                 </button>
                                 <button class="btn-action btn-delete" onclick="deleteGarantia(${garantia.id})">
                                     <i class="bi bi-trash"></i>
                                 </button>
+                            </div>
+                            <div class="mobile-actions">
+                                <div class="dropdown">
+                                    <button class="btn-action btn-secondary dropdown-toggle" type="button" id="actionsMenu${garantia.id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsMenu${garantia.id}">
+                                        <li><a class="dropdown-item" href="#" onclick="editGarantia(${garantia.id}); return false;">Editar</a></li>
+                                        <li><a class="dropdown-item text-danger" href="#" onclick="deleteGarantia(${garantia.id}); return false;">Eliminar</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </td>
                     </tr>

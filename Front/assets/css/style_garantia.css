@@ -44,6 +44,17 @@
     padding-left: 0.25rem;
 }
 
+/* Desktop: reserve space at left so title doesn't overlap back icon */
+@media (min-width: 1024px) {
+    .garantias-title {
+        padding-left: 30rem; /* reserve ~48px + gap */
+    }
+
+    .back-button {
+        left: 1rem; /* slight extra offset on large screens */
+    }
+}
+
 .garantias-subtitle {
     font-size: 0.875rem;
     color: #6b7280;
@@ -422,3 +433,122 @@
         margin-bottom: 0.5rem;
     }
 }
+
+/* Admin guarantees: responsive table -> card layout */
+@media (max-width: 768px) {
+    .garantias-table table {
+        border: 0;
+    }
+
+    .garantias-table thead {
+        display: none;
+    }
+
+    .garantias-table tbody,
+    .garantias-table tr,
+    .garantias-table td,
+    .garantias-table th {
+        display: block;
+        width: 100%;
+    }
+
+    .garantias-table tr {
+        background: #ffffff;
+        border: 1px solid #e6edf0;
+        border-radius: 10px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+
+    .garantias-table td {
+        padding: 0.5rem 0.25rem;
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        border-bottom: 0.5px solid rgba(0,0,0,0.03);
+    }
+
+    .garantias-table td:last-child {
+        border-bottom: none;
+    }
+
+    .garantias-table td::before {
+        content: attr(data-label) ":";
+        font-weight: 600;
+        color: #6b7280;
+        margin-right: 0.5rem;
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .action-buttons .btn-action {
+        padding: 0.45rem 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .filter-section {
+        width: 100%;
+    }
+
+    .filter-select {
+        width: 100%;
+    }
+
+    .modal-dialog {
+        max-width: 95%;
+        margin: 0.5rem;
+    }
+
+    .modal-content {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .garantias-table tr {
+        padding: 0.5rem;
+    }
+
+    .garantias-table td::before {
+        font-size: 0.8rem;
+    }
+
+    .btn-add {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .action-buttons {
+        justify-content: flex-end;
+    }
+}
+
+/* Desktop vs Mobile action visibility */
+@media (max-width: 768px) {
+    .desktop-actions { display: none; }
+    .mobile-actions { display: inline-flex; }
+}
+
+@media (min-width: 769px) {
+    .desktop-actions { display: inline-flex; }
+    .mobile-actions { display: none; }
+}
+
+/* Search input visual */
+#searchInput {
+    min-width: 180px;
+    max-width: 320px;
+    border-radius: 6px;
+    padding-left: 0.75rem;
+}
+
+.dropdown-menu .dropdown-item { font-size: 0.95rem; }
