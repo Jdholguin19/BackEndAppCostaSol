@@ -13,20 +13,20 @@
 </head>
 <body>
 
-<!-- Header Section -->
+<!-- Header Section (match PQR layout: back button + title centered) -->
 <div class="garantias-header">
-  <div style="position: relative; text-align: center;">
-    <button class="back-button" onclick="history.back()">
-      <i class="bi bi-arrow-left"></i>
-    </button>
-    <div>
-      <h1 class="garantias-title">Garantías</h1>
-      <p class="garantias-subtitle">Información detallada de garantías</p>
+    <div style="position: relative; text-align: center;">
+        <button class="back-button" onclick="history.back()">
+            <i class="bi bi-arrow-left"></i>
+        </button>
+        <div>
+            <h1 class="garantias-title">Garantías</h1>
+        </div>
     </div>
+    <!-- Admin button kept at right side of header (hidden by default, shown for responsables) -->
     <button class="admin-button" id="adminButton" style="display: none;" onclick="location.href='admin/admin_garantias.php'">
-      <i class="bi bi-gear"></i> Administrar
+        <i class="bi bi-gear"></i>
     </button>
-  </div>
 </div>
 
 <!-- Main Content -->
@@ -51,7 +51,7 @@
 
   <!-- Procedimiento de Reclamación -->
   <div class="info-card-procedure">
-    <h4>Procedimiento de Reclamación</h4>
+    <p class="garantia-categoria">Procedimiento de reclamación</p>
     <ol>
       <li>Identifique el problema y verifique si está cubierto por la garantía.</li>
       <li>Tome fotografías que evidencien el problema.</li>
@@ -212,7 +212,7 @@ async function loadGarantias() {
 
         // Mostrar garantías de 1 año
         if (clasificadas['12_meses'].length > 0) {
-            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Garantías válidas por 1 año</h4>');
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 class="garantia-categoria">Garantías válidas por 1 año</h4>');
             clasificadas['12_meses'].forEach(garantia => {
                 garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
             });
@@ -220,7 +220,7 @@ async function loadGarantias() {
 
         // Mostrar garantías de 6 meses
         if (clasificadas['6_meses'].length > 0) {
-            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Garantías válidas por 6 meses</h4>');
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 class="garantia-categoria">Garantías válidas por 6 meses</h4>');
             clasificadas['6_meses'].forEach(garantia => {
                 garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
             });
@@ -228,7 +228,7 @@ async function loadGarantias() {
 
         // Mostrar garantías de 3 meses
         if (clasificadas['3_meses'].length > 0) {
-            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Garantías válidas por 3 meses</h4>');
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 class="garantia-categoria">Garantías válidas por 3 meses</h4>');
             clasificadas['3_meses'].forEach(garantia => {
                 garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
             });
@@ -236,7 +236,7 @@ async function loadGarantias() {
 
         // Mostrar otras duraciones
         if (clasificadas['otras'].length > 0) {
-            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Otras garantías</h4>');
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 class="garantia-categoria">Otras garantías</h4>');
             clasificadas['otras'].forEach(garantia => {
                 garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
             });
@@ -244,7 +244,7 @@ async function loadGarantias() {
 
         // Mostrar garantías válidas hasta la entrega (al final)
         if (clasificadas['entrega'].length > 0) {
-            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 30px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600; border-top: 2px solid #e5e7eb; padding-top: 20px;">Garantías válidas hasta la entrega</h4>');
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 class="garantia-categoria" style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 1.6rem;">Garantías válidas hasta la entrega</h4>');
             clasificadas['entrega'].forEach(garantia => {
                 garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
             });
