@@ -76,7 +76,7 @@ try {
     // 3. OBTENER LISTA DE GARANTÍAS ACTIVAS
     if ($is_responsable) {
         // Responsables ven todas las garantías
-        $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id
+        $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, valida_hasta_entrega, tipo_propiedad_id
                 FROM garantias
                 WHERE estado = 1
                 ORDER BY orden ASC, nombre ASC';
@@ -84,7 +84,7 @@ try {
         $stmt->execute();
     } else {
         // Usuarios normales ven garantías generales + específicas de su tipo
-        $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id
+        $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, valida_hasta_entrega, tipo_propiedad_id
                 FROM garantias
                 WHERE estado = 1
                 AND (tipo_propiedad_id IS NULL OR tipo_propiedad_id = :tipo_propiedad_id)
@@ -95,7 +95,7 @@ try {
             $params['tipo_propiedad_id'] = $tipo_propiedad_id;
         } else {
             // Si no hay tipo_propiedad_id, solo mostrar garantías generales
-            $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id
+            $sql = 'SELECT id, nombre, descripcion, tiempo_garantia_meses, valida_hasta_entrega, tipo_propiedad_id
                     FROM garantias
                     WHERE estado = 1 AND tipo_propiedad_id IS NULL
                     ORDER BY orden ASC, nombre ASC';
@@ -111,36 +111,56 @@ try {
     foreach ($garantias as $garantia) {
         // Formatear duración
         $tiempo_meses = intval($garantia['tiempo_garantia_meses']);
+        $valida_hasta_entrega = (int)$garantia['valida_hasta_entrega'];
+        
         $duracion_texto = '';
-        if ($tiempo_meses >= 12) {
-            $anios = floor($tiempo_meses / 12);
-            $meses_restantes = $tiempo_meses % 12;
-            $duracion_texto = $anios == 1 ? '1 año' : $anios . ' años';
-            if ($meses_restantes > 0) {
-                $duracion_texto .= ' y ' . ($meses_restantes == 1 ? '1 mes' : $meses_restantes . ' meses');
-            }
+        if ($valida_hasta_entrega) {
+            $duracion_texto = 'Válida hasta la entrega';
         } else {
-            $duracion_texto = ($tiempo_meses == 1) ? '1 mes' : $tiempo_meses . ' meses';
+            if ($tiempo_meses >= 12) {
+                $anios = floor($tiempo_meses / 12);
+                $meses_restantes = $tiempo_meses % 12;
+                $duracion_texto = $anios == 1 ? '1 año' : $anios . ' años';
+                if ($meses_restantes > 0) {
+                    $duracion_texto .= ' y ' . ($meses_restantes == 1 ? '1 mes' : $meses_restantes . ' meses');
+                }
+            } else {
+                $duracion_texto = ($tiempo_meses == 1) ? '1 mes' : $tiempo_meses . ' meses';
+            }
         }
 
         // Calcular vigencia y estado
         $vigencia_texto = 'No aplica';
         $activa = false; // Por defecto, no está activa si no hay fecha de entrega
+        $tipo_garantia = 'tiempo'; // 'tiempo' o 'entrega'
 
         if ($fecha_entrega_str) {
             try {
-                $fecha_vencimiento = new DateTime($fecha_entrega_str);
+                if ($valida_hasta_entrega) {
+                    // Garantía válida hasta la entrega
+                    $fecha_vencimiento = new DateTime($fecha_entrega_str);
+                    $vigencia_texto = $fecha_vencimiento->format('d/m/Y');
+                    $tipo_garantia = 'entrega';
+                    
+                    // Comparar con la fecha actual
+                    $hoy = new DateTime();
+                    $activa = ($fecha_vencimiento >= $hoy->setTime(0, 0, 0));
+                } else {
+                    // Garantía por tiempo (meses)
+                    $fecha_vencimiento = new DateTime($fecha_entrega_str);
 
-                // Sumar el tiempo de garantía en meses
-                if ($tiempo_meses > 0) {
-                    $fecha_vencimiento->add(new DateInterval("P{$tiempo_meses}M"));
+                    // Sumar el tiempo de garantía en meses
+                    if ($tiempo_meses > 0) {
+                        $fecha_vencimiento->add(new DateInterval("P{$tiempo_meses}M"));
+                    }
+
+                    $vigencia_texto = $fecha_vencimiento->format('d/m/Y');
+                    $tipo_garantia = 'tiempo';
+
+                    // Comparar con la fecha actual para determinar si está activa
+                    $hoy = new DateTime();
+                    $activa = ($fecha_vencimiento >= $hoy->setTime(0, 0, 0));
                 }
-
-                $vigencia_texto = $fecha_vencimiento->format('d/m/Y');
-
-                // Comparar con la fecha actual para determinar si está activa
-                $hoy = new DateTime();
-                $activa = ($fecha_vencimiento >= $hoy->setTime(0, 0, 0));
 
             } catch (Exception $e) {
                 $vigencia_texto = 'Error';
@@ -156,6 +176,7 @@ try {
             'duracion' => $duracion_texto,
             'vigencia' => $vigencia_texto,
             'activa' => $activa,
+            'tipo_garantia' => $tipo_garantia,
             'responsable' => 'Thalia Victoria Constructora'
         ];
     }

@@ -118,6 +118,53 @@ function createGarantiaCard(garantia) {
     `;
 }
 
+// Función para clasificar garantías por duración
+function clasificarGarantias(garantias) {
+    const por_duracion = {
+        '12_meses': [],      // 1 año
+        '6_meses': [],       // 6 meses
+        '3_meses': [],       // 3 meses
+        'otras': [],         // Otras duraciones
+        'entrega': []        // Válidas hasta la entrega
+    };
+
+    garantias.forEach(garantia => {
+        if (garantia.tipo_garantia === 'entrega') {
+            por_duracion.entrega.push(garantia);
+        } else {
+            const meses = extraerMeses(garantia.duracion);
+            
+            if (meses === 12) {
+                por_duracion['12_meses'].push(garantia);
+            } else if (meses === 6) {
+                por_duracion['6_meses'].push(garantia);
+            } else if (meses === 3) {
+                por_duracion['3_meses'].push(garantia);
+            } else {
+                por_duracion['otras'].push(garantia);
+            }
+        }
+    });
+
+    return por_duracion;
+}
+
+// Función para extraer meses de la duración
+function extraerMeses(duracion) {
+    // Extraer el número de meses de textos como "1 año", "6 meses", etc.
+    const match = duracion.match(/(\d+)\s+mes/i);
+    if (match) {
+        return parseInt(match[1]);
+    }
+    
+    const matchAno = duracion.match(/(\d+)\s+año/i);
+    if (matchAno) {
+        return parseInt(matchAno[1]) * 12;
+    }
+    
+    return 0;
+}
+
 // Cargar garantías
 async function loadGarantias() {
     try {
@@ -144,18 +191,64 @@ async function loadGarantias() {
         document.getElementById('spinner').remove();
         
         if (data.garantias.length === 0) {
-            garantiasList.innerHTML = `
-                <div class="text-center py-5">
-                    <i class="bi bi-info-circle text-muted" style="font-size: 3rem;"></i>
-                    <p class="text-muted mt-3">No hay garantías disponibles</p>
-                </div>
-            `;
+            // Si no hay garantías, no mostrar nada
+            garantiasList.innerHTML = '';
             return;
         }
 
-        data.garantias.forEach(garantia => {
-            garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
-        });
+        // Clasificar garantías
+        const clasificadas = clasificarGarantias(data.garantias);
+
+        // Verificar si hay al menos una categoría con garantías
+        const hayGarantias = Object.values(clasificadas).some(grupo => grupo.length > 0);
+
+        // Limpiar contenedor
+        garantiasList.innerHTML = '';
+
+        if (!hayGarantias) {
+            // Si no hay garantías en ninguna categoría, no mostrar nada
+            return;
+        }
+
+        // Mostrar garantías de 1 año
+        if (clasificadas['12_meses'].length > 0) {
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Garantías válidas por 1 año</h4>');
+            clasificadas['12_meses'].forEach(garantia => {
+                garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
+            });
+        }
+
+        // Mostrar garantías de 6 meses
+        if (clasificadas['6_meses'].length > 0) {
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Garantías válidas por 6 meses</h4>');
+            clasificadas['6_meses'].forEach(garantia => {
+                garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
+            });
+        }
+
+        // Mostrar garantías de 3 meses
+        if (clasificadas['3_meses'].length > 0) {
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Garantías válidas por 3 meses</h4>');
+            clasificadas['3_meses'].forEach(garantia => {
+                garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
+            });
+        }
+
+        // Mostrar otras duraciones
+        if (clasificadas['otras'].length > 0) {
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 20px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600;">Otras garantías</h4>');
+            clasificadas['otras'].forEach(garantia => {
+                garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
+            });
+        }
+
+        // Mostrar garantías válidas hasta la entrega (al final)
+        if (clasificadas['entrega'].length > 0) {
+            garantiasList.insertAdjacentHTML('beforeend', '<h4 style="margin-top: 30px; margin-bottom: 15px; color: #2d5a3d; font-weight: 600; border-top: 2px solid #e5e7eb; padding-top: 20px;">Garantías válidas hasta la entrega</h4>');
+            clasificadas['entrega'].forEach(garantia => {
+                garantiasList.insertAdjacentHTML('beforeend', createGarantiaCard(garantia));
+            });
+        }
 
     } catch (error) {
         console.error('Error al cargar garantías:', error);

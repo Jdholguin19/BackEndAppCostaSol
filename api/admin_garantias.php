@@ -74,9 +74,19 @@ try {
         }
 
         // Validar campos requeridos
-        if (empty($input['nombre']) || !isset($input['tiempo_garantia_meses'])) {
+        if (empty($input['nombre'])) {
             http_response_code(400);
-            echo json_encode(['ok' => false, 'error' => 'Nombre y tiempo de garantía son requeridos']);
+            echo json_encode(['ok' => false, 'error' => 'El nombre es requerido']);
+            exit;
+        }
+
+        // Validar que o bien tiempo_garantia_meses o valida_hasta_entrega estén definidos
+        $validaHastaEntrega = isset($input['valida_hasta_entrega']) && $input['valida_hasta_entrega'] == '1';
+        $tiempoGarantiaMeses = !empty($input['tiempo_garantia_meses']) ? intval($input['tiempo_garantia_meses']) : 0;
+
+        if (!$validaHastaEntrega && $tiempoGarantiaMeses < 1) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Debe especificar una duración o marcar "Válida hasta la entrega"']);
             exit;
         }
 
@@ -84,29 +94,24 @@ try {
         $data = [
             'nombre' => trim($input['nombre']),
             'descripcion' => trim($input['descripcion'] ?? ''),
-            'tiempo_garantia_meses' => intval($input['tiempo_garantia_meses']),
+            'tiempo_garantia_meses' => $validaHastaEntrega ? 0 : $tiempoGarantiaMeses,
+            'valida_hasta_entrega' => $validaHastaEntrega ? 1 : 0,
             'tipo_propiedad_id' => !empty($input['tipo_propiedad_id']) ? intval($input['tipo_propiedad_id']) : null,
             'estado' => isset($input['estado']) ? intval($input['estado']) : 1,
             'orden' => isset($input['orden']) ? intval($input['orden']) : 0
         ];
 
-        // Validar tiempo de garantía
-        if ($data['tiempo_garantia_meses'] < 1) {
-            http_response_code(400);
-            echo json_encode(['ok' => false, 'error' => 'El tiempo de garantía debe ser al menos 1 mes']);
-            exit;
-        }
-
         // Insertar
         $stmt = $db->prepare("
-            INSERT INTO garantias (nombre, descripcion, tiempo_garantia_meses, tipo_propiedad_id, estado, orden)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO garantias (nombre, descripcion, tiempo_garantia_meses, valida_hasta_entrega, tipo_propiedad_id, estado, orden)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
             $data['nombre'],
             $data['descripcion'],
             $data['tiempo_garantia_meses'],
+            $data['valida_hasta_entrega'],
             $data['tipo_propiedad_id'],
             $data['estado'],
             $data['orden']
@@ -142,9 +147,19 @@ try {
         }
 
         // Validar campos requeridos
-        if (empty($input['nombre']) || !isset($input['tiempo_garantia_meses'])) {
+        if (empty($input['nombre'])) {
             http_response_code(400);
-            echo json_encode(['ok' => false, 'error' => 'Nombre y tiempo de garantía son requeridos']);
+            echo json_encode(['ok' => false, 'error' => 'El nombre es requerido']);
+            exit;
+        }
+
+        // Validar que o bien tiempo_garantia_meses o valida_hasta_entrega estén definidos
+        $validaHastaEntrega = isset($input['valida_hasta_entrega']) && $input['valida_hasta_entrega'] == '1';
+        $tiempoGarantiaMeses = !empty($input['tiempo_garantia_meses']) ? intval($input['tiempo_garantia_meses']) : 0;
+
+        if (!$validaHastaEntrega && $tiempoGarantiaMeses < 1) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Debe especificar una duración o marcar "Válida hasta la entrega"']);
             exit;
         }
 
@@ -152,23 +167,17 @@ try {
         $data = [
             'nombre' => trim($input['nombre']),
             'descripcion' => trim($input['descripcion'] ?? ''),
-            'tiempo_garantia_meses' => intval($input['tiempo_garantia_meses']),
+            'tiempo_garantia_meses' => $validaHastaEntrega ? 0 : $tiempoGarantiaMeses,
+            'valida_hasta_entrega' => $validaHastaEntrega ? 1 : 0,
             'tipo_propiedad_id' => !empty($input['tipo_propiedad_id']) ? intval($input['tipo_propiedad_id']) : null,
             'estado' => isset($input['estado']) ? intval($input['estado']) : 1,
             'orden' => isset($input['orden']) ? intval($input['orden']) : 0
         ];
 
-        // Validar tiempo de garantía
-        if ($data['tiempo_garantia_meses'] < 1) {
-            http_response_code(400);
-            echo json_encode(['ok' => false, 'error' => 'El tiempo de garantía debe ser al menos 1 mes']);
-            exit;
-        }
-
         // Actualizar
         $stmt = $db->prepare("
             UPDATE garantias
-            SET nombre = ?, descripcion = ?, tiempo_garantia_meses = ?,
+            SET nombre = ?, descripcion = ?, tiempo_garantia_meses = ?, valida_hasta_entrega = ?,
                 tipo_propiedad_id = ?, estado = ?, orden = ?
             WHERE id = ?
         ");
@@ -177,6 +186,7 @@ try {
             $data['nombre'],
             $data['descripcion'],
             $data['tiempo_garantia_meses'],
+            $data['valida_hasta_entrega'],
             $data['tipo_propiedad_id'],
             $data['estado'],
             $data['orden'],

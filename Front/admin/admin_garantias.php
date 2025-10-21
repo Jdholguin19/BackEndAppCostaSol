@@ -408,7 +408,15 @@
 
           <div class="form-group">
             <label for="tiempoGarantiaMeses" class="form-label">Tiempo de Garantía (meses) *</label>
-            <input type="number" class="form-control" id="tiempoGarantiaMeses" name="tiempo_garantia_meses" min="1" required>
+            <input type="number" class="form-control" id="tiempoGarantiaMeses" name="tiempo_garantia_meses" min="1">
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox-group">
+              <input type="checkbox" id="validaHastaEntrega" name="valida_hasta_entrega" onchange="toggleTiempoGarantia()">
+              <label for="validaHastaEntrega" class="form-label">Válida hasta la entrega</label>
+            </div>
+            <small class="text-muted">Si está marcado, esta garantía será válida hasta la fecha de entrega de la propiedad (no requiere duración en meses)</small>
           </div>
 
           <div class="form-group">
@@ -595,7 +603,7 @@ function renderGarantiasTable(garantias) {
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
-                    <th>Tiempo (meses)</th>
+                    <th>Tipo Garantía</th>
                     <th>Tipo Propiedad</th>
                     <th>Estado</th>
                     <th>Orden</th>
@@ -607,7 +615,11 @@ function renderGarantiasTable(garantias) {
                     <tr>
                         <td>${garantia.nombre}</td>
                         <td>${garantia.descripcion || '-'}</td>
-                        <td>${garantia.tiempo_garantia_meses}</td>
+                        <td>
+                            <span class="status-badge ${garantia.valida_hasta_entrega ? 'status-active' : 'status-inactive'}">
+                                ${garantia.valida_hasta_entrega ? 'Hasta entrega' : garantia.tiempo_garantia_meses + ' meses'}
+                            </span>
+                        </td>
                         <td>${garantia.tipo_propiedad_nombre || 'Todos'}</td>
                         <td>
                             <span class="status-badge ${garantia.estado ? 'status-active' : 'status-inactive'}">
@@ -640,6 +652,8 @@ function openCreateModal() {
     document.getElementById('modalTitle').textContent = 'Nueva Garantía';
     document.getElementById('garantiaForm').reset();
     document.getElementById('estado').checked = true;
+    document.getElementById('validaHastaEntrega').checked = false;
+    toggleTiempoGarantia();
 
     // Establecer orden automáticamente (máximo + 1)
     const maxOrden = allGarantias.length > 0 ? Math.max(...allGarantias.map(g => g.orden || 0)) : 0;
@@ -649,48 +663,41 @@ function openCreateModal() {
     modal.show();
 }
 
+// Toggle para habilitar/deshabilitar tiempo de garantía
+function toggleTiempoGarantia() {
+    const checkbox = document.getElementById('validaHastaEntrega');
+    const tiempoInput = document.getElementById('tiempoGarantiaMeses');
+    
+    if (checkbox.checked) {
+        tiempoInput.disabled = true;
+        tiempoInput.value = '';
+    } else {
+        tiempoInput.disabled = false;
+    }
+}
+
 // Editar garantía
 function editGarantia(id) {
     currentGarantiaId = id;
 
-    // Buscar la garantía en la tabla (temporal, después implementar API)
-    const rows = document.querySelectorAll('#garantiasTableContainer table tbody tr');
-    let garantiaData = null;
+    // Buscar la garantía en el array allGarantias
+    const garantia = allGarantias.find(g => g.id === id);
 
-    rows.forEach(row => {
-        const editBtn = row.querySelector('.btn-edit');
-        if (editBtn && editBtn.onclick.toString().includes(id)) {
-            const cells = row.querySelectorAll('td');
-            garantiaData = {
-                nombre: cells[0].textContent,
-                descripcion: cells[1].textContent === '-' ? '' : cells[1].textContent,
-                tiempo_garantia_meses: cells[2].textContent,
-                tipo_propiedad_nombre: cells[3].textContent,
-                estado: cells[4].textContent.includes('Activo'),
-                orden: cells[5].textContent
-            };
-        }
-    });
-
-    if (garantiaData) {
+    if (garantia) {
         document.getElementById('modalTitle').textContent = 'Editar Garantía';
         document.getElementById('garantiaId').value = id;
-        document.getElementById('nombre').value = garantiaData.nombre;
-        document.getElementById('descripcion').value = garantiaData.descripcion;
-        document.getElementById('tiempoGarantiaMeses').value = garantiaData.tiempo_garantia_meses;
-        document.getElementById('orden').value = garantiaData.orden;
-        document.getElementById('estado').checked = garantiaData.estado;
+        document.getElementById('nombre').value = garantia.nombre;
+        document.getElementById('descripcion').value = garantia.descripcion || '';
+        document.getElementById('tiempoGarantiaMeses').value = garantia.tiempo_garantia_meses || '';
+        document.getElementById('validaHastaEntrega').checked = garantia.valida_hasta_entrega ? true : false;
+        document.getElementById('orden').value = garantia.orden || '';
+        document.getElementById('estado').checked = garantia.estado ? true : false;
+        
+        toggleTiempoGarantia();
 
         // Seleccionar tipo de propiedad
         const tipoSelect = document.getElementById('tipoPropiedadId');
-        const tipoOption = Array.from(tipoSelect.options).find(option =>
-            option.textContent === garantiaData.tipo_propiedad_nombre
-        );
-        if (tipoOption) {
-            tipoSelect.value = tipoOption.value;
-        } else {
-            tipoSelect.value = '';
-        }
+        tipoSelect.value = garantia.tipo_propiedad_id || '';
 
         const modal = new bootstrap.Modal(document.getElementById('garantiaModal'));
         modal.show();
@@ -702,8 +709,18 @@ async function saveGarantia() {
     const form = document.getElementById('garantiaForm');
     const formData = new FormData(form);
 
-    // Convertir checkbox a valor numérico
+    // Validar que o bien tiempo_garantia_meses o valida_hasta_entrega estén definidos
+    const tiempoMeses = formData.get('tiempo_garantia_meses');
+    const validaHastaEntrega = formData.get('valida_hasta_entrega') ? '1' : '0';
+
+    if (!validaHastaEntrega && !tiempoMeses) {
+        showError('Debe especificar una duración o marcar "Válida hasta la entrega"');
+        return;
+    }
+
+    // Convertir checkboxes a valores numéricos
     formData.set('estado', formData.get('estado') ? '1' : '0');
+    formData.set('valida_hasta_entrega', validaHastaEntrega);
 
     const data = Object.fromEntries(formData.entries());
 

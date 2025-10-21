@@ -4,7 +4,7 @@ USE `portalao_appCostaSol`;
 --
 -- Host: box5500.bluehost.com    Database: portalao_appCostaSol
 -- ------------------------------------------------------
--- Server version	5.7.23-23
+-- Server version	5.7.44-48
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -73,6 +73,7 @@ CREATE TABLE `agendamiento_visitas` (
   `hora_reunion` time NOT NULL,
   `estado` enum('PROGRAMADO','CONFIRMADO','CANCELADO') COLLATE utf8_unicode_ci DEFAULT 'PROGRAMADO',
   `resultado` varchar(150) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `asistencia` enum('NO_REGISTRADO','ASISTIO','NO_ASISTIO') COLLATE utf8_unicode_ci DEFAULT 'NO_REGISTRADO' COMMENT 'Registro de asistencia del cliente a la cita',
   `fecha_actualizacion` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `id_propiedad` bigint(20) unsigned DEFAULT NULL,
   `observaciones` text COLLATE utf8_unicode_ci COMMENT 'Objetivo o descripcion breve de la visita proporcionada por el usario',
@@ -84,11 +85,12 @@ CREATE TABLE `agendamiento_visitas` (
   KEY `id_usuario` (`id_usuario`),
   KEY `fk_agendamiento_propiedad` (`id_propiedad`),
   KEY `fk_visita_proposito` (`proposito_id`),
+  KEY `idx_asistencia` (`asistencia`),
   CONSTRAINT `agendamiento_visitas_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`),
   CONSTRAINT `agendamiento_visitas_ibfk_2` FOREIGN KEY (`responsable_id`) REFERENCES `responsable` (`id`),
   CONSTRAINT `fk_agendamiento_propiedad` FOREIGN KEY (`id_propiedad`) REFERENCES `propiedad` (`id`),
   CONSTRAINT `fk_visita_proposito` FOREIGN KEY (`proposito_id`) REFERENCES `proposito_agendamiento` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1325 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1334 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +114,7 @@ CREATE TABLE `audit_log` (
   KEY `idx_user` (`user_id`,`user_type`),
   KEY `idx_action` (`action`),
   KEY `idx_resource` (`target_resource`,`target_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=579 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1035 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -173,7 +175,7 @@ CREATE TABLE `ctg` (
   CONSTRAINT `fk_ctg_tipo` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_ctg` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_ctg_urgencia` FOREIGN KEY (`urgencia_id`) REFERENCES `urgencia_ctg` (`id`),
   CONSTRAINT `fk_pqr_propiedad` FOREIGN KEY (`id_propiedad`) REFERENCES `propiedad` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -241,6 +243,31 @@ CREATE TABLE `etapa_construccion` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `garantias`
+--
+
+DROP TABLE IF EXISTS `garantias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `garantias` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `descripcion` text COLLATE utf8_unicode_ci,
+  `tiempo_garantia_meses` smallint(5) unsigned NOT NULL COMMENT 'Tiempo de garantía en meses',
+  `tipo_propiedad_id` tinyint(3) unsigned DEFAULT NULL COMMENT 'FK a tipo_propiedad.id, NULL = aplica a todos los tipos',
+  `estado` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = inactivo, 1 = activo',
+  `orden` smallint(5) unsigned DEFAULT '0' COMMENT 'Orden de visualización',
+  `fecha_creacion` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_actualizacion` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_tipo_propiedad` (`tipo_propiedad_id`),
+  KEY `idx_estado` (`estado`),
+  KEY `idx_orden` (`orden`),
+  CONSTRAINT `fk_garantias_tipo_propiedad` FOREIGN KEY (`tipo_propiedad_id`) REFERENCES `tipo_propiedad` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `kit_color_opcion`
 --
 
@@ -256,33 +283,7 @@ CREATE TABLE `kit_color_opcion` (
   PRIMARY KEY (`id`),
   KEY `fk_opcion_kit_color` (`acabado_kit_id`),
   CONSTRAINT `fk_opcion_kit_color` FOREIGN KEY (`acabado_kit_id`) REFERENCES `acabado_kit` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `log_sincronizacion_outlook`
---
-
-DROP TABLE IF EXISTS `log_sincronizacion_outlook`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `log_sincronizacion_outlook` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `id_cita` bigint(20) unsigned DEFAULT NULL COMMENT 'ID de la cita local afectada',
-  `id_responsable` bigint(20) unsigned DEFAULT NULL COMMENT 'ID del responsable cuya cuenta de Outlook se usó',
-  `direccion` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Dirección de la sincronización (App -> Outlook, Outlook -> App)',
-  `accion` varchar(50) COLLATE utf8_unicode_ci NOT NULL COMMENT 'La operación realizada (CREAR, ACTUALIZAR, ELIMINAR)',
-  `estado` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Resultado de la operación (Exito, Error)',
-  `mensaje` text COLLATE utf8_unicode_ci COMMENT 'Mensaje de error o información adicional',
-  `payload_enviado` text COLLATE utf8_unicode_ci COMMENT 'Cuerpo de la petición enviada a Microsoft Graph API',
-  `respuesta_recibida` text COLLATE utf8_unicode_ci COMMENT 'Cuerpo de la respuesta recibida de Microsoft Graph API',
-  `fecha_hora` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_id_cita` (`id_cita`),
-  KEY `idx_id_responsable` (`id_responsable`),
-  CONSTRAINT `fk_log_cita` FOREIGN KEY (`id_cita`) REFERENCES `agendamiento_visitas` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `fk_log_responsable` FOREIGN KEY (`id_responsable`) REFERENCES `responsable` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1983 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,7 +307,7 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   KEY `usuario_actualizo` (`usuario_actualizo`),
   CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`usuario_actualizo`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,7 +395,7 @@ CREATE TABLE `pqr` (
   CONSTRAINT `fk_pqr_tipo` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_pqr` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk_pqr_urgencia` FOREIGN KEY (`urgencia_id`) REFERENCES `urgencia_ctg` (`id`),
   CONSTRAINT `fk_pqr_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -472,7 +473,7 @@ CREATE TABLE `propiedad` (
   CONSTRAINT `propiedad_ibfk_2` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_propiedad` (`id`),
   CONSTRAINT `propiedad_ibfk_3` FOREIGN KEY (`etapa_id`) REFERENCES `etapa_construccion` (`id`),
   CONSTRAINT `propiedad_ibfk_4` FOREIGN KEY (`estado_id`) REFERENCES `estado_propiedad` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=494 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=497 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -493,7 +494,7 @@ CREATE TABLE `propiedad_paquetes_adicionales` (
   KEY `idx_paquete` (`paquete_id`),
   CONSTRAINT `fk_prop_paq_paquete` FOREIGN KEY (`paquete_id`) REFERENCES `paquetes_adicionales` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk_prop_paq_propiedad` FOREIGN KEY (`propiedad_id`) REFERENCES `propiedad` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -532,7 +533,7 @@ CREATE TABLE `registro_login` (
   KEY `id_usuario` (`id_usuario`),
   KEY `id_responsable` (`id_responsable`),
   CONSTRAINT `registro_login_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=945 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=971 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -584,7 +585,7 @@ CREATE TABLE `responsable` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `correo` (`correo`),
   KEY `idx_responsable_onesignal_player_id` (`onesignal_player_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -634,7 +635,7 @@ CREATE TABLE `respuesta_ctg` (
   CONSTRAINT `fk_resp_resp` FOREIGN KEY (`responsable_id`) REFERENCES `responsable` (`id`) ON DELETE SET NULL,
   CONSTRAINT `fk_resp_responsable` FOREIGN KEY (`responsable_id`) REFERENCES `responsable` (`id`),
   CONSTRAINT `fk_resp_usuario` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=193 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=195 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -697,26 +698,6 @@ CREATE TABLE `rol_menu` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `subtipo_ctg`
---
-
-DROP TABLE IF EXISTS `subtipo_ctg`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `subtipo_ctg` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `tipo_id` tinyint(3) unsigned NOT NULL,
-  `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `urgencia_id` tinyint(3) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_tipo_nombre` (`tipo_id`,`nombre`),
-  KEY `fk_subtipo_urgencia` (`urgencia_id`),
-  CONSTRAINT `fk_subtipo_tipo_ctg` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_ctg` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_subtipo_urgencia_ctg` FOREIGN KEY (`urgencia_id`) REFERENCES `urgencia_ctg` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `tipo_ctg`
 --
 
@@ -731,21 +712,6 @@ CREATE TABLE `tipo_ctg` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `nombre` (`nombre`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `tipo_ctg_backup`
---
-
-DROP TABLE IF EXISTS `tipo_ctg_backup`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tipo_ctg_backup` (
-  `id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `nombre` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `tiempo_garantia_min` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `tiempo_garantia_max` varchar(60) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -858,4 +824,4 @@ CREATE TABLE `usuario` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-02 15:54:54
+-- Dump completed on 2025-10-21 12:05:50
