@@ -459,16 +459,20 @@
         padding: 0.75rem;
         margin-bottom: 0.75rem;
         box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        display: flex;
+        flex-direction: column;
     }
 
     .garantias-table td {
         padding: 0.5rem 0.25rem;
         border: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: block; /* stack label above value on mobile */
+        text-align: left;
+        align-items: flex-start;
         gap: 0.5rem;
         border-bottom: 0.5px solid rgba(0,0,0,0.03);
+        white-space: normal;
+        word-break: break-word;
     }
 
     .garantias-table td:last-child {
@@ -476,12 +480,13 @@
     }
 
     .garantias-table td::before {
-        content: attr(data-label) ":";
-        font-weight: 600;
+        content: attr(data-label);
+        display: block; /* label on its own line */
+        font-weight: 700;
         color: #6b7280;
-        margin-right: 0.5rem;
+        margin: 0 0 0.35rem 0;
         font-size: 0.85rem;
-        white-space: nowrap;
+        white-space: normal;
     }
 
     .action-buttons {
@@ -511,6 +516,72 @@
     .modal-content {
         padding: 0.75rem;
     }
+
+    /* Mobile grouping: make 'Nombre' prominent and group badges together */
+    .garantias-table td[data-label="Nombre"] {
+        font-size: 1rem;
+        font-weight: 700;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px dashed rgba(34, 197, 94, 0.06);
+        margin-bottom: 0.5rem;
+        order: 1;
+    }
+
+    .garantias-table td[data-label="Descripción"] {
+        display: none;
+    }
+
+    /* badges in grid layout: 2 columns */
+    .garantias-table td[data-label="Tipo Garantía"],
+    .garantias-table td[data-label="Tipo Propiedad"],
+    .garantias-table td[data-label="Estado"],
+    .garantias-table td[data-label="Orden"],
+    .garantias-table td[data-label="Acciones"] {
+        width: 48%;
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 2%;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem 0.25rem;
+    }
+
+    /* Tipo Garantía - top left (order 2) */
+    .garantias-table td[data-label="Tipo Garantía"] {
+        order: 2;
+    }
+
+    /* Tipo Propiedad - top right (order 3) */
+    .garantias-table td[data-label="Tipo Propiedad"] {
+        order: 3;
+        margin-right: 0;
+    }
+
+    /* Estado - middle left (order 4) */
+    .garantias-table td[data-label="Estado"] {
+        order: 4;
+    }
+
+    /* Orden - middle right (order 5) */
+    .garantias-table td[data-label="Orden"] {
+        order: 5;
+        margin-right: 0;
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+
+    /* Acciones - bottom spanning full width (order 6) */
+    .garantias-table td[data-label="Acciones"] {
+        width: 100%;
+        margin-right: 0;
+        padding-top: 0.6rem;
+        order: 6;
+    }
+
+    .garantias-table td[data-label="Acciones"] .desktop-actions {
+        margin-bottom: 0.35rem;
+    }
+
+    /* action buttons will use their specific classes (.btn-edit, .btn-delete) so do not neutralize colors here */
 }
 
 @media (max-width: 480px) {
@@ -535,12 +606,10 @@
 /* Desktop vs Mobile action visibility */
 @media (max-width: 768px) {
     .desktop-actions { display: none; }
-    .mobile-actions { display: inline-flex; }
 }
 
 @media (min-width: 769px) {
     .desktop-actions { display: inline-flex; }
-    .mobile-actions { display: none; }
 }
 
 /* Search input visual */
@@ -552,3 +621,16 @@
 }
 
 .dropdown-menu .dropdown-item { font-size: 0.95rem; }
+
+/* Keep actions inline inside stacked td */
+.garantias-table td .action-buttons {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.desktop-actions .btn-action {
+    min-width: 38px;
+    height: 36px;
+    padding: 0.35rem 0.5rem;
+}

@@ -619,7 +619,6 @@ function renderGarantiasTable(garantias) {
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Descripción</th>
                     <th>Tipo Garantía</th>
                     <th>Tipo Propiedad</th>
                     <th>Estado</th>
@@ -631,7 +630,6 @@ function renderGarantiasTable(garantias) {
                 ${garantias.map(garantia => `
                     <tr>
                         <td data-label="Nombre">${garantia.nombre}</td>
-                        <td data-label="Descripción">${garantia.descripcion || '-'}</td>
                         <td data-label="Tipo Garantía">
                             <span class="status-badge ${garantia.valida_hasta_entrega ? 'status-active' : 'status-inactive'}">
                                 ${garantia.valida_hasta_entrega ? 'Hasta entrega' : garantia.tiempo_garantia_meses + ' meses'}
@@ -647,23 +645,13 @@ function renderGarantiasTable(garantias) {
                         <td data-label="Acciones">
                             <div class="action-buttons desktop-actions">
                                 <button class="btn-action btn-edit" onclick="editGarantia(${garantia.id})">
-                                    <i class="bi bi-pencil"></i>
+                                    <i class="bi bi-pencil" ></i>
                                 </button>
                                 <button class="btn-action btn-delete" onclick="deleteGarantia(${garantia.id})">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
-                            <div class="mobile-actions">
-                                <div class="dropdown">
-                                    <button class="btn-action btn-secondary dropdown-toggle" type="button" id="actionsMenu${garantia.id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="actionsMenu${garantia.id}">
-                                        <li><a class="dropdown-item" href="#" onclick="editGarantia(${garantia.id}); return false;">Editar</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#" onclick="deleteGarantia(${garantia.id}); return false;">Eliminar</a></li>
-                                    </ul>
-                                </div>
-                            </div>
+
                         </td>
                     </tr>
                 `).join('')}
