@@ -652,6 +652,132 @@ body {
     font-size: 0.8rem;
 }
 
+/* ============================================
+   RESPONSIVE: PANTALLAS GRANDES Y MEDIANAS
+   ============================================ */
+
+/* Tablets y pantallas medianas (768px - 1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .ctg-detalle-container {
+        max-width: 900px; /* Expandir un poco más en tablets */
+        padding: 1.5rem 2rem;
+    }
+
+    .ctg-detalle-box {
+        padding: 2rem;
+    }
+
+    .chat-bubble {
+        max-width: 75%; /* Un poco más ancho en tablets */
+    }
+
+    .observaciones-container {
+        max-width: 600px; /* Modal más ancho en tablets */
+    }
+
+    /* Header más compacto en tablets */
+    .ctg-detalle-header {
+        padding: 0.5rem 1.5rem 0.3rem;
+    }
+
+    .ctg-detalle-title {
+        font-size: 1.3rem;
+    }
+}
+
+/* Pantallas grandes - Laptops y Monitores (≥1200px) */
+@media (min-width: 1200px) {
+    .ctg-detalle-container {
+        max-width: 1000px; /* Aprovechar mejor el espacio en pantallas grandes */
+        padding: 2rem 3rem;
+    }
+
+    .ctg-detalle-box {
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .ctg-detalle-title {
+        font-size: 1.75rem; /* Título más grande */
+    }
+
+    .chat-bubble {
+        max-width: 70%; /* Burbujas con ancho controlado */
+        font-size: 1rem;
+        padding: 1rem 1.25rem;
+    }
+
+    .chat-list {
+        padding: 1.5rem;
+    }
+
+    .response-form {
+        padding: 1.5rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .response-textarea {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+
+    .observaciones-container {
+        max-width: 700px; /* Modal más grande en pantallas amplias */
+        padding: 2rem;
+    }
+
+    .observaciones-textarea {
+        min-height: 120px;
+        font-size: 1rem;
+    }
+
+    /* Mejorar espaciado de botones */
+    .send-button, .attach-file-button {
+        padding: 0.85rem 1.25rem;
+        font-size: 1rem;
+    }
+
+    /* Header más espacioso */
+    .ctg-detalle-header {
+        padding: 0.6rem 2rem 0.4rem; /* Mucho más compacto */
+    }
+
+    .ctg-detalle-title {
+        font-size: 1.5rem; /* Título más pequeño */
+    }
+
+    .back-button {
+        font-size: 1.3rem;
+        padding: 0.5rem;
+    }
+
+    /* Imágenes más grandes */
+    .problema-image {
+        width: 160px;
+        height: 160px;
+    }
+
+    .media-item img {
+        max-width: 300px;
+    }
+}
+
+/* Pantallas extra grandes - Monitores grandes (≥1600px) */
+@media (min-width: 1600px) {
+    .ctg-detalle-container {
+        max-width: 1200px; /* Máximo ancho para no perder legibilidad */
+    }
+
+    .chat-bubble {
+        max-width: 65%; /* Mantener burbujas no muy anchas */
+    }
+}
+
+/* ============================================
+   RESPONSIVE: PANTALLAS PEQUEÑAS
+   ============================================ */
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
     /* --- Header --- */

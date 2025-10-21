@@ -128,8 +128,8 @@ include '../api/bottom_nav.php';
     const token = localStorage.getItem('cs_token'); // Get token here as it's not global in this scope
     await logModuleAccess(menu.id, menu.nombre, token);
 
-    // Si el nombre es CTG lanzamos ctg.php
-    if ((menu.nombre || '').trim().toUpperCase() === 'CTG'){
+    // Si el nombre es Contingencia lanzamos ctg.php
+    if ((menu.nombre || '').trim().toUpperCase() === 'CONTINGENCIA') {
         location.href = 'ctg/ctg.php';               // ctg.php leerá el usuario desde localStorage
         return;
     }
