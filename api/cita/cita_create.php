@@ -79,53 +79,13 @@ if ($duracion_a_guardar <= 0) {
     $duracion_a_guardar = 60; // Valor por defecto para verificación de solapamiento
 }
 
-/* responsable disponible con menos carga ese día */
-$resp=$db->prepare("
- SELECT r.id, COUNT(v_all.id) AS n -- Count ALL non-cancelled appointments for the day
- FROM   responsable r
- JOIN   responsable_disponibilidad d ON d.responsable_id=r.id
-       AND d.activo=1 AND d.dia_semana= :dia_calculated
-       AND :f BETWEEN d.fecha_vigencia_desde
-                 AND IFNULL(d.fecha_vigencia_hasta,'2999-12-31')
-       AND TIME(:h) BETWEEN d.hora_inicio AND d.hora_fin
- LEFT   JOIN agendamiento_visitas v_all ON v_all.responsable_id=r.id
-       AND v_all.fecha_reunion=:f
-       AND v_all.estado<>'CANCELADO'
- WHERE r.id != 3
- GROUP  BY r.id
- HAVING NOT EXISTS (
-    SELECT 1
-    FROM agendamiento_visitas v_overlap
-    WHERE v_overlap.responsable_id = r.id
-      AND v_overlap.fecha_reunion = :f
-      AND v_overlap.estado <> 'CANCELADO'
-      AND (
-          -- Check if the new appointment overlaps with existing appointments
-          (TIME(:h) >= v_overlap.hora_reunion AND TIME(:h) < ADDTIME(v_overlap.hora_reunion, SEC_TO_TIME(COALESCE(v_overlap.duracion_minutos, 60) * 60)))
-          OR
-          (v_overlap.hora_reunion >= TIME(:h) AND v_overlap.hora_reunion < ADDTIME(TIME(:h), SEC_TO_TIME(:duracion * 60)))
-      )
- )
- ORDER  BY n ASC, RAND() ASC
- LIMIT 1");
-$resp->execute([':f'=>$fecha,':h'=>$hora, ':dia_calculated'=>$dia, ':duracion'=>$duracion_a_guardar]);
-$respId=$resp->fetchColumn();
-if(!$respId) throw new Exception('Sin responsable');
-
-// --- FINALIZAR: Determinar duración final para guardar ---
-if ($duracion_especial <= 0) {
-    // Si no vino una duración especial, buscar la por defecto del responsable seleccionado
-    $stmt_intervalo = $db->prepare("
-        SELECT intervalo_minutos FROM responsable_disponibilidad 
-        WHERE responsable_id = :resp_id AND dia_semana = :dia 
-        AND :f BETWEEN fecha_vigencia_desde AND IFNULL(fecha_vigencia_hasta, '2999-12-31')
-        LIMIT 1
-    ");
-    $stmt_intervalo->execute([':resp_id' => $respId, ':dia' => $dia, ':f' => $fecha]);
-    $duracion_a_guardar = $stmt_intervalo->fetchColumn();
-    if (!$duracion_a_guardar) {
-        $duracion_a_guardar = 30; // Fallback al default de la tabla si algo falla
-    }
+/* responsable disponible según propósito */
+// Si el propósito es ID 4 (Consultas con crédito y cobranzas), asignar al responsable 4
+// Para otros propósitos, asignar al responsable 2
+if ($proposito == 4) {
+    $respId = 4; // Asignar a responsable 4 para Consultas con crédito y cobranzas
+} else {
+    $respId = 2; // Asignar a responsable 2 para otros propósitos
 }
 
 /* inserta */
