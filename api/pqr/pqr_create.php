@@ -120,8 +120,9 @@ try{
         ':resp'=>$respId
     ]);
 
-    // --- INICIO: Lógica de envío de correo a responsable ---
+    // --- INICIO: Lógica de envío de correo a responsable y cliente ---
     require_once __DIR__ . '/../../correos/EnviarCorreoNotificacionResponsable.php';
+    require_once __DIR__ . '/../../correos/EnviarCorreoClienteCTGPQR.php';
 
     // Obtener correo del responsable
     $sql_resp_email = 'SELECT correo FROM responsable WHERE id = :resp_id LIMIT 1';
@@ -129,12 +130,13 @@ try{
     $stmt_resp_email->execute([':resp_id' => $respId]);
     $correoResponsable = $stmt_resp_email->fetchColumn();
 
-    // Obtener nombre del cliente
-    $sql_cliente_nombre = 'SELECT nombres, apellidos FROM usuario WHERE id = :user_id LIMIT 1';
+    // Obtener correo y nombre del cliente
+    $sql_cliente_nombre = 'SELECT nombres, apellidos, correo FROM usuario WHERE id = :user_id LIMIT 1';
     $stmt_cliente_nombre = $db->prepare($sql_cliente_nombre);
     $stmt_cliente_nombre->execute([':user_id' => $authenticated_user_id]);
     $cliente_data = $stmt_cliente_nombre->fetch(PDO::FETCH_ASSOC);
     $nombreCliente = trim($cliente_data['nombres'] . ' ' . $cliente_data['apellidos']);
+    $correoCliente = $cliente_data['correo'];
 
     // Obtener nombre del tipo de PQR
     $sql_tipo_pqr_nombre = 'SELECT nombre FROM tipo_pqr WHERE id = :tipo_id LIMIT 1';
@@ -148,7 +150,7 @@ try{
     $stmt_propiedad_nombre->execute([':prop_id' => $pid]);
     $nombrePropiedad = $stmt_propiedad_nombre->fetchColumn();
 
-    // Enviar correo si se obtuvo el correo del responsable
+    // Enviar correo al responsable
     if ($correoResponsable) {
         enviarNotificacionResponsable(
             $correoResponsable,
@@ -160,7 +162,20 @@ try{
     } else {
         error_log("No se pudo obtener el correo del responsable con ID: " . $respId);
     }
-    // --- FIN: Lógica de envío de correo a responsable ---
+
+    // Enviar correo al cliente
+    if ($correoCliente) {
+        enviarCorreoClientePQR(
+            $correoCliente,
+            $nombreCliente,
+            $tipoTicket,
+            $nombrePropiedad,
+            $numero
+        );
+    } else {
+        error_log("No se pudo obtener el correo del cliente con ID: " . $authenticated_user_id);
+    }
+    // --- FIN: Lógica de envío de correo a responsable y cliente ---
 
     echo json_encode(['ok'=>true,'id'=>$db->lastInsertId(),'numero'=>$numero]);
     log_audit_action($db, 'CREATE_PQR', $authenticated_user_id, 'usuario', 'pqr', $db->lastInsertId(), ['numero_solicitud' => $numero, 'id_propiedad' => $pid, 'tipo_id' => $tipo, 'descripcion' => $desc, 'responsable_id' => $respId]);
