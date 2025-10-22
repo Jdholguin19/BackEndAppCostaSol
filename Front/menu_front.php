@@ -1632,7 +1632,7 @@ include '../api/bottom_nav.php';
       <div class="chat-header">
         <div class="topbar">
           <div>
-            <div class="title">Hola Sistemas 👋</div>
+            <div class="title">Hola ${u.nombres || u.nombre || 'Usuario'} 👋</div>
             <div class="subtitle">¿Cómo podemos ayudarte?</div>
           </div>
           <div class="chat-options">
@@ -1647,8 +1647,23 @@ include '../api/bottom_nav.php';
       </div>
       <div class="chat-body" id="chatBody"></div>
       <div class="chat-footer">
+        <button id="btnEmoji" class="btn btn-link" title="Emoji"><i class="bi bi-emoji-smile"></i></button>
+        <button id="btnGif" class="btn btn-link" title="GIF"><i class="bi bi-filetype-gif"></i></button>
+        <button id="btnAttach" class="btn btn-link" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
+        <button id="btnAudio" class="btn btn-link" title="Audio"><i class="bi bi-mic"></i></button>
+        <input id="fileInput" type="file" style="display:none" />
         <input id="chatText" class="chat-input" type="text" placeholder="Escribe un mensaje..." />
         <button id="chatSend" class="chat-send">Enviar</button>
+      </div>
+      <div id="emojiPanel" style="display:none; padding:8px; border-top:1px solid var(--chat-border)">
+        <span class="emoji">😀</span>
+        <span class="emoji">😁</span>
+        <span class="emoji">😂</span>
+        <span class="emoji">😊</span>
+        <span class="emoji">😍</span>
+        <span class="emoji">👍</span>
+        <span class="emoji">🙏</span>
+        <span class="emoji">🎉</span>
       </div>
     `;
     document.body.appendChild(modal);
@@ -1666,6 +1681,12 @@ include '../api/bottom_nav.php';
     const optExpand= modal.querySelector('#optExpand');
     const optTrans = modal.querySelector('#optTranscript');
     const optClose = modal.querySelector('#optClose');
+    const btnAttach = modal.querySelector('#btnAttach');
+    const fileInput = modal.querySelector('#fileInput');
+    const btnEmoji  = modal.querySelector('#btnEmoji');
+    const emojiPanel= modal.querySelector('#emojiPanel');
+    const btnGif    = modal.querySelector('#btnGif');
+    const btnAudio  = modal.querySelector('#btnAudio');
 
     let threadId = 0;
     let lastId = 0;
@@ -1676,7 +1697,25 @@ include '../api/bottom_nav.php';
       row.className = 'message-row';
       const bubble = document.createElement('div');
       bubble.className = 'message ' + (m.sender_type === 'user' ? 'user' : 'responsable');
-      bubble.textContent = m.content;
+      const text = String(m.content||'');
+      if (/^https?:\/\//.test(text)) {
+        if (/(\.png|\.jpg|\.jpeg|\.gif)$/i.test(text)) {
+          const img = document.createElement('img');
+          img.src = text; img.alt = 'imagen';
+          img.style.maxWidth = '100%'; img.style.borderRadius = '12px';
+          bubble.appendChild(img);
+        } else if (/(\.mp3|\.wav|\.ogg|\.webm)$/i.test(text)) {
+          const audio = document.createElement('audio');
+          audio.controls = true; audio.src = text;
+          bubble.appendChild(audio);
+        } else {
+          const a = document.createElement('a');
+          a.href = text; a.target = '_blank'; a.textContent = 'Abrir archivo';
+          bubble.appendChild(a);
+        }
+      } else {
+        bubble.textContent = text;
+      }
       row.appendChild(bubble);
       chatBody.appendChild(row);
       chatBody.scrollTop = chatBody.scrollHeight;
@@ -1715,6 +1754,79 @@ include '../api/bottom_nav.php';
 
     function startPolling(){ stopPolling(); pollTimer = setInterval(loadMessages, 3000); }
     function stopPolling(){ if (pollTimer) { clearInterval(pollTimer); pollTimer=null; } }
+
+    // Adjuntar archivo
+    btnAttach.addEventListener('click', ()=> fileInput.click());
+    fileInput.addEventListener('change', async ()=>{
+      if (!fileInput.files || !fileInput.files[0] || !threadId) return;
+      const f = fileInput.files[0];
+      const form = new FormData();
+      form.append('file', f);
+      try{
+        const r = await fetch('../api/chat/upload.php', {
+          method:'POST', headers:{ 'Authorization': `Bearer ${token}` }, body: form
+        });
+        const data = await r.json();
+        if (data.ok && data.url){
+          const url = data.url;
+          appendMessage({ sender_type:'user', content: url, id: lastId+1 });
+          await fetch(API_MSG, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ thread_id: threadId, content: url }) });
+        } else {
+          alert('Error subiendo archivo: '+(data.error||'desconocido'));
+        }
+      }catch(e){ console.error('upload error', e); alert('No se pudo subir el archivo'); }
+      fileInput.value='';
+    });
+
+    // Emoji picker básico
+    btnEmoji.addEventListener('click', ()=>{
+      emojiPanel.style.display = emojiPanel.style.display==='none' ? 'block' : 'none';
+    });
+    emojiPanel.querySelectorAll('.emoji').forEach(el=>{
+      el.addEventListener('click', ()=>{ chatText.value += el.textContent; chatText.focus(); });
+    });
+
+    // Insertar GIF por URL
+    btnGif.addEventListener('click', ()=>{
+      const url = prompt('Pega la URL del GIF');
+      if (!url) return;
+      chatText.value = url;
+      sendMessage();
+    });
+
+    // Grabación de audio
+    let mediaRecorder = null; let audioChunks = [];
+    btnAudio.addEventListener('click', async ()=>{
+      try{
+        if (!mediaRecorder){
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.ondataavailable = (e)=>{ if(e.data.size>0) audioChunks.push(e.data); };
+          mediaRecorder.onstop = async ()=>{
+            const blob = new Blob(audioChunks, { type: 'audio/webm' });
+            audioChunks = [];
+            const form = new FormData(); form.append('file', blob, 'audio.webm');
+            const r = await fetch('../api/chat/upload.php', { method:'POST', headers:{ 'Authorization': `Bearer ${token}` }, body: form });
+            const data = await r.json();
+            if (data.ok && data.url){
+              const url = data.url;
+              appendMessage({ sender_type:'user', content: url, id: lastId+1 });
+              await fetch(API_MSG, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ thread_id: threadId, content: url }) });
+            } else {
+              alert('Error subiendo audio');
+            }
+          };
+          mediaRecorder.start();
+          btnAudio.innerHTML = '<i class="bi bi-stop-circle"></i>';
+          btnAudio.title = 'Detener';
+        } else {
+          mediaRecorder.stop();
+          mediaRecorder = null;
+          btnAudio.innerHTML = '<i class="bi bi-mic"></i>';
+          btnAudio.title = 'Audio';
+        }
+      }catch(e){ console.error('audio error', e); alert('No se pudo acceder al micrófono'); }
+    });
 
     // Lanzador: toggle abrir/cerrar
     async function openChat(){
