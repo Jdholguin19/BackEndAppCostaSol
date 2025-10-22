@@ -82,7 +82,12 @@ if (!token) {
     .then(d => {
         if (d.ok) {
             if (d.notificaciones.length > 0) {
-                notificationsListEl.innerHTML = d.notificaciones.map(notif => {
+                // Separar notificaciones en leídas y no leídas
+                const noLeidas = d.notificaciones.filter(n => !n.leido);
+                const leidas = d.notificaciones.filter(n => n.leido);
+                
+                // Función para generar HTML de notificación
+                const generarNotificacion = (notif) => {
                     // --- Lógica para construir el enlace y la presentación dinámicamente ---
                     let detailPageUrl = '#'; // URL por defecto si el tipo es desconocido
                     let cardClass = ''; // Clase CSS opcional para la tarjeta
@@ -119,7 +124,7 @@ if (!token) {
                     });
 
                     return `
-                        <a href="${detailPageUrl}" class="notification-card" data-notification-id="${notif.id}" data-notification-type="notificacion">
+                        <a href="${detailPageUrl}" class="notification-card ${notif.leido ? 'read' : 'unread'}" data-notification-id="${notif.id}" data-notification-type="notificacion">
                             <div class="notification-header">
                                 <h3 class="notification-title">
                                     ${notificationTitle}
@@ -150,7 +155,28 @@ if (!token) {
                             </div>
                         </a>
                     `;
-                }).join('');
+                };
+
+                // Construir HTML con las dos secciones
+                let htmlContent = '';
+
+                // Sección de notificaciones no leídas
+                if (noLeidas.length > 0) {
+                    htmlContent += '<div class="unread-section">';
+                    htmlContent += '<h4 class="section-title">📬 No Leídas</h4>';
+                    htmlContent += noLeidas.map(generarNotificacion).join('');
+                    htmlContent += '</div>';
+                }
+
+                // Sección de notificaciones leídas
+                if (leidas.length > 0) {
+                    htmlContent += '<div class="read-section">';
+                    htmlContent += '<h4 class="section-title">📭 Leídas</h4>';
+                    htmlContent += leidas.map(generarNotificacion).join('');
+                    htmlContent += '</div>';
+                }
+
+                notificationsListEl.innerHTML = htmlContent;
                 
                 // Agregar event listeners para marcar notificaciones como leídas
                 document.querySelectorAll('.notification-card').forEach(card => {

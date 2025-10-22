@@ -327,3 +327,65 @@ body {
   object-fit: cover;
   border: 1px solid #e5e7eb;
 }
+
+/* Estilos para secciones de notificaciones */
+.unread-section,
+.read-section {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2d5a3d;
+  padding: 1rem 1rem 0.5rem;
+  margin: 0.5rem 0 0.5rem 0;
+  border-bottom: 2px solid #e0e7ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unread-section .section-title {
+  color: #d97706;
+  border-bottom-color: #fed7aa;
+}
+
+.read-section .section-title {
+  color: #6b7280;
+  border-bottom-color: #e5e7eb;
+}
+
+/* Estilos diferenciados para tarjetas leídas y no leídas */
+.notification-card.unread {
+  background-color: #fffbeb;
+  border-left: 4px solid #fbbf24;
+  opacity: 1;
+  font-weight: 500;
+}
+
+.notification-card.unread .notification-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.notification-card.read {
+  background-color: #f9fafb;
+  border-left: 4px solid #d1d5db;
+  opacity: 0.85;
+}
+
+.notification-card.read .notification-title {
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.notification-card.read .notification-message {
+  color: #9ca3af;
+}
+
+.notification-card.read .notification-user,
+.notification-card.read .notification-date {
+  color: #d1d5db;
+  font-size: 0.85rem;
+}
+
