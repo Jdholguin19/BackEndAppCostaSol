@@ -1647,13 +1647,24 @@ include '../api/bottom_nav.php';
       </div>
       <div class="chat-body" id="chatBody"></div>
       <div class="chat-footer">
-        <button id="btnEmoji" class="btn btn-link" title="Emoji"><i class="bi bi-emoji-smile"></i></button>
-        <button id="btnGif" class="btn btn-link" title="GIF"><i class="bi bi-filetype-gif"></i></button>
-        <button id="btnAttach" class="btn btn-link" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
-        <button id="btnAudio" class="btn btn-link" title="Audio"><i class="bi bi-mic"></i></button>
-        <input id="fileInput" type="file" style="display:none" />
-        <input id="chatText" class="chat-input" type="text" placeholder="Escribe un mensaje..." />
-        <button id="chatSend" class="chat-send">Enviar</button>
+        <div id="replyContainer" class="reply-container">
+          <div class="replying-to">
+            <div class="reply-info">
+              <div class="reply-author"></div>
+              <div class="reply-text"></div>
+            </div>
+            <button class="cancel-reply" onclick="cancelReply()">×</button>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <button id="btnEmoji" class="btn btn-link" title="Emoji"><i class="bi bi-emoji-smile"></i></button>
+          <input id="chatText" class="chat-input" type="text" placeholder="Escribe un mensaje..." />
+          <button id="btnAttach" class="btn btn-link" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
+          <button id="btnCamera" class="btn btn-link" title="Cámara"><i class="bi bi-camera"></i></button>
+          <button id="btnAudio" class="btn btn-link" title="Audio" style="display: block;"><i class="bi bi-mic"></i></button>
+          <button id="chatSend" class="chat-send" title="Enviar" style="display: none;"><i class="bi bi-send-fill"></i></button>
+          <input id="fileInput" type="file" style="display:none" />
+        </div>
       </div>
       <div id="emojiPanel" class="emoji-panel" style="display:none">
         <span class="emoji">😀</span>
@@ -1676,6 +1687,7 @@ include '../api/bottom_nav.php';
     const chatBody = modal.querySelector('#chatBody');
     const chatText = modal.querySelector('#chatText');
     const chatSend = modal.querySelector('#chatSend');
+    const btnAudio = modal.querySelector('#btnAudio');
     const menuBtn  = modal.querySelector('#chatMenuBtn');
     const menu     = modal.querySelector('#chatMenu');
     const optExpand= modal.querySelector('#optExpand');
@@ -1685,8 +1697,7 @@ include '../api/bottom_nav.php';
     const fileInput = modal.querySelector('#fileInput');
     const btnEmoji  = modal.querySelector('#btnEmoji');
     const emojiPanel= modal.querySelector('#emojiPanel');
-    const btnGif    = modal.querySelector('#btnGif');
-    const btnAudio  = modal.querySelector('#btnAudio');
+    const replyContainer = modal.querySelector('#replyContainer');
 
     let threadId = 0;
     let lastId = 0;
@@ -1700,9 +1711,9 @@ include '../api/bottom_nav.php';
     const isUploadUrl = (text)=> /^https?:\/\//.test(text) || /^\/?uploads\//i.test(text);
     function renderAttachment(bubble, text){
       const lower = String(text).toLowerCase();
-      const isImg   = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)$/i.test(lower);
-      const isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)$/i.test(lower);
-      const isVideo = /(\.mp4|\.webm|\.mov)$/i.test(lower);
+      const isImg   = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)(\?.*)?$/i.test(lower);
+      const isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)(\?.*)?$/i.test(lower) || text.startsWith('blob:') || /^data:audio\//i.test(text);
+      const isVideo = /(\.mp4|\.webm|\.mov)(\?.*)?$/i.test(lower);
       if (isImg){
         const img = document.createElement('img');
         img.src = text; img.alt = 'imagen';
@@ -1712,7 +1723,12 @@ include '../api/bottom_nav.php';
       }
       if (isAudio){
         const audio = document.createElement('audio');
-        audio.controls = true; audio.src = text; audio.style.width = '100%';
+        audio.controls = true;
+        audio.src = text;
+        audio.style.width = '100%';
+        audio.style.height = '40px';
+        audio.style.display = 'block';
+        audio.setAttribute('preload','metadata');
         bubble.appendChild(audio);
         return;
       }
@@ -1726,6 +1742,8 @@ include '../api/bottom_nav.php';
       bubble.appendChild(a);
     }
 
+    let replyingTo = null;
+    
     function appendMessage(m, opts={}){
       if (m.id && renderedIds.has(Number(m.id))) return; // evitar duplicados por id
       const row = document.createElement('div');
@@ -1733,17 +1751,77 @@ include '../api/bottom_nav.php';
       const bubble = document.createElement('div');
       bubble.className = 'message ' + (m.sender_type === 'user' ? 'user' : 'responsable');
       if (opts.pending) bubble.classList.add('pending');
+      
+      // Add reply preview if this message is a reply
+      if (m.reply_to) {
+        const replyPreview = document.createElement('div');
+        replyPreview.className = 'reply-preview';
+        replyPreview.innerHTML = `
+          <div class="reply-line"></div>
+          <div class="reply-content">
+            <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Tú' : 'Responsable'}</div>
+            <div class="reply-text">${m.reply_to.content}</div>
+          </div>
+        `;
+        bubble.appendChild(replyPreview);
+      }
+      
+      const messageContent = document.createElement('div');
+      messageContent.className = 'message-content';
       const text = String(m.content||'');
       if (isUploadUrl(text)) {
-        renderAttachment(bubble, text);
+        renderAttachment(messageContent, text);
       } else {
-        bubble.textContent = text;
+        messageContent.textContent = text;
       }
+      bubble.appendChild(messageContent);
+      
+      // Add reply button (only for non-pending messages)
+      if (!opts.pending) {
+        const replyBtn = document.createElement('button');
+        replyBtn.className = 'reply-btn';
+        replyBtn.innerHTML = '<i class="bi bi-reply"></i>';
+        replyBtn.title = 'Responder';
+        replyBtn.onclick = () => setReplyTo(m);
+        bubble.appendChild(replyBtn);
+      }
+      
       row.appendChild(bubble);
       chatBody.appendChild(row);
-      chatBody.scrollTop = chatBody.scrollHeight;
+      scrollToBottom();
       if (m.id) renderedIds.add(Number(m.id));
       return { row, bubble };
+    }
+    
+    function setReplyTo(message) {
+      replyingTo = message;
+      showReplyPreview();
+      chatText.focus();
+    }
+    
+    function showReplyPreview() {
+      const replyAuthor = replyContainer.querySelector('.reply-author');
+      const replyText = replyContainer.querySelector('.reply-text');
+      
+      replyAuthor.textContent = `Respondiendo a ${replyingTo.sender_type === 'user' ? 'ti mismo' : 'Responsable'}`;
+      replyText.textContent = replyingTo.content;
+      replyContainer.style.display = 'block';
+    }
+    
+    function cancelReply() {
+      replyingTo = null;
+      if (replyContainer) {
+        replyContainer.style.display = 'none';
+      }
+    }
+    
+    // Make cancelReply globally accessible
+    window.cancelReply = cancelReply;
+
+    function scrollToBottom(){
+      setTimeout(() => {
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 100);
     }
 
     async function ensureThread(){
@@ -1759,6 +1837,7 @@ include '../api/bottom_nav.php';
       const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
       const data = await r.json();
       if (data.ok && Array.isArray(data.messages)){
+        let hasNewMessages = false;
         data.messages.forEach(m=>{
           const key = makeKey(m);
           if (m.sender_type==='user' && pendingKeys.has(key)){
@@ -1769,7 +1848,11 @@ include '../api/bottom_nav.php';
           }
           appendMessage(m);
           lastId = Math.max(lastId, Number(m.id||0));
+          hasNewMessages = true;
         });
+        if (hasNewMessages) {
+          scrollToBottom();
+        }
       }
     }
 
@@ -1777,14 +1860,36 @@ include '../api/bottom_nav.php';
       const txt = chatText.value.trim();
       if (!txt || !threadId) return;
       chatText.value='';
-      const key = makeKey({ sender_type:'user', content: txt });
+      
+      // Reset to audio button after sending
+      btnAudio.style.display = 'block';
+      chatSend.style.display = 'none';
+      
+      // Prepare message object
+      const messageObj = { sender_type:'user', content: txt };
+      if (replyingTo) {
+        messageObj.reply_to = replyingTo;
+      }
+      
+      const key = makeKey(messageObj);
       pendingKeys.add(key);
-      appendMessage({ sender_type:'user', content: txt }, { pending: true });
+      appendMessage(messageObj, { pending: true });
+      
+      // Clear reply state
+      if (replyingTo) {
+        cancelReply();
+      }
+      
       try{
+        const payload = { thread_id: threadId, content: txt };
+        if (replyingTo) {
+          payload.reply_to_id = replyingTo.id;
+        }
+        
         await fetch(API_MSG, {
           method:'POST',
           headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ thread_id: threadId, content: txt })
+          body: JSON.stringify(payload)
         });
       }catch(e){ console.error('Error enviando mensaje', e); }
     }
@@ -1835,20 +1940,32 @@ include '../api/bottom_nav.php';
     });
 
     // Selector de emojis mejorado
-    btnEmoji.addEventListener('click', ()=>{
-      emojiPanel.style.display = emojiPanel.style.display==='none' ? 'block' : 'none';
-    });
     const emojiList = '😀 😁 😂 🤣 😊 😇 🙂 🙃 😉 😍 😘 😗 😙 😚 🥰 😋 😛 😜 🤪 😝 🤗 🤭 🤫 🤔 🤐 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 😯 😪 😫 🥱 😴 😌 🥳 🤓 😎 🤩 🥺 😤 😢 😭 😱 😳 🤯 😬 😰 🤥 🤧 🤒 🤕 🤑 🤠 🤡 👋 👍 👎 🙏 💪 ✌️ 👀 ❤️ 🧡 💛 💚 💙 💜 🤎 🖤 🤍 💔 ⭐ 🌟 🔥 🎉 🎂 🎁 🍻 ☕ 🍔 🍕 🍟 🍣 🍓 🍎 🥑 ⚽ 🏀 🎮 🎧'.split(' ');
-    emojiPanel.innerHTML = '<div class="emoji-grid">'+emojiList.map(e=>`<button class="emoji-btn" type="button">${e}</button>`).join('')+'</div>';
-    emojiPanel.querySelectorAll('.emoji-btn').forEach(el=>{ el.addEventListener('click', ()=>{ chatText.value += el.textContent; chatText.focus(); }); });
-
-    // Insertar GIF por URL
-    btnGif.addEventListener('click', ()=>{
-      const url = prompt('Pega la URL del GIF');
-      if (!url) return;
-      chatText.value = url;
-      sendMessage();
+    
+    function initializeEmojiPanel() {
+      emojiPanel.innerHTML = '<div class="emoji-grid">'+emojiList.map(e=>`<button class="emoji-btn" type="button">${e}</button>`).join('')+'</div>';
+      emojiPanel.querySelectorAll('.emoji-btn').forEach(el=>{ 
+        el.addEventListener('click', ()=>{ 
+          chatText.value += el.textContent; 
+          chatText.focus();
+          // Trigger input event to update send/audio button
+          chatText.dispatchEvent(new Event('input'));
+        }); 
+      });
+    }
+    
+    btnEmoji.addEventListener('click', ()=>{
+      const isVisible = emojiPanel.style.display === 'block';
+      if (isVisible) {
+        emojiPanel.style.display = 'none';
+      } else {
+        initializeEmojiPanel(); // Reinitialize every time
+        emojiPanel.style.display = 'block';
+      }
     });
+    
+    // Initialize emoji panel on load
+    initializeEmojiPanel();
 
     // Grabación de audio con preview
     let mediaRecorder = null; let audioChunks = [];
@@ -1905,6 +2022,8 @@ include '../api/bottom_nav.php';
       document.body.style.overflow = 'hidden';
       if (!threadId) await ensureThread();
       await loadMessages();
+      // Asegurar scroll al último mensaje al abrir el chat
+      setTimeout(() => scrollToBottom(), 200);
       startPolling();
     }
     function closeChat(){
@@ -1944,6 +2063,18 @@ include '../api/bottom_nav.php';
 
     chatSend.onclick = sendMessage;
     chatText.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendMessage(); });
+    
+    // Dynamic button switching (WhatsApp style)
+    chatText.addEventListener('input', () => {
+      const hasText = chatText.value.trim().length > 0;
+      if (hasText) {
+        btnAudio.style.display = 'none';
+        chatSend.style.display = 'block';
+      } else {
+        btnAudio.style.display = 'block';
+        chatSend.style.display = 'none';
+      }
+    });
   })();
   /* ---------- End Chat Widget ---------- */
 
