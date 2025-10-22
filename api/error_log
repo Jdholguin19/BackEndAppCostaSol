@@ -29,3 +29,121 @@
 [22-Oct-2025 08:33:55 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
 [22-Oct-2025 08:34:14 America/Boise] noticias.php: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.token' doesn't exist
 [22-Oct-2025 08:37:57 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 08:40:46 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 08:52:30 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:52:30 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:52:32 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:52:32 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:52:35 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:52:35 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:52:42 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=1
+[22-Oct-2025 08:52:45 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 08:53:14 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:53:14 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:53:18 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:53:18 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:53:20 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:53:20 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:55:31 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:55:31 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:55:46 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:55:50 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:56:11 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:56:15 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:56:18 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=1
+[22-Oct-2025 08:56:21 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 08:56:23 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:56:23 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 08:57:55 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=1
+[22-Oct-2025 08:57:57 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:58:02 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:58:30 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 08:58:37 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 08:58:37 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:03:22 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:03:23 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=1
+[22-Oct-2025 09:03:31 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 09:06:04 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:06:04 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:06:08 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:06:10 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:06:10 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:08:06 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:08:06 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:08:40 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:08:40 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:08:59 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:09:05 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:09:08 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:09:33 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:09:40 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:09:40 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:09:44 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:09:48 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:09:48 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:12:49 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:12:49 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:12:53 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:12:55 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:12:55 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:12:59 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:12:59 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:13:54 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:14:04 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:04 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:10 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:10 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:13 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:13 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:17 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:17 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:25 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:25 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:31 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:31 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:37 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:37 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:47 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:47 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:14:49 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:14:49 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:11 America/Boise] noticias.php: filter_by_user=, usuario_id=, is_responsable=
+[22-Oct-2025 09:15:18 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:18 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:23 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:23 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:26 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:26 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:28 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:28 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:30 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:30 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:36 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:36 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:15:56 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:15:56 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:16:00 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:16:00 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:22:27 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:22:27 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:22:31 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:22:31 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:22:41 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:22:41 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:22:46 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:22:46 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:22:47 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:22:47 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:23:25 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:23:25 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:23:29 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:23:29 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:24:33 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:24:33 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:24:40 America/Boise] notificaciones.php: SQLSTATE[21000]: Cardinality violation: 1222 The used SELECT statements have a different number of columns
+[22-Oct-2025 09:24:43 America/Boise] notificaciones.php: SQLSTATE[21000]: Cardinality violation: 1222 The used SELECT statements have a different number of columns
+[22-Oct-2025 09:29:20 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:29:20 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:29:24 America/Boise] noticias.php: filter_by_user=1, usuario_id=9, is_responsable=
+[22-Oct-2025 09:29:24 America/Boise] noticias.php: Filtrando noticias para usuario_id=9
+[22-Oct-2025 09:29:26 America/Boise] notificaciones.php: SQLSTATE[21000]: Cardinality violation: 1222 The used SELECT statements have a different number of columns

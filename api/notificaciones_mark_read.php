@@ -63,23 +63,32 @@ $id = (int)$data['id'];
 $sql = '';
 $params = [];
 
-$table_respuesta = ($type == 'ctg') ? 'respuesta_ctg' : 'respuesta_pqr';
-$table_main = $type;
-$id_column_main = ($type == 'ctg') ? 'ctg_id' : 'pqr_id';
-
 try {
     $db = DB::getDB();
 
-    if ($is_responsable) { // Es un responsable: marcar respuestas de usuario como leídas en sus tickets asignados
-        $sql = "UPDATE {$table_respuesta} r JOIN {$table_main} m ON r.{$id_column_main} = m.id 
-                SET r.leido = 1 
-                WHERE r.{$id_column_main} = ? AND m.responsable_id = ? AND r.usuario_id IS NOT NULL AND r.leido = 0";
+    // Si el tipo es 'notificacion', marcar notificación general como leída
+    if ($type == 'notificacion') {
+        $sql = "UPDATE notificacion 
+                SET leido = 1, fecha_lectura = NOW()
+                WHERE id = ? AND usuario_id = ? AND leido = 0";
         $params = [$id, $auth_id];
-    } else { // Es un usuario normal: marcar respuestas de responsables como leídas en su propio ticket
-        $sql = "UPDATE {$table_respuesta} r JOIN {$table_main} m ON r.{$id_column_main} = m.id 
-                SET r.leido = 1 
-                WHERE r.{$id_column_main} = ? AND m.id_usuario = ? AND r.responsable_id IS NOT NULL AND r.leido = 0";
-        $params = [$id, $auth_id];
+    } else {
+        // Tipos existentes: ctg, pqr
+        $table_respuesta = ($type == 'ctg') ? 'respuesta_ctg' : 'respuesta_pqr';
+        $table_main = $type;
+        $id_column_main = ($type == 'ctg') ? 'ctg_id' : 'pqr_id';
+
+        if ($is_responsable) { // Es un responsable: marcar respuestas de usuario como leídas en sus tickets asignados
+            $sql = "UPDATE {$table_respuesta} r JOIN {$table_main} m ON r.{$id_column_main} = m.id 
+                    SET r.leido = 1 
+                    WHERE r.{$id_column_main} = ? AND m.responsable_id = ? AND r.usuario_id IS NOT NULL AND r.leido = 0";
+            $params = [$id, $auth_id];
+        } else { // Es un usuario normal: marcar respuestas de responsables como leídas en su propio ticket
+            $sql = "UPDATE {$table_respuesta} r JOIN {$table_main} m ON r.{$id_column_main} = m.id 
+                    SET r.leido = 1 
+                    WHERE r.{$id_column_main} = ? AND m.id_usuario = ? AND r.responsable_id IS NOT NULL AND r.leido = 0";
+            $params = [$id, $auth_id];
+        }
     }
 
     $stmt = $db->prepare($sql);

@@ -119,7 +119,7 @@ if (!token) {
                     });
 
                     return `
-                        <a href="${detailPageUrl}" class="notification-card">
+                        <a href="${detailPageUrl}" class="notification-card" data-notification-id="${notif.id}" data-notification-type="notificacion">
                             <div class="notification-header">
                                 <h3 class="notification-title">
                                     ${notificationTitle}
@@ -151,6 +151,28 @@ if (!token) {
                         </a>
                     `;
                 }).join('');
+                
+                // Agregar event listeners para marcar notificaciones como leídas
+                document.querySelectorAll('.notification-card').forEach(card => {
+                    card.addEventListener('click', async (event) => {
+                        event.preventDefault(); // Prevenir navegación inmediata
+                        
+                        const notifId = card.getAttribute('data-notification-id');
+                        const notifType = card.getAttribute('data-notification-type');
+                        let href = card.getAttribute('href');
+                        
+                        // Si la URL destino es menu_front.php, agregar parámetros para marcar como leída
+                        if (href.includes('menu_front.php')) {
+                            const separator = href.includes('?') ? '&' : '?';
+                            href += separator + `notif_id=${notifId}&notif_type=${notifType}`;
+                        }
+                        
+                        // Navegar a la página (con parámetros si es necesario)
+                        if (href && href !== '#') {
+                            window.location.href = href;
+                        }
+                    });
+                });
             } else {
                 notificationsListEl.innerHTML = `
                     <div class="empty-state">

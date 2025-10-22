@@ -63,7 +63,7 @@ try {
                     WHERE rp.usuario_id IS NOT NULL AND rp.leido = 0 AND p.responsable_id = ?
                 ) as combined_counts";
         $params = [$auth_id, $auth_id];
-    } else { // Es un usuario normal: contar respuestas de responsables no leídas
+    } else { // Es un usuario normal: contar respuestas de responsables no leídas + notificaciones generales
         $sql = "SELECT SUM(unread_count) as total_unread FROM (
                     SELECT COUNT(rc.id) as unread_count 
                     FROM respuesta_ctg rc
@@ -74,8 +74,12 @@ try {
                     FROM respuesta_pqr rp
                     JOIN pqr p ON rp.pqr_id = p.id
                     WHERE rp.responsable_id IS NOT NULL AND rp.leido = 0 AND p.id_usuario = ?
+                    UNION ALL
+                    SELECT COUNT(n.id) as unread_count
+                    FROM notificacion n
+                    WHERE n.usuario_id = ? AND n.leido = 0 AND n.estado = 1
                 ) as combined_counts";
-        $params = [$auth_id, $auth_id];
+        $params = [$auth_id, $auth_id, $auth_id];
     }
     
     $stmt = $db->prepare($sql);

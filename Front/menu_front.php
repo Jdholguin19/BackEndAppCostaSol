@@ -512,6 +512,37 @@ include '../api/bottom_nav.php';
 ?>
 
 <script>
+  /* ---------- MARK NOTIFICATION AS READ ---------- */
+  async function markNotificationAsRead(notificationId, notificationType = 'notificacion') {
+    try {
+      const token = localStorage.getItem('cs_token');
+      if (!token) return false;
+
+      const response = await fetch('../api/notificaciones_mark_read.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          type: notificationType,
+          id: parseInt(notificationId)
+        })
+      });
+
+      if (response.ok) {
+        console.log(`Notificación ${notificationId} marcada como leída`);
+        // Actualizar el badge de notificaciones
+        fetchNotifications();
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error marcando notificación como leída:', error);
+      return false;
+    }
+  }
+
   /* ---------- NOTIFICATIONS ---------- */
   function fetchNotifications() {
     const token = localStorage.getItem('cs_token');
@@ -1526,6 +1557,19 @@ include '../api/bottom_nav.php';
       const propiedad = JSON.parse(select.value);
       document.getElementById('filterUbicacion').value = propiedad.ubicacion_completa;
     }
+  }
+
+  /* ---------- MARK NOTIFICATION FROM URL PARAM ---------- */
+  // Si se abre menu_front.php con parámetro notif_id, marcar esa notificación como leída
+  const urlParams = new URLSearchParams(window.location.search);
+  const notifId = urlParams.get('notif_id');
+  const notifType = urlParams.get('notif_type') || 'notificacion';
+  
+  if (notifId) {
+    // Esperar un poco para asegurar que la página esté lista
+    setTimeout(() => {
+      markNotificationAsRead(notifId, notifType);
+    }, 500);
   }
 
 </script>

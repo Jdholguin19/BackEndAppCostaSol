@@ -101,34 +101,34 @@ try {
     }
 
     // --- Consulta para CTG ---
-    $sql_ctg = "SELECT rp.ctg_id AS solicitud_id, CONVERT('CTG' USING utf8mb4) AS tipo_solicitud, CONVERT(rp.mensaje USING utf8mb4) AS mensaje, CONVERT(COALESCE(u.nombres , resp.nombre) USING utf8mb4) AS usuario, rp.fecha_respuesta, CONVERT(rp.url_adjunto USING utf8mb4) AS url_adjunto, CONVERT(pr.manzana USING utf8mb4) AS manzana, CONVERT(pr.villa USING utf8mb4) AS villa FROM respuesta_ctg rp LEFT JOIN usuario u ON rp.usuario_id = u.id LEFT JOIN responsable resp ON rp.responsable_id = resp.id JOIN ctg p ON rp.ctg_id = p.id JOIN propiedad pr ON p.id_propiedad = pr.id";
+    $sql_ctg = "SELECT rp.id AS id, rp.ctg_id AS solicitud_id, CONVERT('CTG' USING utf8mb4) AS tipo_solicitud, CONVERT(rp.mensaje USING utf8mb4) AS mensaje, CONVERT(COALESCE(u.nombres , resp.nombre) USING utf8mb4) AS usuario, rp.fecha_respuesta, CONVERT(rp.url_adjunto USING utf8mb4) AS url_adjunto, CONVERT(pr.manzana USING utf8mb4) AS manzana, CONVERT(pr.villa USING utf8mb4) AS villa FROM respuesta_ctg rp LEFT JOIN usuario u ON rp.usuario_id = u.id LEFT JOIN responsable resp ON rp.responsable_id = resp.id JOIN ctg p ON rp.ctg_id = p.id JOIN propiedad pr ON p.id_propiedad = pr.id";
     if (!empty($conditions_ctg)) {
         $sql_ctg .= ' WHERE ' . implode(' AND ', $conditions_ctg);
     }
 
     // --- Consulta para PQR ---
-    $sql_pqr = "SELECT rpq.pqr_id AS solicitud_id, CONVERT('PQR' USING utf8mb4) AS tipo_solicitud, CONVERT(rpq.mensaje USING utf8mb4) AS mensaje, CONVERT(COALESCE(us.nombres , respn.nombre) USING utf8mb4) AS usuario, rpq.fecha_respuesta, CONVERT(rpq.url_adjunto USING utf8mb4) AS url_adjunto, CONVERT(prp.manzana USING utf8mb4) AS manzana, CONVERT(prp.villa USING utf8mb4) AS villa FROM respuesta_pqr rpq LEFT JOIN usuario us ON rpq.usuario_id = us.id LEFT JOIN responsable respn ON rpq.responsable_id = respn.id JOIN pqr pq ON rpq.pqr_id = pq.id JOIN propiedad prp ON pq.id_propiedad = prp.id";
+    $sql_pqr = "SELECT rpq.id AS id, rpq.pqr_id AS solicitud_id, CONVERT('PQR' USING utf8mb4) AS tipo_solicitud, CONVERT(rpq.mensaje USING utf8mb4) AS mensaje, CONVERT(COALESCE(us.nombres , respn.nombre) USING utf8mb4) AS usuario, rpq.fecha_respuesta, CONVERT(rpq.url_adjunto USING utf8mb4) AS url_adjunto, CONVERT(prp.manzana USING utf8mb4) AS manzana, CONVERT(prp.villa USING utf8mb4) AS villa FROM respuesta_pqr rpq LEFT JOIN usuario us ON rpq.usuario_id = us.id LEFT JOIN responsable respn ON rpq.responsable_id = respn.id JOIN pqr pq ON rpq.pqr_id = pq.id JOIN propiedad prp ON pq.id_propiedad = prp.id";
     if (!empty($conditions_pqr)) {
         $sql_pqr .= ' WHERE ' . implode(' AND ', $conditions_pqr);
     }
 
     // --- Consulta para Citas ---
-    $sql_citas = "SELECT a.id AS solicitud_id, CONVERT('Cita' USING utf8mb4) AS tipo_solicitud, CONVERT(pa.proposito USING utf8mb4) AS mensaje, CONVERT(u.nombres USING utf8mb4) AS usuario, a.fecha_ingreso AS fecha_respuesta, NULL AS url_adjunto, CONVERT(pr.manzana USING utf8mb4) AS manzana, CONVERT(pr.villa USING utf8mb4) AS villa FROM agendamiento_visitas a JOIN usuario u ON a.id_usuario = u.id JOIN propiedad pr ON a.id_propiedad = pr.id JOIN proposito_agendamiento pa ON a.proposito_id = pa.id";
+    $sql_citas = "SELECT a.id AS id, a.id AS solicitud_id, CONVERT('Cita' USING utf8mb4) AS tipo_solicitud, CONVERT(pa.proposito USING utf8mb4) AS mensaje, CONVERT(u.nombres USING utf8mb4) AS usuario, a.fecha_ingreso AS fecha_respuesta, NULL AS url_adjunto, CONVERT(pr.manzana USING utf8mb4) AS manzana, CONVERT(pr.villa USING utf8mb4) AS villa FROM agendamiento_visitas a JOIN usuario u ON a.id_usuario = u.id JOIN propiedad pr ON a.id_propiedad = pr.id JOIN proposito_agendamiento pa ON a.proposito_id = pa.id";
     if (!empty($conditions_citas)) {
         $sql_citas .= ' WHERE ' . implode(' AND ', $conditions_citas);
     }
 
     // --- Consulta para Noticias ---
     $user_id = $authenticated_user['id'] ?? null;
-    $sql_noticias = "SELECT n.id AS solicitud_id, CONVERT('Noticia' USING utf8mb4) AS tipo_solicitud, CONVERT(n.titulo USING utf8mb4) AS mensaje, CONVERT('Sistema' USING utf8mb4) AS usuario, n.fecha_publicacion AS fecha_respuesta, CONVERT(n.url_imagen USING utf8mb4) AS url_adjunto, NULL AS manzana, NULL AS villa FROM noticia n";
+    $sql_noticias = "SELECT notif.id, n.id AS solicitud_id, CONVERT('Noticia' USING utf8mb4) AS tipo_solicitud, CONVERT(n.titulo USING utf8mb4) AS mensaje, CONVERT('Sistema' USING utf8mb4) AS usuario, n.fecha_publicacion AS fecha_respuesta, CONVERT(n.url_imagen USING utf8mb4) AS url_adjunto, NULL AS manzana, NULL AS villa FROM noticia n";
     
     if ($user_id) {
         // Solo mostrar noticias que el usuario ha recibido (existen en la tabla notificacion para él)
-        $sql_noticias .= " JOIN notificacion notif ON n.id = notif.tipo_id AND notif.tipo = 'noticia' WHERE notif.usuario_id = :user_id_noticia";
+        $sql_noticias .= " JOIN notificacion notif ON n.id = notif.tipo_id AND notif.tipo = 'Noticia' WHERE notif.usuario_id = :user_id_noticia";
         $params[':user_id_noticia'] = $user_id;
     } else {
         // Si es responsable, mostrar todas las noticias publicadas
-        $sql_noticias .= " WHERE n.estado = 1";
+        $sql_noticias .= " LEFT JOIN notificacion notif ON n.id = notif.tipo_id AND notif.tipo = 'Noticia' WHERE n.estado = 1";
     }
 
     // --- Combinar las 4 consultas ---
