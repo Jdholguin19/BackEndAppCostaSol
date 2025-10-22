@@ -9,7 +9,7 @@ self.addEventListener('push', event => {
   const options = {
     body: data.contents ? data.contents.es : 'Mensaje de notificación', // Contenido en español
     icon: data.icon || '/imagenes/icons/icon-192x192.png', // Icono (usa uno por defecto si no viene)
-    data: data.data // Datos adicionales (como ctg_id o pqr_id)
+    data: data.data // Datos adicionales (como ctg_id, pqr_id o noticia_id)
   };
 
   event.waitUntil(
@@ -34,6 +34,8 @@ self.addEventListener('notificationclick', event => {
       targetUrl = `${baseUrl}/Front/ctg/ctg_detalle.php?id=${notificationData.ctg_id}`;
     } else if (notificationData.pqr_id) {
       targetUrl = `${baseUrl}/Front/pqr/pqr_detalle.php?id=${notificationData.pqr_id}`;
+    } else if (notificationData.noticia_id) {
+      targetUrl = `${baseUrl}/Front/noticia.php?id=${notificationData.noticia_id}`;
     }
   }
 

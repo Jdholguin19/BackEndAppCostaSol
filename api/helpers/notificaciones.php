@@ -12,8 +12,10 @@ declare(strict_types=1);
  */
 function send_one_signal_notification(string $title, string $body, string $playerId, ?array $data = null): bool
 {
-    $oneSignalAppId = 'e77613c2-51f8-431d-9892-8b2463ecc817';
-    $oneSignalApiKey = 'os_v2_app_453bhqsr7bbr3gesrmsgh3gic66q3hsf24becvfqkh44mrzwgvmwtm3k4p47sydyynham5mmlkc4qyigv27jxoage7n3omod5plhxmi';
+    // Cargar configuración segura de OneSignal
+    $cfg = require __DIR__ . '/../../config/config_onesignal.php';
+    $oneSignalAppId = $cfg['ONESIGNAL_APP_ID'] ?? '';
+    $oneSignalApiKey = $cfg['ONESIGNAL_API_KEY'] ?? '';
 
     $payload = [
         'app_id' => $oneSignalAppId,
@@ -39,7 +41,7 @@ function send_one_signal_notification(string $title, string $body, string $playe
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Considerar TRUE en producción con el bundle de CA correcto
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // TODO: set TRUE en producción con CA bundle correcto
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);

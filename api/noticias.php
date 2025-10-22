@@ -30,6 +30,7 @@
  */
 
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/helpers/notificaciones.php';
 header('Content-Type: application/json; charset=utf-8');
 
 /**
@@ -46,7 +47,7 @@ function sendNotificationByRoles($db, $titulo, $mensaje, $tipo, $tipo_id, $desti
     try {
         // Si no hay destinatarios especificados, enviar a todos
         if ($destinatarios === null || (isset($destinatarios['todos']) && $destinatarios['todos'])) {
-            $sql_usuarios = "SELECT id FROM usuario";
+            $sql_usuarios = "SELECT id, onesignal_player_id FROM usuario";
             $params = [];
         } else {
             // Construir array de roles a incluir
@@ -65,7 +66,7 @@ function sendNotificationByRoles($db, $titulo, $mensaje, $tipo, $tipo_id, $desti
 
             // Crear placeholders para consulta
             $placeholders = implode(',', array_fill(0, count($roles), '?'));
-            $sql_usuarios = "SELECT id FROM usuario WHERE rol_id IN ($placeholders)";
+            $sql_usuarios = "SELECT id, onesignal_player_id FROM usuario WHERE rol_id IN ($placeholders)";
             $params = $roles;
         }
 
@@ -78,7 +79,7 @@ function sendNotificationByRoles($db, $titulo, $mensaje, $tipo, $tipo_id, $desti
             return false;
         }
 
-        // Insertar notificación para cada usuario
+        // Insertar notificación para cada usuario y enviar push si tiene player_id
         $sql_notif = "INSERT INTO notificacion (usuario_id, titulo, mensaje, tipo, tipo_id, leido, fecha_creacion)
                       VALUES (:usuario_id, :titulo, :mensaje, :tipo, :tipo_id, 0, NOW())";
         $stmt_notif = $db->prepare($sql_notif);
@@ -91,6 +92,16 @@ function sendNotificationByRoles($db, $titulo, $mensaje, $tipo, $tipo_id, $desti
                 ':tipo' => $tipo,
                 ':tipo_id' => $tipo_id
             ]);
+
+            // Enviar push OneSignal si el usuario tiene player_id
+            $playerId = $usuario['onesignal_player_id'] ?? null;
+            if ($playerId) {
+                try {
+                    send_one_signal_notification($titulo, $mensaje, $playerId, ['noticia_id' => (int)$tipo_id]);
+                } catch (Throwable $e) {
+                    error_log('Error al enviar push OneSignal (Noticia) al usuario ' . $usuario['id'] . ': ' . $e->getMessage());
+                }
+            }
         }
 
         return true;
@@ -330,7 +341,7 @@ try {
                 // Enviar notificación con criterio de roles
                 $titulo_notif = 'Nueva Noticia: ' . substr($titulo, 0, 50);
                 $mensaje_notif = $resumen;
-                sendNotificationByRoles($db, $titulo_notif, $mensaje_notif, 'noticia', $noticia_id, $destinatarios);
+                sendNotificationByRoles($db, $titulo_notif, $mensaje_notif, 'Noticia', $noticia_id, $destinatarios);
 
                 echo json_encode(['ok' => true, 'mensaje' => 'Noticia creada con éxito', 'id' => $noticia_id]);
             } else {

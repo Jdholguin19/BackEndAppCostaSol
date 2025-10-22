@@ -11,13 +11,14 @@
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_filtro.css" rel="stylesheet">
 
+<?php $onesignal = require __DIR__ . '/../config/config_onesignal.php'; ?>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
       await OneSignal.init({
-          appId: "e77613c2-51f8-431d-9892-8b2463ecc817",
-          safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
+          appId: "<?= htmlspecialchars($onesignal['ONESIGNAL_APP_ID'] ?? '') ?>",
+          safari_web_id: "<?= htmlspecialchars($onesignal['ONESIGNAL_SAFARI_WEB_ID'] ?? '') ?>",
           notifyButton: {
               enable: false, // Deshabilitamos el botón de notificación por defecto
           },
