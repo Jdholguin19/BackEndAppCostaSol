@@ -140,3 +140,17 @@
 /* Overlay para cerrar al tocar fuera */
 .chat-overlay { position: fixed; inset: 0; background: rgba(17,24,39,0.25); backdrop-filter: blur(2px); display: none; z-index: 10000; }
 .chat-overlay.open { display: block; }
+.emoji-panel { padding:8px; border-top:1px solid var(--chat-border); background:#fafafa; }
+.emoji-grid { display:grid; grid-template-columns: repeat(10, 1fr); gap:6px; }
+.emoji-btn { border:none; background:#fff; border:1px solid var(--chat-border); border-radius:8px; padding:4px 6px; cursor:pointer; font-size:18px; line-height:1; }
+.emoji-btn:hover { background:#f3f4f6; }
+.chat-footer .btn.btn-link { color: var(--chat-muted); border: 1px solid var(--chat-border); border-radius: 10px; padding: 6px 8px; background: #fff; }
+.chat-footer .btn.btn-link:hover { background:#f3f4f6; color: var(--chat-text); }
+.chat-footer { gap: 10px; }
+.message.pending { opacity: 0.85; position: relative; }
+.message.pending::after { content:' '; position:absolute; right:12px; bottom:8px; width:12px; height:12px; border:2px solid var(--chat-border); border-top-color:var(--chat-primary); border-radius:50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.message a { color: var(--chat-primary); text-decoration: none; }
+.message a:hover { text-decoration: underline; }
+.message img, .message video { display:block; max-width:100%; border-radius:12px; }
+.message audio { width:100%; }
