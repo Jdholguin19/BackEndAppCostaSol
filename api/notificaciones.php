@@ -118,8 +118,21 @@ try {
         $sql_citas .= ' WHERE ' . implode(' AND ', $conditions_citas);
     }
 
-    // --- Combinar las 3 consultas ---
-    $sql = "($sql_ctg) UNION ALL ($sql_pqr) UNION ALL ($sql_citas) ORDER BY fecha_respuesta DESC LIMIT 20";
+    // --- Consulta para Noticias ---
+    $user_id = $authenticated_user['id'] ?? null;
+    $sql_noticias = "SELECT n.id AS solicitud_id, CONVERT('Noticia' USING utf8mb4) AS tipo_solicitud, CONVERT(n.titulo USING utf8mb4) AS mensaje, CONVERT('Sistema' USING utf8mb4) AS usuario, n.fecha_publicacion AS fecha_respuesta, CONVERT(n.url_imagen USING utf8mb4) AS url_adjunto, NULL AS manzana, NULL AS villa FROM noticia n";
+    
+    if ($user_id) {
+        // Solo mostrar noticias que el usuario ha recibido (existen en la tabla notificacion para él)
+        $sql_noticias .= " JOIN notificacion notif ON n.id = notif.tipo_id AND notif.tipo = 'noticia' WHERE notif.usuario_id = :user_id_noticia";
+        $params[':user_id_noticia'] = $user_id;
+    } else {
+        // Si es responsable, mostrar todas las noticias publicadas
+        $sql_noticias .= " WHERE n.estado = 1";
+    }
+
+    // --- Combinar las 4 consultas ---
+    $sql = "($sql_ctg) UNION ALL ($sql_pqr) UNION ALL ($sql_citas) UNION ALL ($sql_noticias) ORDER BY fecha_respuesta DESC LIMIT 20";
 
     $stmt = $db->prepare($sql);
 

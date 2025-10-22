@@ -101,6 +101,10 @@ if (!token) {
                         detailPageUrl = `citas.php`; // Enlace a la lista de citas
                         typeClass = 'type-cita';
                         notificationTitle = 'Nueva Cita Programada';
+                    } else if (notif.tipo_solicitud === 'Noticia') {
+                        detailPageUrl = `menu_front.php`; // Enlace a la lista de noticias
+                        typeClass = 'type-noticia';
+                        notificationTitle = 'Nueva Noticia';
                     }
                     // --- FIN Lógica para construir el enlace y la presentación dinámicamente ---
 
@@ -117,7 +121,10 @@ if (!token) {
                     return `
                         <a href="${detailPageUrl}" class="notification-card">
                             <div class="notification-header">
-                                <h3 class="notification-title">${notificationTitle} <br>- Mz ${notif.manzana} - Villa ${notif.villa} - </h3>
+                                <h3 class="notification-title">
+                                    ${notificationTitle}
+                                    ${notif.manzana && notif.villa ? `<br>- Mz ${notif.manzana} - Villa ${notif.villa} -` : ''}
+                                </h3>
                                 <span class="notification-type ${typeClass}">${notif.tipo_solicitud}</span>
                             </div>
                             <div class="notification-body">

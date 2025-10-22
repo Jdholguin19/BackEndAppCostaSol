@@ -4,7 +4,7 @@
  *
  *  Métodos:
  *    GET  /api/noticias.php
- *    POST /api/noticias.php        - Crear noticia
+ *    POST /api/noticias.php        - Crear noticia con subida de imagen
  *    DELETE /api/noticias.php?id=X - Borrar noticia
  *
  *  Parámetros opcionales (GET):
@@ -13,25 +13,104 @@
  *      offset (int)     → para paginar (def. 0)
  *      estado (0|1)     → filtrar por activo/inactivo (def. 1)
  *
- *  Cuerpo de la solicitud (POST):
- *      titulo (string)
- *      resumen (string)
- *      url_imagen (string, opcional)
+ *  Cuerpo de la solicitud (POST) - multipart/form-data:
+ *      titulo (string)      - requerido
+ *      resumen (string)     - requerido
+ *      imagen (file)        - requerido, formatos: JPG, PNG, GIF, WEBP (máx 2MB)
  *      link_noticia (string, opcional)
- *      autor_id (int, opcional - si se autentica al responsable)
  *
  *  Parámetros de URL (DELETE):
  *      id (int, requerido) → ID de la noticia a borrar
  *
  *  Respuesta:
  *      200 OK  { ok:true, ... }
- *      400 Bad Request { ok: false, mensaje: "..." }
- *      404 Not Found { ok: false, mensaje: "..." }
- *      500 Internal Server Error { ok: false, mensaje: "Error interno" }
+ *      400 Bad Request { ok: false, error: "..." }
+ *      404 Not Found { ok: false, error: "..." }
+ *      500 Internal Server Error { ok: false, error: "Error interno" }
  */
 
 require_once __DIR__ . '/../config/db.php';
 header('Content-Type: application/json; charset=utf-8');
+
+/**
+ * Envía una notificación a usuarios basado en criterios de rol
+ * @param PDO $db Base de datos
+ * @param string $titulo Título de la notificación
+ * @param string $mensaje Mensaje de la notificación
+ * @param string $tipo Tipo de notificación (noticia, ctg, pqr, etc)
+ * @param int $tipo_id ID relacionado (noticia_id, ctg_id, etc)
+ * @param array|null $destinatarios Array con 'todos' (bool), 'clientes' (bool), 'residentes' (bool)
+ *                                    Si es null, se envía a todos
+ */
+function sendNotificationByRoles($db, $titulo, $mensaje, $tipo, $tipo_id, $destinatarios = null) {
+    try {
+        // Si no hay destinatarios especificados, enviar a todos
+        if ($destinatarios === null || (isset($destinatarios['todos']) && $destinatarios['todos'])) {
+            $sql_usuarios = "SELECT id FROM usuario";
+            $params = [];
+        } else {
+            // Construir array de roles a incluir
+            $roles = [];
+            if (isset($destinatarios['clientes']) && $destinatarios['clientes']) {
+                $roles[] = 1; // Cliente
+            }
+            if (isset($destinatarios['residentes']) && $destinatarios['residentes']) {
+                $roles[] = 2; // Residente
+            }
+
+            // Si no hay roles seleccionados, no enviar notificaciones
+            if (empty($roles)) {
+                return true; // No es error, solo que no hay destinatarios
+            }
+
+            // Crear placeholders para consulta
+            $placeholders = implode(',', array_fill(0, count($roles), '?'));
+            $sql_usuarios = "SELECT id FROM usuario WHERE rol_id IN ($placeholders)";
+            $params = $roles;
+        }
+
+        // Obtener usuarios
+        $stmt_usuarios = $db->prepare($sql_usuarios);
+        $stmt_usuarios->execute($params);
+        $usuarios = $stmt_usuarios->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($usuarios)) {
+            return false;
+        }
+
+        // Insertar notificación para cada usuario
+        $sql_notif = "INSERT INTO notificacion (usuario_id, titulo, mensaje, tipo, tipo_id, leido, fecha_creacion)
+                      VALUES (:usuario_id, :titulo, :mensaje, :tipo, :tipo_id, 0, NOW())";
+        $stmt_notif = $db->prepare($sql_notif);
+
+        foreach ($usuarios as $usuario) {
+            $stmt_notif->execute([
+                ':usuario_id' => $usuario['id'],
+                ':titulo' => $titulo,
+                ':mensaje' => $mensaje,
+                ':tipo' => $tipo,
+                ':tipo_id' => $tipo_id
+            ]);
+        }
+
+        return true;
+    } catch (Throwable $e) {
+        error_log('Error enviando notificaciones: ' . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Envía una notificación a todos los usuarios (legacy)
+ * @param PDO $db Base de datos
+ * @param string $titulo Título de la notificación
+ * @param string $mensaje Mensaje de la notificación
+ * @param string $tipo Tipo de notificación (noticia, ctg, pqr, etc)
+ * @param int $tipo_id ID relacionado (noticia_id, ctg_id, etc)
+ */
+function sendNotificationToAll($db, $titulo, $mensaje, $tipo, $tipo_id) {
+    return sendNotificationByRoles($db, $titulo, $mensaje, $tipo, $tipo_id, ['todos' => true]);
+}
 
 try {
     $db = DB::getDB();
@@ -99,23 +178,60 @@ try {
             break;
 
         case 'POST':
-            /* ---------- Crear nueva noticia ---------- */
-            $data = json_decode(file_get_contents('php://input'), true);
-
+            /* ---------- Crear nueva noticia con subida de imagen ---------- */
+            
             // Validar datos mínimos
-            if (!isset($data['titulo']) || empty($data['titulo']) || !isset($data['resumen']) || empty($data['resumen'])) {
+            if (!isset($_POST['titulo']) || empty($_POST['titulo']) || !isset($_POST['resumen']) || empty($_POST['resumen'])) {
                 http_response_code(400);
-                exit(json_encode(['ok' => false, 'mensaje' => 'Faltan campos obligatorios (titulo, resumen)']));
+                exit(json_encode(['ok' => false, 'error' => 'Faltan campos obligatorios (titulo, resumen)']));
             }
 
-            $titulo = $data['titulo'];
-            $resumen = $data['resumen'];
-            $url_imagen = $data['url_imagen'] ?? null; // Opcional
-            $link_noticia = $data['link_noticia'] ?? null; // Opcional
-            //autor_id - si manejas autenticación, obtén el ID del usuario responsable aquí
-            $autor_id = null; // Por ahora, dejándolo como NULL según tu indicación
+            $titulo = $_POST['titulo'];
+            $resumen = $_POST['resumen'];
+            $link_noticia = $_POST['link_noticia'] ?? null;
+            $url_imagen = null;
 
-            // Determinar el siguiente valor para 'orden' (simple: max + 1)
+            // Manejar la subida de imagen
+            if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['imagen'];
+                
+                // Validar tipo de archivo
+                $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                if (!in_array($file['type'], $allowed_types)) {
+                    http_response_code(400);
+                    exit(json_encode(['ok' => false, 'error' => 'Tipo de archivo no permitido. Use JPG, PNG, GIF o WEBP']));
+                }
+
+                // Validar tamaño (máx 2MB)
+                if ($file['size'] > 2 * 1024 * 1024) {
+                    http_response_code(400);
+                    exit(json_encode(['ok' => false, 'error' => 'Archivo demasiado grande (máx 2MB)']));
+                }
+
+                // Crear carpeta si no existe
+                $upload_dir = __DIR__ . '/../ImagenesNoticias/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+
+                // Generar nombre único
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $filename = 'noticia_' . time() . '_' . uniqid() . '.' . $ext;
+                $filepath = $upload_dir . $filename;
+
+                // Mover archivo
+                if (move_uploaded_file($file['tmp_name'], $filepath)) {
+                    $url_imagen = '../ImagenesNoticias/' . $filename;
+                } else {
+                    http_response_code(500);
+                    exit(json_encode(['ok' => false, 'error' => 'Error al subir la imagen']));
+                }
+            } else {
+                http_response_code(400);
+                exit(json_encode(['ok' => false, 'error' => 'Imagen es requerida']));
+            }
+
+            // Determinar el siguiente valor para 'orden'
             $stmt_orden = $db->query("SELECT MAX(orden) FROM noticia");
             $next_orden = (int)$stmt_orden->fetchColumn() + 1;
 
@@ -129,16 +245,32 @@ try {
                 ':resumen' => $resumen,
                 ':url_imagen' => $url_imagen,
                 ':link_noticia' => $link_noticia,
-                ':estado' => 1, // Estado inicial 1
+                ':estado' => 1,
                 ':orden' => $next_orden,
-                ':autor_id' => $autor_id
+                ':autor_id' => null
             ]);
 
             if ($result) {
-                echo json_encode(['ok' => true, 'mensaje' => 'Noticia creada con éxito', 'id' => $db->lastInsertId()]);
+                $noticia_id = $db->lastInsertId();
+
+                // Procesar destinatarios
+                $destinatarios = null;
+                if (isset($_POST['destinatarios'])) {
+                    $destinatarios = json_decode($_POST['destinatarios'], true);
+                    if (!is_array($destinatarios)) {
+                        $destinatarios = null;
+                    }
+                }
+
+                // Enviar notificación con criterio de roles
+                $titulo_notif = 'Nueva Noticia: ' . substr($titulo, 0, 50);
+                $mensaje_notif = $resumen;
+                sendNotificationByRoles($db, $titulo_notif, $mensaje_notif, 'noticia', $noticia_id, $destinatarios);
+
+                echo json_encode(['ok' => true, 'mensaje' => 'Noticia creada con éxito', 'id' => $noticia_id]);
             } else {
-                http_response_code(500); // Error interno del servidor
-                echo json_encode(['ok' => false, 'mensaje' => 'Error al crear la noticia']);
+                http_response_code(500);
+                echo json_encode(['ok' => false, 'error' => 'Error al insertar en base de datos']);
             }
 
             break;
