@@ -178,6 +178,13 @@ try {
                   )';
         $params[':role_id'] = $role_id;
     }
+
+    /* --------- Excepción: MCM (id 11) solo para Residentes (rol_id = 2) --------- */
+    // Ocultar MCM para responsables y para cualquier rol distinto de 2
+    $should_hide_mcm = $is_admin_responsible_user || ($role_id !== 2);
+    if ($should_hide_mcm) {
+        $sql .= ' AND m.id != 11';
+    }
     
     /* --------- Filtrar garantías según progreso de construcción --------- */
     if (!$mostrar_garantias && !$is_admin_responsible_user) {
