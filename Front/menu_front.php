@@ -1093,6 +1093,15 @@ include '../api/bottom_nav.php';
       const renderMenu = (menuItems) => {
           grid.innerHTML = ''; // Clear grid before rendering
           menuItems.forEach(m=> {
+              // Placeholder invisible to preserve layout position
+              if (m && m.is_placeholder) {
+                  const placeholder = document.createElement('div');
+                  placeholder.className = 'menu-card';
+                  placeholder.style.visibility = 'hidden';
+                  placeholder.style.pointerEvents = 'none';
+                  grid.appendChild(placeholder);
+                  return;
+              }
               // Check if this is the Garantias module (menu.id === 6)
               // and if there are no active warranties
               const isGarantiasModule = (Number(m.id) === 6);
@@ -1137,10 +1146,27 @@ include '../api/bottom_nav.php';
         ? menus.filter(m => m.id !== 1) 
         : menus;
 
-      const initialMenus = availableMenus.slice(0, 4);
-      const allMenus = availableMenus;
+      // Fijar el módulo id 15 ("Ver más") en la posición 4 siempre
+      const verMas = availableMenus.find(m => Number(m.id) === 15);
+      const others = availableMenus.filter(m => Number(m.id) !== 15);
 
-      renderMenu(initialMenus);
+      // Mantener el orden provisto por el API; tomar los tres primeros distintos de 15
+      const firstThree = others.slice(0, 3);
+      const itemsForFirstRow = [...firstThree];
+
+      // Si faltan módulos antes del 4, agregar placeholders invisibles
+      if (verMas) {
+        while (itemsForFirstRow.length < 3) {
+          itemsForFirstRow.push({ is_placeholder: true });
+        }
+        // Ubicar "Ver más" como la cuarta tarjeta
+        itemsForFirstRow.push(verMas);
+      } else {
+        // Si no existe el módulo 15, usar los primeros cuatro disponibles
+        itemsForFirstRow.push(...others.slice(itemsForFirstRow.length, 4 - itemsForFirstRow.length));
+      }
+
+      renderMenu(itemsForFirstRow);
 
     });
   });
