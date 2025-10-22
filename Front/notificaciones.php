@@ -171,12 +171,44 @@ if (!token) {
                 // Sección de notificaciones leídas
                 if (leidas.length > 0) {
                     htmlContent += '<div class="read-section">';
+                    htmlContent += '<div class="read-section-header">';
                     htmlContent += '<h4 class="section-title">📭 Leídas</h4>';
+                    htmlContent += '<button class="toggle-read-btn" id="toggleReadBtn" title="Ocultar/Mostrar leídas">';
+                    htmlContent += '<i class="bi bi-chevron-up"></i>';
+                    htmlContent += '</button>';
+                    htmlContent += '</div>';
+                    htmlContent += '<div class="read-notifications" id="readNotifications">';
                     htmlContent += leidas.map(generarNotificacion).join('');
+                    htmlContent += '</div>';
                     htmlContent += '</div>';
                 }
 
                 notificationsListEl.innerHTML = htmlContent;
+                
+                // Agregar funcionalidad al botón de toggle
+                const toggleBtn = document.getElementById('toggleReadBtn');
+                const readNotifications = document.getElementById('readNotifications');
+                
+                if (toggleBtn && readNotifications) {
+                    // Cargar estado guardado en localStorage
+                    const readHidden = localStorage.getItem('readNotificationsHidden') === 'true';
+                    if (readHidden) {
+                        readNotifications.style.display = 'none';
+                        toggleBtn.classList.add('collapsed');
+                    }
+                    
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const isHidden = readNotifications.style.display === 'none';
+                        readNotifications.style.display = isHidden ? 'block' : 'none';
+                        toggleBtn.classList.toggle('collapsed');
+                        
+                        // Guardar preferencia en localStorage
+                        localStorage.setItem('readNotificationsHidden', !isHidden);
+                    });
+                }
                 
                 // Agregar event listeners para marcar notificaciones como leídas
                 document.querySelectorAll('.notification-card').forEach(card => {

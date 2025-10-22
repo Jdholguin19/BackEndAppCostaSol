@@ -389,3 +389,66 @@ body {
   font-size: 0.85rem;
 }
 
+/* Estilos para el encabezado de la sección de leídas con botón */
+.read-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.5rem;
+  gap: 1rem;
+}
+
+.read-section-header .section-title {
+  margin: 0;
+  padding: 0;
+  border: none;
+  flex: 1;
+}
+
+/* Estilos para el botón de toggle */
+.toggle-read-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 32px;
+  height: 32px;
+}
+
+.toggle-read-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.toggle-read-btn:active {
+  background-color: #e5e7eb;
+}
+
+.toggle-read-btn i {
+  transition: transform 0.3s ease;
+}
+
+.toggle-read-btn.collapsed i {
+  transform: rotate(180deg);
+}
+
+/* Contenedor de notificaciones leídas con animación */
+.read-notifications {
+  transition: all 0.3s ease;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.read-notifications[style*="display: none"] {
+  max-height: 0;
+  opacity: 0;
+}
+
