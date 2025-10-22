@@ -57,7 +57,7 @@ function getModulesData($db) {
         'cita' => [
             'name' => 'Citas',
             'description' => 'Agendamiento y gestión de citas',
-            'actions' => ['CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA']
+            'actions' => ['CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA', 'REGISTRAR_ASISTENCIA_CITA']
         ],
         'ctg' => [
             'name' => 'CTG',
@@ -106,7 +106,7 @@ function getModulesData($db) {
                 CASE 
                     WHEN target_resource = 'autenticacion' OR action IN ('LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT') THEN 'autenticacion'
                     WHEN target_resource = 'usuario' OR action IN ('CREATE_USER', 'UPDATE_USER', 'DELETE_USER') THEN 'usuario'
-                    WHEN target_resource = 'cita' OR action IN ('CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA') THEN 'cita'
+                    WHEN target_resource = 'cita' OR action IN ('CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA', 'REGISTRAR_ASISTENCIA_CITA') THEN 'cita'
                     WHEN target_resource = 'ctg' OR action IN ('CREATE_CTG', 'UPDATE_CTG_STATUS', 'ADD_CTG_RESPONSE', 'UPDATE_CTG_OBSERVATION') THEN 'ctg'
                     WHEN target_resource = 'pqr' OR action IN ('CREATE_PQR', 'UPDATE_PQR_STATUS', 'ADD_PQR_RESPONSE', 'UPDATE_PQR_OBSERVATION') THEN 'pqr'
                     WHEN target_resource = 'acabados' OR action = 'SAVE_ACABADOS' THEN 'acabados'
@@ -264,6 +264,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         $params[] = $filters['tipo_pqr'];
     }
     
+    // Filtro de asistencia para módulo Citas
+    if (!empty($filters['asistencia']) && $resource === 'cita') {
+        $sql .= " AND al.action = 'REGISTRAR_ASISTENCIA_CITA' AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.asistencia')) = ?";
+        $params[] = $filters['asistencia'];
+    }
+    
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
         $params[] = $filters['target_id'];
@@ -331,6 +337,12 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
         $countParams[] = $filters['tipo_pqr'];
     }
     
+    // Filtro de asistencia para módulo Citas (count)
+    if (!empty($filters['asistencia']) && $resource === 'cita') {
+        $countSql .= " AND al.action = 'REGISTRAR_ASISTENCIA_CITA' AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.asistencia')) = ?";
+        $countParams[] = $filters['asistencia'];
+    }
+    
     if (!empty($filters['target_id'])) {
         $countSql .= " AND al.target_id = ?";
         $countParams[] = $filters['target_id'];
@@ -369,7 +381,7 @@ function getModuleAudits($db, $resource, $filters = [], $offset = 0, $limit = 20
 // Función para obtener todos los datos de auditoría para el gráfico (sin paginación)
 function getModuleAuditsForChart($db, $resource, $filters = []) {
     // Construir la consulta base para el gráfico
-    $sql = "SELECT al.action, al.details
+    $sql = "SELECT al.action, al.details, al.target_id, al.target_resource
             FROM audit_log al
             WHERE 1=1";
     
@@ -439,11 +451,17 @@ function getModuleAuditsForChart($db, $resource, $filters = []) {
         $params[] = $filters['tipo_pqr'];
     }
     
+    // Filtro de asistencia para módulo Citas (chart)
+    if (!empty($filters['asistencia']) && $resource === 'cita') {
+        $sql .= " AND al.action = 'REGISTRAR_ASISTENCIA_CITA' AND JSON_UNQUOTE(JSON_EXTRACT(al.details, '$.asistencia')) = ?";
+        $params[] = $filters['asistencia'];
+    }
+    
     if (!empty($filters['target_id'])) {
         $sql .= " AND al.target_id = ?";
         $params[] = $filters['target_id'];
     }
-    
+   
     if (!empty($filters['search'])) {
         $sql .= " AND (al.details LIKE ? OR al.action LIKE ?)";
         $searchTerm = '%' . $filters['search'] . '%';
@@ -625,6 +643,20 @@ function formatAuditDetails($details, $db = null, $audit = null) {
             }
         }
         
+        // Caso especial: asistencia de cita, derivar propósito por target_id
+        if (($audit['action'] ?? null) === 'REGISTRAR_ASISTENCIA_CITA' && $db && $audit && isset($audit['target_id'])) {
+            try {
+                $stmt = $db->prepare("SELECT pa.proposito FROM agendamiento_visitas av JOIN proposito_agendamiento pa ON av.proposito_id = pa.id WHERE av.id = ?");
+                $stmt->execute([$audit['target_id']]);
+                $proposito = $stmt->fetchColumn();
+                if ($proposito) {
+                    return $proposito;
+                }
+            } catch (Exception $e) {
+                // continuar con el procesamiento normal
+            }
+        }
+        
         // Si tenemos proposito_id (para citas), obtener información completa
         if (isset($parsed['proposito_id'])) {
             $proposito_name = null;
@@ -789,7 +821,7 @@ function getModuleActions($resource) {
     $moduleActions = [
         'autenticacion' => ['LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT'],
         'usuario' => ['CREATE_USER', 'UPDATE_USER', 'DELETE_USER'],
-        'cita' => ['CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA'],
+        'cita' => ['CREATE_CITA', 'CANCEL_CITA', 'UPDATE_CITA_STATUS', 'DELETE_CITA', 'REGISTRAR_ASISTENCIA_CITA'],
         'ctg' => ['CREATE_CTG', 'UPDATE_CTG_STATUS', 'ADD_CTG_RESPONSE', 'UPDATE_CTG_OBSERVATION'],
         'pqr' => ['CREATE_PQR', 'UPDATE_PQR_STATUS', 'ADD_PQR_RESPONSE', 'UPDATE_PQR_OBSERVATION'],
         'acabados' => ['SAVE_ACABADOS'],

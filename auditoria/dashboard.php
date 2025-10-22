@@ -170,6 +170,14 @@ if (!$token) {
               <option value="">Todas las acciones</option>
             </select>
           </div>
+          <div class="filter-group" id="filterAsistenciaGroup" style="display: none;">
+            <label for="filterAsistencia">Asistencia:</label>
+            <select id="filterAsistencia" class="form-control">
+              <option value="">Todas</option>
+              <option value="ASISTIO">Asistió</option>
+              <option value="NO_ASISTIO">No asistió</option>
+            </select>
+          </div>
           <div class="filter-group" id="filterTipoCtgGroup" style="display: none;">
             <label for="filterTipoCtg">Tipo CTG:</label>
             <select id="filterTipoCtg" class="form-control">
@@ -720,6 +728,7 @@ async function loadModuleAudits() {
             details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
             tipo_ctg_filter: currentFilters.tipo_ctg || '',
             tipo_pqr_filter: currentFilters.tipo_pqr || '',
+            asistencia_filter: currentFilters.asistencia || '',
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -793,6 +802,50 @@ function createAuditChart(audits) {
         
         labels = Object.keys(kitCounts);
         data = Object.values(kitCounts);
+    } else if (currentModule === 'ctg') {
+        // Para el módulo CTG, agrupar por "Tipo" extraído de los detalles formateados
+        const tipoCounts = {};
+        audits.forEach(audit => {
+             const detail = audit.formatted_details || audit.details || '';
+             let tipoExtraido = '';
+             if (typeof detail === 'string') {
+                 const idx = detail.indexOf('Tipo: ');
+                 if (idx !== -1) {
+                     const rest = detail.substring(idx + 6);
+                     // Cortar hasta la primera coma si existe
+                     const endIdx = rest.indexOf(',');
+                     tipoExtraido = endIdx !== -1 ? rest.substring(0, endIdx).trim() : rest.trim();
+                 }
+             } else if (detail && typeof detail === 'object') {
+                 // Fallback si recibimos objeto JSON sin formatear
+                 if (detail.tipo_id) tipoExtraido = `Tipo #${detail.tipo_id}`;
+             }
+             if (!tipoExtraido) return; // Omitir entradas sin tipo
+             tipoCounts[tipoExtraido] = (tipoCounts[tipoExtraido] || 0) + 1;
+         });
+        labels = Object.keys(tipoCounts);
+        data = Object.values(tipoCounts);
+    } else if (currentModule === 'pqr') {
+        // Para el módulo PQR, agrupar por "Tipo" extraído de los detalles formateados
+        const tipoCounts = {};
+        audits.forEach(audit => {
+             const detail = audit.formatted_details || audit.details || '';
+             let tipoExtraido = '';
+             if (typeof detail === 'string') {
+                 const idx = detail.indexOf('Tipo: ');
+                 if (idx !== -1) {
+                     const rest = detail.substring(idx + 6);
+                     const endIdx = rest.indexOf(',');
+                     tipoExtraido = endIdx !== -1 ? rest.substring(0, endIdx).trim() : rest.trim();
+                 }
+             } else if (detail && typeof detail === 'object') {
+                 if (detail.tipo_id) tipoExtraido = `Tipo #${detail.tipo_id}`;
+             }
+             if (!tipoExtraido) return; // Omitir entradas sin tipo
+             tipoCounts[tipoExtraido] = (tipoCounts[tipoExtraido] || 0) + 1;
+         });
+        labels = Object.keys(tipoCounts);
+        data = Object.values(tipoCounts);
     } else if (currentModule === 'cita') {
         // Para el módulo de citas, mostrar nombres de propósitos o tipos de acción
         const propositoCounts = {};
@@ -873,16 +926,16 @@ function createAuditChart(audits) {
     }
     
     colors = [
-        '#2d5a3d', // Verde principal
-        '#4a7c59', // Verde claro
-        '#6c757d', // Gris
-        '#dc3545', // Rojo
-        '#fd7e14', // Naranja
-        '#17a2b8', // Azul
-        '#6f42c1', // Púrpura
-        '#e83e8c', // Rosa
-        '#20c997', // Verde agua
-        '#ffc107'  // Amarillo
+        '#2d5a3d',
+        '#4a7c59',
+        '#6c757d',
+        '#dc3545',
+        '#fd7e14',
+        '#17a2b8',
+        '#6f42c1',
+        '#e83e8c',
+        '#20c997',
+        '#ffc107'
     ];
     
     // Crear el gráfico de barras horizontales
@@ -900,51 +953,20 @@ function createAuditChart(audits) {
             }]
         },
         options: {
-            indexAxis: 'y', // Hacer el gráfico horizontal
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    enabled: true,
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed.x;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} (${percentage}%)`;
-                        }
-                    }
-                },
-                datalabels: {
-                    color: '#ffffff',
-                    font: {
-                        size: 12,
-                        weight: 'bold'
-                    },
-                    formatter: function(value, context) {
-                        return value;
-                    },
-                    anchor: 'end',
-                    align: 'right',
-                    offset: 4
-                }
-            },
+            indexAxis: 'y',
             scales: {
                 x: {
                     beginAtZero: true,
-                    title: {
-                    display: true,
-                        text: 'Número de Auditorías'
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Categorías'
+                    ticks: { precision: 0 }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.parsed.x}`;
+                        }
                     }
                 }
             }
@@ -976,6 +998,10 @@ function renderModuleAudits(audits, total, chartData) {
         chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Propósitos de Citas';
     } else if (currentModule === 'autenticacion') {
         chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Acciones de Autenticación';
+    } else if (currentModule === 'ctg') {
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Tipo CTG';
+    } else if (currentModule === 'pqr') {
+        chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución por Tipo PQR';
     } else {
         chartTitle.innerHTML = '<i class="bi bi-bar-chart"></i> Distribución de Auditorías';
     }
@@ -1002,9 +1028,9 @@ function renderModuleAudits(audits, total, chartData) {
                             <span class="user-type-badge user-${audit.user_type}">${audit.user_type}</span>
                             ${audit.user_display_name ? ` (${audit.user_display_name})` : ''}
                         </td>
-                        <td><span class="action-badge action-${getActionType(audit.action)}">${audit.action}</span></td>
+                        <td><span class="action-badge action-${getActionType(audit.action)}">${getActionType(audit.action)}</span></td>
                         <td>${audit.target_id || '-'}</td>
-                        <td>${audit.ip_address}</td>
+                        <td>${audit.ip_address || '-'}</td>
                         <td>${audit.formatted_details || '-'}</td>
                     </tr>
                 `).join('')}
@@ -1070,6 +1096,7 @@ async function loadMoreAudits() {
             details_filter: isDetailsModule ? (currentFilters.action || '') : '', // Solo para módulos de detalles
             tipo_ctg_filter: currentFilters.tipo_ctg || '',
             tipo_pqr_filter: currentFilters.tipo_pqr || '',
+            asistencia_filter: currentFilters.asistencia || '',
             target_id: currentFilters.target_id || '',
             search: currentFilters.search || ''
         };
@@ -1300,12 +1327,16 @@ async function populateActionFilter(module) {
     const tipoCtgSelect = document.getElementById('filterTipoCtg');
     const tipoPqrGroup = document.getElementById('filterTipoPqrGroup');
     const tipoPqrSelect = document.getElementById('filterTipoPqr');
+    const asistenciaGroup = document.getElementById('filterAsistenciaGroup');
+    const asistenciaSelect = document.getElementById('filterAsistencia');
 
     // Reset and hide module-specific filters
     tipoCtgGroup.style.display = 'none';
     tipoCtgSelect.value = '';
     tipoPqrGroup.style.display = 'none';
     tipoPqrSelect.value = '';
+    asistenciaGroup.style.display = 'none';
+    asistenciaSelect.value = '';
     
     // Populate and show filter for CTG module
     if (module === 'ctg') {
@@ -1330,6 +1361,8 @@ async function populateActionFilter(module) {
             option.textContent = tipo.nombre;
             tipoPqrSelect.appendChild(option);
         });
+    } else if (module === 'cita') {
+        asistenciaGroup.style.display = 'block';
     }
     
     
@@ -1359,7 +1392,8 @@ async function populateActionFilter(module) {
             { value: 'CREATE_CITA', label: 'Crear Cita' },
             { value: 'UPDATE_CITA', label: 'Actualizar Cita' },
             { value: 'DELETE_CITA', label: 'Eliminar Cita' },
-            { value: 'CANCEL_CITA', label: 'Cancelar Cita' }
+            { value: 'CANCEL_CITA', label: 'Cancelar Cita' },
+            { value: 'REGISTRAR_ASISTENCIA_CITA', label: 'Registrar Asistencia' }
         ],
         'ctg': [
             { value: 'CREATE_CTG', label: 'Crear CTG' },
@@ -1428,6 +1462,7 @@ function applyFilters() {
         action: document.getElementById('filterAction').value,
         tipo_ctg: document.getElementById('filterTipoCtg').value,
         tipo_pqr: document.getElementById('filterTipoPqr').value,
+        asistencia: document.getElementById('filterAsistencia').value,
         target_id: document.getElementById('filterTargetId').value,
         search: document.getElementById('filterSearch').value
     };
@@ -1446,6 +1481,7 @@ function clearFilters() {
     document.getElementById('filterAction').value = '';
     document.getElementById('filterTipoCtg').value = '';
     document.getElementById('filterTipoPqr').value = '';
+    document.getElementById('filterAsistencia').value = '';
     document.getElementById('filterTargetId').value = '';
     document.getElementById('filterSearch').value = '';
     
@@ -1470,6 +1506,7 @@ function resetFilters() {
     document.getElementById('filterAction').value = '';
     document.getElementById('filterTipoCtg').value = '';
     document.getElementById('filterTipoPqr').value = '';
+    document.getElementById('filterAsistencia').value = '';
     document.getElementById('filterTargetId').value = '';
     document.getElementById('filterSearch').value = '';
     
@@ -1496,6 +1533,11 @@ function setupEventListeners() {
     
     // Change event en el select de tipo de CTG
     document.getElementById('filterTipoCtg').addEventListener('change', function() {
+        applyFilters();
+    });
+
+    // Change event en el select de asistencia
+    document.getElementById('filterAsistencia').addEventListener('change', function() {
         applyFilters();
     });
     
