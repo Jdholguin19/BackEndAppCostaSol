@@ -8,10 +8,10 @@
 class DB
 {
     // ¡Rellena con tus credenciales!
-    private const DB_HOST = 'localhost';           // p.ej. 127.0.0.1
+    private const DB_HOST = 'box5500.bluehost.com';           // p.ej. 127.0.0.1
     private const DB_NAME = 'portalao_appCostaSol';             // p.ej. costasol_app
-    private const DB_USER = 'root';        // p.ej. portalao_gcoello
-    private const DB_PASS = '';       // p.ej. ********
+    private const DB_USER = 'portalao_gcoello';        // p.ej. portalao_gcoello
+    private const DB_PASS = 'guiCTV321!';       // p.ej. ********
     private const DB_CHARSET = 'utf8mb4';
 
     /** @var \PDO|null  Instancia única (singleton) */

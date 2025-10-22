@@ -10,6 +10,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="assets/css/style_main.css" rel="stylesheet">
 <link href="assets/css/style_filtro.css" rel="stylesheet">
+<link href="assets/css/chat.css" rel="stylesheet">
 
 <?php $onesignal = require __DIR__ . '/../config/config_onesignal.php'; ?>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
@@ -724,6 +725,12 @@ include '../api/bottom_nav.php';
         return;
     }
 
+    // Centro de Mensajes para responsables
+    if ( (menu.id + '') === 'chat_responsable' ||
+        (menu.nombre || '').toUpperCase().includes('MENSAJE') ){
+        location.href = 'chat_responsable.php';          // <<<<<<
+        return;
+    }
 
     if ( menu.id === 15 ||
         (menu.nombre || '').toUpperCase().includes('VER') ){
@@ -1142,9 +1149,12 @@ include '../api/bottom_nav.php';
 
       // Filter menus for Residente role before slicing
       const isResidente = u.rol_id === 2;
-      const availableMenus = isResidente 
+      const availableMenusBase = isResidente 
         ? menus.filter(m => m.id !== 1) 
         : menus;
+      const availableMenus = u.is_responsable
+        ? [{ id: 'chat_responsable', nombre: 'Centro de Mensajes', descripcion: 'Atiende conversaciones', url_icono: 'bi-chat-dots' }, ...availableMenusBase]
+        : availableMenusBase;
 
       // Fijar el módulo id 15 ("Ver más") en la posición 4 siempre
       const verMas = availableMenus.find(m => Number(m.id) === 15);
@@ -1598,6 +1608,162 @@ include '../api/bottom_nav.php';
       markNotificationAsRead(notifId, notifType);
     }, 500);
   }
+
+  /* ---------- Chat Widget ---------- */
+  (function(){
+    const token = localStorage.getItem('cs_token');
+    const u = JSON.parse(localStorage.getItem('cs_usuario') || '{}');
+    if (!token || !u.id || u.is_responsable) { return; }
+
+    const API_THREAD = '../api/chat/thread.php';
+    const API_MSG    = '../api/chat/messages.php';
+    const API_TRANS  = '../api/chat/transcript.php';
+
+    // Botón flotante
+    const launcher = document.createElement('button');
+    launcher.className = 'chat-launcher';
+    launcher.innerHTML = '<i class="bi bi-chat-dots"></i>';
+    document.body.appendChild(launcher);
+
+    // Modal
+    const modal = document.createElement('div');
+    modal.className = 'chat-modal';
+    modal.innerHTML = `
+      <div class="chat-header">
+        <div class="topbar">
+          <div>
+            <div class="title">Hola Sistemas 👋</div>
+            <div class="subtitle">¿Cómo podemos ayudarte?</div>
+          </div>
+          <div class="chat-options">
+            <button id="chatMenuBtn" title="Opciones"><i class="bi bi-three-dots"></i></button>
+            <div id="chatMenu" class="chat-options-menu">
+              <div class="item" id="optExpand">Ampliar ventana</div>
+              <div class="item" id="optTranscript">Descargar transcripción</div>
+              <div class="item" id="optClose">Cerrar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-body" id="chatBody"></div>
+      <div class="chat-footer">
+        <input id="chatText" class="chat-input" type="text" placeholder="Escribe un mensaje..." />
+        <button id="chatSend" class="chat-send">Enviar</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Overlay para cerrar al tocar fuera
+    const overlay = document.createElement('div');
+    overlay.className = 'chat-overlay';
+    document.body.appendChild(overlay);
+
+    const chatBody = modal.querySelector('#chatBody');
+    const chatText = modal.querySelector('#chatText');
+    const chatSend = modal.querySelector('#chatSend');
+    const menuBtn  = modal.querySelector('#chatMenuBtn');
+    const menu     = modal.querySelector('#chatMenu');
+    const optExpand= modal.querySelector('#optExpand');
+    const optTrans = modal.querySelector('#optTranscript');
+    const optClose = modal.querySelector('#optClose');
+
+    let threadId = 0;
+    let lastId = 0;
+    let pollTimer = null;
+
+    function appendMessage(m){
+      const row = document.createElement('div');
+      row.className = 'message-row';
+      const bubble = document.createElement('div');
+      bubble.className = 'message ' + (m.sender_type === 'user' ? 'user' : 'responsable');
+      bubble.textContent = m.content;
+      row.appendChild(bubble);
+      chatBody.appendChild(row);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    async function ensureThread(){
+      const r = await fetch(API_THREAD, { headers: { 'Authorization': `Bearer ${token}` } });
+      const data = await r.json();
+      if (!data.ok) throw new Error(data.error||'No se pudo iniciar chat');
+      threadId = data.thread.id || data.thread_id || data.id;
+    }
+
+    async function loadMessages(){
+      if (!threadId) return;
+      const url = `${API_MSG}?thread_id=${threadId}&limit=100&since_id=${lastId}`;
+      const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+      const data = await r.json();
+      if (data.ok && Array.isArray(data.messages)){
+        data.messages.forEach(m=>{ appendMessage(m); lastId = Math.max(lastId, Number(m.id||0)); });
+      }
+    }
+
+    async function sendMessage(){
+      const txt = chatText.value.trim();
+      if (!txt || !threadId) return;
+      chatText.value='';
+      appendMessage({ sender_type:'user', content: txt, id: lastId+1 });
+      try{
+        await fetch(API_MSG, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ thread_id: threadId, content: txt })
+        });
+      }catch(e){ console.error('Error enviando mensaje', e); }
+    }
+
+    function startPolling(){ stopPolling(); pollTimer = setInterval(loadMessages, 3000); }
+    function stopPolling(){ if (pollTimer) { clearInterval(pollTimer); pollTimer=null; } }
+
+    // Lanzador: toggle abrir/cerrar
+    async function openChat(){
+      modal.classList.add('open');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (!threadId) await ensureThread();
+      await loadMessages();
+      startPolling();
+    }
+    function closeChat(){
+      modal.classList.remove('open');
+      modal.classList.remove('fullscreen');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      stopPolling();
+    }
+    launcher.onclick = async ()=>{ 
+      if (modal.classList.contains('open')) { 
+        closeChat(); 
+      } else { 
+        await openChat(); 
+      } 
+    };
+
+    // Cerrar al tocar fuera
+    overlay.addEventListener('click', closeChat);
+
+    // Opciones
+    menuBtn.addEventListener('click', ()=>{ menu.classList.toggle('open'); });
+    document.addEventListener('click', (e)=>{ if(!menu.contains(e.target) && e.target!==menuBtn){ menu.classList.remove('open'); } });
+    optExpand.addEventListener('click', ()=>{ modal.classList.toggle('fullscreen'); });
+    optTrans.addEventListener('click', ()=>{
+      if (!threadId) return;
+      const url = new URL(API_TRANS, location.origin);
+      url.searchParams.set('thread_id', threadId);
+      fetch(url, { headers:{ 'Authorization': `Bearer ${token}` }})
+        .then(r=>r.blob())
+        .then(blob=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`chat_transcript_${threadId}.txt`; document.body.appendChild(a); a.click(); a.remove(); });
+    });
+    optClose.addEventListener('click', closeChat);
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeChat(); });
+
+    chatSend.onclick = sendMessage;
+    chatText.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendMessage(); });
+  })();
+  /* ---------- End Chat Widget ---------- */
 
 </script>
 
