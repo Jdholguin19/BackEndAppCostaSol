@@ -173,6 +173,21 @@ function getRecentAudits($db, $limit = 10) {
     // Procesar detalles para mejorar la visualización
     foreach ($audits as &$audit) {
         $audit['formatted_details'] = formatAuditDetails($audit['details'], $db, $audit);
+        // Detalle enriquecido para UI (no afecta el gráfico)
+        if (($audit['action'] ?? '') === 'REGISTRAR_ASISTENCIA_CITA') {
+            $asistencia = null;
+            try {
+                $parsed = is_string($audit['details']) ? json_decode($audit['details'], true) : $audit['details'];
+                if (is_array($parsed) && isset($parsed['asistencia'])) {
+                    $asistencia = $parsed['asistencia'];
+                }
+            } catch (Exception $e) {}
+            $ui = $audit['formatted_details'];
+            if ($asistencia) {
+                $ui = ($ui ? $ui . ', ' : '') . 'Asistencia: ' . $asistencia;
+            }
+            $audit['formatted_details_ui'] = $ui ?: $audit['formatted_details'];
+        }
     }
     
     return $audits;

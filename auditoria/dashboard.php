@@ -1028,10 +1028,10 @@ function renderModuleAudits(audits, total, chartData) {
                             <span class="user-type-badge user-${audit.user_type}">${audit.user_type}</span>
                             ${audit.user_display_name ? ` (${audit.user_display_name})` : ''}
                         </td>
-                        <td><span class="action-badge action-${getActionType(audit.action)}">${getActionType(audit.action)}</span></td>
+                        <td><span class="action-badge action-${getActionType(audit.action)}">${audit.action}</span></td>
                         <td>${audit.target_id || '-'}</td>
                         <td>${audit.ip_address || '-'}</td>
-                        <td>${audit.formatted_details || '-'}</td>
+                        <td>${audit.formatted_details_ui || audit.formatted_details || '-'}</td>
                     </tr>
                 `).join('')}
             </tbody>
@@ -1179,13 +1179,13 @@ function appendAuditsToTable(audits) {
                 ${audit.user_display_name ? ` (${audit.user_display_name})` : ''}
             </td>
             <td>
-                <span class="action-badge action-${getActionType(audit.action)}">${getActionType(audit.action)}</span>
+                <span class="action-badge action-${getActionType(audit.action)}">${audit.action}</span>
             </td>
             <td>${audit.target_id || '-'}</td>
             <td>${audit.ip_address || '-'}</td>
             <td class="details-cell">
                 <div class="details-content">
-                    ${audit.formatted_details || audit.details || 'Sin detalles'}
+                    ${audit.formatted_details_ui || audit.formatted_details || audit.details || 'Sin detalles'}
                 </div>
             </td>
         </tr>
@@ -1559,12 +1559,16 @@ function formatDateTime(timestamp) {
 }
 
 function getActionType(action) {
-    if (action.includes('LOGIN')) return 'login';
-    if (action.includes('CREATE')) return 'create';
-    if (action.includes('UPDATE')) return 'update';
-    if (action.includes('DELETE')) return 'delete';
-    if (action.includes('ACCESS')) return 'access';
-    return 'login';
+    if (!action) return 'other';
+    const upper = String(action).toUpperCase();
+    if (upper.includes('LOGIN')) return 'login';
+    if (upper.includes('CREATE')) return 'create';
+    if (upper.includes('UPDATE')) return 'update';
+    if (upper.includes('DELETE')) return 'delete';
+    if (upper.includes('ACCESS')) return 'access';
+    if (upper.includes('CANCEL')) return 'cancel';
+    if (upper.includes('REGISTRAR_ASISTENCIA')) return 'asistencia';
+    return 'other';
 }
 
 function formatDetails(details) {
