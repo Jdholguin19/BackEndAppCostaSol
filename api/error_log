@@ -1,0 +1,31 @@
+[20-Oct-2025 09:54:50 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Oct-2025 14:32:56 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Oct-2025 14:38:05 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Oct-2025 14:40:26 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Oct-2025 15:13:02 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[20-Oct-2025 16:12:25 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 07:19:45 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 07:40:57 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 07:41:28 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 07:42:40 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 07:55:49 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[21-Oct-2025 07:55:49 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 09:15:02 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 09:19:55 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 09:23:21 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 10:03:18 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 10:23:51 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 10:26:04 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 10:35:23 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 10:35:47 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 10:47:50 America/Boise] Player ID actualizado exitosamente para usuario 4: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 12:17:20 America/Boise] Admin Garantías API - Error: SQLSTATE[22001]: String data, right truncated: 1406 Data too long for column 'nombre' at row 1
+[21-Oct-2025 13:05:03 America/Boise] Player ID duplicado limpiado para permitir nueva asignación
+[21-Oct-2025 13:05:03 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[21-Oct-2025 15:57:22 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 07:28:41 America/Boise] Error enviando notificaciones: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'estado' in 'where clause'
+[22-Oct-2025 08:26:29 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 08:33:52 America/Boise] noticias.php: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.token' doesn't exist
+[22-Oct-2025 08:33:55 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01
+[22-Oct-2025 08:34:14 America/Boise] noticias.php: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'portalao_appCostaSol.token' doesn't exist
+[22-Oct-2025 08:37:57 America/Boise] Player ID actualizado exitosamente para usuario 2: c3925247-841e-41d7-be9a-30560a3b7a01

@@ -124,6 +124,40 @@ try {
             $limit   = isset($_GET['limit'])   ? max(1, (int)$_GET['limit'])   : 12;
             $offset  = isset($_GET['offset'])  ? max(0, (int)$_GET['offset'])  : 0;
             $estado  = isset($_GET['estado'])  ? (int)$_GET['estado']  : 1;  // 1 = activos
+            $filter_by_user = isset($_GET['filter_by_user']) && $_GET['filter_by_user'] === '1';
+
+            // Obtener usuario_id del token si se requiere filtrado
+            $usuario_id = null;
+            $is_responsable = false;
+            if ($filter_by_user) {
+                $headers = getallheaders();
+                $authHeader = isset($headers['Authorization']) ? $headers['Authorization'] : '';
+                
+                if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
+                    $token = $matches[1];
+                    
+                    // Validar token en tabla usuario
+                    $stmt = $db->prepare("SELECT id FROM usuario WHERE token = :token");
+                    $stmt->execute([':token' => $token]);
+                    $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if ($userData) {
+                        $usuario_id = $userData['id'];
+                        $is_responsable = false;
+                    } else {
+                        // Si no está en usuario, buscar en responsable
+                        $stmt = $db->prepare("SELECT id FROM responsable WHERE token = :token");
+                        $stmt->execute([':token' => $token]);
+                        $respData = $stmt->fetch(PDO::FETCH_ASSOC);
+                        
+                        if ($respData) {
+                            // Los responsables ven todas las noticias, no filtrar
+                            $is_responsable = true;
+                            $filter_by_user = false; // Desactivar filtrado para responsables
+                        }
+                    }
+                }
+            }
 
             /* ---------- Si piden una sola noticia ---------- */
             if ($id > 0) {
@@ -142,32 +176,63 @@ try {
             }
 
             /* ---------- Listado paginado ---------- */
-            $where  = 'WHERE 1';
-            $params = [];
-            if ($estado === 0 || $estado === 1) {
-                $where .= ' AND estado = :estado';
-                $params[':estado'] = $estado;
+            $where  = 'WHERE n.estado = :estado';
+            $params = [':estado' => $estado];
+            
+            // Log para debug
+            error_log("noticias.php: filter_by_user=$filter_by_user, usuario_id=$usuario_id, is_responsable=$is_responsable");
+            
+            // Si hay filtrado por usuario, hacer JOIN con notificacion
+            if ($filter_by_user && $usuario_id) {
+                $sql = "SELECT DISTINCT n.id, n.titulo, n.resumen, n.url_imagen, n.link_noticia,
+                               n.fecha_publicacion
+                          FROM noticia n
+                          INNER JOIN notificacion notif ON notif.tipo_id = n.id 
+                                                        AND notif.tipo = 'Noticia'
+                                                        AND notif.usuario_id = :usuario_id
+                          $where
+                         ORDER BY n.fecha_publicacion DESC, n.orden ASC
+                         LIMIT :limit OFFSET :offset";
+                $params[':usuario_id'] = $usuario_id;
+                
+                error_log("noticias.php: Filtrando noticias para usuario_id=$usuario_id");
+            } else {
+                // Sin filtrado, devolver todas las noticias (para admin)
+                $sql = "SELECT n.id, n.titulo, n.resumen, n.url_imagen, n.link_noticia,
+                               n.fecha_publicacion
+                          FROM noticia n
+                          $where
+                         ORDER BY n.fecha_publicacion DESC, n.orden ASC
+                         LIMIT :limit OFFSET :offset";
             }
 
-            // total para paginación
-            $total = $db->prepare("SELECT COUNT(*) FROM noticia $where");
-            $total->execute($params);
-            $total = (int)$total->fetchColumn();
+            // Contar total
+            if ($filter_by_user && $usuario_id) {
+                $countSql = "SELECT COUNT(DISTINCT n.id) FROM noticia n
+                             INNER JOIN notificacion notif ON notif.tipo_id = n.id 
+                                                           AND notif.tipo = 'Noticia'
+                                                           AND notif.usuario_id = :usuario_id
+                             $where";
+            } else {
+                $countSql = "SELECT COUNT(*) FROM noticia n $where";
+            }
+            
+            $totalStmt = $db->prepare($countSql);
+            foreach ($params as $k => $v) {
+                if ($k !== ':limit' && $k !== ':offset') {
+                    $totalStmt->bindValue($k, $v);
+                }
+            }
+            $totalStmt->execute();
+            $total = (int)$totalStmt->fetchColumn();
 
-            // listado
-            $sql = "SELECT id, titulo, resumen, url_imagen, link_noticia,
-                           fecha_publicacion
-                      FROM noticia
-                      $where
-                     ORDER BY fecha_publicacion DESC, orden ASC
-                     LIMIT :limit OFFSET :offset";
-
+            // Ejecutar consulta principal
             $stmt = $db->prepare($sql);
             foreach ($params as $k => $v) $stmt->bindValue($k, $v);
             $stmt->bindValue(':limit',  $limit,  PDO::PARAM_INT);
             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
             $stmt->execute();
-            $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC); // Usar fetchAll(PDO::FETCH_ASSOC)
+            $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             echo json_encode([
                 'ok'       => true,

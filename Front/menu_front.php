@@ -559,7 +559,7 @@ include '../api/bottom_nav.php';
   const is_responsable = u.is_responsable;
 
   /* ---------- Endpoints ---------- */
-  const API_NEWS  = '../api/noticias.php?limit=10';
+  const API_NEWS  = '../api/noticias.php?limit=10&filter_by_user=1';
   const API_MENU  = is_admin_responsable ? '../api/menu.php' : '../api/menu.php?role_id=' + u.rol_id;
   const API_PROP  = u.is_responsable ? '../api/obtener_propiedades.php' : '../api/obtener_propiedades.php?id_usuario=' + u.id;
   const API_FASE  = '../api/propiedad_fase.php?id_propiedad=';
@@ -705,7 +705,11 @@ include '../api/bottom_nav.php';
   }
 
   /* ---------- Noticias ---------- */
-  fetch(API_NEWS).then(r=>r.json()).then(({ok,noticias})=>{
+  fetch(API_NEWS, {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }).then(r=>r.json()).then(({ok,noticias})=>{
     if(!ok){document.getElementById('newsSpinner').textContent='Error noticias';return;}
     const row=document.getElementById('newsRow');
     row.innerHTML = `
