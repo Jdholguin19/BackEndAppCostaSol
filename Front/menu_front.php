@@ -1698,6 +1698,7 @@ include '../api/bottom_nav.php';
     const btnEmoji  = modal.querySelector('#btnEmoji');
     const emojiPanel= modal.querySelector('#emojiPanel');
     const replyContainer = modal.querySelector('#replyContainer');
+    const btnCamera = modal.querySelector('#btnCamera');
 
     let threadId = 0;
     let lastId = 0;
@@ -2070,9 +2071,11 @@ include '../api/bottom_nav.php';
       if (hasText) {
         btnAudio.style.display = 'none';
         chatSend.style.display = 'block';
+        if (btnCamera) btnCamera.style.display = 'none';
       } else {
         btnAudio.style.display = 'block';
         chatSend.style.display = 'none';
+        if (btnCamera) btnCamera.style.display = 'block';
       }
     });
   })();
