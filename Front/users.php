@@ -38,14 +38,50 @@ if (!$token) {
             /* --------- 1. Lista de roles para el <select> --------- */
             $roles = $db->query('SELECT id, nombre FROM rol ORDER BY nombre')->fetchAll(PDO::FETCH_KEY_PAIR);
 
-            /* --------- 2. Usuarios (incluye rol_id para edición) --------- */
-            $usuarios = $db->query(
-              'SELECT u.id, u.url_foto_perfil, u.nombres, u.apellidos, u.correo,
-                      u.rol_id, r.nombre AS rol
-                 FROM usuario u
-                 JOIN rol r ON r.id = u.rol_id
-                 ORDER BY u.id DESC'
-            )->fetchAll();
+            /* --------- 2. Paginación de usuarios --------- */
+            // Obtener parámetros de paginación
+            $page = max(1, (int)($_GET['page'] ?? 1));
+            $limit = (int)($_GET['limit'] ?? 20);
+            
+            // Validar límite (solo permitir valores específicos)
+            $allowedLimits = [20, 50, 100, 0]; // 0 = todos
+            if (!in_array($limit, $allowedLimits)) {
+                $limit = 20; // valor por defecto
+            }
+            
+            // Contar total de usuarios
+            $totalUsers = $db->query('SELECT COUNT(*) FROM usuario')->fetchColumn();
+            
+            // Calcular offset
+            $offset = ($page - 1) * $limit;
+            
+            // Construir consulta con o sin límite
+            if ($limit > 0) {
+                $sql = 'SELECT u.id, u.url_foto_perfil, u.nombres, u.apellidos, u.correo,
+                              u.rol_id, r.nombre AS rol
+                         FROM usuario u
+                         JOIN rol r ON r.id = u.rol_id
+                         ORDER BY u.id DESC
+                         LIMIT :limit OFFSET :offset';
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+                $stmt->execute();
+                $usuarios = $stmt->fetchAll();
+                
+                // Calcular información de paginación
+                $totalPages = ceil($totalUsers / $limit);
+            } else {
+                // Mostrar todos los usuarios
+                $usuarios = $db->query(
+                  'SELECT u.id, u.url_foto_perfil, u.nombres, u.apellidos, u.correo,
+                          u.rol_id, r.nombre AS rol
+                     FROM usuario u
+                     JOIN rol r ON r.id = u.rol_id
+                     ORDER BY u.id DESC'
+                )->fetchAll();
+                $totalPages = 1;
+            }
         }
     } catch (Exception $e) {
         $showAccessDenied = true;
@@ -102,28 +138,71 @@ if (!$token) {
         <h3 style="margin: 0; font-family: 'Inter', sans-serif; font-weight: 600; color: #2d5a3d;">
           Lista de Usuarios
         </h3>
-        <button 
-          onclick="verReporteGeneral()" 
-          class="btn btn-success"
-          style="
-            background: #2d5a3d;
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-          "
-          onmouseover="this.style.background='#4a7c59'"
-          onmouseout="this.style.background='#2d5a3d'"
-        >
-          <i class="bi bi-graph-up-arrow"></i>
-          Reporte General
-        </button>
+        
+        <div style="display: flex; gap: 10px;">
+          
+          <button 
+            onclick="verReporteGeneral()" 
+            class="btn btn-success"
+            style="
+              background: #2d5a3d;
+              border: none;
+              color: white;
+              padding: 8px 16px;
+              border-radius: 6px;
+              font-size: 14px;
+              font-weight: 500;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              transition: all 0.3s ease;
+            "
+            onmouseover="this.style.background='#4a7c59'"
+            onmouseout="this.style.background='#2d5a3d'"
+          >
+            <i class="bi bi-graph-up-arrow"></i>
+            Reporte General
+          </button>
+        </div>
+        
+        <!-- Controles de paginación -->
+        <div class="pagination-controls" style="display: flex; align-items: center; gap: 15px;">
+          <div class="limit-selector" style="display: flex; align-items: center; gap: 8px;">
+            <label for="limitSelect" style="font-size: 14px; color: #374151;">Mostrar:</label>
+            <select id="limitSelect" onchange="changeLimitAndReload()" style="padding: 4px 8px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px;">
+              <option value="20" <?= $limit == 20 ? 'selected' : '' ?>>20</option>
+              <option value="50" <?= $limit == 50 ? 'selected' : '' ?>>50</option>
+              <option value="100" <?= $limit == 100 ? 'selected' : '' ?>>100</option>
+              <option value="0" <?= $limit == 0 ? 'selected' : '' ?>>Todos</option>
+            </select>
+            <span class="results-info" style="font-size: 12px; color: #6b7280;">
+              <?php if ($limit > 0): ?>
+                Mostrando <?= min($offset + 1, $totalUsers) ?>-<?= min($offset + $limit, $totalUsers) ?> de <?= $totalUsers ?> usuarios
+              <?php else: ?>
+                Mostrando todos los <?= $totalUsers ?> usuarios
+              <?php endif; ?>
+            </span>
+          </div>
+          
+          <?php if ($limit > 0 && $totalPages > 1): ?>
+          <div class="page-navigation" style="display: flex; align-items: center; gap: 10px;">
+            <?php if ($page > 1): ?>
+              <button class="btn btn-secondary btn-sm" onclick="changePage(<?= $page - 1 ?>)" style="padding: 4px 8px; font-size: 12px;">
+                <i class="bi bi-chevron-left"></i> Anterior
+              </button>
+            <?php endif; ?>
+            
+            <span class="page-info" style="font-size: 14px; color: #374151;">Página <?= $page ?> de <?= $totalPages ?></span>
+            
+            <?php if ($page < $totalPages): ?>
+              <button class="btn btn-secondary btn-sm" onclick="changePage(<?= $page + 1 ?>)" style="padding: 4px 8px; font-size: 12px;">
+                Siguiente <i class="bi bi-chevron-right"></i>
+              </button>
+            <?php endif; ?>
+          </div>
+          <?php endif; ?>
+        </div>
+        
         <div class="filter-container" style="position: relative; display: inline-block;">
           <input 
             type="text" 
@@ -552,6 +631,24 @@ function verReporteUsuario(userId) {
 // Función para ver reporte general
 function verReporteGeneral() {
     window.open(`reportes_general_usuario.php`, '_blank');
+}
+
+// Funciones de paginación
+function changePage(newPage) {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('page', newPage);
+    window.location.href = '?' + urlParams.toString();
+}
+
+function changeLimitAndReload() {
+    const limitSelect = document.getElementById('limitSelect');
+    const newLimit = limitSelect.value;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('limit', newLimit);
+    urlParams.set('page', '1'); // Resetear a la primera página
+    
+    window.location.href = '?' + urlParams.toString();
 }
 </script>
 
