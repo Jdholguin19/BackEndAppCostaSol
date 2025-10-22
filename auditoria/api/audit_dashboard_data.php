@@ -1020,7 +1020,8 @@ try {
                 'tipo_ctg' => $input['tipo_ctg_filter'] ?? '',
                 'tipo_pqr' => $input['tipo_pqr_filter'] ?? '',
                 'target_id' => $input['target_id'] ?? '',
-                'search' => $input['search'] ?? ''
+                'search' => $input['search'] ?? '',
+                'asistencia' => $input['asistencia_filter'] ?? ''
             ];
             $offset = intval($input['offset'] ?? 0);
             $limit = intval($input['limit'] ?? 20);
