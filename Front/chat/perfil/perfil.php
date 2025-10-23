@@ -74,13 +74,15 @@ $showAccessDenied = false;
     }
 
     .metric-card {
-      background: var(--chat-panel);
+      background: white;
       border-radius: 12px;
-      padding: 20px;
+      padding: 24px;
       text-align: center;
       border: 1px solid var(--chat-border);
       transition: all 0.2s ease;
       height: 100%;
+      position: relative;
+      cursor: pointer;
     }
 
     .metric-card:hover {
@@ -88,6 +90,100 @@ $showAccessDenied = false;
       box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     }
 
+    .metric-details {
+      background: white;
+      border: 1px solid var(--chat-border);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      margin-top: -1px;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .details-content {
+      padding: 16px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .loading-details {
+      text-align: center;
+      padding: 20px;
+      color: var(--chat-muted);
+    }
+
+    .detail-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .detail-title {
+      font-weight: 600;
+      color: var(--chat-text);
+      margin-bottom: 4px;
+    }
+
+    .detail-subtitle {
+      font-size: 12px;
+      color: var(--chat-muted);
+      margin-bottom: 8px;
+    }
+
+    .detail-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .detail-badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .badge-warning {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .badge-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .badge-info {
+      background-color: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .expand-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .metric-card.expanded .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     .metric-number {
       font-size: 2rem;
       font-weight: 700;
@@ -367,31 +463,67 @@ $showAccessDenied = false;
 
     <div class="row mb-4">
       <div class="col-lg-3 col-md-6 mb-3">
-        <div class="metric-card">
+        <div class="metric-card" data-metric="propiedades" onclick="toggleMetricDetails(this)">
           <i class="bi bi-house metric-icon"></i>
           <div id="totalPropiedades" class="metric-number">-</div>
           <div class="metric-label">Propiedades</div>
+          <i class="bi bi-chevron-down expand-icon" style="position: absolute; top: 10px; right: 10px; font-size: 14px; opacity: 0.7;"></i>
+        </div>
+        <div class="metric-details" id="details-propiedades" style="display: none;">
+          <div class="details-content">
+            <div class="loading-details">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <span class="ms-2">Cargando detalles...</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-lg-3 col-md-6 mb-3">
-        <div class="metric-card">
+        <div class="metric-card" data-metric="ctg" onclick="toggleMetricDetails(this)">
           <i class="bi bi-tools metric-icon"></i>
           <div id="totalCTG" class="metric-number">-</div>
           <div class="metric-label">Solicitudes CTG</div>
+          <i class="bi bi-chevron-down expand-icon" style="position: absolute; top: 10px; right: 10px; font-size: 14px; opacity: 0.7;"></i>
+        </div>
+        <div class="metric-details" id="details-ctg" style="display: none;">
+          <div class="details-content">
+            <div class="loading-details">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <span class="ms-2">Cargando detalles...</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-lg-3 col-md-6 mb-3">
-        <div class="metric-card">
+        <div class="metric-card" data-metric="pqr" onclick="toggleMetricDetails(this)">
           <i class="bi bi-chat-dots metric-icon"></i>
           <div id="totalPQR" class="metric-number">-</div>
           <div class="metric-label">Solicitudes PQR</div>
+          <i class="bi bi-chevron-down expand-icon" style="position: absolute; top: 10px; right: 10px; font-size: 14px; opacity: 0.7;"></i>
+        </div>
+        <div class="metric-details" id="details-pqr" style="display: none;">
+          <div class="details-content">
+            <div class="loading-details">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <span class="ms-2">Cargando detalles...</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-lg-3 col-md-6 mb-3">
-        <div class="metric-card">
+        <div class="metric-card" data-metric="citas" onclick="toggleMetricDetails(this)">
           <i class="bi bi-calendar-check metric-icon"></i>
           <div id="totalCitas" class="metric-number">-</div>
           <div class="metric-label">Citas</div>
+          <i class="bi bi-chevron-down expand-icon" style="position: absolute; top: 10px; right: 10px; font-size: 14px; opacity: 0.7;"></i>
+        </div>
+        <div class="metric-details" id="details-citas" style="display: none;">
+          <div class="details-content">
+            <div class="loading-details">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <span class="ms-2">Cargando detalles...</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -473,15 +605,20 @@ async function loadUserProfile(userId, token) {
 
 function displayUserProfile(data) {
     // Información personal
-    const fullName = `${data.usuario.nombre} ${data.usuario.apellidos || ''}`.trim();
-    document.getElementById('userName').textContent = fullName;
+    const fullName = `${data.usuario.nombres || ''} ${data.usuario.apellidos || ''}`.trim();
+    document.getElementById('userName').textContent = fullName || 'Usuario';
     document.getElementById('userEmail').textContent = data.usuario.correo || '-';
     document.getElementById('userCedula').textContent = data.usuario.cedula || '-';
     document.getElementById('userTelefono').textContent = data.usuario.telefono || '-';
 
-    // Avatar con iniciales
-    const initials = getInitials(fullName);
-    document.getElementById('userAvatar').textContent = initials;
+    // Avatar con iniciales o foto de perfil
+    if (data.usuario.url_foto_perfil) {
+        const avatarElement = document.getElementById('userAvatar');
+        avatarElement.innerHTML = `<img src="${data.usuario.url_foto_perfil}" alt="Foto de perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+    } else {
+        const initials = getInitials(fullName || 'Usuario');
+        document.getElementById('userAvatar').textContent = initials;
+    }
 
     // Métricas
     document.getElementById('totalPropiedades').textContent = data.estadisticas.propiedades.total_propiedades || 0;
@@ -495,7 +632,7 @@ function displayUserProfile(data) {
         recentCTGContainer.innerHTML = data.actividad_reciente.ctg.map(item => `
             <div class="activity-item">
                 <div class="activity-date">${formatDate(item.fecha_creacion)}</div>
-                <div class="activity-title">${item.tipo_solicitud}</div>
+                <div class="activity-title">${item.descripcion}</div>
                 <div class="activity-desc">Estado: ${item.estado}</div>
             </div>
         `).join('');
@@ -509,7 +646,7 @@ function displayUserProfile(data) {
         recentPQRContainer.innerHTML = data.actividad_reciente.pqr.map(item => `
             <div class="activity-item">
                 <div class="activity-date">${formatDate(item.fecha_creacion)}</div>
-                <div class="activity-title">${item.tipo}</div>
+                <div class="activity-title">${item.descripcion}</div>
                 <div class="activity-desc">Estado: ${item.estado}</div>
             </div>
         `).join('');
@@ -545,6 +682,231 @@ function showError(message) {
     document.getElementById('loadingState').style.display = 'none';
     document.getElementById('errorText').textContent = message;
     document.getElementById('errorState').style.display = 'block';
+}
+
+// Funciones para métricas expandibles
+async function toggleMetricDetails(cardElement) {
+    const metricType = cardElement.getAttribute('data-metric');
+    const detailsElement = document.getElementById(`details-${metricType}`);
+    const expandIcon = cardElement.querySelector('.expand-icon');
+    
+    if (detailsElement.style.display === 'none') {
+        // Expandir
+        cardElement.classList.add('expanded');
+        detailsElement.style.display = 'block';
+        
+        // Cargar detalles si no están cargados
+        if (!detailsElement.hasAttribute('data-loaded')) {
+            await loadMetricDetails(metricType, detailsElement);
+            detailsElement.setAttribute('data-loaded', 'true');
+        }
+    } else {
+        // Contraer
+        cardElement.classList.remove('expanded');
+        detailsElement.style.display = 'none';
+    }
+}
+
+async function loadMetricDetails(metricType, detailsElement) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user_id');
+    const token = localStorage.getItem('responsable_token');
+    
+    try {
+        const response = await fetch(`../../../api/chat/perfil/detalles_metricas.php?user_id=${userId}&tipo=${metricType}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Error al cargar detalles');
+        }
+
+        if (data.ok) {
+            displayMetricDetails(metricType, data.detalles, detailsElement);
+        } else {
+            throw new Error(data.error || 'Error en la respuesta del servidor');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        detailsElement.querySelector('.details-content').innerHTML = `
+            <div class="text-center text-danger p-3">
+                <i class="bi bi-exclamation-triangle"></i>
+                <p class="mb-0 mt-2">Error al cargar detalles: ${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+function displayMetricDetails(metricType, detalles, detailsElement) {
+    const contentElement = detailsElement.querySelector('.details-content');
+    
+    if (!detalles || detalles.length === 0) {
+        contentElement.innerHTML = `
+            <div class="text-center text-muted p-3">
+                <i class="bi bi-info-circle"></i>
+                <p class="mb-0 mt-2">No hay información disponible</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    
+    switch (metricType) {
+        case 'propiedades':
+            html = detalles.map(propiedad => `
+                <div class="detail-item">
+                    <div class="detail-title">
+                        ${propiedad.tipo_propiedad || 'Propiedad'} - ${propiedad.urbanizacion || 'N/A'}
+                    </div>
+                    <div class="detail-subtitle">
+                        Mz: ${propiedad.manzana || 'N/A'}, Solar: ${propiedad.solar || 'N/A'}, Villa: ${propiedad.villa || 'N/A'}
+                    </div>
+                    <div class="detail-info">
+                        <div>
+                            <strong>Etapa:</strong> ${propiedad.etapa_construccion || 'N/A'} 
+                            ${propiedad.porcentaje_construccion ? `(${propiedad.porcentaje_construccion}%)` : ''}
+                        </div>
+                        <span class="detail-badge badge-info">${propiedad.estado_propiedad || 'N/A'}</span>
+                    </div>
+                    ${propiedad.fecha_entrega ? `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="bi bi-calendar-event"></i> 
+                                Entrega: ${formatDate(propiedad.fecha_entrega)}
+                            </small>
+                        </div>
+                    ` : ''}
+                    ${propiedad.acabado_kit ? `
+                        <div class="mt-1">
+                            <small class="text-muted">
+                                <i class="bi bi-palette"></i> 
+                                Acabado: ${propiedad.acabado_kit}
+                                ${propiedad.acabado_color_seleccionado ? ` - ${propiedad.acabado_color_seleccionado}` : ''}
+                            </small>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            break;
+            
+        case 'ctg':
+            html = detalles.map(ctg => `
+                <div class="detail-item">
+                    <div class="detail-title">Solicitud #${ctg.numero_solicitud}</div>
+                    <div class="detail-subtitle">${formatDate(ctg.fecha_ingreso)}</div>
+                    <div class="detail-info">
+                        <div>
+                            <strong>Tipo:</strong> ${ctg.tipo_ctg || 'N/A'}<br>
+                            <small class="text-muted">${ctg.descripcion || 'Sin descripción'}</small>
+                        </div>
+                        <span class="detail-badge ${getStatusBadgeClass(ctg.estado)}">${ctg.estado || 'N/A'}</span>
+                    </div>
+                    ${ctg.fecha_resolucion ? `
+                        <div class="mt-2">
+                            <small class="text-success">
+                                <i class="bi bi-check-circle"></i> 
+                                Resuelto: ${formatDate(ctg.fecha_resolucion)}
+                            </small>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            break;
+            
+        case 'pqr':
+            html = detalles.map(pqr => `
+                <div class="detail-item">
+                    <div class="detail-title">Solicitud #${pqr.numero_solicitud}</div>
+                    <div class="detail-subtitle">${formatDate(pqr.fecha_ingreso)}</div>
+                    <div class="detail-info">
+                        <div>
+                            <strong>Tipo:</strong> ${pqr.tipo_pqr || 'N/A'}<br>
+                            <small class="text-muted">${pqr.descripcion || 'Sin descripción'}</small>
+                        </div>
+                        <span class="detail-badge ${getStatusBadgeClass(pqr.estado)}">${pqr.estado || 'N/A'}</span>
+                    </div>
+                    ${pqr.fecha_resolucion ? `
+                        <div class="mt-2">
+                            <small class="text-success">
+                                <i class="bi bi-check-circle"></i> 
+                                Resuelto: ${formatDate(pqr.fecha_resolucion)}
+                            </small>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            break;
+            
+        case 'citas':
+            html = detalles.map(cita => `
+                <div class="detail-item">
+                    <div class="detail-title">
+                        ${cita.proposito || 'Cita'} - ${formatDate(cita.fecha_reunion)} ${cita.hora_reunion}
+                    </div>
+                    <div class="detail-subtitle">
+                        Responsable: ${cita.responsable_nombre || 'N/A'}
+                        ${cita.manzana && cita.solar ? ` | Propiedad: Mz ${cita.manzana}, Solar ${cita.solar}` : ''}
+                    </div>
+                    <div class="detail-info">
+                        <div>
+                            <strong>Estado:</strong> ${cita.estado || 'N/A'}<br>
+                            <strong>Asistencia:</strong> ${getAsistenciaText(cita.asistencia)}
+                        </div>
+                        <span class="detail-badge ${getAsistenciaBadgeClass(cita.asistencia)}">${getAsistenciaText(cita.asistencia)}</span>
+                    </div>
+                    ${cita.resultado ? `
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="bi bi-clipboard-check"></i> 
+                                Resultado: ${cita.resultado}
+                            </small>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            break;
+    }
+    
+    contentElement.innerHTML = html;
+}
+
+function getStatusBadgeClass(estado) {
+    if (!estado) return 'badge-info';
+    
+    const estadoLower = estado.toLowerCase();
+    if (estadoLower.includes('resuelto') || estadoLower.includes('completado') || estadoLower.includes('cerrado')) {
+        return 'badge-success';
+    } else if (estadoLower.includes('pendiente') || estadoLower.includes('proceso') || estadoLower.includes('abierto')) {
+        return 'badge-warning';
+    } else if (estadoLower.includes('cancelado') || estadoLower.includes('rechazado')) {
+        return 'badge-danger';
+    }
+    return 'badge-info';
+}
+
+function getAsistenciaText(asistencia) {
+    switch (asistencia) {
+        case 'ASISTIO': return 'Asistió';
+        case 'NO_ASISTIO': return 'No asistió';
+        case 'NO_REGISTRADO': return 'No registrado';
+        default: return 'N/A';
+    }
+}
+
+function getAsistenciaBadgeClass(asistencia) {
+    switch (asistencia) {
+        case 'ASISTIO': return 'badge-success';
+        case 'NO_ASISTIO': return 'badge-danger';
+        case 'NO_REGISTRADO': return 'badge-warning';
+        default: return 'badge-info';
+    }
 }
 </script>
 
