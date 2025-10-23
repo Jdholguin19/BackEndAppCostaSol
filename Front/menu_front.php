@@ -2204,15 +2204,19 @@ include '../api/bottom_nav.php';
 </script>
 
 <!-- Image Modal -->
-<div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9);">
-  <div class="image-modal-content" style="position: relative; margin: auto; padding: 0; width: 90%; max-width: 700px; top: 50%; transform: translateY(-50%);">
-    <span id="closeModal" class="close" style="position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 10001;">&times;</span>
-    <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
-    <div style="text-align: center; margin-top: 15px;">
-      <button id="downloadModal" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px;">
-        <i class="bi bi-download"></i> Descargar
+<div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(128,128,128,0.95); padding: 20px; box-sizing: border-box; justify-content: center; align-items: center;">
+  <div class="image-modal-content" style="position: relative; max-width: 95%; max-height: 95%; display: flex; flex-direction: column; align-items: center;">
+    <div style="position: relative; max-width: 100%; max-height: calc(100% - 80px); display: flex; justify-content: center; align-items: center;">
+      <img id="modalImage" style="max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+    </div>
+    <div style="display: flex; gap: 15px; margin-top: 20px; justify-content: center; align-items: center;">
+      <button id="closeModal" class="close" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;">&times;</button>
+      <button id="downloadModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;">
+        <i class="bi bi-download"></i>
       </button>
     </div>
+  </div>
+</div>
   </div>
 </div>
 

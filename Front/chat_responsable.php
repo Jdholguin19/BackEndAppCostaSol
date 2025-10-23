@@ -235,11 +235,15 @@ if ($token) {
 </div>
 
 <!-- Image Modal -->
-<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center;">
-  <div style="position: relative; max-width: 90%; max-height: 90%;">
-    <img id="modalImage" style="max-width: 100%; max-height: 100%; border-radius: 8px;">
-    <button id="closeModal" style="position: absolute; top: -40px; right: 0; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px;">&times;</button>
-    <button id="downloadModal" style="position: absolute; top: -40px; right: 40px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="bi bi-download"></i></button>
+<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(128,128,128,0.95); z-index: 10002; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+  <div style="position: relative; max-width: 95%; max-height: 95%; display: flex; flex-direction: column; align-items: center;">
+    <div style="position: relative; max-width: 100%; max-height: calc(100% - 60px); display: flex; justify-content: center; align-items: center;">
+      <img id="modalImage" style="max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+    </div>
+    <div style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
+      <button id="closeModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;">&times;</button>
+      <button id="downloadModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;"><i class="bi bi-download"></i></button>
+    </div>
   </div>
 </div>
 
