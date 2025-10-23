@@ -1758,11 +1758,8 @@ include '../api/bottom_nav.php';
         const replyPreview = document.createElement('div');
         replyPreview.className = 'reply-preview';
         replyPreview.innerHTML = `
-          <div class="reply-line"></div>
-          <div class="reply-content">
-            <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Tú' : 'Responsable'}</div>
-            <div class="reply-text">${m.reply_to.content}</div>
-          </div>
+          <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Tú' : 'Responsable'}</div>
+          <div class="reply-text">${m.reply_to.content}</div>
         `;
         bubble.appendChild(replyPreview);
       }

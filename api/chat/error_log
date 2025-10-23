@@ -1,0 +1,22 @@
+
+  thrown in /home1/portalao/public_html/website_cc359709/api/chat/messages.php on line 4
+[23-Oct-2025 07:11:37 America/Boise] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1364 Field 'sender_id' doesn't have a default value in /home1/portalao/public_html/website_cc359709/api/chat/messages.php:89
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/chat/messages.php(89): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/chat/messages.php on line 89
+[23-Oct-2025 07:14:39 America/Boise] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1364 Field 'sender_id' doesn't have a default value in /home1/portalao/public_html/website_cc359709/api/chat/messages.php:89
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/chat/messages.php(89): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/chat/messages.php on line 89
+[23-Oct-2025 07:15:39 America/Boise] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1364 Field 'sender_id' doesn't have a default value in /home1/portalao/public_html/website_cc359709/api/chat/messages.php:89
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/chat/messages.php(89): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/chat/messages.php on line 89
+[23-Oct-2025 07:15:43 America/Boise] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000]: General error: 1364 Field 'sender_id' doesn't have a default value in /home1/portalao/public_html/website_cc359709/api/chat/messages.php:89
+Stack trace:
+#0 /home1/portalao/public_html/website_cc359709/api/chat/messages.php(89): PDOStatement->execute(Array)
+#1 {main}
+  thrown in /home1/portalao/public_html/website_cc359709/api/chat/messages.php on line 89
