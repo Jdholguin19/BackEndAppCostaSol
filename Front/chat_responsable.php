@@ -527,8 +527,7 @@ if ($token) {
         row.appendChild(bubble);
         refs.body.appendChild(row);
       });
-      // Auto-scroll to bottom after rendering messages
-      scrollToBottom();
+      // Remove auto-scroll from renderMessages - it should only happen on first load
     }
 
     function isAttachmentUrl(url){
@@ -550,12 +549,61 @@ if ($token) {
       }
 
       if (isImg) {
+        const imgContainer = document.createElement('div');
+        imgContainer.style.position = 'relative';
+        imgContainer.style.display = 'inline-block';
+        
         const img = document.createElement('img');
         img.src = url;
         img.alt = 'imagen';
         img.style.maxWidth = '100%';
         img.style.borderRadius = '12px';
-        container.appendChild(img);
+        img.style.cursor = 'pointer';
+        
+        // Add click event to open image in new tab
+        img.addEventListener('click', () => {
+          window.open(url, '_blank');
+        });
+        
+        // Add download button overlay
+        const downloadBtn = document.createElement('button');
+        downloadBtn.innerHTML = '<i class="bi bi-download"></i>';
+        downloadBtn.style.position = 'absolute';
+        downloadBtn.style.top = '8px';
+        downloadBtn.style.right = '8px';
+        downloadBtn.style.background = 'rgba(0,0,0,0.7)';
+        downloadBtn.style.color = 'white';
+        downloadBtn.style.border = 'none';
+        downloadBtn.style.borderRadius = '50%';
+        downloadBtn.style.width = '32px';
+        downloadBtn.style.height = '32px';
+        downloadBtn.style.cursor = 'pointer';
+        downloadBtn.style.display = 'none';
+        downloadBtn.style.alignItems = 'center';
+        downloadBtn.style.justifyContent = 'center';
+        downloadBtn.title = 'Descargar imagen';
+        
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = url.split('/').pop() || 'imagen';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        });
+        
+        // Show/hide download button on hover
+        imgContainer.addEventListener('mouseenter', () => {
+          downloadBtn.style.display = 'flex';
+        });
+        imgContainer.addEventListener('mouseleave', () => {
+          downloadBtn.style.display = 'none';
+        });
+        
+        imgContainer.appendChild(img);
+        imgContainer.appendChild(downloadBtn);
+        container.appendChild(imgContainer);
       } else if (isAudio) {
         const audio = document.createElement('audio');
         audio.controls = true;
