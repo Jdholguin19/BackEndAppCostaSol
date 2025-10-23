@@ -35,13 +35,13 @@ try {
     $params = [':rid' => $responsable_id];
     $where = 'WHERE t.responsable_id = :rid';
     if ($q !== '') {
-        $where .= ' AND (u.nombres LIKE :q OR CAST(u.id AS CHAR) = :qid)';
+        $where .= ' AND (u.nombres LIKE :q OR u.apellidos LIKE :q OR CONCAT(u.nombres, " ", u.apellidos) LIKE :q OR CAST(u.id AS CHAR) = :qid)';
         $params[':q'] = '%' . $q . '%';
         $params[':qid'] = $q;
     }
 
     // Seleccionar último mensaje por hilo
-    $sql = "SELECT t.id, t.user_id, u.nombres AS user_name, t.estado, t.created_at,
+    $sql = "SELECT t.id, t.user_id, u.nombres AS user_name, u.apellidos AS user_lastname, t.estado, t.created_at,
                    m.id AS last_message_id, m.content AS last_message, m.created_at AS last_created_at
             FROM chat_thread t
             JOIN usuario u ON u.id = t.user_id

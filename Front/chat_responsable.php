@@ -204,6 +204,7 @@ if ($token) {
         <div class="chat-options">
           <button id="optionsBtn" title="Opciones"><i class="bi bi-three-dots"></i></button>
           <div id="optionsMenu" class="chat-options-menu">
+            <div class="item" id="optPerfil">Perfil</div>
             <div class="item" id="optExpand">Ampliar ventana</div>
             <div class="item" id="optTranscript">Descargar transcripción</div>
           </div>
@@ -340,6 +341,7 @@ if ($token) {
       refresh: document.getElementById('refreshThreads'),
       optBtn: document.getElementById('optionsBtn'),
       optMenu: document.getElementById('optionsMenu'),
+      optPerfil: document.getElementById('optPerfil'),
       optExpand: document.getElementById('optExpand'),
       optTranscript: document.getElementById('optTranscript'),
       btnEmoji: document.getElementById('btnEmoji'),
@@ -361,8 +363,13 @@ if ($token) {
     };
 
     let currentThreadId = null;
+    let currentThreadData = null;
     let polling = null;
     let replyingTo = null;
+
+    function getCurrentThreadData() {
+      return currentThreadData;
+    }
 
     async function fetchThreads(){
       const q = refs.search.value.trim();
@@ -383,7 +390,10 @@ if ($token) {
       items.forEach(t=>{
         const li = document.createElement('div');
         li.className = 'thread-item';
-        li.innerHTML = `<div class="name">${escapeHtml(t.user_name||('Usuario #'+t.user_id))}</div>
+        const fullName = t.user_name && t.user_lastname ? 
+          `${t.user_name} ${t.user_lastname}` : 
+          (t.user_name || `Usuario #${t.user_id}`);
+        li.innerHTML = `<div class="name">${escapeHtml(fullName)}</div>
                         <div class="snippet">${escapeHtml((t.last_message||'').slice(0,80))}</div>`;
         li.onclick = ()=> openThread(t);
         refs.list.appendChild(li);
@@ -394,7 +404,11 @@ if ($token) {
 
     async function openThread(t){
       currentThreadId = t.id;
-      refs.title.textContent = t.user_name || ('Usuario #' + t.user_id);
+      currentThreadData = t; // Store the complete thread data
+      const fullName = t.user_name && t.user_lastname ? 
+        `${t.user_name} ${t.user_lastname}` : 
+        (t.user_name || `Usuario #${t.user_id}`);
+      refs.title.textContent = fullName;
       refs.subtitle.textContent = 'Hilo #' + t.id;
       refs.body.innerHTML = '';
       
@@ -795,6 +809,20 @@ if ($token) {
         refs.optMenu.classList.remove('open'); 
       }
     });
+    
+    if (refs.optPerfil) {
+      refs.optPerfil.addEventListener('click', ()=>{
+        if(!currentThreadId) return;
+        // Get current thread data to extract user_id
+        const currentThread = getCurrentThreadData();
+        if (currentThread && currentThread.user_id) {
+          // Store token in localStorage for the profile page
+          localStorage.setItem('responsable_token', token);
+          const url = `chat/perfil/perfil.php?user_id=${currentThread.user_id}`;
+          window.open(url, '_blank');
+        }
+      });
+    }
     
     if (refs.optExpand) {
       refs.optExpand.addEventListener('click', ()=>{
