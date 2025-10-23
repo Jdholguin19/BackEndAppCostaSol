@@ -1733,9 +1733,9 @@ include '../api/bottom_nav.php';
         img.style.maxWidth = '100%'; img.style.borderRadius = '12px';
         img.style.cursor = 'pointer';
         
-        // Add click event to open image in new tab
+        // Add click event to open image in modal
         img.addEventListener('click', () => {
-          window.open(text, '_blank');
+          openImageModal(text);
         });
         
         // Add download button overlay
@@ -1810,6 +1810,11 @@ include '../api/bottom_nav.php';
       bubble.className = 'message ' + (m.sender_type === 'user' ? 'user' : 'responsable');
       if (opts.pending) bubble.classList.add('pending');
       
+      // Add message ID for scrolling
+      if (m.id) {
+        bubble.setAttribute('data-message-id', m.id);
+      }
+      
       // Add reply preview if this message is a reply
       if (m.reply_to) {
         const replyPreview = document.createElement('div');
@@ -1818,6 +1823,10 @@ include '../api/bottom_nav.php';
           <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Tú' : 'Responsable'}</div>
           <div class="reply-text">${m.reply_to.content}</div>
         `;
+        replyPreview.style.cursor = 'pointer';
+        replyPreview.addEventListener('click', () => {
+          scrollToMessage(m.reply_to.id);
+        });
         bubble.appendChild(replyPreview);
       }
       
@@ -2141,10 +2150,71 @@ include '../api/bottom_nav.php';
         if (btnCamera) btnCamera.style.display = 'block';
       }
     });
+
+    // Image modal functions
+    function openImageModal(imageUrl) {
+      const imageModal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('modalImage');
+      const downloadModal = document.getElementById('downloadModal');
+      
+      modalImage.src = imageUrl;
+      imageModal.style.display = 'block';
+      
+      downloadModal.onclick = function() {
+        const a = document.createElement('a');
+        a.href = imageUrl;
+        a.download = imageUrl.split('/').pop() || 'imagen';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+    }
+
+    function closeImageModal() {
+      const imageModal = document.getElementById('imageModal');
+      imageModal.style.display = 'none';
+    }
+
+    // Image modal event listeners
+    document.getElementById('closeModal').addEventListener('click', closeImageModal);
+    document.getElementById('imageModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeImageModal();
+      }
+    });
+
+    // Scroll to message function
+    function scrollToMessage(messageId) {
+      const targetMessage = document.querySelector(`[data-message-id="${messageId}"]`);
+      if (targetMessage) {
+        targetMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Add highlight effect
+        targetMessage.style.backgroundColor = '#ffeb3b';
+        targetMessage.style.transition = 'background-color 0.3s ease';
+        
+        setTimeout(() => {
+          targetMessage.style.backgroundColor = '';
+        }, 2000);
+      }
+    }
   })();
   /* ---------- End Chat Widget ---------- */
 
 </script>
+
+<!-- Image Modal -->
+<div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9);">
+  <div class="image-modal-content" style="position: relative; margin: auto; padding: 0; width: 90%; max-width: 700px; top: 50%; transform: translateY(-50%);">
+    <span id="closeModal" class="close" style="position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 10001;">&times;</span>
+    <img id="modalImage" style="width: 100%; height: auto; border-radius: 8px;">
+    <div style="text-align: center; margin-top: 15px;">
+      <button id="downloadModal" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px;">
+        <i class="bi bi-download"></i> Descargar
+      </button>
+    </div>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

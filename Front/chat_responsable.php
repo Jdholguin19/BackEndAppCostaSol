@@ -222,7 +222,7 @@ if ($token) {
           <button id="btnAttach" class="chat-btn" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
           <button id="btnCamera" class="chat-btn" title="Tomar foto"><i class="bi bi-camera"></i></button>
           <button id="btnAudio" class="chat-btn" title="Grabar audio"><i class="bi bi-mic"></i></button>
-          <button id="sendBtn" class="chat-send" style="display: none;">Enviar</button>
+          <button id="sendBtn" class="chat-send" style="display: none;"><i class="bi bi-send-fill"></i></button>
         </div>
         <div id="emojiPanel" class="emoji-panel" style="display:none">
           <div class="emoji-grid"></div>
