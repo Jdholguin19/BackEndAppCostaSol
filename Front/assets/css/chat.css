@@ -64,7 +64,7 @@
 
 .message-row { display: flex; margin: 6px 0; }
 .message { max-width: 72%; padding: 8px 12px; border-radius: 16px; font-size: 14px; line-height: 1.35; white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; position: relative; }
-.message.user { background: #1677ff; color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+.message.user { background: #d9fdd3; color: #000000; margin-left: auto; border-bottom-right-radius: 4px; }
 .message.responsable { background: #edf2fe; color: #1f2937; margin-right: auto; border-bottom-left-radius: 4px; }
 .message-meta { font-size: 11px; color: var(--chat-muted); margin-top: 4px; }
 
@@ -72,7 +72,7 @@
 .message-content { display: block; }
 .message-content img, .message-content video { max-width: 100%; border-radius: 12px; display: block; }
 .message-content audio { width: 350px; max-width: 100%; min-width: 220px; height: 40px; display: block; border-radius: 3px; background: #fff; flex-shrink: 0; }
-.message.user .message-content audio { filter: brightness(0.98); background: rgba(255,255,255,0.95); }
+.message.user .message-content audio { filter: brightness(0.98); background: rgba(0, 0, 0, 0.95); }
 .message.responsable .message-content audio { background: rgba(0,0,0,0.05); }
 
 /* Compact reply preview inside bubble */
