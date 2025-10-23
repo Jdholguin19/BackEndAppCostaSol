@@ -294,12 +294,23 @@
   white-space: nowrap;
   max-width: 100%;
 }
-.replying-to {
+.reply-container {
+  display: none;
   background: #f7f8f9;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.replying-to {
+  background: transparent;
   border-radius: 6px;
   padding: 4px 6px;
   gap: 4px;
   border-left: 2px solid #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .reply-info .reply-author { font-size: 11px; margin-bottom: 0; }
 .reply-info .reply-text { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

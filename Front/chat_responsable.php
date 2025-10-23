@@ -76,6 +76,16 @@ if ($token) {
       font-size: 16px;
     }
     
+    /* Image size limitations */
+    .message img {
+      max-width: 300px;
+      max-height: 200px;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    
     /* Reply container styles */
     .reply-container {
       background: #f8f9fa;
@@ -304,6 +314,8 @@ if ($token) {
       });
     }
 
+    let isFirstLoad = true; // Track if this is the first load of messages
+
     async function openThread(t){
       currentThreadId = t.id;
       refs.title.textContent = t.user_name || ('Usuario #' + t.user_id);
@@ -314,6 +326,9 @@ if ($token) {
       if (replyingTo) {
         cancelReply();
       }
+      
+      // Reset first load flag when opening a new thread
+      isFirstLoad = true;
       
       await loadMessages();
       if(polling) clearInterval(polling);
@@ -328,8 +343,12 @@ if ($token) {
       const data = await r.json();
       if(!data.ok) return;
       renderMessages(data.messages || []);
-      // Auto-scroll to bottom after loading messages
-      setTimeout(() => scrollToBottom(), 100);
+      
+      // Only auto-scroll on first load (when opening thread or page reload)
+      if (isFirstLoad) {
+        setTimeout(() => scrollToBottom(), 100);
+        isFirstLoad = false;
+      }
     }
 
     async function sendMessage(){
