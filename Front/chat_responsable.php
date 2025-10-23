@@ -234,6 +234,15 @@ if ($token) {
   </div>
 </div>
 
+<!-- Image Modal -->
+<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center;">
+  <div style="position: relative; max-width: 90%; max-height: 90%;">
+    <img id="modalImage" style="max-width: 100%; max-height: 100%; border-radius: 8px;">
+    <button id="closeModal" style="position: absolute; top: -40px; right: 0; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px;">&times;</button>
+    <button id="downloadModal" style="position: absolute; top: -40px; right: 40px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer;"><i class="bi bi-download"></i></button>
+  </div>
+</div>
+
 <script>
 (function(){
   const token = localStorage.getItem('cs_token');
@@ -284,6 +293,10 @@ if ($token) {
       fileInput: document.getElementById('fileInput'),
       cameraInput: document.getElementById('cameraInput'),
       replyContainer: document.getElementById('replyContainer'),
+      imageModal: document.getElementById('imageModal'),
+      modalImage: document.getElementById('modalImage'),
+      closeModal: document.getElementById('closeModal'),
+      downloadModal: document.getElementById('downloadModal'),
       replyAuthor: document.getElementById('replyAuthor'),
       replyText: document.getElementById('replyText'),
       cancelReply: document.getElementById('cancelReply'),
@@ -498,15 +511,23 @@ if ($token) {
         
         const bubble = document.createElement('div');
         bubble.className = `message ${m.sender_type}`;
+        bubble.setAttribute('data-message-id', m.id); // Add message ID for scrolling
         
         // Reply preview if exists
         if (m.reply_to && m.reply_to.content) {
           const replyPreview = document.createElement('div');
           replyPreview.className = 'reply-preview';
+          replyPreview.style.cursor = 'pointer';
           replyPreview.innerHTML = `
             <div class="reply-author">${escapeHtml(m.reply_to.sender_type === 'user' ? 'Usuario' : 'Responsable')}</div>
             <div class="reply-text">${m.reply_to.content || ''}</div>
           `;
+          
+          // Add click event to scroll to original message
+          replyPreview.addEventListener('click', () => {
+            scrollToMessage(m.reply_to.id);
+          });
+          
           bubble.appendChild(replyPreview);
         }
         
@@ -565,9 +586,9 @@ if ($token) {
         img.style.borderRadius = '12px';
         img.style.cursor = 'pointer';
         
-        // Add click event to open image in new tab
+        // Add click event to open image in modal
         img.addEventListener('click', () => {
-          window.open(url, '_blank');
+          openImageModal(url);
         });
         
         // Add download button overlay
@@ -749,6 +770,45 @@ if ($token) {
       });
     }
 
+    // Scroll to message function
+    function scrollToMessage(messageId) {
+      const targetMessage = document.querySelector(`[data-message-id="${messageId}"]`);
+      if (targetMessage) {
+        targetMessage.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+        
+        // Add highlight effect
+        targetMessage.style.backgroundColor = 'rgba(22, 119, 255, 0.1)';
+        setTimeout(() => {
+          targetMessage.style.backgroundColor = '';
+        }, 2000);
+      }
+    }
+
+    // Image modal functions
+    function openImageModal(imageUrl) {
+      if (refs.modalImage && refs.imageModal) {
+        refs.modalImage.src = imageUrl;
+        refs.imageModal.style.display = 'flex';
+        
+        // Set download functionality
+        refs.downloadModal.onclick = () => {
+          const a = document.createElement('a');
+          a.href = imageUrl;
+          a.download = 'imagen.jpg';
+          a.click();
+        };
+      }
+    }
+
+    function closeImageModal() {
+      if (refs.imageModal) {
+        refs.imageModal.style.display = 'none';
+      }
+    }
+
     // File upload handlers
     if (refs.btnAttach) refs.btnAttach.addEventListener('click', ()=>refs.fileInput.click());
     if (refs.btnCamera) refs.btnCamera.addEventListener('click', ()=>refs.cameraInput.click());
@@ -756,6 +816,14 @@ if ($token) {
     if (refs.cameraInput) refs.cameraInput.addEventListener('change', handleFileUpload);
     if (refs.btnAudio) refs.btnAudio.addEventListener('click', toggleAudioRecording);
     if (refs.sendBtn) refs.sendBtn.addEventListener('click', sendMessage);
+    
+    // Image modal event listeners
+    if (refs.closeModal) refs.closeModal.addEventListener('click', closeImageModal);
+    if (refs.imageModal) {
+      refs.imageModal.addEventListener('click', (e) => {
+        if (e.target === refs.imageModal) closeImageModal();
+      });
+    }
 
     fetchThreads();
   }
