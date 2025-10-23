@@ -173,17 +173,16 @@ if ($token) {
 </div>
 
 <div id="chatInterface" style="display:none;">
-  <div class="topbar">
-    <div class="brand"><i class="bi bi-chat-dots"></i> Centro de Mensajes</div>
-    <div>
-      <span id="responsableName" style="margin-right:16px;color:#6b7280"></span>
-      <a href="menu_front.php" style="text-decoration:none;color:#1677ff">Volver</a>
-    </div>
-  </div>
-
   <div class="resp-wrap">
     <!-- Lista de hilos -->
     <div class="resp-panel">
+      <div class="topbar">
+        <div class="brand"><i class="bi bi-chat-dots"></i> Centro de Mensajes</div>
+        <div>
+          <span id="responsableName" style="margin-right:16px;color:#6b7280"></span>
+          <a href="menu_front.php" style="text-decoration:none;color:#1677ff">Volver</a>
+        </div>
+      </div>
       <div class="panel-header">
         <span>Conversaciones</span>
         <button id="refreshThreads" class="btn btn-sm" style="border:1px solid #e5e7eb">Actualizar</button>
