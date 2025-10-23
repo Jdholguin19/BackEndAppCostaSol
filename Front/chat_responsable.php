@@ -195,6 +195,9 @@ if ($token) {
     <!-- Chat seleccionado -->
     <div class="resp-panel resp-chat">
       <div class="panel-header">
+        <button id="mobileBackBtn" class="mobile-back-btn" style="display: none;">
+          <i class="bi bi-arrow-left"></i>
+        </button>
         <div>
           <div id="chatTitle">Selecciona una conversación</div>
           <div id="chatSubtitle" style="color:#6b7280;font-size:12px"></div>
@@ -395,6 +398,12 @@ if ($token) {
       refs.title.textContent = t.user_name || ('Usuario #' + t.user_id);
       refs.subtitle.textContent = 'Hilo #' + t.id;
       refs.body.innerHTML = '';
+      
+      // Mobile navigation: show chat panel and hide list
+      if (window.innerWidth <= 768) {
+        document.querySelector('.resp-wrap').classList.add('chat-active');
+        document.getElementById('mobileBackBtn').style.display = 'block';
+      }
       
       // Clear any existing reply state when opening a new thread
       if (replyingTo) {
@@ -910,6 +919,31 @@ if ($token) {
     if (refs.cameraInput) refs.cameraInput.addEventListener('change', handleFileUpload);
     if (refs.btnAudio) refs.btnAudio.addEventListener('click', toggleAudioRecording);
     if (refs.sendBtn) refs.sendBtn.addEventListener('click', sendMessage);
+    
+    // Mobile back button functionality
+    document.getElementById('mobileBackBtn').addEventListener('click', () => {
+      document.querySelector('.resp-wrap').classList.remove('chat-active');
+      document.getElementById('mobileBackBtn').style.display = 'none';
+      currentThreadId = null;
+      if (polling) {
+        clearInterval(polling);
+        polling = null;
+      }
+      refs.title.textContent = 'Selecciona una conversación';
+      refs.subtitle.textContent = '';
+      refs.body.innerHTML = '';
+    });
+    
+    // Handle window resize for mobile navigation
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        document.querySelector('.resp-wrap').classList.remove('chat-active');
+        document.getElementById('mobileBackBtn').style.display = 'none';
+      } else if (currentThreadId) {
+        document.querySelector('.resp-wrap').classList.add('chat-active');
+        document.getElementById('mobileBackBtn').style.display = 'block';
+      }
+    });
     
     // Image modal event listeners
     if (refs.closeModal) refs.closeModal.addEventListener('click', closeImageModal);
