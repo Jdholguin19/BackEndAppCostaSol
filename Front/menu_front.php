@@ -2158,7 +2158,7 @@ include '../api/bottom_nav.php';
       const downloadModal = document.getElementById('downloadModal');
       
       modalImage.src = imageUrl;
-      imageModal.style.display = 'block';
+      imageModal.style.display = 'flex';
       
       downloadModal.onclick = function() {
         const a = document.createElement('a');
@@ -2169,19 +2169,6 @@ include '../api/bottom_nav.php';
         document.body.removeChild(a);
       };
     }
-
-    function closeImageModal() {
-      const imageModal = document.getElementById('imageModal');
-      imageModal.style.display = 'none';
-    }
-
-    // Image modal event listeners
-    document.getElementById('closeModal').addEventListener('click', closeImageModal);
-    document.getElementById('imageModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeImageModal();
-      }
-    });
 
     // Scroll to message function
     function scrollToMessage(messageId) {
@@ -2204,22 +2191,98 @@ include '../api/bottom_nav.php';
 </script>
 
 <!-- Image Modal -->
-<div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(128,128,128,0.95); padding: 20px; box-sizing: border-box; justify-content: center; align-items: center;">
-  <div class="image-modal-content" style="position: relative; max-width: 95%; max-height: 95%; display: flex; flex-direction: column; align-items: center;">
-    <div style="position: relative; max-width: 100%; max-height: calc(100% - 80px); display: flex; justify-content: center; align-items: center;">
-      <img id="modalImage" style="max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+<div id="imageModal" class="image-modal" style="display: none; position: fixed; z-index: 10002; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); padding: 20px; box-sizing: border-box; justify-content: center; align-items: center;">
+  <div class="image-modal-content" style="position: relative; max-width: min(90vw, 800px); max-height: min(90vh, 600px); display: flex; flex-direction: column; align-items: center;">
+    <!-- Close button -->
+    <button id="closeModal" class="close" style="position: absolute; top: -50px; right: 0; background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3); z-index: 10003;">&times;</button>
+    
+    <!-- Image container -->
+    <div style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+      <img id="modalImage" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">
     </div>
-    <div style="display: flex; gap: 15px; margin-top: 20px; justify-content: center; align-items: center;">
-      <button id="closeModal" class="close" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;">&times;</button>
-      <button id="downloadModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;">
-        <i class="bi bi-download"></i>
+    
+    <!-- Download button -->
+    <div style="margin-top: 15px;">
+      <button id="downloadModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 20px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 14px;">
+        <i class="bi bi-download"></i> Descargar
       </button>
     </div>
   </div>
 </div>
+
+<style>
+/* Responsive rules for image modal */
+@media (max-width: 768px) {
+  #imageModal .image-modal-content {
+    max-width: 95vw !important;
+    max-height: 85vh !important;
+  }
+  
+  #closeModal {
+    top: -45px !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 18px !important;
+  }
+  
+  #downloadModal {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #imageModal {
+    padding: 15px !important;
+  }
+  
+  #imageModal .image-modal-content {
+    max-width: 98vw !important;
+    max-height: 80vh !important;
+  }
+  
+  #closeModal {
+    top: -40px !important;
+    right: -5px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  #imageModal .image-modal-content {
+    max-width: 70vw !important;
+    max-height: 70vh !important;
+  }
+}
+</style>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Image modal event listeners - ejecutar después de que el DOM esté listo
+function closeImageModal() {
+  const imageModal = document.getElementById('imageModal');
+  imageModal.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const closeModal = document.getElementById('closeModal');
+  const imageModal = document.getElementById('imageModal');
+  
+  if (closeModal) {
+    closeModal.addEventListener('click', closeImageModal);
+  }
+  
+  if (imageModal) {
+    imageModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeImageModal();
+      }
+    });
+  }
+});
+</script>
+
 </body>
 </html>

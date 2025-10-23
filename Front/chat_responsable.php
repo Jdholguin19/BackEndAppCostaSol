@@ -235,17 +235,69 @@ if ($token) {
 </div>
 
 <!-- Image Modal -->
-<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(128,128,128,0.95); z-index: 10002; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
-  <div style="position: relative; max-width: 95%; max-height: 95%; display: flex; flex-direction: column; align-items: center;">
-    <div style="position: relative; max-width: 100%; max-height: calc(100% - 60px); display: flex; justify-content: center; align-items: center;">
-      <img id="modalImage" style="max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
+<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10002; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;">
+  <div style="position: relative; max-width: min(90vw, 800px); max-height: min(90vh, 600px); display: flex; flex-direction: column; align-items: center;">
+    <!-- Close button -->
+    <button id="closeModal" style="position: absolute; top: -50px; right: 0; background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.3); z-index: 10003;">&times;</button>
+    
+    <!-- Image container -->
+    <div style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+      <img id="modalImage" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block;">
     </div>
-    <div style="display: flex; gap: 15px; margin-top: 20px; justify-content: center;">
-      <button id="closeModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;">&times;</button>
-      <button id="downloadModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 50%; width: 48px; height: 48px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); transition: all 0.2s ease;"><i class="bi bi-download"></i></button>
+    
+    <!-- Download button -->
+    <div style="margin-top: 15px;">
+      <button id="downloadModal" style="background: rgba(255,255,255,0.9); color: #333; border: none; border-radius: 20px; padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-size: 14px;">
+        <i class="bi bi-download"></i> Descargar
+      </button>
     </div>
   </div>
 </div>
+
+<style>
+/* Responsive rules for image modal */
+@media (max-width: 768px) {
+  #imageModal > div {
+    max-width: 95vw !important;
+    max-height: 85vh !important;
+  }
+  
+  #closeModal {
+    top: -45px !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 18px !important;
+  }
+  
+  #downloadModal {
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #imageModal {
+    padding: 15px !important;
+  }
+  
+  #imageModal > div {
+    max-width: 98vw !important;
+    max-height: 80vh !important;
+  }
+  
+  #closeModal {
+    top: -40px !important;
+    right: -5px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  #imageModal > div {
+    max-width: 70vw !important;
+    max-height: 70vh !important;
+  }
+}
+</style>
 
 <script>
 (function(){
