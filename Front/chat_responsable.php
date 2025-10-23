@@ -170,10 +170,72 @@ if ($token) {
       row.className = 'message-row';
       const bubble = document.createElement('div');
       bubble.className = 'message ' + (m.sender_type==='responsable'?'responsable':'user');
-      bubble.textContent = m.content;
+      
+      // Render reply preview if present
+      if (m.reply_to) {
+        const replyPreview = document.createElement('div');
+        replyPreview.className = 'reply-preview';
+        replyPreview.innerHTML = `
+          <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Usuario' : 'Responsable'}</div>
+          <div class="reply-text">${m.reply_to.content || ''}</div>
+        `;
+        bubble.appendChild(replyPreview);
+      }
+      
+      // Render message content (attachments or text)
+      const messageContent = document.createElement('div');
+      messageContent.className = 'message-content';
+      const text = String(m.content||'');
+      if (isAttachmentUrl(text)) {
+        renderAttachment(messageContent, text);
+      } else {
+        messageContent.textContent = text;
+      }
+      bubble.appendChild(messageContent);
+
       row.appendChild(bubble);
       refs.body.appendChild(row);
     });
+  }
+
+  function isAttachmentUrl(url){
+    const u = String(url||'');
+    if (!/^https?:\/\//i.test(u)) return false;
+    return /\/uploads\//i.test(u);
+  }
+
+  function renderAttachment(container, url){
+    const lower = url.toLowerCase();
+    const isImg = /\.(png|jpg|jpeg|gif|webp)$/i.test(lower);
+    let isAudio = /\.(mp3|wav|m4a|ogg)$/i.test(lower) || lower.includes('/uploads/audio/');
+    let isVideo = /\.(mp4|webm|mov)$/i.test(lower);
+
+    // Tratar .webm como audio si el navegador lo soporta o si proviene de /uploads/chat/
+    if (/\.webm$/i.test(lower)) {
+      let treatAsAudio = false;
+      const probe = document.createElement('audio');
+      if (typeof probe.canPlayType === 'function') {
+        const support = probe.canPlayType('audio/webm; codecs=opus') || probe.canPlayType('audio/webm');
+        if (support) treatAsAudio = true;
+      }
+      if (lower.includes('/uploads/chat/')) {
+        treatAsAudio = true; // tus audios se guardan ahí
+      }
+      if (treatAsAudio) { isAudio = true; isVideo = false; }
+    }
+
+    if (isImg) {
+      const img = document.createElement('img');
+      img.src = url; container.appendChild(img);
+    } else if (isAudio) {
+      const audio = document.createElement('audio');
+      audio.controls = true; audio.src = url; container.appendChild(audio);
+    } else if (isVideo) {
+      const video = document.createElement('video');
+      video.controls = true; video.src = url; container.appendChild(video);
+    } else {
+      const a = document.createElement('a'); a.href=url; a.target='_blank'; a.textContent=url; container.appendChild(a);
+    }
   }
 
   async function sendMessage(){

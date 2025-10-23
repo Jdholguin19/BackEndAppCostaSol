@@ -1707,14 +1707,22 @@ include '../api/bottom_nav.php';
     // Deduplicación y claves de mensajes
     const renderedIds = new Set();
     const pendingKeys = new Set();
+    const pendingMap = new Map();
     const makeKey = (m)=> (m.sender_type||'-') + '|' + String(m.content||'').trim();
 
     const isUploadUrl = (text)=> /^https?:\/\//.test(text) || /^\/?uploads\//i.test(text);
     function renderAttachment(bubble, text){
       const lower = String(text).toLowerCase();
       const isImg   = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)(\?.*)?$/i.test(lower);
-      const isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)(\?.*)?$/i.test(lower) || text.startsWith('blob:') || /^data:audio\//i.test(text);
-      const isVideo = /(\.mp4|\.webm|\.mov)(\?.*)?$/i.test(lower);
+      let isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)(\?.*)?$/i.test(lower) || text.startsWith('blob:') || /^data:audio\//i.test(text);
+      let isVideo = /(\.mp4|\.webm|\.mov)(\?.*)?$/i.test(lower);
+
+      // Forzar .webm como audio si proviene de /uploads/chat/
+      if (/\.webm(\?.*)?$/i.test(lower) && /\/uploads\/chat\//i.test(lower)) {
+        isAudio = true;
+        isVideo = false;
+      }
+
       if (isImg){
         const img = document.createElement('img');
         img.src = text; img.alt = 'imagen';
@@ -1840,9 +1848,13 @@ include '../api/bottom_nav.php';
           const key = makeKey(m);
           if (m.sender_type==='user' && pendingKeys.has(key)){
             pendingKeys.delete(key);
+            const row = pendingMap.get(key);
+            if (row) { row.remove(); pendingMap.delete(key); }
+            appendMessage(m);
             lastId = Math.max(lastId, Number(m.id||0));
             renderedIds.add(Number(m.id||0));
-            return; // saltar eco
+            hasNewMessages = true;
+            return;
           }
           appendMessage(m);
           lastId = Math.max(lastId, Number(m.id||0));
@@ -1871,7 +1883,8 @@ include '../api/bottom_nav.php';
       
       const key = makeKey(messageObj);
       pendingKeys.add(key);
-      appendMessage(messageObj, { pending: true });
+      const { row } = appendMessage(messageObj, { pending: true });
+      pendingMap.set(key, row);
       
       // Clear reply state
       if (replyingTo) {
@@ -1929,6 +1942,7 @@ include '../api/bottom_nav.php';
           status.textContent = 'Enviado';
           const key = makeKey({ sender_type:'user', content: url });
           pendingKeys.add(key);
+          pendingMap.set(key, row);
           await fetch(API_MSG, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ thread_id: threadId, content: url }) });
         } else {
           status.textContent = 'Error al subir';
@@ -1995,6 +2009,7 @@ include '../api/bottom_nav.php';
                 status.textContent = 'Enviado';
                 const key = makeKey({ sender_type:'user', content: url });
                 pendingKeys.add(key);
+                pendingMap.set(key, row);
                 await fetch(API_MSG, { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ thread_id: threadId, content: url }) });
               } else {
                 status.textContent = 'Error subiendo audio';
