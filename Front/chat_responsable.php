@@ -574,10 +574,24 @@ if ($token) {
           const replyPreview = document.createElement('div');
           replyPreview.className = 'reply-preview';
           replyPreview.style.cursor = 'pointer';
-          replyPreview.innerHTML = `
-            <div class="reply-author">${escapeHtml(m.reply_to.sender_type === 'user' ? 'Usuario' : 'Responsable')}</div>
-            <div class="reply-text">${m.reply_to.content || ''}</div>
-          `;
+          
+          const replyAuthor = document.createElement('div');
+          replyAuthor.className = 'reply-author';
+          replyAuthor.textContent = m.reply_to.sender_type === 'user' ? 'Usuario' : 'Responsable';
+          
+          const replyText = document.createElement('div');
+          replyText.className = 'reply-text';
+          
+          // Check if reply content is a multimedia file
+          if (isAttachmentUrl(m.reply_to.content)) {
+            const replyContent = getReplyPreviewContent(m.reply_to.content);
+            replyText.innerHTML = replyContent;
+          } else {
+            replyText.textContent = m.reply_to.content || '';
+          }
+          
+          replyPreview.appendChild(replyAuthor);
+          replyPreview.appendChild(replyText);
           
           // Add click event to scroll to original message
           replyPreview.addEventListener('click', () => {
@@ -616,6 +630,30 @@ if ($token) {
       const u = String(url||'');
       // Detectar URLs que empiecen con http/https o rutas relativas que contengan /uploads/
       return /^https?:\/\//i.test(u) || /^\/?uploads\//i.test(u);
+    }
+
+    // Function to generate preview content for multimedia files in replies
+    function getReplyPreviewContent(url) {
+      const lower = String(url).toLowerCase();
+      const isImg = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)(\?.*)?$/i.test(lower);
+      let isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)(\?.*)?$/i.test(lower) || url.startsWith('blob:') || /^data:audio\//i.test(url);
+      let isVideo = /(\.mp4|\.webm|\.mov)(\?.*)?$/i.test(lower);
+
+      // Forzar .webm como audio si proviene de /uploads/chat/
+      if (/\.webm(\?.*)?$/i.test(lower) && /\/uploads\/chat\//i.test(lower)) {
+        isAudio = true;
+        isVideo = false;
+      }
+
+      if (isImg) {
+        return '<i class="bi bi-image" style="margin-right: 4px;"></i>Imagen';
+      } else if (isAudio) {
+        return '<i class="bi bi-mic-fill" style="margin-right: 4px;"></i>Audio';
+      } else if (isVideo) {
+        return '<i class="bi bi-play-circle" style="margin-right: 4px;"></i>Video';
+      } else {
+        return '<i class="bi bi-paperclip" style="margin-right: 4px;"></i>Archivo';
+      }
     }
 
     function renderAttachment(container, url){

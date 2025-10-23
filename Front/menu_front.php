@@ -1711,6 +1711,31 @@ include '../api/bottom_nav.php';
     const makeKey = (m)=> (m.sender_type||'-') + '|' + String(m.content||'').trim();
 
     const isUploadUrl = (text)=> /^https?:\/\//.test(text) || /^\/?uploads\//i.test(text);
+    
+    // Function to generate preview content for multimedia files in replies
+    function getReplyPreviewContent(url) {
+      const lower = String(url).toLowerCase();
+      const isImg = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)(\?.*)?$/i.test(lower);
+      let isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)(\?.*)?$/i.test(lower) || url.startsWith('blob:') || /^data:audio\//i.test(url);
+      let isVideo = /(\.mp4|\.webm|\.mov)(\?.*)?$/i.test(lower);
+
+      // Forzar .webm como audio si proviene de /uploads/chat/
+      if (/\.webm(\?.*)?$/i.test(lower) && /\/uploads\/chat\//i.test(lower)) {
+        isAudio = true;
+        isVideo = false;
+      }
+
+      if (isImg) {
+        return '<i class="bi bi-image" style="margin-right: 4px;"></i>Imagen';
+      } else if (isAudio) {
+        return '<i class="bi bi-mic-fill" style="margin-right: 4px;"></i>Audio';
+      } else if (isVideo) {
+        return '<i class="bi bi-play-circle" style="margin-right: 4px;"></i>Video';
+      } else {
+        return '<i class="bi bi-paperclip" style="margin-right: 4px;"></i>Archivo';
+      }
+    }
+    
     function renderAttachment(bubble, text){
       const lower = String(text).toLowerCase();
       const isImg   = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)(\?.*)?$/i.test(lower);
@@ -1819,10 +1844,24 @@ include '../api/bottom_nav.php';
       if (m.reply_to) {
         const replyPreview = document.createElement('div');
         replyPreview.className = 'reply-preview';
-        replyPreview.innerHTML = `
-          <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Tú' : 'Responsable'}</div>
-          <div class="reply-text">${m.reply_to.content}</div>
-        `;
+        
+        const replyAuthor = document.createElement('div');
+        replyAuthor.className = 'reply-author';
+        replyAuthor.textContent = m.reply_to.sender_type === 'user' ? 'Tú' : 'Responsable';
+        
+        const replyText = document.createElement('div');
+        replyText.className = 'reply-text';
+        
+        // Check if reply content is a multimedia file
+        if (isUploadUrl(m.reply_to.content)) {
+          const replyContent = getReplyPreviewContent(m.reply_to.content);
+          replyText.innerHTML = replyContent;
+        } else {
+          replyText.textContent = m.reply_to.content;
+        }
+        
+        replyPreview.appendChild(replyAuthor);
+        replyPreview.appendChild(replyText);
         replyPreview.style.cursor = 'pointer';
         replyPreview.addEventListener('click', () => {
           scrollToMessage(m.reply_to.id);
