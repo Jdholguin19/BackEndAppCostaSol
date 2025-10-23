@@ -217,13 +217,15 @@ if ($token) {
           <button id="cancelReply" class="cancel-reply">&times;</button>
         </div>
         <div class="chat-input-container">
+          <button id="btnEmoji" class="chat-btn" title="Emoji"><i class="bi bi-emoji-smile"></i></button>
           <input id="chatInput" class="chat-input" placeholder="Escribe un mensaje..." />
-          <div class="chat-buttons">
-            <button id="btnAttach" class="chat-btn" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
-            <button id="btnCamera" class="chat-btn" title="Tomar foto"><i class="bi bi-camera"></i></button>
-            <button id="btnAudio" class="chat-btn" title="Grabar audio"><i class="bi bi-mic"></i></button>
-            <button id="sendBtn" class="chat-send">Enviar</button>
-          </div>
+          <button id="btnAttach" class="chat-btn" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
+          <button id="btnCamera" class="chat-btn" title="Tomar foto"><i class="bi bi-camera"></i></button>
+          <button id="btnAudio" class="chat-btn" title="Grabar audio"><i class="bi bi-mic"></i></button>
+          <button id="sendBtn" class="chat-send" style="display: none;">Enviar</button>
+        </div>
+        <div id="emojiPanel" class="emoji-panel" style="display:none">
+          <div class="emoji-grid"></div>
         </div>
         <input type="file" id="fileInput" style="display:none" accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt" />
         <input type="file" id="cameraInput" style="display:none" accept="image/*" capture="environment" />
@@ -273,9 +275,12 @@ if ($token) {
       optMenu: document.getElementById('optionsMenu'),
       optExpand: document.getElementById('optExpand'),
       optTranscript: document.getElementById('optTranscript'),
+      btnEmoji: document.getElementById('btnEmoji'),
+      emojiPanel: document.getElementById('emojiPanel'),
       btnAttach: document.getElementById('btnAttach'),
       btnCamera: document.getElementById('btnCamera'),
       btnAudio: document.getElementById('btnAudio'),
+      sendBtn: document.getElementById('sendBtn'),
       fileInput: document.getElementById('fileInput'),
       cameraInput: document.getElementById('cameraInput'),
       replyContainer: document.getElementById('replyContainer'),
@@ -698,12 +703,59 @@ if ($token) {
     // Reply functionality
     if (refs.cancelReply) refs.cancelReply.addEventListener('click', cancelReply);
 
+    // Emoji functionality
+    const emojiList = '😀 😁 😂 🤣 😊 😇 🙂 🙃 😉 😍 😘 😗 😙 😚 🥰 😋 😛 😜 🤪 😝 🤗 🤭 🤫 🤔 🤐 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 😯 😪 😫 🥱 😴 😌 🥳 🤓 😎 🤩 🥺 😤 😢 😭 😱 😳 🤯 😬 😰 🤥 🤧 🤒 🤕 🤑 🤠 🤡 👋 👍 👎 🙏 💪 ✌️ 👀 ❤️ 🧡 💛 💚 💙 💜 🤎 🖤 🤍 💔 ⭐ 🌟 🔥 🎉 🎂 🎁 🍻 ☕ 🍔 🍕 🍟 🍣 🍓 🍎 🥑 ⚽ 🏀 🎮 🎧'.split(' ');
+    
+    function initializeEmojiPanel() {
+      if (refs.emojiPanel) {
+        refs.emojiPanel.innerHTML = '<div class="emoji-grid">'+emojiList.map(e=>`<button class="emoji-btn" type="button">${e}</button>`).join('')+'</div>';
+        refs.emojiPanel.querySelectorAll('.emoji-btn').forEach(el=>{ 
+          el.addEventListener('click', ()=>{ 
+            refs.input.value += el.textContent; 
+            refs.input.focus();
+          }); 
+        });
+      }
+    }
+    
+    if (refs.btnEmoji) {
+      refs.btnEmoji.addEventListener('click', ()=>{
+        const isVisible = refs.emojiPanel.style.display === 'block';
+        if (isVisible) {
+          refs.emojiPanel.style.display = 'none';
+        } else {
+          initializeEmojiPanel();
+          refs.emojiPanel.style.display = 'block';
+        }
+      });
+    }
+    
+    // Initialize emoji panel on load
+    initializeEmojiPanel();
+
+    // Dynamic button switching (WhatsApp style)
+    if (refs.input) {
+      refs.input.addEventListener('input', () => {
+        const hasText = refs.input.value.trim().length > 0;
+        if (hasText) {
+          refs.btnAudio.style.display = 'none';
+          refs.sendBtn.style.display = 'block';
+          if (refs.btnCamera) refs.btnCamera.style.display = 'none';
+        } else {
+          refs.btnAudio.style.display = 'block';
+          refs.sendBtn.style.display = 'none';
+          if (refs.btnCamera) refs.btnCamera.style.display = 'block';
+        }
+      });
+    }
+
     // File upload handlers
     if (refs.btnAttach) refs.btnAttach.addEventListener('click', ()=>refs.fileInput.click());
     if (refs.btnCamera) refs.btnCamera.addEventListener('click', ()=>refs.cameraInput.click());
     if (refs.fileInput) refs.fileInput.addEventListener('change', handleFileUpload);
     if (refs.cameraInput) refs.cameraInput.addEventListener('change', handleFileUpload);
     if (refs.btnAudio) refs.btnAudio.addEventListener('click', toggleAudioRecording);
+    if (refs.sendBtn) refs.sendBtn.addEventListener('click', sendMessage);
 
     fetchThreads();
   }

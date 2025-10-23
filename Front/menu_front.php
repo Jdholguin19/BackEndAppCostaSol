@@ -1928,10 +1928,13 @@ include '../api/bottom_nav.php';
       btnAudio.style.display = 'block';
       chatSend.style.display = 'none';
       
-      // Prepare message object
+      // Prepare message object and payload before clearing reply state
       const messageObj = { sender_type:'user', content: txt };
+      const payload = { thread_id: threadId, content: txt };
+      
       if (replyingTo) {
         messageObj.reply_to = replyingTo;
+        payload.reply_to_id = replyingTo.id;
       }
       
       const key = makeKey(messageObj);
@@ -1939,17 +1942,12 @@ include '../api/bottom_nav.php';
       const { row } = appendMessage(messageObj, { pending: true });
       pendingMap.set(key, row);
       
-      // Clear reply state
+      // Clear reply state after preparing payload
       if (replyingTo) {
         cancelReply();
       }
       
       try{
-        const payload = { thread_id: threadId, content: txt };
-        if (replyingTo) {
-          payload.reply_to_id = replyingTo.id;
-        }
-        
         await fetch(API_MSG, {
           method:'POST',
           headers:{ 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
