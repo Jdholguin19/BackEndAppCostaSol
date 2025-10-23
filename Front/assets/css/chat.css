@@ -57,7 +57,12 @@
 .chat-header .avatar { width: 24px; height: 24px; border-radius: 999px; background: #fff; opacity: 0.85; }
 
 .chat-body {
-  background: linear-gradient(180deg, #ffffff, #f3f4f6);
+  background: 
+    /* Custom SVG pattern */
+    url('chat-pattern.svg'),
+    /* Base gradient */
+    linear-gradient(180deg, #ffffff, #f3f4f6);
+  background-size: 60px 60px, 100% 100%;
   padding: 12px;
   overflow-y: auto;
 }
@@ -72,8 +77,8 @@
 .message-content { display: block; }
 .message-content img, .message-content video { max-width: 100%; border-radius: 12px; display: block; }
 .message-content audio { width: 350px; max-width: 100%; min-width: 220px; height: 40px; display: block; border-radius: 3px; background: #fff; flex-shrink: 0; }
-.message.user .message-content audio { filter: brightness(0.98); background: rgba(0, 0, 0, 0.95); }
-.message.responsable .message-content audio { background: rgba(0,0,0,0.05); }
+.message.user .message-content audio { filter: brightness(0.98); background: #d9fdd3; }
+.message.responsable .message-content audio { background: #edf2fe; }
 
 /* Compact reply preview inside bubble */
 .reply-preview { background: rgba(255,255,255,0.18); border-left: 3px solid rgba(0,0,0,0.2); padding: 4px 8px; margin-bottom: 6px; border-radius: 8px; }
@@ -146,7 +151,19 @@
 .chat-options-menu .item:hover { background: #f3f4f6; }
 
 /* Responsable view layout */
-.resp-wrap { display: grid; grid-template-columns: 320px 1fr; height: calc(100vh - 40px); gap: 16px; padding: 20px; background: var(--chat-bg); }
+.resp-wrap { 
+  display: grid; 
+  grid-template-columns: 320px 1fr; 
+  height: calc(100vh - 40px); 
+  gap: 16px; 
+  padding: 20px; 
+  background: 
+    /* Custom SVG pattern for responsable view */
+    url('resp-pattern.svg'),
+    /* Base background */
+    var(--chat-bg);
+  background-size: 80px 80px, 100% 100%;
+}
 .resp-panel { background: var(--chat-panel); border-radius: 16px; box-shadow: 0 6px 24px rgba(0,0,0,0.08); overflow: hidden; display: flex; flex-direction: column; }
 .resp-panel .panel-header { padding: 14px; border-bottom: 1px solid var(--chat-border); font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
 .resp-search { width: 100%; border: 1px solid var(--chat-border); border-radius: 10px; padding: 8px 10px; font-size: 14px; }
