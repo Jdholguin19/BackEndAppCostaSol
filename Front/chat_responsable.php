@@ -15,7 +15,10 @@ if ($token) {
         if (!$responsable) { $showAccessDenied = true; }
     } catch (Exception $e) { $showAccessDenied = true; }
 } else {
-    $showAccessDenied = true;
+    // Si no hay token en POST, verificar si hay uno en localStorage via JavaScript
+    if (!isset($_SESSION['responsable_id'])) {
+        $showAccessDenied = true;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -26,20 +29,144 @@ if ($token) {
   <title>Chat Responsable</title>
   <link rel="stylesheet" href="assets/css/chat.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  <style>body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;} .brand{display:flex;align-items:center;gap:8px;font-weight:700;padding:14px 20px;} .brand i{color:#1677ff;} .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 20px;border-bottom:1px solid #e5e7eb;background:#fff;}</style>
+  <style>
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;} 
+    .brand{display:flex;align-items:center;gap:8px;font-weight:700;padding:14px 20px;} 
+    .brand i{color:#1677ff;} 
+    .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 20px;border-bottom:1px solid #e5e7eb;background:#fff;}
+    
+    /* Chat input container styles */
+    .chat-input-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .chat-input {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .chat-buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .chat-btn {
+      background: none;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      color: #6b7280;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    
+    .chat-btn:hover {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .chat-btn i {
+      font-size: 16px;
+    }
+    
+    /* Reply container styles */
+    .reply-container {
+      background: #f8f9fa;
+      border-left: 3px solid #1677ff;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .reply-preview {
+      flex: 1;
+    }
+    
+    .reply-author {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1677ff;
+      margin-bottom: 2px;
+    }
+    
+    .reply-text {
+      font-size: 13px;
+      color: #6b7280;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .cancel-reply {
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    .cancel-reply:hover {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    
+    /* Reply button in messages */
+    .reply-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 4px 6px;
+      font-size: 12px;
+      color: #6b7280;
+      cursor: pointer;
+      opacity: 0;
+      transition: all 0.2s;
+    }
+    
+    .message:hover .reply-btn {
+      opacity: 1;
+    }
+    
+    .reply-btn:hover {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .message {
+      position: relative;
+    }
+  </style>
 </head>
 <body>
-<?php if ($showAccessDenied): ?>
-  <div style="padding:40px;text-align:center">
-    <h2>Acceso denegado</h2>
-    <p>Debes iniciar sesión como responsable.</p>
-    <a href="login_front.php">Ir al login</a>
-  </div>
-<?php else: ?>
+
+<div id="accessDenied" style="padding:40px;text-align:center;display:none;">
+  <h2>Acceso denegado</h2>
+  <p>Debes iniciar sesión como responsable.</p>
+  <a href="login_front.php">Ir al login</a>
+</div>
+
+<div id="chatInterface" style="display:none;">
   <div class="topbar">
     <div class="brand"><i class="bi bi-chat-dots"></i> Centro de Mensajes</div>
     <div>
-      <span style="margin-right:16px;color:#6b7280">Responsable: <?php echo htmlspecialchars($responsable['nombre']); ?></span>
+      <span id="responsableName" style="margin-right:16px;color:#6b7280"></span>
       <a href="menu_front.php" style="text-decoration:none;color:#1677ff">Volver</a>
     </div>
   </div>
@@ -72,225 +199,447 @@ if ($token) {
       </div>
       <div id="chatBody" class="chat-body"></div>
       <div class="chat-footer">
-        <input id="chatInput" class="chat-input" placeholder="Escribe un mensaje..." />
-        <button id="sendBtn" class="chat-send">Enviar</button>
+        <div id="replyContainer" class="reply-container" style="display:none;">
+          <div class="reply-preview">
+            <div class="reply-author" id="replyAuthor"></div>
+            <div class="reply-text" id="replyText"></div>
+          </div>
+          <button id="cancelReply" class="cancel-reply">&times;</button>
+        </div>
+        <div class="chat-input-container">
+          <input id="chatInput" class="chat-input" placeholder="Escribe un mensaje..." />
+          <div class="chat-buttons">
+            <button id="btnAttach" class="chat-btn" title="Adjuntar archivo"><i class="bi bi-paperclip"></i></button>
+            <button id="btnCamera" class="chat-btn" title="Tomar foto"><i class="bi bi-camera"></i></button>
+            <button id="btnAudio" class="chat-btn" title="Grabar audio"><i class="bi bi-mic"></i></button>
+            <button id="sendBtn" class="chat-send">Enviar</button>
+          </div>
+        </div>
+        <input type="file" id="fileInput" style="display:none" accept="image/*,audio/*,video/*,.pdf,.doc,.docx,.txt" />
+        <input type="file" id="cameraInput" style="display:none" accept="image/*" capture="environment" />
       </div>
     </div>
   </div>
-<?php endif; ?>
+</div>
 
 <script>
 (function(){
   const token = localStorage.getItem('cs_token');
-  if (!token) { window.location.href = 'login_front.php'; return; }
+  if (!token) { 
+    document.getElementById('accessDenied').style.display = 'block';
+    return; 
+  }
 
-  // Validar servidor y render si OK
+  // Validar token con el servidor
   const formData = new FormData();
   formData.append('token', token);
   fetch(window.location.href, { method:'POST', body:formData })
     .then(r=>r.text())
-    .then(html=>{ /* página ya renderizada en PHP; no re-render aquí */ })
-    .catch(()=>{});
-
-  const API_THREADS = '../api/chat/threads.php';
-  const API_THREAD  = '../api/chat/thread.php';
-  const API_MSG     = '../api/chat/messages.php';
-  const API_TRANS   = '../api/chat/transcript.php';
-
-  const refs = {
-    search: document.getElementById('searchInput'),
-    list: document.getElementById('threadList'),
-    title: document.getElementById('chatTitle'),
-    subtitle: document.getElementById('chatSubtitle'),
-    body: document.getElementById('chatBody'),
-    input: document.getElementById('chatInput'),
-    send: document.getElementById('sendBtn'),
-    refresh: document.getElementById('refreshThreads'),
-    optBtn: document.getElementById('optionsBtn'),
-    optMenu: document.getElementById('optionsMenu'),
-    optExpand: document.getElementById('optExpand'),
-    optTranscript: document.getElementById('optTranscript'),
-  };
-
-  let currentThreadId = null;
-  let polling = null;
-
-  async function fetchThreads(){
-    const q = refs.search.value.trim();
-    const url = new URL(API_THREADS, window.location.origin);
-    if(q) url.searchParams.set('q', q);
-    const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` }});
-    const data = await r.json();
-    if(!data.ok) return;
-    renderThreadList(data.threads || []);
-  }
-
-  function renderThreadList(items){
-    refs.list.innerHTML = '';
-    if(!items.length){
-      refs.list.innerHTML = '<div style="padding:14px;color:#6b7280">Sin conversaciones</div>';
-      return;
-    }
-    items.forEach(t=>{
-      const li = document.createElement('div');
-      li.className = 'thread-item';
-      li.innerHTML = `<div class="name">${escapeHtml(t.user_name||('Usuario #'+t.user_id))}</div>
-                      <div class="snippet">${escapeHtml((t.last_message||'').slice(0,80))}</div>`;
-      li.onclick = ()=> openThread(t);
-      refs.list.appendChild(li);
+    .then(html=>{
+      // Si llegamos aquí, el token es válido
+      document.getElementById('chatInterface').style.display = 'block';
+      initializeChat();
+    })
+    .catch(()=>{
+      document.getElementById('accessDenied').style.display = 'block';
     });
-  }
 
-  async function openThread(t){
-    currentThreadId = t.id;
-    refs.title.textContent = t.user_name || ('Usuario #' + t.user_id);
-    refs.subtitle.textContent = 'Hilo #' + t.id;
-    refs.body.innerHTML = '';
-    await loadMessages();
-    if(polling) clearInterval(polling);
-    polling = setInterval(loadMessages, 2500);
-  }
+  function initializeChat() {
+    const API_THREADS = '../api/chat/threads.php';
+    const API_THREAD  = '../api/chat/thread.php';
+    const API_MSG     = '../api/chat/messages.php';
+    const API_TRANS   = '../api/chat/transcript.php';
 
-  async function loadMessages(){
-    if(!currentThreadId) return;
-    const url = new URL(API_MSG, window.location.origin);
-    url.searchParams.set('thread_id', currentThreadId);
-    url.searchParams.set('limit', 200);
-    const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` }});
-    const data = await r.json();
-    if(!data.ok) return;
-    renderMessages(data.messages||[]);
-    refs.body.scrollTop = refs.body.scrollHeight;
-  }
+    const refs = {
+      search: document.getElementById('searchInput'),
+      list: document.getElementById('threadList'),
+      title: document.getElementById('chatTitle'),
+      subtitle: document.getElementById('chatSubtitle'),
+      body: document.getElementById('chatBody'),
+      input: document.getElementById('chatInput'),
+      send: document.getElementById('sendBtn'),
+      refresh: document.getElementById('refreshThreads'),
+      optBtn: document.getElementById('optionsBtn'),
+      optMenu: document.getElementById('optionsMenu'),
+      optExpand: document.getElementById('optExpand'),
+      optTranscript: document.getElementById('optTranscript'),
+      btnAttach: document.getElementById('btnAttach'),
+      btnCamera: document.getElementById('btnCamera'),
+      btnAudio: document.getElementById('btnAudio'),
+      fileInput: document.getElementById('fileInput'),
+      cameraInput: document.getElementById('cameraInput'),
+      replyContainer: document.getElementById('replyContainer'),
+      replyAuthor: document.getElementById('replyAuthor'),
+      replyText: document.getElementById('replyText'),
+      cancelReply: document.getElementById('cancelReply'),
+    };
 
-  function renderMessages(msgs){
-    refs.body.innerHTML = '';
-    msgs.forEach(m=>{
-      const row = document.createElement('div');
-      row.className = 'message-row';
-      const bubble = document.createElement('div');
-      bubble.className = 'message ' + (m.sender_type==='responsable'?'responsable':'user');
-      
-      // Render reply preview if present
-      if (m.reply_to) {
-        const replyPreview = document.createElement('div');
-        replyPreview.className = 'reply-preview';
-        replyPreview.innerHTML = `
-          <div class="reply-author">${m.reply_to.sender_type === 'user' ? 'Usuario' : 'Responsable'}</div>
-          <div class="reply-text">${m.reply_to.content || ''}</div>
-        `;
-        bubble.appendChild(replyPreview);
-      }
-      
-      // Render message content (attachments or text)
-      const messageContent = document.createElement('div');
-      messageContent.className = 'message-content';
-      const text = String(m.content||'');
-      if (isAttachmentUrl(text)) {
-        renderAttachment(messageContent, text);
-      } else {
-        messageContent.textContent = text;
-      }
-      bubble.appendChild(messageContent);
+    let currentThreadId = null;
+    let polling = null;
+    let replyingTo = null;
 
-      row.appendChild(bubble);
-      refs.body.appendChild(row);
-    });
-  }
-
-  function isAttachmentUrl(url){
-    const u = String(url||'');
-    if (!/^https?:\/\//i.test(u)) return false;
-    return /\/uploads\//i.test(u);
-  }
-
-  function renderAttachment(container, url){
-    const lower = url.toLowerCase();
-    const isImg = /\.(png|jpg|jpeg|gif|webp)$/i.test(lower);
-    let isAudio = /\.(mp3|wav|m4a|ogg)$/i.test(lower) || lower.includes('/uploads/audio/');
-    let isVideo = /\.(mp4|webm|mov)$/i.test(lower);
-
-    // Tratar .webm como audio si el navegador lo soporta o si proviene de /uploads/chat/
-    if (/\.webm$/i.test(lower)) {
-      let treatAsAudio = false;
-      const probe = document.createElement('audio');
-      if (typeof probe.canPlayType === 'function') {
-        const support = probe.canPlayType('audio/webm; codecs=opus') || probe.canPlayType('audio/webm');
-        if (support) treatAsAudio = true;
-      }
-      if (lower.includes('/uploads/chat/')) {
-        treatAsAudio = true; // tus audios se guardan ahí
-      }
-      if (treatAsAudio) { isAudio = true; isVideo = false; }
+    async function fetchThreads(){
+      const q = refs.search.value.trim();
+      const url = new URL(API_THREADS, window.location.origin);
+      if(q) url.searchParams.set('q', q);
+      const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` }});
+      const data = await r.json();
+      if(!data.ok) return;
+      renderThreadList(data.threads || []);
     }
 
-    if (isImg) {
-      const img = document.createElement('img');
-      img.src = url; container.appendChild(img);
-    } else if (isAudio) {
-      const audio = document.createElement('audio');
-      audio.controls = true; audio.src = url; container.appendChild(audio);
-    } else if (isVideo) {
-      const video = document.createElement('video');
-      video.controls = true; video.src = url; container.appendChild(video);
-    } else {
-      const a = document.createElement('a'); a.href=url; a.target='_blank'; a.textContent=url; container.appendChild(a);
-    }
-  }
-
-  async function sendMessage(){
-    const content = refs.input.value.trim();
-    if(!content || !currentThreadId) return;
-    refs.input.value='';
-    // Optimista
-    const row = document.createElement('div');
-    row.className = 'message-row';
-    const bubble = document.createElement('div');
-    bubble.className = 'message responsable';
-    bubble.textContent = content;
-    row.appendChild(bubble);
-    refs.body.appendChild(row);
-    refs.body.scrollTop = refs.body.scrollHeight;
-
-    await fetch(API_MSG, {
-      method:'POST',
-      headers:{ 'Authorization': `Bearer ${token}`, 'Content-Type':'application/json' },
-      body: JSON.stringify({ thread_id: currentThreadId, content })
-    });
-  }
-
-  function escapeHtml(s){ return (s||'').replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
-
-  // Opciones
-  refs.optBtn.addEventListener('click', ()=>{
-    refs.optMenu.classList.toggle('open');
-  });
-  document.addEventListener('click', (e)=>{
-    if(!refs.optMenu.contains(e.target) && e.target!==refs.optBtn){ refs.optMenu.classList.remove('open'); }
-  });
-  refs.optExpand.addEventListener('click', ()=>{
-    document.querySelector('.resp-chat').classList.toggle('fullscreen');
-  });
-  refs.optTranscript.addEventListener('click', ()=>{
-    if(!currentThreadId) return;
-    const url = new URL(API_TRANS, window.location.origin);
-    url.searchParams.set('thread_id', currentThreadId);
-    fetch(url, { headers:{ 'Authorization': `Bearer ${token}` }})
-      .then(r=>r.blob())
-      .then(blob=>{
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `chat_transcript_${currentThreadId}.txt`;
-        document.body.appendChild(a); a.click(); a.remove();
+    function renderThreadList(items){
+      refs.list.innerHTML = '';
+      if(!items.length){
+        refs.list.innerHTML = '<div style="padding:14px;color:#6b7280">Sin conversaciones</div>';
+        return;
+      }
+      items.forEach(t=>{
+        const li = document.createElement('div');
+        li.className = 'thread-item';
+        li.innerHTML = `<div class="name">${escapeHtml(t.user_name||('Usuario #'+t.user_id))}</div>
+                        <div class="snippet">${escapeHtml((t.last_message||'').slice(0,80))}</div>`;
+        li.onclick = ()=> openThread(t);
+        refs.list.appendChild(li);
       });
-  });
+    }
 
-  refs.send.addEventListener('click', sendMessage);
-  refs.input.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
-  refs.refresh.addEventListener('click', fetchThreads);
-  refs.search.addEventListener('input', ()=>{ clearTimeout(window.__throttle); window.__throttle=setTimeout(fetchThreads, 250); });
+    async function openThread(t){
+      currentThreadId = t.id;
+      refs.title.textContent = t.user_name || ('Usuario #' + t.user_id);
+      refs.subtitle.textContent = 'Hilo #' + t.id;
+      refs.body.innerHTML = '';
+      
+      // Clear any existing reply state when opening a new thread
+      if (replyingTo) {
+        cancelReply();
+      }
+      
+      await loadMessages();
+      if(polling) clearInterval(polling);
+      polling = setInterval(loadMessages, 3000);
+    }
 
-  fetchThreads();
+    async function loadMessages(){
+      if(!currentThreadId) return;
+      const url = new URL(API_MSG, window.location.origin);
+      url.searchParams.set('thread_id', currentThreadId);
+      const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` }});
+      const data = await r.json();
+      if(!data.ok) return;
+      renderMessages(data.messages || []);
+      // Auto-scroll to bottom after loading messages
+      setTimeout(() => scrollToBottom(), 100);
+    }
+
+    async function sendMessage(){
+      const text = refs.input.value.trim();
+      if(!text || !currentThreadId) return;
+      refs.input.value = '';
+      const payload = {
+        thread_id: currentThreadId,
+        content: text,
+        sender_type: 'responsable'
+      };
+      
+      // Add reply information if replying to a message
+      if (replyingTo) {
+        payload.reply_to_id = replyingTo.id;
+      }
+      
+      await fetch(API_MSG, { 
+        method:'POST', 
+        headers:{ 
+          'Content-Type':'application/json', 
+          'Authorization': `Bearer ${token}` 
+        }, 
+        body: JSON.stringify(payload) 
+      });
+      
+      // Clear reply state after sending
+      if (replyingTo) {
+        cancelReply();
+      }
+      
+      loadMessages();
+    }
+
+    // File upload handler
+    async function handleFileUpload(e) {
+      const file = e.target.files[0];
+      if (!file || !currentThreadId) return;
+      
+      const form = new FormData();
+      form.append('file', file);
+      form.append('thread_id', currentThreadId);
+      
+      try {
+        const r = await fetch('../api/chat/upload.php', { 
+          method:'POST', 
+          headers:{ 'Authorization': `Bearer ${token}` }, 
+          body: form 
+        });
+        const data = await r.json();
+        if (data.ok && data.url) {
+          await fetch(API_MSG, { 
+            method:'POST', 
+            headers:{ 
+              'Content-Type':'application/json', 
+              'Authorization': `Bearer ${token}` 
+            }, 
+            body: JSON.stringify({ 
+              thread_id: currentThreadId, 
+              content: data.url,
+              sender_type: 'responsable'
+            }) 
+          });
+          loadMessages();
+        }
+      } catch (err) {
+        console.error('Upload error:', err);
+      }
+      e.target.value = '';
+    }
+
+    // Audio recording variables
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    async function toggleAudioRecording() {
+      if (!currentThreadId) return;
+      
+      if (!isRecording) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          
+          mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+          mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const form = new FormData();
+            form.append('file', audioBlob, 'audio.webm');
+            form.append('thread_id', currentThreadId);
+            
+            try {
+              const r = await fetch('../api/chat/upload.php', { 
+                method:'POST', 
+                headers:{ 'Authorization': `Bearer ${token}` }, 
+                body: form 
+              });
+              const data = await r.json();
+              if (data.ok && data.url) {
+                await fetch(API_MSG, { 
+                  method:'POST', 
+                  headers:{ 
+                    'Content-Type':'application/json', 
+                    'Authorization': `Bearer ${token}` 
+                  }, 
+                  body: JSON.stringify({ 
+                    thread_id: currentThreadId, 
+                    content: data.url,
+                    sender_type: 'responsable'
+                  }) 
+                });
+                loadMessages();
+              }
+            } catch (err) {
+              console.error('Audio upload error:', err);
+            }
+            
+            stream.getTracks().forEach(track => track.stop());
+          };
+          
+          mediaRecorder.start();
+          isRecording = true;
+          refs.btnAudio.innerHTML = '<i class="bi bi-stop-fill"></i>';
+          refs.btnAudio.style.color = '#ef4444';
+        } catch (err) {
+          console.error('Audio recording error:', err);
+        }
+      } else {
+        mediaRecorder.stop();
+        isRecording = false;
+        refs.btnAudio.innerHTML = '<i class="bi bi-mic"></i>';
+        refs.btnAudio.style.color = '';
+      }
+    }
+
+    function renderMessages(messages){
+      refs.body.innerHTML = '';
+      messages.forEach(m=>{
+        const row = document.createElement('div');
+        row.className = 'message-row';
+        
+        const bubble = document.createElement('div');
+        bubble.className = `message ${m.sender_type}`;
+        
+        // Reply preview if exists
+        if (m.reply_to && m.reply_to.content) {
+          const replyPreview = document.createElement('div');
+          replyPreview.className = 'reply-preview';
+          replyPreview.innerHTML = `
+            <div class="reply-author">${escapeHtml(m.reply_to.sender_type === 'user' ? 'Usuario' : 'Responsable')}</div>
+            <div class="reply-text">${m.reply_to.content || ''}</div>
+          `;
+          bubble.appendChild(replyPreview);
+        }
+        
+        // Render message content (attachments or text)
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        const text = String(m.content||'');
+        if (isAttachmentUrl(text)) {
+          renderAttachment(messageContent, text);
+        } else {
+          messageContent.textContent = text;
+        }
+        bubble.appendChild(messageContent);
+
+        // Add reply button
+        const replyBtn = document.createElement('button');
+        replyBtn.className = 'reply-btn';
+        replyBtn.innerHTML = '<i class="bi bi-reply"></i>';
+        replyBtn.title = 'Responder';
+        replyBtn.onclick = () => setReplyTo(m);
+        bubble.appendChild(replyBtn);
+
+        row.appendChild(bubble);
+        refs.body.appendChild(row);
+      });
+      // Auto-scroll to bottom after rendering messages
+      scrollToBottom();
+    }
+
+    function isAttachmentUrl(url){
+      const u = String(url||'');
+      // Detectar URLs que empiecen con http/https o rutas relativas que contengan /uploads/
+      return /^https?:\/\//i.test(u) || /^\/?uploads\//i.test(u);
+    }
+
+    function renderAttachment(container, url){
+      const lower = String(url).toLowerCase();
+      const isImg = /(\.png|\.jpg|\.jpeg|\.gif|\.webp|\.bmp|\.svg)(\?.*)?$/i.test(lower);
+      let isAudio = /(\.mp3|\.wav|\.ogg|\.webm|\.m4a)(\?.*)?$/i.test(lower) || url.startsWith('blob:') || /^data:audio\//i.test(url);
+      let isVideo = /(\.mp4|\.webm|\.mov)(\?.*)?$/i.test(lower);
+
+      // Forzar .webm como audio si proviene de /uploads/chat/
+      if (/\.webm(\?.*)?$/i.test(lower) && /\/uploads\/chat\//i.test(lower)) {
+        isAudio = true;
+        isVideo = false;
+      }
+
+      if (isImg) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'imagen';
+        img.style.maxWidth = '100%';
+        img.style.borderRadius = '12px';
+        container.appendChild(img);
+      } else if (isAudio) {
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.src = url;
+        audio.style.width = '100%';
+        audio.style.height = '40px';
+        audio.style.display = 'block';
+        audio.setAttribute('preload', 'metadata');
+        container.appendChild(audio);
+      } else if (isVideo) {
+        const video = document.createElement('video');
+        video.controls = true;
+        video.src = url;
+        video.style.maxWidth = '100%';
+        video.style.borderRadius = '12px';
+        container.appendChild(video);
+      } else {
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.textContent = 'Abrir archivo';
+        container.appendChild(a);
+      }
+    }
+
+    // Reply functionality
+    function setReplyTo(message) {
+      replyingTo = message;
+      showReplyPreview();
+      refs.input.focus();
+    }
+    
+    function showReplyPreview() {
+      if (!replyingTo) return;
+      refs.replyAuthor.textContent = replyingTo.sender_type === 'user' ? 'Usuario' : 'Responsable';
+      refs.replyText.textContent = replyingTo.content || '';
+      refs.replyContainer.style.display = 'block';
+    }
+    
+    function cancelReply() {
+      replyingTo = null;
+      refs.replyContainer.style.display = 'none';
+    }
+    
+    // Auto-scroll function
+    function scrollToBottom() {
+      refs.body.scrollTop = refs.body.scrollHeight;
+    }
+
+    function escapeHtml(s){ return (s||'').replace(/[&<>\"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+
+    // Opciones - verificar que los elementos existen antes de agregar listeners
+    if (refs.optBtn) {
+      refs.optBtn.addEventListener('click', ()=>{
+        refs.optMenu.classList.toggle('open');
+      });
+    }
+    
+    document.addEventListener('click', (e)=>{
+      if(refs.optMenu && !refs.optMenu.contains(e.target) && e.target!==refs.optBtn){ 
+        refs.optMenu.classList.remove('open'); 
+      }
+    });
+    
+    if (refs.optExpand) {
+      refs.optExpand.addEventListener('click', ()=>{
+        document.querySelector('.resp-chat').classList.toggle('fullscreen');
+      });
+    }
+    
+    if (refs.optTranscript) {
+      refs.optTranscript.addEventListener('click', ()=>{
+        if(!currentThreadId) return;
+        const url = new URL(API_TRANS, window.location.origin);
+        url.searchParams.set('thread_id', currentThreadId);
+        fetch(url, { headers:{ 'Authorization': `Bearer ${token}` }})
+          .then(r=>r.blob())
+          .then(blob=>{
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `chat_transcript_${currentThreadId}.txt`;
+            document.body.appendChild(a); a.click(); a.remove();
+          });
+      });
+    }
+
+    if (refs.send) refs.send.addEventListener('click', sendMessage);
+    if (refs.input) refs.input.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
+    if (refs.refresh) refs.refresh.addEventListener('click', fetchThreads);
+    if (refs.search) refs.search.addEventListener('input', ()=>{ clearTimeout(window.__throttle); window.__throttle=setTimeout(fetchThreads, 250); });
+
+    // Reply functionality
+    if (refs.cancelReply) refs.cancelReply.addEventListener('click', cancelReply);
+
+    // File upload handlers
+    if (refs.btnAttach) refs.btnAttach.addEventListener('click', ()=>refs.fileInput.click());
+    if (refs.btnCamera) refs.btnCamera.addEventListener('click', ()=>refs.cameraInput.click());
+    if (refs.fileInput) refs.fileInput.addEventListener('change', handleFileUpload);
+    if (refs.cameraInput) refs.cameraInput.addEventListener('change', handleFileUpload);
+    if (refs.btnAudio) refs.btnAudio.addEventListener('click', toggleAudioRecording);
+
+    fetchThreads();
+  }
 })();
 </script>
 </body>

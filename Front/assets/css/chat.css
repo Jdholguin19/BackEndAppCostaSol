@@ -354,12 +354,12 @@
 .message a:hover { text-decoration: underline; }
 .message img, .message video { display:block; max-width:100%; border-radius:12px; }
 .message audio {
-  width: 280px;
+  width: 400px;
   max-width: 100%;
-  min-width: 200px;
+  min-width: 220px;
   height: 40px;
-  border-radius: 8px;
-  margin: 4px 0;
+  border-radius: 3px;
+  margin: 1px 0;
   background: #fff;
   display: block;
   flex-shrink: 0;
