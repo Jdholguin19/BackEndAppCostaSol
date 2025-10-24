@@ -99,6 +99,37 @@ $showAccessDenied = false;
       animation: slideDown 0.3s ease-out;
     }
 
+    /* Estilos para métricas expandidas */
+    .metrics-row.expanded .metric-column:not(.expanded-column) {
+      display: none;
+    }
+
+    .metrics-row.expanded .expanded-column {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+
+    .expanded-column .metric-details {
+      border-radius: 0 0 12px 12px;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .expanded-column .metric-card {
+      border-radius: 12px 12px 0 0;
+    }
+
+    /* Ocultar secciones cuando hay métricas expandidas */
+    .content-container.metrics-expanded .activity-section {
+      display: none;
+    }
+
+    /* Limitar altura de detalles expandidos */
+    .expanded-column .details-content {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
     .details-content {
       padding: 16px;
       max-height: 400px;
@@ -374,20 +405,21 @@ $showAccessDenied = false;
     </div>
   </div>
 
-  <!-- Estados de Carga -->
-  <div id="loadingState" class="loading-spinner">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
+  <div class="content-container">
+    <!-- Estados de Carga -->
+    <div id="loadingState" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-muted">Cargando perfil del usuario...</p>
     </div>
-    <p class="mt-2 text-muted">Cargando perfil del usuario...</p>
-  </div>
 
-  <div id="errorState" class="error-message" style="display: none;">
-    <i class="bi bi-exclamation-triangle me-2"></i>
-    <span id="errorText">Error al cargar el perfil</span>
-  </div>
+    <div id="errorState" class="error-message" style="display: none;">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      <span id="errorText">Error al cargar el perfil</span>
+    </div>
 
-  <div id="profileContent" style="display: none;">
+    <div id="profileContent" style="display: none;">
     <!-- Información Personal -->
     <div class="row mb-4">
       <div class="col-12">
@@ -451,6 +483,63 @@ $showAccessDenied = false;
       </div>
     </div>
 
+    <!-- Notas y Contexto del Cliente -->
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <div class="profile-card">
+          <h3 class="section-title">
+            <i class="bi bi-journal-text"></i>
+            Notas de Cliente
+          </h3>
+          <div class="notes-container">
+            <textarea 
+              id="clientNotes" 
+              class="form-control" 
+              placeholder="Escriba aquí las notas del cliente..."
+              rows="8"
+              style="resize: vertical; min-height: 200px; border: 1px solid var(--chat-border); border-radius: 8px; padding: 12px;"
+            ></textarea>
+            <div class="notes-status mt-2">
+              <small id="saveStatus" class="text-muted">
+                <i class="bi bi-check-circle text-success"></i> Guardado automáticamente
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <div class="profile-card">
+          <h3 class="section-title">
+            <i class="bi bi-robot"></i>
+            Contexto del Cliente
+            <button 
+              id="refreshContextBtn" 
+              class="btn btn-sm btn-outline-primary ms-2"
+              onclick="generateClientContext()"
+              title="Generar nuevo contexto con IA"
+            >
+              <i class="bi bi-arrow-clockwise"></i>
+            </button>
+          </h3>
+          <div class="context-container">
+            <div id="clientContext" class="context-content" style="min-height: 200px; max-height: 300px; overflow-y: auto; padding: 12px; background: #f8f9fa; border-radius: 8px; border: 1px solid var(--chat-border);">
+              <div class="text-center text-muted p-3">
+                <i class="bi bi-robot"></i>
+                <p class="mb-2">Contexto generado por IA</p>
+                <button class="btn btn-primary btn-sm" onclick="generateClientContext()">
+                  <i class="bi bi-magic"></i> Generar Contexto
+                </button>
+              </div>
+            </div>
+            <div id="contextLoading" class="text-center p-3" style="display: none;">
+              <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+              <span class="ms-2 text-muted">Generando contexto con IA...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Métricas de Actividad -->
     <div class="row mb-4">
       <div class="col-12">
@@ -461,8 +550,8 @@ $showAccessDenied = false;
       </div>
     </div>
 
-    <div class="row mb-4">
-      <div class="col-lg-3 col-md-6 mb-3">
+    <div class="row mb-4 metrics-row">
+      <div class="col-lg-3 col-md-6 mb-3 metric-column">
         <div class="metric-card" data-metric="propiedades" onclick="toggleMetricDetails(this)">
           <i class="bi bi-house metric-icon"></i>
           <div id="totalPropiedades" class="metric-number">-</div>
@@ -478,7 +567,7 @@ $showAccessDenied = false;
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6 mb-3">
+      <div class="col-lg-3 col-md-6 mb-3 metric-column">
         <div class="metric-card" data-metric="ctg" onclick="toggleMetricDetails(this)">
           <i class="bi bi-tools metric-icon"></i>
           <div id="totalCTG" class="metric-number">-</div>
@@ -494,7 +583,7 @@ $showAccessDenied = false;
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6 mb-3">
+      <div class="col-lg-3 col-md-6 mb-3 metric-column">
         <div class="metric-card" data-metric="pqr" onclick="toggleMetricDetails(this)">
           <i class="bi bi-chat-dots metric-icon"></i>
           <div id="totalPQR" class="metric-number">-</div>
@@ -510,7 +599,7 @@ $showAccessDenied = false;
           </div>
         </div>
       </div>
-      <div class="col-lg-3 col-md-6 mb-3">
+      <div class="col-lg-3 col-md-6 mb-3 metric-column">
         <div class="metric-card" data-metric="citas" onclick="toggleMetricDetails(this)">
           <i class="bi bi-calendar-check metric-icon"></i>
           <div id="totalCitas" class="metric-number">-</div>
@@ -529,7 +618,7 @@ $showAccessDenied = false;
     </div>
 
     <!-- Actividad Reciente -->
-    <div class="row">
+    <div class="row activity-section">
       <div class="col-md-6 mb-4">
         <div class="profile-card">
           <h4 class="section-title">
@@ -657,6 +746,13 @@ function displayUserProfile(data) {
     // Mostrar contenido y ocultar loading
     document.getElementById('loadingState').style.display = 'none';
     document.getElementById('profileContent').style.display = 'block';
+    
+    // Cargar notas del cliente y establecer ID actual
+    const urlParams = new URLSearchParams(window.location.search);
+    currentUserId = urlParams.get('user_id');
+    if (currentUserId) {
+        loadClientNotes(currentUserId);
+    }
 }
 
 function getInitials(name) {
@@ -689,22 +785,54 @@ async function toggleMetricDetails(cardElement) {
     const metricType = cardElement.getAttribute('data-metric');
     const detailsElement = document.getElementById(`details-${metricType}`);
     const expandIcon = cardElement.querySelector('.expand-icon');
+    const metricsRow = document.querySelector('.metrics-row');
+    const currentColumn = cardElement.closest('.metric-column');
+    const contentContainer = document.querySelector('.content-container');
     
-    if (detailsElement.style.display === 'none') {
-        // Expandir
+    // Verificar si esta métrica ya está expandida
+    const isCurrentlyExpanded = cardElement.classList.contains('expanded');
+    
+    // Cerrar cualquier métrica expandida previamente
+    const expandedColumns = document.querySelectorAll('.expanded-column');
+    const expandedCards = document.querySelectorAll('.metric-card.expanded');
+    
+    expandedColumns.forEach(col => {
+        col.classList.remove('expanded-column');
+        const details = col.querySelector('.metric-details');
+        if (details) details.style.display = 'none';
+    });
+    
+    expandedCards.forEach(card => {
+        card.classList.remove('expanded');
+        const icon = card.querySelector('.expand-icon');
+        if (icon) {
+            icon.classList.remove('bi-chevron-up');
+            icon.classList.add('bi-chevron-down');
+        }
+    });
+    
+    metricsRow.classList.remove('expanded');
+    contentContainer.classList.remove('metrics-expanded');
+    
+    // Si no estaba expandida, expandir
+    if (!isCurrentlyExpanded) {
         cardElement.classList.add('expanded');
+        currentColumn.classList.add('expanded-column');
+        metricsRow.classList.add('expanded');
+        contentContainer.classList.add('metrics-expanded');
         detailsElement.style.display = 'block';
+        
+        // Cambiar icono
+        expandIcon.classList.remove('bi-chevron-down');
+        expandIcon.classList.add('bi-chevron-up');
         
         // Cargar detalles si no están cargados
         if (!detailsElement.hasAttribute('data-loaded')) {
             await loadMetricDetails(metricType, detailsElement);
             detailsElement.setAttribute('data-loaded', 'true');
         }
-    } else {
-        // Contraer
-        cardElement.classList.remove('expanded');
-        detailsElement.style.display = 'none';
     }
+    // Si ya estaba expandida, ya se cerró en el código anterior
 }
 
 async function loadMetricDetails(metricType, detailsElement) {
@@ -908,6 +1036,155 @@ function getAsistenciaBadgeClass(asistencia) {
         default: return 'badge-info';
     }
 }
+
+
+
+// Variables globales para notas
+let currentUserId = null;
+let notesTimeout = null;
+
+// Función para cargar notas del cliente
+async function loadClientNotes(userId) {
+    const token = localStorage.getItem('responsable_token');
+    
+    try {
+        const response = await fetch(`../../../api/chat/perfil/notas.php?user_id=${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        
+        if (data.ok) {
+            const notesTextarea = document.getElementById('clientNotes');
+            if (notesTextarea) {
+                notesTextarea.value = data.notas || '';
+            }
+        } else {
+            console.error('Error al cargar notas:', data.error);
+        }
+    } catch (error) {
+        console.error('Error al cargar notas:', error);
+    }
+}
+
+// Función para guardar notas del cliente
+async function saveClientNotes(userId, notes) {
+    const token = localStorage.getItem('responsable_token');
+    const statusElement = document.getElementById('saveStatus');
+    
+    try {
+        if (statusElement) {
+            statusElement.innerHTML = '<i class="bi bi-clock text-warning"></i> Guardando...';
+        }
+        
+        const response = await fetch('../../../api/chat/perfil/notas.php', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                notas: notes
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.ok) {
+            if (statusElement) {
+                statusElement.innerHTML = '<i class="bi bi-check-circle text-success"></i> Guardado';
+                setTimeout(() => {
+                    statusElement.innerHTML = '';
+                }, 2000);
+            }
+        } else {
+            throw new Error(data.error || 'Error al guardar');
+        }
+    } catch (error) {
+        console.error('Error al guardar notas:', error);
+        if (statusElement) {
+            statusElement.innerHTML = '<i class="bi bi-exclamation-triangle text-danger"></i> Error al guardar';
+            setTimeout(() => {
+                statusElement.innerHTML = '';
+            }, 3000);
+        }
+    }
+}
+
+// Función para generar contexto del cliente con IA
+async function generateClientContext() {
+    const token = localStorage.getItem('responsable_token');
+    const contextElement = document.getElementById('clientContext');
+    const loadingElement = document.getElementById('contextLoading');
+    
+    try {
+        contextElement.style.display = 'none';
+        loadingElement.style.display = 'block';
+        
+        const response = await fetch(`../../../api/chat/perfil/contexto_ia.php?user_id=${currentUserId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const data = await response.json();
+        
+        if (data.ok) {
+            contextElement.innerHTML = `
+                <div class="context-text">
+                    ${data.contexto.replace(/\n/g, '<br>')}
+                </div>
+                <div class="mt-2">
+                    <small class="text-muted">
+                        <i class="bi bi-clock"></i> Generado: ${new Date().toLocaleString('es-ES')}
+                    </small>
+                </div>
+            `;
+        } else {
+            throw new Error(data.error || 'Error al generar contexto');
+        }
+    } catch (error) {
+        console.error('Error al generar contexto:', error);
+        contextElement.innerHTML = `
+            <div class="text-center text-danger p-3">
+                <i class="bi bi-exclamation-triangle"></i>
+                <p class="mb-2">Error al generar contexto</p>
+                <small>${error.message}</small>
+                <br>
+                <button class="btn btn-primary btn-sm mt-2" onclick="generateClientContext()">
+                    <i class="bi bi-arrow-clockwise"></i> Reintentar
+                </button>
+            </div>
+        `;
+    } finally {
+        loadingElement.style.display = 'none';
+        contextElement.style.display = 'block';
+    }
+}
+
+// Event listeners para notas
+document.addEventListener('DOMContentLoaded', function() {
+    const notesTextarea = document.getElementById('clientNotes');
+    
+    if (notesTextarea) {
+        // Auto-save con debounce
+        notesTextarea.addEventListener('input', function() {
+            clearTimeout(notesTimeout);
+            notesTimeout = setTimeout(() => {
+                if (currentUserId) {
+                    saveClientNotes(currentUserId, this.value);
+                }
+            }, 1000); // Guardar después de 1 segundo de inactividad
+        });
+    }
+});
 </script>
 
 <?php endif; ?>
