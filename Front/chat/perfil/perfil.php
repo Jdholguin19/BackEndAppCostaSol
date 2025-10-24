@@ -80,7 +80,7 @@ $showAccessDenied = false;
       text-align: center;
       border: 1px solid var(--chat-border);
       transition: all 0.2s ease;
-      height: 100%;
+      height: 180px;
       position: relative;
       cursor: pointer;
     }
@@ -752,6 +752,8 @@ function displayUserProfile(data) {
     currentUserId = urlParams.get('user_id');
     if (currentUserId) {
         loadClientNotes(currentUserId);
+        // Generar contexto automáticamente al cargar el perfil
+        generateClientContext();
     }
 }
 
