@@ -18,6 +18,7 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
   - PQR
   - Citas y calendario (Outlook)
   - Perfil y gestión de usuarios
+    - Sistema de Contexto de IA para Clientes
   - Reportes y recursos
   - Avance de obra / construcción
   - Garantías
@@ -35,9 +36,9 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
 
 ## Descripción general
 
-- Backend: API en PHP bajo `api/` con endpoints para autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, **garantías**, integraciones y auditoría.
-- Frontend: páginas PHP/HTML bajo `Front/` con vistas para login, menú principal, módulos (CTG, PQR, Citas), notificaciones, perfil/usuarios, overview interactivo y recursos.
-- Integraciones: OneSignal (notificaciones push), Kiss Flow (webhooks y sincronización de datos), Outlook/Microsoft Graph (webhooks y sincronización de calendario).
+- Backend: API en PHP bajo `api/` con endpoints para autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, **garantías**, **contexto de IA**, integraciones y auditoría.
+- Frontend: páginas PHP/HTML bajo `Front/` con vistas para login, menú principal, módulos (CTG, PQR, Citas), notificaciones, perfil/usuarios con **análisis inteligente de clientes**, overview interactivo y recursos.
+- Integraciones: OneSignal (notificaciones push), Kiss Flow (webhooks y sincronización de datos), Outlook/Microsoft Graph (webhooks y sincronización de calendario), **IA para análisis de contexto de clientes**.
 
 ---
 ## Configuración del entorno
@@ -129,9 +130,47 @@ Aplicación web para clientes y responsables que centraliza CTG, PQR, citas/cale
 
 ### Perfil y gestión de usuarios
 
-- Front: `Front/perfil.php`, `Front/users.php`.
-- API: `api/perfil.php`, `api/user_crud.php`, `api/user_list.php`.
+- Front: `Front/perfil.php`, `Front/users.php`, `Front/chat/perfil/perfil.php`.
+- API: `api/perfil.php`, `api/user_crud.php`, `api/user_list.php`, `api/chat/perfil/contexto_ia.php`.
 - Roles y permisos (RBAC): tablas `rol`, `rol_menu` determinan accesos a vistas y endpoints.
+
+#### Sistema de Contexto de IA para Clientes
+
+Sistema inteligente de análisis de clientes que genera automáticamente contexto profesional basado en el historial completo del usuario.
+
+##### Funcionalidades principales:
+- **Generación automática**: El contexto se genera automáticamente al acceder al perfil del cliente (`Front/chat/perfil/perfil.php?user_id=X`)
+- **Análisis integral**: Incluye información personal, propiedades, CTGs, PQRs, mensajes de chat y historial de citas
+- **Detección de patrones**: Identifica comportamientos, problemas recurrentes y patrones de interacción
+- **Recomendaciones inteligentes**: Sugiere estrategias de manejo y puntos de atención especial
+- **Límite de palabras**: Contexto conciso limitado a 300 palabras para lectura rápida
+
+##### Datos analizados:
+- **Información personal**: Datos básicos del usuario y propiedades asociadas
+- **CTGs (Control de Tareas Generales)**: Últimos 10 CTGs con todas sus respuestas asociadas
+- **PQRs (Peticiones, Quejas y Reclamos)**: Últimos 10 PQRs con todas sus respuestas
+- **Mensajes de chat**: Últimos 5 mensajes del usuario con fechas y tipo de remitente
+- **Historial de citas**: Citas programadas y su estado
+
+##### API Endpoint:
+- **Contexto IA**: `api/chat/perfil/contexto_ia.php` - Genera contexto inteligente del cliente
+  - Requiere autenticación Bearer token
+  - Parámetro: `user_id` (ID del cliente a analizar)
+  - Respuesta: JSON con contexto generado por IA
+
+##### Características técnicas:
+- **Integración con IA**: Utiliza prompts estructurados para análisis profesional
+- **Datos completos**: Combina información de múltiples tablas (usuarios, propiedades, CTG, PQR, chat_message)
+- **Respuestas concatenadas**: Utiliza `GROUP_CONCAT` para incluir todas las respuestas de CTG y PQR
+- **Generación automática**: Se ejecuta automáticamente al cargar el perfil del cliente
+- **Interfaz responsive**: Muestra el contexto en una sección dedicada con indicador de carga
+
+##### Flujo de uso:
+1. **Acceso al perfil**: Responsable accede a `perfil.php?user_id=X`
+2. **Generación automática**: El sistema genera el contexto automáticamente
+3. **Análisis IA**: La IA analiza todo el historial del cliente
+4. **Contexto profesional**: Se muestra un resumen con recomendaciones y puntos clave
+5. **Toma de decisiones**: El responsable puede usar el contexto para mejorar la atención
 
 ### Reportes y recursos
 
@@ -212,8 +251,8 @@ Sistema completo de gestión de garantías con filtrado inteligente por tipo de 
   - Login → menú dinámico → CTG/PQR → citas → **garantías** → notificaciones → perfil.
   - Visualiza noticias, reportes propios y garantías aplicables a su propiedad.
 - Responsable:
-  - Login → menú con módulos operativos → gestión CTG/PQR → calendario responsable → **administrar garantías** → notificaciones y perfil.
-  - Puede ver reportes, recursos y gestionar todas las garantías del sistema según rol.
+  - Login → menú con módulos operativos → gestión CTG/PQR → calendario responsable → **administrar garantías** → **análisis de contexto de clientes** → notificaciones y perfil.
+  - Puede ver reportes, recursos, gestionar todas las garantías del sistema según rol y **acceder al contexto inteligente de clientes para mejorar la atención**.
 
 ---
 
@@ -263,8 +302,10 @@ Sistema completo de gestión de garantías con filtrado inteligente por tipo de 
 
 - `Front/`: vistas del frontend, overview, módulos (CTG, PQR, Citas, Perfil, Noticias, Reportes, **Garantías**).
 - `Front/admin/`: vistas administrativas (**admin_garantias.php** para gestión de garantías).
+- `Front/chat/perfil/`: módulo de perfil de clientes con **contexto de IA** (**perfil.php** para vista de perfil con análisis automático).
 - `api/`: endpoints PHP (autenticación, menú, CTG, PQR, citas, notificaciones, perfil, reportes, **garantías**, integraciones).
 - `api/admin/`: endpoints administrativos (**admin_garantias.php** para CRUD de garantías).
+- `api/chat/perfil/`: endpoints de análisis de clientes (**contexto_ia.php** para generación de contexto inteligente).
 - `config/`: configuración de base de datos y Outlook.
 - `garantias_structure.sql`: script de creación de tabla de garantías.
 - `assets/css/style_garantia.css`: estilos específicos para el módulo de garantías.
